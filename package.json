@@ -1,0 +1,12 @@
+{
+  "name": "@types/sap__cds",
+  "version": "1.0.0",
+  "description": "Type definitions for main packages of CAP, like `@sap/cds`.",
+  "keywords": [],
+  "author": "SAP SE (https://www.sap.com)",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/cap-js/cds-types/issues"
+  },
+  "homepage": "https://github.com/cap-js/cds-types#readme"
+}
