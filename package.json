@@ -8,5 +8,11 @@
   "bugs": {
     "url": "https://github.com/cap-js/cds-types/issues"
   },
-  "homepage": "https://github.com/cap-js/cds-types#readme"
+  "homepage": "https://github.com/cap-js/cds-types#readme",
+  "files": [
+    "index.d.ts",
+    "apis/",
+    "LICENSE",
+    "README.md"
+  ]
 }
