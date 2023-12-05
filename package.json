@@ -1,6 +1,6 @@
 {
-  "name": "@types/sap__cds",
-  "version": "1.0.0",
+  "name": "@cap-js/cds-types",
+  "version": "0.1.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`.",
   "keywords": [],
   "author": "SAP SE (https://www.sap.com)",
