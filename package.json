@@ -1,14 +1,16 @@
 {
   "name": "@cap-js/cds-types",
   "version": "0.1.0",
-  "description": "Type definitions for main packages of CAP, like `@sap/cds`.",
-  "keywords": [],
+  "description": "Type definitions for main packages of CAP, like `@sap/cds`",
+  "repository": "github:cap-js/cds-types",
+  "homepage": "https://cap.cloud.sap/",
+  "keywords": [
+    "CAP",
+    "CDS",
+    "Node.js"
+  ],
   "author": "SAP SE (https://www.sap.com)",
   "license": "SEE LICENSE IN LICENSE",
-  "bugs": {
-    "url": "https://github.com/cap-js/cds-types/issues"
-  },
-  "homepage": "https://github.com/cap-js/cds-types#readme",
   "files": [
     "index.d.ts",
     "apis/",
@@ -17,6 +19,9 @@
   ],
   "scripts": {
     "test": "jest --silent"
+  },
+  "peerDependencies": {
+    "@sap/cds": ">=7"
   },
   "devDependencies": {
     "@sap/cds": "^7.4.0",
