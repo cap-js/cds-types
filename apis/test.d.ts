@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import chai from 'chai';
+import * as chai from 'chai';
 import * as http from 'http';
 import { Service } from './services';
 
