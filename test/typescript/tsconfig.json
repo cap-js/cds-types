@@ -1,0 +1,8 @@
+{
+  "files": ["test.ts"],
+  "compilerOptions": {
+    "esModuleInterop": true, // required for import cds from '@sap/cds'
+    "types": [ "node" ], // to ignore @types/mocha and others
+    "outDir": "_out"
+  }
+}
