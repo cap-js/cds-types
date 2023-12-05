@@ -1,0 +1,15 @@
+{
+  "include": ["*.ts"],
+  "compilerOptions": {
+    "module": "ES2022",
+    "target": "ES2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "noEmit": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
