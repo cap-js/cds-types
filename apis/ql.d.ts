@@ -1,6 +1,8 @@
 import { CSN, Definition, EntityElements } from "./csn"
 import * as CQN from "./cqn"
 import { Constructable, ArrayConstructable, SingularType } from "./internal/inference"
+import { LinkedEntity } from "./linked"
+import { ref, column_expr } from './cqn'
 
 export type Query = CQN.Query
 
@@ -130,6 +132,7 @@ declare class QL<T> {
 	UPDATE : typeof UPDATE
 		& typeof UPDATE.entity
 	DELETE : typeof DELETE
+	    & ((...entries:object[]) => DELETE<any>) & ((entries:object[]) => DELETE<any>)
 	CREATE : typeof CREATE
 	DROP : typeof DROP
 }
@@ -151,7 +154,8 @@ export class SELECT<T> extends ConstructedQuery {
 	columns: TaggedTemplateQueryPart<this>
 		& ((projection: Projection<T>) => this)
 		& ((...col: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]) => this)
-		& ((...col:string[]) => this)
+		& ((...col:(string | column_expr)[]) => this)
+		& ((col:(string | column_expr)[]) => this)
 	where: TaggedTemplateQueryPart<this>
 		& ((predicate:object) => this)
 		& ((...expr : any[]) => this)
@@ -206,10 +210,12 @@ TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 	=> Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
 
 & ((entity: Definition | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<any>)
+& ((entity: LinkedEntity | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<any>)
 & (<T> (entity: T[], projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
 & (<T> (entity: T[], primaryKey : PK, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
 & (<T> (entity: {new():T}, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
 & (<T> (entity: {new():T}, primaryKey : PK, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
+& ((subject: ref) => SELECT<any>)
 
 type SELECT_from =
 // tagged template
@@ -225,15 +231,17 @@ type SELECT_from =
 	=> Awaitable<SELECT<SingularType<T>>, InstanceType<SingularType<T>>>)  // when specifying a key, we expect a single element as result
 // calling with definition
 & ((entity: Definition | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<any>)
+& ((entity: LinkedEntity | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<any>)
 // calling with concrete list
 & (<T> (entity: T[], projection? : Projection<T>) => SELECT<T> & Promise<T[]>)
 & (<T> (entity: T[], primaryKey : PK, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
-
+& ((subject: ref) => SELECT<any>)
 
 export class INSERT<T> extends ConstructedQuery {
 	static into : (<T extends ArrayConstructable<any>> (entity:T, entries? : object | object[]) => INSERT<SingularType<T>>)
 		& (TaggedTemplateQueryPart<INSERT<unknown>>)
 		& ((entity : Definition | string, entries? : object | object[]) => INSERT<any>)
+		& ((entity : LinkedEntity | string, entries? : object | object[]) => INSERT<any>)
 		& (<T> (entity:Constructable<T>, entries? : object | object[]) => INSERT<T>)
 		& (<T> (entity:T, entries? : T | object | object[]) => INSERT<T>)
 
@@ -255,6 +263,7 @@ export class UPSERT<T> extends ConstructedQuery {
 	static into : (<T extends ArrayConstructable<any>> (entity:T, entries? : object | object[]) => UPSERT<SingularType<T>>)
 		& (TaggedTemplateQueryPart<UPSERT<unknown>>)
 		& ((entity : Definition | string, entries? : object | object[]) => UPSERT<any>)
+		& ((entity : LinkedEntity | string, entries? : object | object[]) => UPSERT<any>)
 		& (<T> (entity:Constructable<T>, entries? : object | object[]) => UPSERT<T>)
 		& (<T> (entity:T, entries? : T | object | object[]) => UPSERT<T>)
 
@@ -274,8 +283,10 @@ export class UPSERT<T> extends ConstructedQuery {
 
 export class DELETE<T> extends ConstructedQuery {
 	static from:
-		TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
+TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 	 	& ((entity : Definition | string | ArrayConstructable, primaryKey? : PK) => DELETE<any>)
+	 	& ((entity : LinkedEntity | string | ArrayConstructable, primaryKey? : PK) => DELETE<any>)
+		& ((subject: ref) => DELETE<any>)
 	byKey (primaryKey? : PK) : this
 	where (predicate:object) : this
 	where (...expr : any[]) : this
@@ -289,6 +300,7 @@ export class UPDATE<T> extends ConstructedQuery {
 	static entity <T extends ArrayConstructable<any>> (entity:T, primaryKey? : PK) : UPDATE<SingularType<T>>
 
 	static entity (entity : Definition | string, primaryKey? : PK) : UPDATE<any>
+	static entity (entity : LinkedEntity | string, primaryKey? : PK) : UPDATE<any>
 	static entity <T> (entity:Constructable<T>, primaryKey? : PK) : UPDATE<T>
 	static entity <T> (entity:T, primaryKey? : PK) : UPDATE<T>
 	byKey (primaryKey? : PK) : this
@@ -307,10 +319,12 @@ export class UPDATE<T> extends ConstructedQuery {
 
 export class CREATE<T> extends ConstructedQuery {
 	static entity (entity : Definition | string) : CREATE<any>
+	static entity (entity : LinkedEntity | string) : CREATE<any>
 	CREATE : CQN.CREATE["CREATE"]
 }
 
 export class DROP<T> extends ConstructedQuery {
 	static entity (entity : Definition | string) : DROP<any>
+	static entity (entity : LinkedEntity | string) : DROP<any>
 	DROP : CQN.DROP["DROP"]
 }

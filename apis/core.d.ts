@@ -3,13 +3,13 @@ import * as csn from './csn'
 import { service } from './server'
 
 // These are classes actually -> using the new() => interface trick
-export type Association = new() => LinkedAssociation
-export type Composition = new() => LinkedAssociation
-export type entity = new() => LinkedEntity
-export type event = new() => linked & csn.struct
-export type type = new() => linked & csn.type
-export type array = new() => linked & csn.type
-export type struct = new() => linked & csn.struct
+export type Association = new(_?:object) => LinkedAssociation
+export type Composition = new(_?:object) => LinkedAssociation
+export type entity = new(_?:object) => LinkedEntity
+export type event = new(_?:object) => linked & csn.struct
+export type type = new(_?:object) => linked & csn.type
+export type array = new(_?:object) => linked & csn.type
+export type struct = new(_?:object) => linked & csn.struct
 
 export default class cds {
   // infer (query : cqn, model : csn) : LinkedDefinition

@@ -1,7 +1,7 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { LinkedCSN, LinkedDefinition, Definitions } from './linked'
+import { LinkedCSN, LinkedDefinition, Definitions, LinkedEntity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
@@ -111,6 +111,8 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
    */
   context?: EventContext
+
+  db: DatabaseService
 }
 
 
@@ -120,9 +122,9 @@ export class QueryAPI {
  */
 export class Service extends QueryAPI {
   constructor(
-    name: string,
-    model: CSN,
-    options: {
+    name?: string,
+    model?: CSN,
+    options?: {
       kind: string
       impl: string | ServiceImpl
     }
@@ -132,6 +134,11 @@ export class Service extends QueryAPI {
    * The name of the service
    */
   name: string
+
+  /**
+   * The kind of the service
+   */
+  kind: string
 
   /**
    * The model from which the service's definition was loaded
@@ -380,5 +387,5 @@ declare namespace types {
     | 'NEW' | 'EDIT' | 'PATCH' | 'SAVE'
     | 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
     | 'COMMIT' | 'ROLLBACK'
-  type target = string | LinkedDefinition | ArrayConstructable<any>
+  type target = string | LinkedDefinition | LinkedEntity | (string | LinkedDefinition | LinkedEntity)[] | ArrayConstructable<any>
 }

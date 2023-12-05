@@ -100,18 +100,18 @@ export default class cds {
 
 }
 
-export type service = any & {
+export type service = {
 	/**
 	 * Dummy wrapper for service implementation functions.
 	 * Use that in modules to get IntelliSense.
 	 */
 	impl (impl: ServiceImpl) : typeof impl
-	impl <T> (srv:T, impl: ( this: T, srv: (T) ) => any) : typeof impl
+	// impl <T> (srv:T, impl: ( this: T, srv: (T) ) => any) : typeof impl
 
 	/**
 	 * Array of all services constructed.
 	 */
-	providers : Service
+	providers : Service[]
 }
 
 
