@@ -1,4 +1,4 @@
-import cds from '../../../../apis/cds'
+import cds from '../../../..'
 import { User } from '../../../../apis/cds'
 
 // accepts no args

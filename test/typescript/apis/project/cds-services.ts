@@ -1,4 +1,4 @@
-import cds from '../../../../apis/cds'
+import cds from '../../../..'
 import { Foo, Foos, action } from './dummy'
 import User from '../../../../apis/core'
 

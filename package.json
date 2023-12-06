@@ -11,8 +11,8 @@
   ],
   "author": "SAP SE (https://www.sap.com)",
   "license": "SEE LICENSE IN LICENSE",
+  "typings": "apis/cds.d.ts",
   "files": [
-    "index.d.ts",
     "apis/",
     "LICENSE",
     "README.md"

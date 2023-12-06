@@ -1,4 +1,4 @@
-import cds from '../../../../apis/cds'
+import cds from '../../../..'
 
 const test = cds.test(__dirname).in('other')
 cds.test('serve', '--in-memory', '--project', __dirname)

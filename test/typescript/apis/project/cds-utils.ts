@@ -1,4 +1,4 @@
-import cds from '../../../../apis/cds'
+import cds from '../../../..'
 
 const uuid: string = cds.utils.uuid()
 const decodeURI: string = cds.utils.decodeURI('https://developer.mozilla.org/docs/JavaScript%3A%20a_scripting_language')
@@ -9,7 +9,7 @@ const isDir: string = cds.utils.isdir('app')
 const isFile: string = cds.utils.isfile('package.json')
 
 const { read, write } = cds.utils
- 
+
 const rd: Buffer | {} = await read ('package.json')
 
 await write ({foo:'bar'}) .to ('some','file.json')

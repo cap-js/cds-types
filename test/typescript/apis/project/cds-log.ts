@@ -1,4 +1,4 @@
-import cds from '../../../../apis/cds'
+import cds from '../../../..'
 import * as winston from "winston"
 
 cds.log('foo').debug('message')
