@@ -1,7 +1,7 @@
 # cds-types
 
-<!-- [![REUSE status](https://api.reuse.software/badge/github.com/cap-js/cds-types)](https://api.reuse.software/info/github.com/cap-js/cds-types)
-![Unit Tests passing](https://github.com/cap-js/cds-types/actions/workflows/test.yml/badge.svg) -->
+[![REUSE status](https://api.reuse.software/badge/github.com/cap-js/cds-types)](https://api.reuse.software/info/github.com/cap-js/cds-types)
+![Unit Tests passing](https://github.com/cap-js/cds-types/actions/workflows/test.yml/badge.svg)
 
 ## About this project
 
