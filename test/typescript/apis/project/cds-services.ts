@@ -1,6 +1,5 @@
 import cds from '../../../..'
 import { Foo, Foos, action } from './dummy'
-import User from '../../../../apis/core'
 
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -248,7 +247,7 @@ const req3 = cds.context?.http?.req
 let ctx = cds.context
 ctx?.tenant === 't1'
 const myUser = ctx?.user
-if ( myUser instanceof User) {
+if (myUser instanceof cds.User) {
   myUser.id === 'u2'
 }
 
@@ -274,5 +273,3 @@ await cds.db.tx (async (tx) => {
   await tx.run(SELECT(1).from(Books,201).forUpdate())
 })
 cds.db.entities('draftModelAuth')
-
-

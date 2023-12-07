@@ -1,16 +1,16 @@
-export * from './core'  // FIXME v, and add test
+export * from './core'
 export * from './server'
-export * from './env'  // FIXME: remove wrapper v, allow additional keys v
+export * from './env'
 export * from './models'
-export * from './services'  // FIXME: missing type Transaction v, also all properties from this.db proxied
-export * from './events'  // FIXME: get rid of .default v, missing @types/express v
+export * from './services'
+export * from './events'
 export * from './utils'
-export { log, debug } from './log'  // log.levels, log.Logger, log.
+export { log, debug } from './log'
 // FIXME: rename clashes to Linked.*
 // export * from './csn'
-export { test } from './test'  // nothing except for .test v
-export * from './cqn'  // FIXME: everything missing? only exports marked as such should be exported (no, but @private)
-export * as ql from './ql' // FIXME: remove cds_ql v, instead export to cds.ql v
+export { test } from './test'
+export * from './cqn'
+export * as ql from './ql'
 export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
 
 import * as ql from './ql'

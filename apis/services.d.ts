@@ -384,9 +384,17 @@ declare namespace types {
 }
 
 // facade proxies into cds.db, which is a Service
+export const tx: Service['tx']
+export const entities: Service['entities']
+export const run: Service['run']
+export const foreach: Service['foreach']
+export const stream: Service['stream']
 export const read: Service['read']
-export const delete: Service['delete']
 export const create: Service['create']
-export const update: Service['update']
 export const insert: Service['insert']
-export const upsert: Service['upsert']
+export const update: Service['update']
+export const delete: Service['delete']
+export const disconnect: Service['disconnect']
+export const transaction: Service['transaction']
+export const db: Service
+//export const upsert: Service['upsert']
