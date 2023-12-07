@@ -10,9 +10,6 @@ export class ConstructedQuery {
 	then(_resolved:(x:any)=>any, _rejected:(e:Error)=>any) : any
 }
 
-export class cds_ql {
-	ql:QL<any> & ((context:object) => QL<any>)
-}
 
 export type PK = number | string | object
 
@@ -295,7 +292,7 @@ TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 	DELETE : CQN.DELETE["DELETE"]
 }
 
-export class UPDATE<T> extends ConstructedQuery {
+export class UPDATE<T = any> extends ConstructedQuery {
 	// cds-typer plural
 	static entity <T extends ArrayConstructable<any>> (entity:T, primaryKey? : PK) : UPDATE<SingularType<T>>
 

@@ -1,32 +1,7 @@
 import { LinkedDefinition } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
-import * as express from "express"
-
-
-export default class cds {
-
-  /**
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
-   */
-  EventContext: typeof EventContext
-
-  /**
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
-   */
-  Event: typeof Event
-
-  /**
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
-   */
-  Request: typeof Request
-
-  /**
-   * Represents the user in a given context.
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
-   */
-  User: typeof User
-}
+import * as express from 'express'
 
 
 /**
@@ -97,6 +72,10 @@ export class Request extends Event {
 }
 
 
+/**
+ * Represents the user in a given context.
+ * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
+ */
 export class User {
   constructor(obj?: string | { id: string; attr: Record<string, string>; roles: Record<string, string> } | User)
   id: string

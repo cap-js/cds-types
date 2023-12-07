@@ -111,8 +111,6 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
    */
   context?: EventContext
-
-  db: DatabaseService
 }
 
 
@@ -134,11 +132,6 @@ export class Service extends QueryAPI {
    * The name of the service
    */
   name: string
-
-  /**
-   * The kind of the service
-   */
-  kind: string
 
   /**
    * The model from which the service's definition was loaded
@@ -292,7 +285,7 @@ export default class cds {
 }
 
 
-interface Transaction extends Service {
+export interface Transaction extends Service {
   commit(): Promise<void>
   rollback(): Promise<void>
 }
@@ -389,3 +382,11 @@ declare namespace types {
     | 'COMMIT' | 'ROLLBACK'
   type target = string | LinkedDefinition | LinkedEntity | (string | LinkedDefinition | LinkedEntity)[] | ArrayConstructable<any>
 }
+
+// facade proxies into cds.db, which is a Service
+export const read: Service['read']
+export const delete: Service['delete']
+export const create: Service['create']
+export const update: Service['update']
+export const insert: Service['insert']
+export const upsert: Service['upsert']
