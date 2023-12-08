@@ -80,4 +80,5 @@ export default class {
   version: string
   home: string
   root: string
+
 }
