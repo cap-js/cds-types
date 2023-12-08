@@ -6,6 +6,7 @@ import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
 
+
 export class QueryAPI {
 
   entities : LinkedCSN['entities']
@@ -60,19 +61,9 @@ export class QueryAPI {
   }
 
   /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
-   */
-  delete<T>(entity: LinkedDefinition | string, key?: any): DELETE<T>
-
-  /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
-   */
-  foreach(query: Query, callback: (row: object) => void): this
-
-  /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-stream-column)
    */
-  stream: {
+  stream: {  // tl
     (column: string): {
       from(entity: LinkedDefinition | string): {
         where(filter: any): ReadableStream
@@ -82,35 +73,20 @@ export class QueryAPI {
   }
 
   /**
-   * Starts or joins a transaction
-   * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
+   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
+  delete<T>(entity: LinkedDefinition | string, key?: any): DELETE<T>   // tl
 
-  tx: {
+  /**
+   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
+   */
+  foreach(query: Query, callback: (row: object) => void): this   // tl
+
+  transaction: {  // tl
     (fn: (tx: Transaction) => {}): Promise<unknown>
     (context?: object): Transaction
     (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
   }
-
-  transaction: {
-    (fn: (tx: Transaction) => {}): Promise<unknown>
-    (context?: object): Transaction
-    (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
-  }
-
-  /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#cds-spawn)
-   */
-  spawn(options: {
-    [key: string]: any
-    every?: number
-    after?: number
-  }, fn: (tx: Transaction) => {}): SpawnEventEmitter
-
-  /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
-   */
-  context?: EventContext
 }
 
 
@@ -127,6 +103,11 @@ export class Service extends QueryAPI {
       impl: string | ServiceImpl
     }
   )
+
+  /**
+   * The kind of the service
+   */
+  kind: string
 
   /**
    * The name of the service
@@ -383,6 +364,34 @@ declare namespace types {
   type target = string | LinkedDefinition | LinkedEntity | (string | LinkedDefinition | LinkedEntity)[] | ArrayConstructable<any>
 }
 
+type SpawnOptions = {
+  [key: string]: any
+  every?: number
+  after?: number
+}
+
+// FIXME: this was ?: EventContext before. Is context supposed to not be present sometimes?
+// let, as apparently we can reassign?
+/**
+ * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
+ */
+export let context: EventContext
+
+/**
+* @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#cds-spawn)
+*/
+export function spawn(options: SpawnOptions, fn: (tx: Transaction) => {}): SpawnEventEmitter
+
+/**
+* Starts or joins a transaction
+* @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
+*/
+export const tx: {
+  (fn: (tx: Transaction) => {}): Promise<unknown>
+  (context?: object): Transaction
+  (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
+}
+
 // facade proxies into cds.db, which is a Service
 export const tx: Service['tx']
 export const entities: Service['entities']
@@ -397,5 +406,5 @@ export const update: Service['update']
 // export const delete: Service['delete']
 export const disconnect: Service['disconnect']
 export const transaction: Service['transaction']
-export const db: Service
+export const db: DatabaseService
 //export const upsert: Service['upsert']
