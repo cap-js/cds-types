@@ -63,7 +63,7 @@ export class QueryAPI {
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-stream-column)
    */
-  stream: {  // tl
+  stream: {
     (column: string): {
       from(entity: LinkedDefinition | string): {
         where(filter: any): ReadableStream
@@ -75,14 +75,14 @@ export class QueryAPI {
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  delete<T>(entity: LinkedDefinition | string, key?: any): DELETE<T>   // tl
+  delete<T>(entity: LinkedDefinition | string, key?: any): DELETE<T>
 
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
    */
-  foreach(query: Query, callback: (row: object) => void): this   // tl
+  foreach(query: Query, callback: (row: object) => void): this
 
-  transaction: {  // tl
+  transaction: {
     (fn: (tx: Transaction) => {}): Promise<unknown>
     (context?: object): Transaction
     (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
