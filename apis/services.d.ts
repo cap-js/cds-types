@@ -393,7 +393,8 @@ export const read: Service['read']
 export const create: Service['create']
 export const insert: Service['insert']
 export const update: Service['update']
-export const delete: Service['delete']
+// temporarily moved to cds.d.ts, as "delete" is a reserved keyword
+// export const delete: Service['delete']
 export const disconnect: Service['disconnect']
 export const transaction: Service['transaction']
 export const db: Service
