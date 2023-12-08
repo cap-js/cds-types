@@ -411,10 +411,3 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 //export const upsert: Service['upsert']
-
-
-import * as events from './events'
-/**
- * @deprecated use `import { Request } from '@sap/cds'` instead
- */
-export type Request = events.Request
