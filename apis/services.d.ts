@@ -1,7 +1,7 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { LinkedCSN, LinkedDefinition, Definitions, LinkedEntity } from './linked'
+import { LinkedCSN, LinkedDefinition, LinkedDefinitions, LinkedEntity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
@@ -124,25 +124,25 @@ export class Service extends QueryAPI {
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: Definitions & ((namespace: string) => Definitions)
+  entities: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: Definitions & ((namespace: string) => Definitions)
+  events: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: Definitions & ((namespace: string) => Definitions)
+  types: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: Definitions & ((namespace: string) => Definitions)
+  operations: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -408,3 +408,10 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 //export const upsert: Service['upsert']
+
+
+import * as events from './events'
+/**
+ * @deprecated use `import { Request } from '@sap/cds'` instead
+ */
+export type Request = events.Request
