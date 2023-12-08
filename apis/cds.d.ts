@@ -15,7 +15,7 @@ export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from
 
 // trick to work around "delete" as reserved identifier
 import { Service } from './services'
-const delete_: Service['delete']
+declare const delete_: Service['delete']
 export { delete_ as delete }
 
 import * as ql from './ql'

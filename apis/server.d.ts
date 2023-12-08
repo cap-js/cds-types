@@ -1,7 +1,7 @@
 import { Service, ServiceImpl } from "./services"
 import { CSN } from "./csn"
 import * as http from "http"
-import cds from './cds'
+import * as cds from './cds'
 //import { Application } from "express"
 
 	export const connect: {

@@ -403,7 +403,8 @@ export const insert: Service['insert']
 export const update: Service['update']
 // temporarily moved to cds.d.ts, as "delete" is a reserved keyword
 // export const delete: Service['delete']
-export const disconnect: Service['disconnect']
+// disconnect doesn't seem to be preset anywhere, also not mentioned on CAPire
+//export const disconnect: Service['disconnect']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 //export const upsert: Service['upsert']
