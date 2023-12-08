@@ -205,6 +205,9 @@ export class Service extends QueryAPI {
   // The central method to dispatch events
   dispatch(msg: types.event): Promise<any>
 
+  // FIXME: not yet documented, will come in future version
+  //disconnect (tenant?: string): Promise<void>
+
   // Provider API
   prepend(fn: ServiceImpl): Promise<this>
   on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
@@ -403,7 +406,7 @@ export const insert: Service['insert']
 export const update: Service['update']
 // temporarily moved to cds.d.ts, as "delete" is a reserved keyword
 // export const delete: Service['delete']
-// disconnect doesn't seem to be preset anywhere, also not mentioned on CAPire
+// FIXME: see Service.disconnect comment
 //export const disconnect: Service['disconnect']
 export const transaction: Service['transaction']
 export const db: DatabaseService
