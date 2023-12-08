@@ -9,7 +9,7 @@ import * as express from 'express'
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
 export class EventContext {
-  constructor(properties:{event:string, data?:object, query?:object, headers:object});
+  constructor(properties:{event:string, data?:object, query?:object, headers?:object});
   http?: {req: express.Request, res: express.Response}
   tenant: string
   user: User
