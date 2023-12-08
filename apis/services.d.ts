@@ -382,6 +382,8 @@ export let context: EventContext
 */
 export function spawn(options: SpawnOptions, fn: (tx: Transaction) => {}): SpawnEventEmitter
 
+
+// facade proxies into cds.db, which is a Service
 /**
 * Starts or joins a transaction
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
@@ -391,9 +393,6 @@ export const tx: {
   (context?: object): Transaction
   (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
 }
-
-// facade proxies into cds.db, which is a Service
-export const tx: Service['tx']
 export const entities: Service['entities']
 export const run: Service['run']
 export const foreach: Service['foreach']
