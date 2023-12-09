@@ -10,7 +10,9 @@ export { log, debug } from './log'
 // export * from './csn'
 export { test } from './test'
 export * from './cqn'
-export * as ql from './ql'
+
+import * as ql from './ql'
+export { ql }
 export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
 
 // trick to work around "delete" as reserved identifier
@@ -18,7 +20,6 @@ import { Service } from './services'
 declare const delete_: Service['delete']
 export { delete_ as delete }
 
-import * as ql from './ql'
 declare global {
 	// these provide the functionality from SELECT, INSERT, etc in the global facade
 	const SELECT: ql.QL<any>['SELECT']
