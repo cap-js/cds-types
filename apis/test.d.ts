@@ -75,12 +75,13 @@ declare class Test extends Axios {
 declare const test: {
     Test: typeof Test
     /**
-     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test?q=cds.test#run)
+     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test#class-cds-test-test)
      */
-    (projectDir: string): Test;
+    (dirname: string): Test;
     /**
-     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test?q=cds.test#run-2)
+     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test#class-cds-test-test)
      */
     (command: string, ...args: string[]): Test;
-    in (string) : Test
+
+    in (dirname: string) : Test
 }
