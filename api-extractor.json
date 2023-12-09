@@ -127,8 +127,12 @@
         "lib": [
           "es2021"
         ],
-        "outDir": "lib"
       },
+      "exclude": [
+        "node_modules",
+        "dist",
+        "test"
+      ]
     },
     /**
      * This option causes the compiler to be invoked with the --skipLibCheck option. This option is not recommended
@@ -406,6 +410,11 @@
       "default": {
         "logLevel": "warning"
         // "addToApiReportFile": false
+      },
+      // for now, everything is public
+      // FIXME use release tags
+      "ae-missing-release-tag": {
+        "logLevel": "none"
       }
 
       // "ae-extra-release-tag": {
