@@ -51,7 +51,7 @@ declare type LogFactory = {
 
     /**
      * Set a custom formatter function like that:
-     * ```
+     * ```js
      *   cds.log.format = (module, level, ...args) => [ '[', module, ']', ...args ]
      * ```
      *
@@ -61,7 +61,7 @@ declare type LogFactory = {
 
     /**
      * Set a custom logger.
-     * ```
+     * ```js
      *   cds.log.Logger = ...
      * ```
      */

@@ -6,10 +6,12 @@ export * from './services'
 export * from './events'
 export * from './utils'
 export { log, debug } from './log'
-// FIXME: rename clashes to Linked.*
-// export * from './csn'
 export { test } from './test'
 export * from './cqn'
+
+// FIXME: sort out what needs to be exported from csn/linked and under which namespace
+// export { Association, CSN, Definition, Extension, Element, EntityElements, FQN, kinds } from './csn'
+// export { Definitions, LinkedCSN, LinkedDefinition, LinkedAssociation, LinkedEntity, Filter, Visitor } from './linked'
 
 import * as ql from './ql'
 export { ql }

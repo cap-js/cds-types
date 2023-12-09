@@ -10,13 +10,13 @@ export interface linked {
 	name: FQN
 }
 
-interface LinkedEntity extends linked, entity {
+export interface LinkedEntity extends linked, entity {
 	constructor (properties: object)
 	keys: Definitions
 	drafts: LinkedEntity
 }
 
-interface LinkedAssociation extends linked, Association {
+export interface LinkedAssociation extends linked, Association {
 	is2one: boolean
 	is2many: boolean
 }

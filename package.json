@@ -18,7 +18,8 @@
     "README.md"
   ],
   "scripts": {
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "api-extractor": "api-extractor run --local --verbose"
   },
   "peerDependencies": {
     "@sap/cds": ">=7"

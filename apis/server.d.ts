@@ -46,14 +46,8 @@ type _cds = typeof cds
 	 */
 	// FIXME: this is actually supposed to be part of models.d.ts
 	// but had to be moved here so export * would not clash their definitions
-<<<<<<< HEAD
-	export function on (event : 'loaded', listener : (model : CSN) => void): typeof cds
-
-
-=======
 	export function on (event : 'loaded', listener : (model : CSN) => void): _cds
 
->>>>>>> 949a076 (Use type indirection for cds type)
 	/**
 	 * Emitted whenever a specific service is connected for the first time.
 	 */
@@ -65,8 +59,8 @@ type _cds = typeof cds
 	 * express application has been constructed but no middlewares or routes
 	 * added yet.
 	 */
-	export function on (event : 'bootstrap', listener : (app : any) => void) : _cds
-	export function once (event : 'bootstrap', listener : (app : any) => void) :  _cds
+	export function on (event : 'bootstrap', listener : (app : Application) => void) : _cds
+	export function once (event : 'bootstrap', listener : (app : Application) => void) :  _cds
 
 	/**
 	 * Emitted for each service served by cds.serve().
@@ -134,7 +128,7 @@ interface cds_serve_fluent {
 	from (model : string | CSN) :  cds_serve_fluent
 	to (protocol: string) :  cds_serve_fluent
 	at (path: string) :  cds_serve_fluent
-	in (app: any) :  cds_serve_fluent
+	in (app: Application) :  cds_serve_fluent
 	with (impl: ServiceImpl | string) :  cds_serve_fluent
 	// (req,res) : void
 }
