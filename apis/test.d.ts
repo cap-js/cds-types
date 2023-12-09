@@ -2,6 +2,9 @@ import { AxiosInstance } from 'axios';
 import chai from 'chai';
 import * as http from 'http';
 import { Service } from './services';
+import * as cds from './cds'
+
+type _cds = typeof cds
 
 declare class Axios {
   get axios(): AxiosInstance;
@@ -40,7 +43,7 @@ declare class Test extends Axios {
   get expect(): typeof chai.expect;
   get assert(): typeof chai.assert;
   get data(): DataUtil;
-  get cds(): typeof import('./cds')
+  get cds(): _cds
 
   log() : {
     output: string
