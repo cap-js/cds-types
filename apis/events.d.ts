@@ -37,7 +37,7 @@ export class Request extends Event {
   path: string
   target: LinkedDefinition
   /**
-   * Shortcut to {@link target.name}
+   * Shortcut to {@link Request.target | target (entity) name}
    * @see https://cap.cloud.sap/docs/node.js/events#req-entity
    */
   entity: string

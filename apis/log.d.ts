@@ -7,13 +7,14 @@ export declare const log: LogFactory
 /**
  * Shortcut to `cds.log(...).debug`, returning `undefined` if `cds.log(...)._debug` is `false`.
  * Use like this:
- * ```
+ * @example
+ * ```js
  *   const dbg = cds.debug('foo')
  *   ...
  *   dbg && dbg('message')
  * ```
  *
- * @param name logger name
+ * @param name - logger name
  */
 export declare function debug(name: string): undefined | Log
 
@@ -26,23 +27,23 @@ declare type LogFactory = {
      *
      * By default this logger would prefix all output with `[sql] - `
      * You can change this by specifying another prefix in the options:
-     *
-     * ```
+     * @example
+     * ```js
      *   const LOG = cds.log('sql|db', { prefix: 'cds.ql' })
      * ```
      *
      * Call `cds.log()` for a given module again to dynamically change the log level
      * of all formerly created loggers, for example:
-     *
-     * ```
+     * @example
+     * ```js
      *   const LOG = cds.log('sql')
      *   LOG.info ('this will show, as default level is info')
      *   cds.log('sql', 'warn')
      *   LOG.info('this will be suppressed now')
      * ```
      *
-     * @param name logger name
-     * @param options level, label and prefix
+     * @param name - logger name
+     * @param options - level, label and prefix
      * @returns the logger
      * @see [capire](https://cap.cloud.sap/docs/node.js/cds-log)
      */
@@ -57,7 +58,7 @@ declare type LogFactory = {
      * The formatter shall return an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
     format: Formatter
-    
+
     /**
      * Set a custom logger.
      * ```
@@ -140,9 +141,9 @@ declare type Formatter = {
     /**
      * Custom format function
      *
-     * @param module logger name
-     * @param level log level
-     * @param args additional arguments
+     * @param module - logger name
+     * @param level - log level
+     * @param args - additional arguments
      * @returns an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
     (module: string, level: number, args: any[]): any[]
@@ -152,8 +153,8 @@ declare type Log = {
     /**
      * Logs a message
      *
-     * @param message text to log
-     * @param optionalParams additional parameters, same as in `console.log(text, param1, ...)`
+     * @param message - text to log
+     * @param optionalParams - additional parameters, same as in `console.log(text, param1, ...)`
      */
      (message?: any, ...optionalParams: any[]): void
 }

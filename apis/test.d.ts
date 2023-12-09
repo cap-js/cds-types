@@ -27,7 +27,10 @@ declare class Axios {
 declare class DataUtil {
   delete(db?: Service): Promise<void>;
   reset(db?: Service): Promise<void>;
-  /** @deprecated */ autoReset(enabled: boolean): this;
+  /**
+   * @deprecated if needed, call `reset()`, considering test performance
+   */
+  autoReset(enabled: boolean): this;
 }
 
 declare class Test extends Axios {
@@ -37,7 +40,10 @@ declare class Test extends Axios {
   run(cmd: string, ...args: string[]): this;
   in(...paths: string[]): this;
   silent(): this;
-  /** @deprecated */ verbose(v: boolean): this;
+  /**
+   * @deprecated Server log is shown by default. Use `log()` to get control over it.
+   */
+  verbose(v: boolean): this;
 
   get chai(): typeof chai;
   get expect(): typeof chai.expect;

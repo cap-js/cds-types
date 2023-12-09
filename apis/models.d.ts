@@ -52,13 +52,13 @@ export const parse : {
  * Loads and parses models from the specified files.
  * Uses `cds.resolve` to fetch the respective models.
  * Essentially a shortcut for `cds.compile.to.csn(files)`
- * @param {string} files - filenames of models or if folder containing models
+ * @param files - filenames of models or if folder containing models
  */
 export function get (files: '*' | filename | filename[], o?:_options): Promise<CSN>
 
 /**
  * Shortcut for `cds.get(files, 'inferred')`
- * @param {string} files - filenames of models or if folder containing models
+ * @param files - filenames of models or if folder containing models
  */
 export function load (files: '*' | filename | filename[], o?:_options): Promise<CSN>
 
