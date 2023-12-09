@@ -5,6 +5,7 @@ import { LinkedCSN, LinkedDefinition, LinkedDefinitions, LinkedEntity } from './
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
+import { ReadableStream } from 'node:stream/web'
 
 
 export class QueryAPI {
