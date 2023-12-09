@@ -131,11 +131,11 @@ export type service = {
 type cds_services = { [name:string]: Service }
 
 interface cds_serve_fluent {
-	from (model : string | CSN) :  _cds
-	to (protocol: string) :  _cds
-	at (path: string) :  _cds
-	in (app: any) :  _cds
-	with (impl: ServiceImpl | string) :  _cds
+	from (model : string | CSN) :  cds_serve_fluent
+	to (protocol: string) :  cds_serve_fluent
+	at (path: string) :  cds_serve_fluent
+	in (app: any) :  cds_serve_fluent
+	with (impl: ServiceImpl | string) :  cds_serve_fluent
 	// (req,res) : void
 }
 

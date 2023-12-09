@@ -34,6 +34,7 @@ cds.serve('SomeService', { service: '*' })
 cds.serve('SomeService', { from: '*' })
 cds.serve('SomeService', { service: '*', from: '*' })
 cds.serve('SomeService', { someOtherOption: true })
+cds.serve('SomeService').at('path').from('model').in('dir').to('protocol')
 
 // CRUD
 await srv.read(Books, 'ID')
@@ -228,12 +229,13 @@ cds.on('bootstrap', (app): void => {
   app.use(proxy({ port: process.env.PORT }))
 })
 
-cds.on('shutdown', () => {
+.on('shutdown', () => {
   console.log("shutdown")
 })
-cds.once('shutdown', () => {
+.once('shutdown', () => {
   console.log("shutdown")
 })
+
 
 // cds.context.http
 if (cds.context?.http) {
