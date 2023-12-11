@@ -113,7 +113,7 @@ export type service = {
 	 * Use that in modules to get IntelliSense.
 	 */
 	impl (impl: ServiceImpl) : typeof impl
-	// impl <T> (srv:T, impl: (  cdsType: T, srv: (T) ) => any) : typeof impl
+	// impl <T> (srv:T, impl: (  _cds: T, srv: (T) ) => any) : typeof impl
 
 	/**
 	 * Array of all services constructed.
