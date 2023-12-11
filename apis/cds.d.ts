@@ -8,7 +8,7 @@ export * from './utils'
 export { log, debug } from './log'
 // FIXME: rename clashes to Linked.*
 // export * from './csn'
-export { test, Test } from './test'
+export { test } from './test'
 export * from './cqn'
 export * as ql from './ql'
 export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
