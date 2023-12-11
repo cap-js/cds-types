@@ -1,33 +1,33 @@
+export * from './core'
+export * from './server'
+export * from './env'
+export * from './models'
+export * from './services'
+export * from './events'
+export * from './utils'
+export { log, debug } from './log'
+// FIXME: rename clashes to Linked.*
+// export * from './csn'
+export { test } from './test'
+export * from './cqn'
+export * as ql from './ql'
+export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
+
+// trick to work around "delete" as reserved identifier
+import { Service } from './services'
+declare const delete_: Service['delete']
+export { delete_ as delete }
+
 import * as ql from './ql'
-
-declare global {
-	const cds : cds_facade
-}
-
-export = cds
-
-type cds_facade = {}
-& import('./core').default
-& import('./env').default
-& import('./models').default
-& import('./server').default
-& import('./services').QueryAPI
-& import('./services').default
-& import('./events').default
-& import('./ql').cds_ql
-& import('./log')
-& import('./utils')
-& import('./test')
-
 declare global {
 	// these provide the functionality from SELECT, INSERT, etc in the global facade
-	const SELECT: typeof cds.ql.SELECT
-	const INSERT: typeof cds.ql.INSERT
-	const UPSERT: typeof cds.ql.UPSERT
-	const UPDATE: typeof cds.ql.UPDATE
-	const DELETE: typeof cds.ql.DELETE
-	const CREATE: typeof cds.ql.CREATE
-	const DROP: typeof cds.ql.DROP
+	const SELECT: ql.QL<any>['SELECT']
+	const INSERT: ql.QL<any>['INSERT']
+	const UPSERT: ql.QL<any>['UPSERT']
+	const UPDATE: ql.QL<any>['UPDATE']
+	const DELETE: ql.QL<any>['DELETE']
+	const CREATE: ql.QL<any>['CREATE']
+	const DROP: ql.QL<any>['DROP']
 
 	// and these allow us to use them as type too, i.e. `const q: SELECT<Book> = ...`
 	type SELECT<T> = ql.SELECT<T>

@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import * as chai from 'chai';
+import chai from 'chai';
 import * as http from 'http';
 import { Service } from './services';
 
@@ -63,10 +63,7 @@ declare class Test extends Axios {
 //   restore(): (...args: TArgs) => TReturnValue;
 // }
 
-export = cds
-
-declare class cds {
-  test: {
+declare const test: {
     Test: typeof Test
     /**
      * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test?q=cds.test#run)
@@ -77,5 +74,4 @@ declare class cds {
      */
     (command: string, ...args: string[]): Test;
     in (string) : Test
-  }
 }

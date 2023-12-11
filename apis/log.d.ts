@@ -1,23 +1,21 @@
-export = cds
-declare class cds {
-    /**
-     * Create a new logger, or install a custom log formatter
-     */
-    log: LogFactory
 
-    /**
-     * Shortcut to `cds.log(...).debug`, returning `undefined` if `cds.log(...)._debug` is `false`.
-     * Use like this:
-     * ```
-     *   const dbg = cds.debug('foo')
-     *   ...
-     *   dbg && dbg('message')
-     * ```
-     *
-     * @param name logger name
-     */
-    debug(name: string): undefined | Log
-}
+/**
+ * Create a new logger, or install a custom log formatter
+ */
+export declare const log: LogFactory
+
+/**
+ * Shortcut to `cds.log(...).debug`, returning `undefined` if `cds.log(...)._debug` is `false`.
+ * Use like this:
+ * ```
+ *   const dbg = cds.debug('foo')
+ *   ...
+ *   dbg && dbg('message')
+ * ```
+ *
+ * @param name logger name
+ */
+export declare function debug(name: string): undefined | Log
 
 declare type LogFactory = {
 

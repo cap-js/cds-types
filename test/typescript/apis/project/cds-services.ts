@@ -1,6 +1,5 @@
 import cds from '../../../..'
 import { Foo, Foos, action } from './dummy'
-import User from '../../../../apis/core'
 
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -57,7 +56,8 @@ await cds.update(Books, 'ID')
 await cds.delete(Books)
 await cds.delete(Books, 'ID')
 await cds.delete(Books).where({ id: 123 })
-await cds.upsert({}).into(Books)
+// GAP: has to be added in runtime, then types, then re-enable this test
+// await cds.upsert({}).into(Books)
 
 // as alias to the query methods
 let fs1: Foos = await srv.read(Foos)
@@ -248,7 +248,7 @@ const req3 = cds.context?.http?.req
 let ctx = cds.context
 ctx?.tenant === 't1'
 const myUser = ctx?.user
-if ( myUser instanceof User) {
+if (myUser instanceof cds.User) {
   myUser.id === 'u2'
 }
 
@@ -257,12 +257,12 @@ const tx3 = cds.tx (cds.context)
 const db = await cds.connect.to('db')
 cds.context.features = {foo: true}
 
-db.tx({tenant: 'myTenant'}, async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
+cds.tx({tenant: 'myTenant'}, async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
   await tx.run('').then(() => {}, () => {})
   // code here
 }).then(() => {}, () => {})
 
-db.tx(async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
+cds.tx(async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
   await tx.run('').then(() => {}, () => {})
   // code here
 }).then(() => {}, () => {})
@@ -270,9 +270,7 @@ db.tx(async (tx) => { // tx has to be infered from the type defintion to be a Tr
 //tests cds.db
 cds.db.kind === "hana"
 await cds.db.run ( SELECT.from(Books) )
-await cds.db.tx (async (tx) => {
+await cds.tx (async (tx) => {
   await tx.run(SELECT(1).from(Books,201).forUpdate())
 })
 cds.db.entities('draftModelAuth')
-
-

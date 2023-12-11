@@ -2,7 +2,9 @@ import { CSN, FQN, Association, Definition, entity, kinds } from "./csn"
 
 export type LinkedDefinition = linked & Definition & LinkedEntity & LinkedAssociation
 export type Definitions = { [name: string]: LinkedDefinition }
-
+// FIXME: this is only a temporary alias. Definitions is actually correct,
+// but the name may be misleading, as it is indeed a mapping of strings to LinkedDefinition objects.
+export type LinkedDefinitions = Definitions
 export interface linked {
 	is(kind: kinds | 'Association' | 'Composition'): boolean
 	name: FQN
