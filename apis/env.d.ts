@@ -28,6 +28,7 @@ export default class {
       kibana_formatter: boolean,
 
       /**
+      @experimental
       * @see [capire](https://cap.cloud.sap/docs/advanced/odata#transformations)
       */
       odata_new_parser: boolean,
