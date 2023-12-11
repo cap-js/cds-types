@@ -62,7 +62,6 @@ declare type LogFactory = {
      * Set a custom logger.
      * ```
      *   cds.log.Logger = ...
-cds.on('connect', (x) => x.) 
      * ```
      */
     Logger: Logger
