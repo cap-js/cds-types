@@ -378,7 +378,7 @@ type SpawnOptions = {
 /**
  * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
  */
-export let context: EventContext
+export let context: EventContext | undefined
 
 /**
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#cds-spawn)
