@@ -3,7 +3,7 @@ import cds from '../../../..'
 const test = cds.test(__dirname).in('other')
 cds.test('serve', '--in-memory', '--project', __dirname)
 cds.test('dir').run('cmd', '--arg1', '--arg2');
-(new cds.Test).run(...args)
+(new cds.test.Test).run(...args)
 
 
 const {GET, DELETE, POST, PUT} = test

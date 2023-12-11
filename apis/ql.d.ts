@@ -292,7 +292,7 @@ TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 	DELETE : CQN.DELETE["DELETE"]
 }
 
-export class UPDATE<T = any> extends ConstructedQuery {
+export class UPDATE<T> extends ConstructedQuery {
 	// cds-typer plural
 	static entity <T extends ArrayConstructable<any>> (entity:T, primaryKey? : PK) : UPDATE<SingularType<T>>
 
