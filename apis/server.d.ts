@@ -2,7 +2,7 @@ import { Service, ServiceImpl } from "./services"
 import { CSN } from "./csn"
 import * as http from "http"
 import * as cds from './cds'
-//import { Application } from "express"
+import { Application } from "express"
 
 	export const connect: {
 		/**
@@ -58,8 +58,8 @@ import * as cds from './cds'
 	 * express application has been constructed but no middlewares or routes
 	 * added yet.
 	 */
-	export function on (event : 'bootstrap', listener : (app : any) => void) : typeof cds
-	export function once (event : 'bootstrap', listener : (app : any) => void) :  typeof cds
+	export function on (event : 'bootstrap', listener : (app : Application) => void) : typeof cds
+	export function once (event : 'bootstrap', listener : (app : Application) => void) :  typeof cds
 
 	/**
 	 * Emitted for each service served by cds.serve().
@@ -127,7 +127,7 @@ interface cds_serve_fluent {
 	from (model : string | CSN) :  typeof cds
 	to (protocol: string) :  typeof cds
 	at (path: string) :  typeof cds
-	in (app: any) :  typeof cds
+	in (app: Application) :  typeof cds
 	with (impl: ServiceImpl | string) :  typeof cds
 	// (req,res) : void
 }
