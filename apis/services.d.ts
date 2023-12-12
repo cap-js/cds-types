@@ -1,10 +1,11 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { LinkedCSN, LinkedDefinition, LinkedDefinitions, LinkedEntity } from './linked'
+import { LinkedCSN, LinkedDefinition, Definitions as LinkedDefinitions, LinkedEntity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
+import { ReadableStream } from 'node:stream/web'
 
 
 export class QueryAPI {

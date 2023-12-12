@@ -18,13 +18,15 @@
     "README.md"
   ],
   "scripts": {
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "api-extractor": "api-extractor run --local --verbose"
   },
   "peerDependencies": {
     "@sap/cds": ">=7"
   },
   "devDependencies": {
     "@sap/cds": "^7.4.0",
+    "@types/node": "^20",
     "axios": "^1.6.2",
     "chai": "^4.3.10",
     "jest": "^29.7.0",

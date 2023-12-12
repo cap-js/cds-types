@@ -4,6 +4,8 @@ import * as http from "http"
 import * as cds from './cds'
 import { Application } from "express"
 
+type _cds = typeof cds
+
 	export const connect: {
 		/**
 		 * Connects to a specific datasource.
@@ -21,7 +23,8 @@ import { Application } from "express"
 		 * Connects the primary datasource.
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect)
 		 */
-		(options?: string | cds_connect_options): Promise<typeof cds>  //> cds.connect(<options>)
+                // API extractor cannot handle the direct usages of the cds namespace in typeof cds, so add an indirection.
+		(options?: string | cds_connect_options): Promise<_cds>  //> cds.connect(<options>)
 	}
 
 	/**
@@ -44,13 +47,12 @@ import { Application } from "express"
 	 */
 	// FIXME: this is actually supposed to be part of models.d.ts
 	// but had to be moved here so export * would not clash their definitions
-	export function on (event : 'loaded', listener : (model : CSN) => void): typeof cds
+	export function on (event : 'loaded', listener : (model : CSN) => void): _cds
 
-	
 	/**
 	 * Emitted whenever a specific service is connected for the first time.
 	 */
-	export function on(event: 'connect', listener: (srv: Service) => void):  typeof cds
+	export function on(event: 'connect', listener: (srv: Service) => void):  _cds
 
 
 	/**
@@ -58,34 +60,34 @@ import { Application } from "express"
 	 * express application has been constructed but no middlewares or routes
 	 * added yet.
 	 */
-	export function on (event : 'bootstrap', listener : (app : Application) => void) : typeof cds
-	export function once (event : 'bootstrap', listener : (app : Application) => void) :  typeof cds
+	export function on (event : 'bootstrap', listener : (app : Application) => void) : _cds
+	export function once (event : 'bootstrap', listener : (app : Application) => void) :  _cds
 
 	/**
 	 * Emitted for each service served by cds.serve().
 	 */
-	export function on (event : 'serving', listener : (srv : Service) => void) :  typeof cds
+	export function on (event : 'serving', listener : (srv : Service) => void) :  _cds
 
 	/**
 	 * Emitted by the default, built-in `server.js` when all services are
 	 * constructed and mounted by cds.serve().
 	 */
-	export function on   (event : 'served', listener : (all : cds_services) => void) :  typeof cds
-	export function once (event : 'served', listener : (all : cds_services) => void) :  typeof cds
+	export function on   (event : 'served', listener : (all : cds_services) => void) :  _cds
+	export function once (event : 'served', listener : (all : cds_services) => void) :  _cds
 
 	/**
 	 * Emitted by the default, built-in `server.js` when the http server
 	 * is started and listening for incoming requests.
 	 */
-	export function on   (event : 'listening', listener : (args : { server: http.Server, url:string }) => void) :  typeof cds
-	export function once (event : 'listening', listener : (args : { server: http.Server, url:string }) => void) :  typeof cds
+	export function on   (event : 'listening', listener : (args : { server: http.Server, url:string }) => void) :  _cds
+	export function once (event : 'listening', listener : (args : { server: http.Server, url:string }) => void) :  _cds
 
 	/**
 	 * Emitted by the default, built-in `server.js` when the http server
 	 * is shutdown.
 	 */
-	export function on (event : 'shutdown', listener : () => void) :  typeof cds
-	export function once (event : 'shutdown', listener : () => void) :  typeof cds
+	export function on (event : 'shutdown', listener : () => void) :  _cds
+	export function once (event : 'shutdown', listener : () => void) :  _cds
 
 	/**
 	 * Dictionary of all services constructed and/or connected.
@@ -112,7 +114,7 @@ export type service = {
 	 * Use that in modules to get IntelliSense.
 	 */
 	impl (impl: ServiceImpl) : typeof impl
-	// impl <T> (srv:T, impl: (  typeof cds: T, srv: (T) ) => any) : typeof impl
+	// impl <T> (srv:T, impl: (  _cds: T, srv: (T) ) => any) : typeof impl
 
 	/**
 	 * Array of all services constructed.
@@ -124,11 +126,11 @@ export type service = {
 type cds_services = { [name:string]: Service }
 
 interface cds_serve_fluent {
-	from (model : string | CSN) :  typeof cds
-	to (protocol: string) :  typeof cds
-	at (path: string) :  typeof cds
-	in (app: Application) :  typeof cds
-	with (impl: ServiceImpl | string) :  typeof cds
+	from (model : string | CSN) :  cds_serve_fluent
+	to (protocol: string) :  cds_serve_fluent
+	at (path: string) :  cds_serve_fluent
+	in (app: Application) :  cds_serve_fluent
+	with (impl: ServiceImpl | string) :  cds_serve_fluent
 	// (req,res) : void
 }
 
