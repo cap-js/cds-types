@@ -23,6 +23,7 @@ type _cds = typeof cds
 		 * Connects the primary datasource.
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect)
 		 */
+                // API extractor cannot handle the direct usages of the cds namespace in typeof cds, so add an indirection.
 		(options?: string | cds_connect_options): Promise<_cds>  //> cds.connect(<options>)
 	}
 

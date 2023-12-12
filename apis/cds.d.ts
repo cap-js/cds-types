@@ -13,6 +13,7 @@ export * from './cqn'
 // export { Association, CSN, Definition, Extension, Element, EntityElements, FQN, kinds } from './csn'
 // export { Definitions, LinkedCSN, LinkedDefinition, LinkedAssociation, LinkedEntity, Filter, Visitor } from './linked'
 
+// API extractor cannot handle export * as ql from './ql', so split it into an import and an export statement
 import * as ql from './ql'
 export { ql }
 export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
