@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.1.0 - tbd
 
-### Added
+### Changed
+
+- Rework of the export structure of the main `cds` facade object, so that e.g. `cds.Request` and `cds.User` work again.
+
+### Fixed
+
+- TSDoc comments have a proper structure
 
 ## Version 0.0.1 - 2023-12-06
 
