@@ -1,4 +1,4 @@
-import assert from 'node:assert'
+import assert = require('node:assert')
 import cds, { User } from '@sap/cds';
 import { Query } from '@sap/cds/apis/cqn';
 import { entity, type, struct } from '@sap/cds/apis/csn';
@@ -59,7 +59,7 @@ import {
   EventContext,
   Request,
   Event,
-  // User, >> allready imported above
+  // User, >> already imported above
 
   ApplicationService,
   MessagingService,
