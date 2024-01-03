@@ -196,7 +196,7 @@ export class Service extends QueryAPI {
     <T = any>(details: { event: types.event; data?: object; headers?: object }): Promise<T>
     <T = any>(details: { query: ConstructedQuery; data?: object; headers?: object }): Promise<T>
     <T = any>(details: { method: types.eventName; path: string; data?: object; headers?: object }): Promise<T>
-    <T = any>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object }): Promise<T>
+    <T = any>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object; headers?: object }): Promise<T>
   }
 
   /**

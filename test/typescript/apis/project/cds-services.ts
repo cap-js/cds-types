@@ -102,6 +102,7 @@ await srv.emit({ event: 'UPDATE', data: {} })
 await srv.send({ event: 'AuthorCreated', data: {}, headers: {} })
 await srv.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 await srv.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}, params: {my: 7,new: 8}})
+await srv.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}, params: {my: 7,new: 8}, headers: {accept: 'application/json'}})
 
 // single args
 await srv.send('CREATE', 'Books', {}, {})
