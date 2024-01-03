@@ -46,7 +46,7 @@ export type Definition = context & service & type & struct & entity & Associatio
 // NOTE: If we use & instead of | CSN.definitions values would be reduced to <never>
 
 /**
- * Extensions capture extend Foo with { ... } directives.
+ * Extensions capture `extend Foo with { ... }` directives.
  */
 export type Extension = {
   extend: FQN
@@ -103,7 +103,7 @@ export interface Association extends type {
   type: 'cds.Association' | 'cds.Composition'
   target: FQN
   /**
-   * The specified cardinality. to-one = {max:1}, to-many = {max:'*'}
+   * The specified cardinality. to-one = `{max:1}`, to-many = `{max:'*'}`
    */
   cardinality?: { src?: 1; min?: 1 | 0; max?: 1 | '*' }
   /**

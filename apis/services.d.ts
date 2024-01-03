@@ -1,10 +1,12 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { LinkedCSN, LinkedDefinition, Definitions, LinkedEntity } from './linked'
+import { LinkedCSN, LinkedDefinition, Definitions as LinkedDefinitions, LinkedEntity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
+import { ReadableStream } from 'node:stream/web'
+
 
 export class QueryAPI {
 
@@ -60,16 +62,6 @@ export class QueryAPI {
   }
 
   /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
-   */
-  delete<T>(entity: LinkedDefinition | string, key?: any): DELETE<T>
-
-  /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
-   */
-  foreach(query: Query, callback: (row: object) => void): this
-
-  /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-stream-column)
    */
   stream: {
@@ -82,37 +74,20 @@ export class QueryAPI {
   }
 
   /**
-   * Starts or joins a transaction
-   * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
+   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
+  delete<T>(entity: LinkedDefinition | string, key?: any): DELETE<T>
 
-  tx: {
-    (fn: (tx: Transaction) => {}): Promise<unknown>
-    (context?: object): Transaction
-    (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
-  }
+  /**
+   * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
+   */
+  foreach(query: Query, callback: (row: object) => void): this
 
   transaction: {
     (fn: (tx: Transaction) => {}): Promise<unknown>
     (context?: object): Transaction
     (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
   }
-
-  /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#cds-spawn)
-   */
-  spawn(options: {
-    [key: string]: any
-    every?: number
-    after?: number
-  }, fn: (tx: Transaction) => {}): SpawnEventEmitter
-
-  /**
-   * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
-   */
-  context?: EventContext
-
-  db: DatabaseService
 }
 
 
@@ -131,14 +106,14 @@ export class Service extends QueryAPI {
   )
 
   /**
-   * The name of the service
-   */
-  name: string
-
-  /**
    * The kind of the service
    */
   kind: string
+
+  /**
+   * The name of the service
+   */
+  name: string
 
   /**
    * The model from which the service's definition was loaded
@@ -150,25 +125,25 @@ export class Service extends QueryAPI {
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: Definitions & ((namespace: string) => Definitions)
+  entities: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: Definitions & ((namespace: string) => Definitions)
+  events: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: Definitions & ((namespace: string) => Definitions)
+  types: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: Definitions & ((namespace: string) => Definitions)
+  operations: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -231,6 +206,9 @@ export class Service extends QueryAPI {
   // The central method to dispatch events
   dispatch(msg: types.event): Promise<any>
 
+  // FIXME: not yet documented, will come in future version
+  //disconnect (tenant?: string): Promise<void>
+
   // Provider API
   prepend(fn: ServiceImpl): Promise<this>
   on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
@@ -292,7 +270,7 @@ export default class cds {
 }
 
 
-interface Transaction extends Service {
+export interface Transaction extends Service {
   commit(): Promise<void>
   rollback(): Promise<void>
 }
@@ -389,3 +367,48 @@ declare namespace types {
     | 'COMMIT' | 'ROLLBACK'
   type target = string | LinkedDefinition | LinkedEntity | (string | LinkedDefinition | LinkedEntity)[] | ArrayConstructable<any>
 }
+
+type SpawnOptions = {
+  [key: string]: any
+  every?: number
+  after?: number
+}
+
+// FIXME: this was ?: EventContext before. Is context supposed to not be present sometimes?
+// let, as apparently we can reassign?
+/**
+ * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#event-contexts
+ */
+export let context: EventContext | undefined
+
+/**
+* @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#cds-spawn)
+*/
+export function spawn(options: SpawnOptions, fn: (tx: Transaction) => {}): SpawnEventEmitter
+
+
+// facade proxies into cds.db, which is a Service
+/**
+* Starts or joins a transaction
+* @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
+*/
+export const tx: {
+  (fn: (tx: Transaction) => {}): Promise<unknown>
+  (context?: object): Transaction
+  (context: object, fn: (tx: Transaction) => {}): Promise<unknown>
+}
+export const entities: Service['entities']
+export const run: Service['run']
+export const foreach: Service['foreach']
+export const stream: Service['stream']
+export const read: Service['read']
+export const create: Service['create']
+export const insert: Service['insert']
+export const update: Service['update']
+// temporarily moved to cds.d.ts, as "delete" is a reserved keyword
+// export const delete: Service['delete']
+// FIXME: see Service.disconnect comment
+//export const disconnect: Service['disconnect']
+export const transaction: Service['transaction']
+export const db: DatabaseService
+//export const upsert: Service['upsert']
