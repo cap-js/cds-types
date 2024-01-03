@@ -180,6 +180,11 @@ srv.on('CREATE', Books, (req, next) => {
   next()
 })
 
+// special error handler
+srv.on('error', (err, req) => {
+  err.message
+  req.event
+})
 
 // Typed bound/ unbound actions
 // The handler must return a number to be in line with action's signature (or void)
