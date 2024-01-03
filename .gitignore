@@ -1,0 +1,10 @@
+node_modules/
+gen/
+out/
+
+# API extractor
+
+dist/
+temp/
+etc/
+tsdoc-metadata.json

@@ -1,32 +1,7 @@
 import { LinkedDefinition } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
-import * as express from "express"
-
-
-export default class cds {
-
-  /**
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
-   */
-  EventContext: typeof EventContext
-
-  /**
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
-   */
-  Event: typeof Event
-
-  /**
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
-   */
-  Request: typeof Request
-
-  /**
-   * Represents the user in a given context.
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
-   */
-  User: typeof User
-}
+import * as express from 'express'
 
 
 /**
@@ -34,7 +9,7 @@ export default class cds {
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
 export class EventContext {
-  constructor(properties:{event:string, data?:object, query?:object, headers:object});
+  constructor(properties:{event:string, data?:object, query?:object, headers?:object});
   http?: {req: express.Request, res: express.Response}
   tenant: string
   user: User
@@ -62,7 +37,7 @@ export class Request extends Event {
   path: string
   target: LinkedDefinition
   /**
-   * Shortcut to {@link target.name}
+   * Shortcut to {@link Request.target | target (entity) name}
    * @see https://cap.cloud.sap/docs/node.js/events#req-entity
    */
   entity: string
@@ -97,6 +72,10 @@ export class Request extends Event {
 }
 
 
+/**
+ * Represents the user in a given context.
+ * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
+ */
 export class User {
   constructor(obj?: string | { id: string; attr: Record<string, string>; roles: Record<string, string> } | User)
   id: string

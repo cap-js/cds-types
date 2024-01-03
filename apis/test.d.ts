@@ -1,7 +1,10 @@
 import { AxiosInstance } from 'axios';
-import * as chai from 'chai';
+import chai from 'chai';
 import * as http from 'http';
 import { Service } from './services';
+import * as cds from './cds'
+
+type _cds = typeof cds
 
 declare class Axios {
   get axios(): AxiosInstance;
@@ -24,7 +27,10 @@ declare class Axios {
 declare class DataUtil {
   delete(db?: Service): Promise<void>;
   reset(db?: Service): Promise<void>;
-  /** @deprecated */ autoReset(enabled: boolean): this;
+  /**
+   * @deprecated if needed, call `reset()`, considering test performance
+   */
+  autoReset(enabled: boolean): this;
 }
 
 declare class Test extends Axios {
@@ -34,13 +40,16 @@ declare class Test extends Axios {
   run(cmd: string, ...args: string[]): this;
   in(...paths: string[]): this;
   silent(): this;
-  /** @deprecated */ verbose(v: boolean): this;
+  /**
+   * @deprecated Server log is shown by default. Use `log()` to get control over it.
+   */
+  verbose(v: boolean): this;
 
   get chai(): typeof chai;
   get expect(): typeof chai.expect;
   get assert(): typeof chai.assert;
   get data(): DataUtil;
-  get cds(): typeof import('./cds')
+  get cds(): _cds
 
   log() : {
     output: string
@@ -63,19 +72,16 @@ declare class Test extends Axios {
 //   restore(): (...args: TArgs) => TReturnValue;
 // }
 
-export = cds
-
-declare class cds {
-  test: {
+declare const test: {
     Test: typeof Test
     /**
-     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test?q=cds.test#run)
+     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test#class-cds-test-test)
      */
-    (projectDir: string): Test;
+    (dirname: string): Test;
     /**
-     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test?q=cds.test#run-2)
+     * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test#class-cds-test-test)
      */
     (command: string, ...args: string[]): Test;
-    in (string) : Test
-  }
+
+    in (dirname: string) : Test
 }
