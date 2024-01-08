@@ -171,7 +171,7 @@ export class Service extends QueryAPI {
     <T = any>(details: { event: types.event; data?: object; headers?: object }): Promise<T>
     <T = any>(details: { query: ConstructedQuery; data?: object; headers?: object }): Promise<T>
     <T = any>(details: { method: types.eventName; path: string; data?: object; headers?: object }): Promise<T>
-    <T = any>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object }): Promise<T>
+    <T = any>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object; headers?: object }): Promise<T>
   }
 
   /**
@@ -216,6 +216,7 @@ export class Service extends QueryAPI {
   on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
   on(eve: types.event, entity: types.target, handler: OnEventHandler): this
   on(eve: types.event, handler: OnEventHandler): this
+  on(eve: 'error', handler: OnErrorHandler): this
 
 
   // onSucceeded (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
@@ -288,6 +289,10 @@ interface EventHandler {
 
 interface OnEventHandler {
   (req: Request, next: Function): Promise<any> | any | void
+}
+
+interface OnErrorHandler {
+  (err: Error, req: Request): any | void
 }
 
 // `Partial` wraps any type and allows all properties to be undefined
