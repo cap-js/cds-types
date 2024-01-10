@@ -3,15 +3,15 @@
 // in several places within the API.
 
 
-export interface Constructable<T = unknown> {
-    new(...args: unknown[]): T;
+export interface Constructable<T = any> {
+    new(...args: any[]): T;
 }
 
-// unknown class (not value) of array to represent plural types used in cds-typer.
+// any class (not value) of array to represent plural types used in cds-typer.
 // Mainly used as pattern match for SingularType
-// type ArrayConstructable = Constructable<Array<unknown>>
-export interface ArrayConstructable<T = unknown> {
-    new(...args: unknown[]): T[];
+// type ArrayConstructable = Constructable<Array<any>>
+export interface ArrayConstructable<T = any> {
+    new(...args: any[]): T[];
 }
 
 // concrete singular type.

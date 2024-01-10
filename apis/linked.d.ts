@@ -11,7 +11,7 @@ export interface linked {
 }
 
 interface LinkedEntity extends linked, entity {
-    new (properties: object): unknown;  // unknown -> LinkedEntity, but that would trigger the linter
+    new (properties: object): any; // any -> LinkedEntity, but that would trigger the linter
     keys: Definitions;
     drafts: LinkedEntity;
 }
@@ -33,13 +33,13 @@ export interface LinkedCSN extends CSN {
 	 *   let entities = m.all('entity')        //> equivalent shortcut
 	 * ```
 	 */
-    each(x: Filter, defs?: Definitions): IterableIterator<unknown>;
+    each(x: Filter, defs?: Definitions): IterableIterator<any>;
 
     /**
 	 * Fetches definitions matching the given filter, returning them in an array.
 	 * Convenience shortcut for `[...reflect.each('entity')]`
 	 */
-    all(x: Filter, defs?: Definitions): unknown[];
+    all(x: Filter, defs?: Definitions): any[];
 
     /**
 	 * Fetches definitions matching the given filter, returning the first match, if any.
@@ -48,7 +48,7 @@ export interface LinkedCSN extends CSN {
 	 * @param x - the filter
 	 * @param defs - the definitions to fetch in, default: `this.definitions`
 	 */
-    find(x: Filter, defs?: Definitions): unknown;
+    find(x: Filter, defs?: Definitions): any;
 
     /**
 	 * Calls the visitor for each definition matching the given filter.
@@ -76,7 +76,7 @@ export interface LinkedCSN extends CSN {
 	 * @param parent - either the parent itself or its fully-qualified name
 	 * @param filter - an optional filter to apply before picking a child
 	 */
-    childrenOf(parent: unknown | string, filter?: ((def: LinkedDefinition) => boolean)): Definitions;
+    childrenOf(parent: any | string, filter?: ((def: LinkedDefinition) => boolean)): Definitions;
 
     /**
 	 * Provides convenient access to the model's top-level definitions.

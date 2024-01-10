@@ -5,18 +5,18 @@
  * directory and process environment.
  */
 export const env: {
-    build: unknown;
-    hana: unknown;
-    i18n: unknown;
-    mtx: unknown;
-    requires: unknown;
-    folders: unknown;
-    odata: unknown;
-    query: unknown;
-    sql: unknown;
-} & { [key: string]: unknown } // to allow additional values we have not yet captured
+    build: any;
+    hana: any;
+    i18n: any;
+    mtx: any;
+    requires: any;
+    folders: any;
+    odata: any;
+    query: any;
+    sql: any;
+} & { [key: string]: any } // to allow additional values we have not yet captured
 
-export const requires: unknown
+export const requires: any
 export const version: string
 export const home: string
 export const root: string

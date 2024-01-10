@@ -60,14 +60,14 @@ export type DROP = { DROP: {
 type scalar = number | string | boolean | null
 
 /** @private */
-type data = Record<string, unknown>
+type data = Record<string, any>
 
 /** @private */
 type name = string
 
 /** @private */
 type source = (ref | SELECT) & { as?: name; join?: name; on?: xpr }
-export type column_expr = expr & { as?: name; cast?: unknown; expand?: column_expr[]; inline?: column_expr[] }
+export type column_expr = expr & { as?: name; cast?: any; expand?: column_expr[]; inline?: column_expr[] }
 export type predicate = _xpr
 
 /** @private */
@@ -79,7 +79,7 @@ export type expr = ref | val | xpr | function_call | SELECT
 type ref = { ref: (name & { id?: string; where?: expr; args?: expr[] })[] }
 
 /** @private */
-type val = { val: unknown }
+type val = { val: any }
 
 /** @private */
 type xpr = { xpr: _xpr }
@@ -91,7 +91,7 @@ type _xpr = (expr | operator) []
 type operator = string
 
 /** @private */
-type function_call = { func: string; args: { [key: string]: unknown }[] }
+type function_call = { func: string; args: { [key: string]: any }[] }
 
 export type enum_literal = { '#': string }
 export type expr_literal = { '=': string }

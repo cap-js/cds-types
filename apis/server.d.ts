@@ -41,7 +41,7 @@ export const server: Function
 export const serve: (service: string, options?: {
     service?: string;
     from?: '*' | 'all' | string;
-    [key: string]: unknown;
+    [key: string]: any;
 }) => Promise<cds_services> & cds_serve_fluent
 
 /**

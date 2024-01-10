@@ -17,5 +17,7 @@
     "@stylistic/object-curly-spacing": ["error", "always"],
     // FIXME: turn this on if we decide on a conventional nomenclature for our types
     //"@typescript-eslint/naming-convention": ["error", { "selector": "typeLike", "format": ["PascalCase"] }]
+    // FIXME: turn this back on once we have resolved all the any-quirks
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

@@ -61,7 +61,7 @@ export const builtin: {
  * ```
  */
 export function extend<T> (target: T): {
-    with<E extends readonly unknown[]>(...ext: E): T & Intersect<E>;
+    with<E extends readonly any[]>(...ext: E): T & Intersect<E>;
 }
 
 /**

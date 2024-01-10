@@ -34,9 +34,9 @@ export class Event extends EventContext {
 
     event: string
 
-    data: unknown
+    data: any
 
-    headers: unknown
+    headers: any
 
 }
 
@@ -64,31 +64,31 @@ export class Request extends Event {
 
     subject: ref
 
-    reply (results: unknown): void
+    reply (results: any): void
 
-    notify (code: number, message: string, target?: string, args?: unknown[]): Error
-    info (code: number, message: string, target?: string, args?: unknown[]): Error
-    warn (code: number, message: string, target?: string, args?: unknown[]): Error
-    error (code: number, message: string, target?: string, args?: unknown[]): Error
-    reject (code: number, message: string, target?: string, args?: unknown[]): Error
+    notify (code: number, message: string, target?: string, args?: any[]): Error
+    info (code: number, message: string, target?: string, args?: any[]): Error
+    warn (code: number, message: string, target?: string, args?: any[]): Error
+    error (code: number, message: string, target?: string, args?: any[]): Error
+    reject (code: number, message: string, target?: string, args?: any[]): Error
 
-    notify (code: number, message: string, args?: unknown[]): Error
-    info (code: number, message: string, args?: unknown[]): Error
-    warn (code: number, message: string, args?: unknown[]): Error
-    error (code: number, message: string, args?: unknown[]): Error
-    reject (code: number, message: string, args?: unknown[]): Error
+    notify (code: number, message: string, args?: any[]): Error
+    info (code: number, message: string, args?: any[]): Error
+    warn (code: number, message: string, args?: any[]): Error
+    error (code: number, message: string, args?: any[]): Error
+    reject (code: number, message: string, args?: any[]): Error
 
-    notify (message: string, target?: string, args?: unknown[]): Error
-    info (message: string, target?: string, args?: unknown[]): Error
-    warn (message: string, target?: string, args?: unknown[]): Error
-    error (message: string, target?: string, args?: unknown[]): Error
-    reject (message: string, target?: string, args?: unknown[]): Error
+    notify (message: string, target?: string, args?: any[]): Error
+    info (message: string, target?: string, args?: any[]): Error
+    warn (message: string, target?: string, args?: any[]): Error
+    error (message: string, target?: string, args?: any[]): Error
+    reject (message: string, target?: string, args?: any[]): Error
 
-    notify (message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
-    info (message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
-    warn (message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
-    error (message: { code?: number | string; message: string; target?: string; args?: unknown[]; status?: number }): Error
-    reject (message: { code?: number | string; message: string; target?: string; args?: unknown[]; status?: number }): Error
+    notify (message: { code?: number | string; message: string; target?: string; args?: any[] }): Error
+    info (message: { code?: number | string; message: string; target?: string; args?: any[] }): Error
+    warn (message: { code?: number | string; message: string; target?: string; args?: any[] }): Error
+    error (message: { code?: number | string; message: string; target?: string; args?: any[]; status?: number }): Error
+    reject (message: { code?: number | string; message: string; target?: string; args?: any[]; status?: number }): Error
 
 }
 

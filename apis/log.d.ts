@@ -69,7 +69,7 @@ declare type LogFactory = {
 
     // FIXME
     /* eslint-disable-next-line @typescript-eslint/ban-types */
-    winstonLogger (LoggerOptions?: { level?: string; levels?: unknown; format?: unknown; transports?: unknown; exitOnError?: boolean | Function; silent?: boolean });
+    winstonLogger (LoggerOptions?: { level?: string; levels?: any; format?: any; transports?: any; exitOnError?: boolean | Function; silent?: boolean });
 }
 
 declare class Logger {
@@ -152,7 +152,7 @@ declare type Formatter = {
      * @param args - additional arguments
      * @returns an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-    (module: string, level: number, args: unknown[]): unknown[];
+    (module: string, level: number, args: any[]): any[];
 }
 
 declare type Log = {
@@ -163,9 +163,11 @@ declare type Log = {
      * @param message - text to log
      * @param optionalParams - additional parameters, same as in `console.log(text, param1, ...)`
      */
-    (message?: unknown, ...optionalParams: unknown[]): void;
+    (message?: any, ...optionalParams: any[]): void;
 }
 
 declare enum levels {
+    // FIXME: check if this is a copy-paste error
+    /* eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values */
     SILENT = 0, ERROR = 1, WARN = 2, INFO = 3, DEBUG = 4, TRACE = 5, SILLY = 5, VERBOSE = 5
 }
