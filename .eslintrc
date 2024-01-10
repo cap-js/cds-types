@@ -2,11 +2,19 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "@stylistic"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ]
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@stylistic/all-extends"
+  ],
+  "rules": {
+    "@stylistic/quotes": ["error", "single"],
+    "@stylistic/semi": ["error", "never"],
+    "@stylistic/object-curly-spacing": ["error", "always"]
+    
+  }
 }

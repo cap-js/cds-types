@@ -16,7 +16,7 @@ export declare const log: LogFactory
  *
  * @param name - logger name
  */
-export declare function debug(name: string): undefined | Log
+export declare function debug (name: string): undefined | Log
 
 declare type LogFactory = {
 
@@ -47,7 +47,7 @@ declare type LogFactory = {
      * @returns the logger
      * @see [capire](https://cap.cloud.sap/docs/node.js/cds-log)
      */
-    (name: string, options?: string | number | { level?: number, label?: string, prefix?: string }): Logger
+    (name: string, options?: string | number | { level?: number; label?: string; prefix?: string }): Logger;
 
     /**
      * Set a custom formatter function like that:
@@ -57,7 +57,7 @@ declare type LogFactory = {
      *
      * The formatter shall return an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-    format: Formatter
+    format: Formatter;
 
     /**
      * Set a custom logger.
@@ -65,12 +65,14 @@ declare type LogFactory = {
      *   cds.log.Logger = ...
      * ```
      */
-    Logger: Logger
+    Logger: Logger;
 
-    winstonLogger (LoggerOptions?: {level?: string, levels?: unknown, format?: unknown, transports?: unknown, exitOnError?: boolean | Function, silent?: boolean})
+    winstonLogger (LoggerOptions?: { level?: string; levels?: unknown; format?: unknown; transports?: unknown; exitOnError?: boolean | Function; silent?: boolean });
 }
 
 declare class Logger {
+
+
     /**
      * Logs with 'trace' level
      */
@@ -109,22 +111,22 @@ declare class Logger {
     /**
      * @returns whether 'debug' level is active
      */
-     _debug: boolean
+    _debug: boolean
 
     /**
      * @returns whether 'info' level is active
      */
-     _info: boolean
+    _info: boolean
 
     /**
      * @returns whether 'warn' level is active
      */
-     _warn: boolean
+    _warn: boolean
 
     /**
      * @returns whether 'error' level is active
      */
-     _error: boolean
+    _error: boolean
 
     /**
      * Change the format for this logger instance:
@@ -134,10 +136,12 @@ declare class Logger {
      *
      * The formatter shall return an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-     setFormat(formatter: Formatter)
+    setFormat (formatter: Formatter)
+
 }
 
 declare type Formatter = {
+
     /**
      * Custom format function
      *
@@ -146,17 +150,18 @@ declare type Formatter = {
      * @param args - additional arguments
      * @returns an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-    (module: string, level: number, args: unknown[]): unknown[]
+    (module: string, level: number, args: unknown[]): unknown[];
 }
 
 declare type Log = {
+
     /**
      * Logs a message
      *
      * @param message - text to log
      * @param optionalParams - additional parameters, same as in `console.log(text, param1, ...)`
      */
-     (message?: unknown, ...optionalParams: unknown[]): void
+    (message?: unknown, ...optionalParams: unknown[]): void;
 }
 
 declare enum levels {

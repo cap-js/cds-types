@@ -9,66 +9,87 @@ import * as express from 'express'
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
 export class EventContext {
-  constructor(properties:{event:string, data?:object, query?:object, headers?:object});
-  http?: {req: express.Request, res: express.Response}
-  tenant: string
-  user: User
-  id: string
-  locale: `${string}_${string}`
-  timestamp: Date
-  features?: { [key: string]: boolean }
+
+    constructor (properties: { event: string; data?: object; query?: object; headers?: object })
+    http?: { req: express.Request; res: express.Response }
+
+    tenant: string
+
+    user: User
+
+    id: string
+
+    locale: `${string}_${string}`
+
+    timestamp: Date
+
+    features?: { [key: string]: boolean }
+
 }
 
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
 export class Event extends EventContext {
-  event: string
-  data: unknown
-  headers: unknown
+
+    event: string
+
+    data: unknown
+
+    headers: unknown
+
 }
 
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
 export class Request extends Event {
-  params: (string | object)[]
-  method: string
-  path: string
-  target: LinkedDefinition
-  /**
+
+    params: (string | object)[]
+
+    method: string
+
+    path: string
+
+    target: LinkedDefinition
+
+
+    /**
    * Shortcut to {@link Request.target | target (entity) name}
    * @see https://cap.cloud.sap/docs/node.js/events#req-entity
    */
-  entity: string
-  query: Query
-  subject: ref
+    entity: string
 
-  reply(results: unknown): void
+    query: Query
 
-  notify(code: number, message: string, target?: string, args?: unknown[]): Error
-  info(code: number, message: string, target?: string, args?: unknown[]): Error
-  warn(code: number, message: string, target?: string, args?: unknown[]): Error
-  error(code: number, message: string, target?: string, args?: unknown[]): Error
-  reject(code: number, message: string, target?: string, args?: unknown[]): Error
+    subject: ref
 
-  notify(code: number, message: string, args?: unknown[]): Error
-  info(code: number, message: string, args?: unknown[]): Error
-  warn(code: number, message: string, args?: unknown[]): Error
-  error(code: number, message: string, args?: unknown[]): Error
-  reject(code: number, message: string, args?: unknown[]): Error
+    reply (results: unknown): void
 
-  notify(message: string, target?: string, args?: unknown[]): Error
-  info(message: string, target?: string, args?: unknown[]): Error
-  warn(message: string, target?: string, args?: unknown[]): Error
-  error(message: string, target?: string, args?: unknown[]): Error
-  reject(message: string, target?: string, args?: unknown[]): Error
+    notify (code: number, message: string, target?: string, args?: unknown[]): Error
+    info (code: number, message: string, target?: string, args?: unknown[]): Error
+    warn (code: number, message: string, target?: string, args?: unknown[]): Error
+    error (code: number, message: string, target?: string, args?: unknown[]): Error
+    reject (code: number, message: string, target?: string, args?: unknown[]): Error
 
-  notify(message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
-  info(message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
-  warn(message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
-  error(message: { code?: number | string; message: string; target?: string; args?: unknown[], status?: number }): Error
-  reject(message: { code?: number | string; message: string; target?: string; args?: unknown[], status?: number }): Error
+    notify (code: number, message: string, args?: unknown[]): Error
+    info (code: number, message: string, args?: unknown[]): Error
+    warn (code: number, message: string, args?: unknown[]): Error
+    error (code: number, message: string, args?: unknown[]): Error
+    reject (code: number, message: string, args?: unknown[]): Error
+
+    notify (message: string, target?: string, args?: unknown[]): Error
+    info (message: string, target?: string, args?: unknown[]): Error
+    warn (message: string, target?: string, args?: unknown[]): Error
+    error (message: string, target?: string, args?: unknown[]): Error
+    reject (message: string, target?: string, args?: unknown[]): Error
+
+    notify (message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
+    info (message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
+    warn (message: { code?: number | string; message: string; target?: string; args?: unknown[] }): Error
+    error (message: { code?: number | string; message: string; target?: string; args?: unknown[]; status?: number }): Error
+    reject (message: { code?: number | string; message: string; target?: string; args?: unknown[]; status?: number }): Error
+
 }
 
 
@@ -77,29 +98,35 @@ export class Request extends Event {
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
  */
 export class User {
-  constructor(obj?: string | { id: string; attr: Record<string, string>; roles: Record<string, string> } | User)
-  id: string
 
-  /**
+    constructor (obj?: string | { id: string; attr: Record<string, string>; roles: Record<string, string> } | User)
+    id: string
+
+    /**
    * @deprecated Use https://cap.cloud.sap/docs/node.js/events#locale instead
    */
-  locale: string
+    locale: string
 
-  /**
+    /**
    * @deprecated Use https://cap.cloud.sap/docs/node.js/events#tenant instead
    */
-  tenant: string | undefined
+    tenant: string | undefined
 
-  attr: Record<string, string>
-  roles: Array<string> | Record<string, string>
-  static Privileged: typeof Privileged
-  is(role: string): boolean
+    attr: Record<string, string>
+
+    roles: Array<string> | Record<string, string>
+
+    static Privileged: typeof Privileged
+    is (role: string): boolean
+
 }
 
 /**
  * Subclass for executing code with superuser privileges.
  */
 declare class Privileged extends User {
-  constructor()
-  is(): boolean
+
+    constructor ()
+    is (): boolean
+
 }

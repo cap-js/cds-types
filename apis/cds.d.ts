@@ -16,7 +16,7 @@ export * from './cqn'
 // API extractor cannot handle export * as ql from './ql', so split it into an import and an export statement
 import * as ql from './ql'
 export { ql }
-export { QLExtensions } from './ql'  // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
+export { QLExtensions } from './ql' // cds-ql.ts test tries to import this from top level? Correct? Or ql.QLExtensions?
 
 // trick to work around "delete" as reserved identifier
 import { Service } from './services'
@@ -24,14 +24,14 @@ declare const delete_: Service['delete']
 export { delete_ as delete }
 
 declare global {
-	// these provide the functionality from SELECT, INSERT, etc in the global facade
-	const SELECT: ql.QL<unknown>['SELECT']
-	const INSERT: ql.QL<unknown>['INSERT']
-	const UPSERT: ql.QL<unknown>['UPSERT']
-	const UPDATE: ql.QL<unknown>['UPDATE']
-	const DELETE: ql.QL<unknown>['DELETE']
-	const CREATE: ql.QL<unknown>['CREATE']
-	const DROP: ql.QL<unknown>['DROP']
+    // these provide the functionality from SELECT, INSERT, etc in the global facade
+    const SELECT: ql.QL<unknown>['SELECT']
+    const INSERT: ql.QL<unknown>['INSERT']
+    const UPSERT: ql.QL<unknown>['UPSERT']
+    const UPDATE: ql.QL<unknown>['UPDATE']
+    const DELETE: ql.QL<unknown>['DELETE']
+    const CREATE: ql.QL<unknown>['CREATE']
+    const DROP: ql.QL<unknown>['DROP']
 
 	// and these allow us to use them as type too, i.e. `const q: SELECT<Book> = ...`
 	type SELECT<T> = ql.SELECT<T>
@@ -40,5 +40,5 @@ declare global {
 	type UPDATE<T> = ql.UPDATE<T>
 	type DELETE<T> = ql.DELETE<T>
 	type CREATE<T> = ql.CREATE<T>
-	type DROP<T>   = ql.DROP<T>
+	type DROP<T> = ql.DROP<T>
 }

@@ -1,13 +1,15 @@
-import { Definition, EntityElements } from "./csn"
-import * as CQN from "./cqn"
-import { Constructable, ArrayConstructable, SingularType } from "./internal/inference"
-import { LinkedEntity } from "./linked"
+import { Definition, EntityElements } from './csn'
+import * as CQN from './cqn'
+import { Constructable, ArrayConstructable, SingularType } from './internal/inference'
+import { LinkedEntity } from './linked'
 import { ref, column_expr } from './cqn'
 
 export type Query = CQN.Query
 
 export class ConstructedQuery {
-	then(_resolved:(x:unknown)=>unknown, _rejected:(e:Error)=>unknown) : unknown
+
+    then (_resolved: (x: unknown) => unknown, _rejected: (e: Error) => unknown): unknown
+
 }
 
 
@@ -24,24 +26,25 @@ type QLExtensions<T> = T extends QLExtensions_<unknown> ? T : QLExtensions_<T>
  * They are passed down to all properties recursively.
 */
 type QLExtensions_<T> = {
-	[Key in keyof T]: QLExtensions<T[Key]>
+    [Key in keyof T]: QLExtensions<T[Key]>
 } & {
-	/**
+
+    /**
 	 * Alias for this attribute.
 	 */
-	as: (alias: string) => void
+    as: (alias: string) => void;
 
-	/**
+    /**
 	 * Accesses any nested attribute based on a [path](https://cap.cloud.sap/cap/docs/java/query-api#path-expressions):
 	 * `X.get('a.b.c.d')`. Note that you will not receive
 	 * proper typing after this call.
 	 * To still have access to typed results, use
 	 * `X.a().b().c().d()` instead.
 	 */
-	get: (path: string) => unknown
+    get: (path: string) => unknown;
 
-	// have to exclude undefined from the type, or we'd end up with a distribution of Subqueryable
-	// over T and undefined, which gives us zero code completion within the callable.
+    // have to exclude undefined from the type, or we'd end up with a distribution of Subqueryable
+    // over T and undefined, which gives us zero code completion within the callable.
 } & Subqueryable<Exclude<T, undefined>>
 
 /**
@@ -52,8 +55,9 @@ type QLExtensions_<T> = {
 type Subqueryable<T> =
 T extends Primitive	? object
 // composition of many/ association to many
-: T extends readonly unknown[] ? {
-	/**
+    : T extends readonly unknown[] ? {
+
+        /**
 	 * @example
 	 * ```js
 	 * SELECT.from(Books, b => b.author)
@@ -68,11 +72,12 @@ T extends Primitive	? object
 	 *
 	 * Note that you do not need to return anything from these subqueries.
 	 */
-	(fn: ((a:QLExtensions<T[number]>) => unknown) | '*'): T[number]
-}
-// composition of one/ association to one
-: {
-	/**
+        (fn: ((a: QLExtensions<T[number]>) => unknown) | '*'): T[number];
+    }
+    // composition of one/ association to one
+        : {
+
+            /**
 	 * @example
 	 * ```js
 	 * SELECT.from(Books, b => b.author)
@@ -87,15 +92,14 @@ T extends Primitive	? object
 	 *
 	 * Note that you do not need to return anything from these subqueries.
 	 */
-	(fn: ((a:QLExtensions<T>) => unknown) | '*'): T
-}
-;
+            (fn: ((a: QLExtensions<T>) => unknown) | '*'): T;
+        }
 
 
 // Alias for projections
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
-//export type Projection<T> = (e:T)=>void
-export type Projection<T> = (e:QLExtensions<T extends ArrayConstructable ?  SingularType<T> : T>)=>void
+// export type Projection<T> = (e:T)=>void
+export type Projection<T> = (e: QLExtensions<T extends ArrayConstructable ? SingularType<T> : T>) => void
 // Type for query pieces that can either be chained to build more complex queries or
 // awaited to materialise the result:
 // `Awaitable<SELECT<Book>, Book> = SELECT<Book> & Promise<Book>`
@@ -113,25 +117,33 @@ export type Awaitable<T, I> = T & Promise<I>
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
 export type StaticSELECT<T> = typeof SELECT
-	& ((...columns: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]) => SELECT<T>)
-	& ((...columns:string[]) => SELECT<T>)
-	& ((columns:string[]) => SELECT<T>)
-	& (TaggedTemplateQueryPart<SELECT<T>>)
-	& SELECT_one // as it is not directly quantified, ...
-	& SELECT_from // ...we should expect both a scalar and a list
+  & ((...columns: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]) => SELECT<T>)
+  & ((...columns: string[]) => SELECT<T>)
+  & ((columns: string[]) => SELECT<T>)
+  & (TaggedTemplateQueryPart<SELECT<T>>)
+  & SELECT_one // as it is not directly quantified, ...
+  & SELECT_from // ...we should expect both a scalar and a list
 
 declare class QL<T> {
-	SELECT : StaticSELECT<T>
-	INSERT : typeof INSERT
-		& ((...entries:object[]) => INSERT<unknown>) & ((entries:object[]) => INSERT<unknown>)
-	UPSERT: typeof UPSERT
-		& ((...entries:object[]) => UPSERT<unknown>) & ((entries:object[]) => UPSERT<unknown>)
-	UPDATE : typeof UPDATE
-		& typeof UPDATE.entity
-	DELETE : typeof DELETE
-		& ((...entries:object[]) => DELETE<unknown>) & ((entries:object[]) => DELETE<unknown>)
-	CREATE : typeof CREATE
-	DROP : typeof DROP
+
+    SELECT: StaticSELECT<T>
+
+    INSERT: typeof INSERT
+    & ((...entries: object[]) => INSERT<unknown>) & ((entries: object[]) => INSERT<unknown>)
+
+    UPSERT: typeof UPSERT
+    & ((...entries: object[]) => UPSERT<unknown>) & ((entries: object[]) => UPSERT<unknown>)
+
+    UPDATE: typeof UPDATE
+    & typeof UPDATE.entity
+
+    DELETE: typeof DELETE
+    & ((...entries: object[]) => DELETE<unknown>) & ((entries: object[]) => DELETE<unknown>)
+
+    CREATE: typeof CREATE
+
+    DROP: typeof DROP
+
 }
 
 // used as a catch-all type for using tagged template strings: SELECT `foo`. from `bar` etc.
@@ -142,186 +154,214 @@ declare class QL<T> {
 type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unknown[]) => T
 
 export class SELECT<T> extends ConstructedQuery {
-	static one : SELECT_one & { from: SELECT_one }
-	static distinct : typeof SELECT
-    static from : SELECT_from
-	from: SELECT_from & TaggedTemplateQueryPart<this>
-		& ((entity: Definition | string, primaryKey? : PK, projection? : Projection<unknown>) => this)
-	byKey (primaryKey? : PK) : this
-	columns: TaggedTemplateQueryPart<this>
-		& ((projection: Projection<T>) => this)
-		& ((...col: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]) => this)
-		& ((...col:(string | column_expr)[]) => this)
-		& ((col:(string | column_expr)[]) => this)
-	where: TaggedTemplateQueryPart<this>
-		& ((predicate:object) => this)
-		& ((...expr : unknown[]) => this)
-	and: TaggedTemplateQueryPart<this>
-		& ((predicate:object) => this)
-		& ((...expr : unknown[]) => this)
-	having: TaggedTemplateQueryPart<this>
-		& ((...expr : string[]) => this)
-		& ((predicate:object) => this)
-	groupBy: TaggedTemplateQueryPart<this>
-		& ((...expr : string[]) => this)
-	orderBy: TaggedTemplateQueryPart<this>
-		& ((...expr : string[]) => this)
-	limit: TaggedTemplateQueryPart<this>
-		& ((rows : number, offset? : number) => this)
-	forShareLock () : this
-	forUpdate ({wait}? : {wait?: number}) : this
-	alias (as: string) : this
 
-	elements: EntityElements
+    static one: SELECT_one & { from: SELECT_one }
+
+    static distinct: typeof SELECT
+
+    static from: SELECT_from
+
+    from: SELECT_from & TaggedTemplateQueryPart<this>
+    & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => this)
+
+    byKey (primaryKey?: PK): this
+    columns: TaggedTemplateQueryPart<this>
+    & ((projection: Projection<T>) => this)
+    & ((...col: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]) => this)
+    & ((...col: (string | column_expr)[]) => this)
+    & ((col: (string | column_expr)[]) => this)
+
+    where: TaggedTemplateQueryPart<this>
+    & ((predicate: object) => this)
+    & ((...expr: unknown[]) => this)
+
+    and: TaggedTemplateQueryPart<this>
+    & ((predicate: object) => this)
+    & ((...expr: unknown[]) => this)
+
+    having: TaggedTemplateQueryPart<this>
+    & ((...expr: string[]) => this)
+    & ((predicate: object) => this)
+
+    groupBy: TaggedTemplateQueryPart<this>
+    & ((...expr: string[]) => this)
+
+    orderBy: TaggedTemplateQueryPart<this>
+    & ((...expr: string[]) => this)
+
+    limit: TaggedTemplateQueryPart<this>
+    & ((rows: number, offset?: number) => this)
+    forShareLock (): this
+    forUpdate ({ wait }?: { wait?: number }): this
+    alias (as: string): this
+
+    elements: EntityElements
 
 
-	// Not yet public
-	// fullJoin (other: string, as: string) : this
-	// leftJoin (other: string, as: string) : this
-  // 	rightJoin (other: string, as: string) : this
-  // 	innerJoin (other: string, as: string) : this
-  // 	join (other: string, as: string, kind?: string) : this
-	// on : TaggedTemplateQueryPart<this>
-	//   & ((...expr : string[]) => this)
-	//   & ((predicate:object) => this)
+    // Not yet public
+    // fullJoin (other: string, as: string) : this
+    // leftJoin (other: string, as: string) : this
+    // 	rightJoin (other: string, as: string) : this
+    // 	innerJoin (other: string, as: string) : this
+    // 	join (other: string, as: string, kind?: string) : this
+    // on : TaggedTemplateQueryPart<this>
+    //   & ((...expr : string[]) => this)
+    //   & ((predicate:object) => this)
 
-	SELECT : CQN.SELECT["SELECT"] & {
-		forUpdate?: { wait: number }
-		forShareLock?: { wait: number }
-		search?: CQN.predicate
-		count?: boolean
-	}
+    SELECT: CQN.SELECT['SELECT'] & {
+        forUpdate?: { wait: number };
+        forShareLock?: { wait: number };
+        search?: CQN.predicate;
+        count?: boolean;
+    }
+
 }
 
 
 type SELECT_one =
-TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
 &
 // calling with class
-	(<T extends ArrayConstructable<unknown>>
-	(entityType: T, projection?: Projection<QLExtensions<SingularType<T>>>)
-	=> Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
+  (<T extends ArrayConstructable<unknown>>
+  (entityType: T, projection?: Projection<QLExtensions<SingularType<T>>>)
+  => Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
 &
-	(<T extends ArrayConstructable<unknown>>
-	(entityType: T, primaryKey : PK, projection?: Projection<QLExtensions<SingularType<T>>>)
-	=> Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
+  (<T extends ArrayConstructable<unknown>>
+  (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularType<T>>>)
+  => Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
 
-& ((entity: Definition | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<unknown>)
-& ((entity: LinkedEntity | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<unknown>)
-& (<T> (entity: T[], projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
-& (<T> (entity: T[], primaryKey : PK, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
-& (<T> (entity: {new():T}, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
-& (<T> (entity: {new():T}, primaryKey : PK, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
-& ((subject: ref) => SELECT<unknown>)
+  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<unknown>)
+  & ((entity: LinkedEntity | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<unknown>)
+  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & ((subject: ref) => SELECT<unknown>)
 
 type SELECT_from =
 // tagged template
-	TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
 &
 // calling with class
-	(<T extends ArrayConstructable<unknown>>
-	(entityType: T, projection?: Projection<QLExtensions<SingularType<T>>>)
-	=> Awaitable<SELECT<T>, InstanceType<T>>)
+  (<T extends ArrayConstructable<unknown>>
+  (entityType: T, projection?: Projection<QLExtensions<SingularType<T>>>)
+  => Awaitable<SELECT<T>, InstanceType<T>>)
 &
-	(<T extends ArrayConstructable<unknown>>
-	(entityType: T, primaryKey : PK, projection?: Projection<SingularType<T>>)
-	=> Awaitable<SELECT<SingularType<T>>, InstanceType<SingularType<T>>>)  // when specifying a key, we expect a single element as result
+  (<T extends ArrayConstructable<unknown>>
+  (entityType: T, primaryKey: PK, projection?: Projection<SingularType<T>>)
+  => Awaitable<SELECT<SingularType<T>>, InstanceType<SingularType<T>>>) // when specifying a key, we expect a single element as result
 // calling with definition
-& ((entity: Definition | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<unknown>)
-& ((entity: LinkedEntity | string, primaryKey? : PK, projection? : Projection<unknown>) => SELECT<unknown>)
+  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<unknown>)
+  & ((entity: LinkedEntity | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<unknown>)
 // calling with concrete list
-& (<T> (entity: T[], projection? : Projection<T>) => SELECT<T> & Promise<T[]>)
-& (<T> (entity: T[], primaryKey : PK, projection? : Projection<T>) => Awaitable<SELECT<T>, T>)
-& ((subject: ref) => SELECT<unknown>)
+  & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
+  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & ((subject: ref) => SELECT<unknown>)
 
 export class INSERT<T> extends ConstructedQuery {
-	static into : (<T extends ArrayConstructable<unknown>> (entity:T, entries? : object | object[]) => INSERT<SingularType<T>>)
-		& (TaggedTemplateQueryPart<INSERT<unknown>>)
-		& ((entity : Definition | string, entries? : object | object[]) => INSERT<unknown>)
-		& ((entity : LinkedEntity | string, entries? : object | object[]) => INSERT<unknown>)
-		& (<T> (entity:Constructable<T>, entries? : object | object[]) => INSERT<T>)
-		& (<T> (entity:T, entries? : T | object | object[]) => INSERT<T>)
 
-	into: (<T extends ArrayConstructable> (entity:T) => this)
-		& TaggedTemplateQueryPart<this>
-		& ((entity : Definition | string) => this)
-	data (block : (e:T)=>void) : this
-	entries (...entries : object[]) : this
-	columns (...col: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]) : this
-	columns (...col: string[]) : this
-	values (... val: unknown[]) : this
-	rows (... row: unknown[]) : this
-	as (select: SELECT<T>): this
-	INSERT : CQN.INSERT["INSERT"]
+    static into: (<T extends ArrayConstructable<unknown>> (entity: T, entries?: object | object[]) => INSERT<SingularType<T>>)
+      & (TaggedTemplateQueryPart<INSERT<unknown>>)
+      & ((entity: Definition | string, entries?: object | object[]) => INSERT<unknown>)
+      & ((entity: LinkedEntity | string, entries?: object | object[]) => INSERT<unknown>)
+      & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
+      & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
+
+    into: (<T extends ArrayConstructable> (entity: T) => this)
+    & TaggedTemplateQueryPart<this>
+    & ((entity: Definition | string) => this)
+
+    data (block: (e: T) => void): this
+    entries (...entries: object[]): this
+    columns (...col: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]): this
+    columns (...col: string[]): this
+    values (...val: unknown[]): this
+    rows (...row: unknown[]): this
+    as (select: SELECT<T>): this
+    INSERT: CQN.INSERT['INSERT']
+
 }
 
 
 export class UPSERT<T> extends ConstructedQuery {
-	static into : (<T extends ArrayConstructable<unknown>> (entity:T, entries? : object | object[]) => UPSERT<SingularType<T>>)
-		& (TaggedTemplateQueryPart<UPSERT<unknown>>)
-		& ((entity : Definition | string, entries? : object | object[]) => UPSERT<unknown>)
-		& ((entity : LinkedEntity | string, entries? : object | object[]) => UPSERT<unknown>)
-		& (<T> (entity:Constructable<T>, entries? : object | object[]) => UPSERT<T>)
-		& (<T> (entity:T, entries? : T | object | object[]) => UPSERT<T>)
 
-	into: (<T extends ArrayConstructable> (entity:T) => this)
-		& TaggedTemplateQueryPart<this>
-		& ((entity : Definition | string) => this)
-	data (block : (e:T)=>void) : this
-	entries (...entries : object[]) : this
-	columns (...col: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]) : this
-	columns (...col: string[]) : this
-	values (... val: unknown[]) : this
-	rows (... row: unknown[]) : this
-	UPSERT : CQN.UPSERT["UPSERT"]
+    static into: (<T extends ArrayConstructable<unknown>> (entity: T, entries?: object | object[]) => UPSERT<SingularType<T>>)
+      & (TaggedTemplateQueryPart<UPSERT<unknown>>)
+      & ((entity: Definition | string, entries?: object | object[]) => UPSERT<unknown>)
+      & ((entity: LinkedEntity | string, entries?: object | object[]) => UPSERT<unknown>)
+      & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
+      & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
+
+    into: (<T extends ArrayConstructable> (entity: T) => this)
+    & TaggedTemplateQueryPart<this>
+    & ((entity: Definition | string) => this)
+
+    data (block: (e: T) => void): this
+    entries (...entries: object[]): this
+    columns (...col: (T extends ArrayConstructable<unknown> ? keyof SingularType<T> : keyof T)[]): this
+    columns (...col: string[]): this
+    values (...val: unknown[]): this
+    rows (...row: unknown[]): this
+    UPSERT: CQN.UPSERT['UPSERT']
+
 }
-
 
 
 export class DELETE<T> extends ConstructedQuery {
-	static from:
-TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
-		& ((entity : Definition | string | ArrayConstructable, primaryKey? : PK) => DELETE<unknown>)
-		& ((entity : LinkedEntity | string | ArrayConstructable, primaryKey? : PK) => DELETE<unknown>)
-		& ((subject: ref) => DELETE<unknown>)
-	byKey (primaryKey? : PK) : this
-	where (predicate:object) : this
-	where (...expr : unknown[]) : this
-	and (predicate:object) : this
-	and (...expr : unknown[]) : this
-	DELETE : CQN.DELETE["DELETE"]
+
+    static from:
+      TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
+      & ((entity: Definition | string | ArrayConstructable, primaryKey?: PK) => DELETE<unknown>)
+      & ((entity: LinkedEntity | string | ArrayConstructable, primaryKey?: PK) => DELETE<unknown>)
+      & ((subject: ref) => DELETE<unknown>)
+
+    byKey (primaryKey?: PK): this
+    where (predicate: object): this
+    where (...expr: unknown[]): this
+    and (predicate: object): this
+    and (...expr: unknown[]): this
+    DELETE: CQN.DELETE['DELETE']
+
 }
 
 export class UPDATE<T> extends ConstructedQuery {
-	// cds-typer plural
-	static entity <T extends ArrayConstructable<unknown>> (entity:T, primaryKey? : PK) : UPDATE<SingularType<T>>
 
-	static entity (entity : Definition | string, primaryKey? : PK) : UPDATE<unknown>
-	static entity (entity : LinkedEntity | string, primaryKey? : PK) : UPDATE<unknown>
-	static entity <T> (entity:Constructable<T>, primaryKey? : PK) : UPDATE<T>
-	static entity <T> (entity:T, primaryKey? : PK) : UPDATE<T>
-	byKey (primaryKey? : PK) : this
-	// with (block: (e:T)=>void) : this
-	// set (block: (e:T)=>void) : this
-	set: TaggedTemplateQueryPart<this>
-		& ((data:object) => this)
-	with: TaggedTemplateQueryPart<this>
-		& ((data:object) => this)
-	where (predicate:object) : this
-	where (...expr : unknown[]) : this
-	and (predicate:object) : this
-	and (...expr : unknown[]) : this
-	UPDATE : CQN.UPDATE["UPDATE"]
+    // cds-typer plural
+    static entity<T extends ArrayConstructable<unknown>> (entity: T, primaryKey?: PK): UPDATE<SingularType<T>>
+
+    static entity (entity: Definition | string, primaryKey?: PK): UPDATE<unknown>
+    static entity (entity: LinkedEntity | string, primaryKey?: PK): UPDATE<unknown>
+    static entity<T> (entity: Constructable<T>, primaryKey?: PK): UPDATE<T>
+    static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
+    byKey (primaryKey?: PK): this
+    // with (block: (e:T)=>void) : this
+    // set (block: (e:T)=>void) : this
+    set: TaggedTemplateQueryPart<this>
+    & ((data: object) => this)
+
+    with: TaggedTemplateQueryPart<this>
+      & ((data: object) => this)
+
+    where (predicate: object): this
+    where (...expr: unknown[]): this
+    and (predicate: object): this
+    and (...expr: unknown[]): this
+    UPDATE: CQN.UPDATE['UPDATE']
+
 }
 
 export class CREATE<T> extends ConstructedQuery {
-	static entity (entity : Definition | string) : CREATE<unknown>
-	static entity (entity : LinkedEntity | string) : CREATE<unknown>
-	CREATE : CQN.CREATE["CREATE"]
+
+    static entity (entity: Definition | string): CREATE<unknown>
+    static entity (entity: LinkedEntity | string): CREATE<unknown>
+    CREATE: CQN.CREATE['CREATE']
+
 }
 
 export class DROP<T> extends ConstructedQuery {
-	static entity (entity : Definition | string) : DROP<unknown>
-	static entity (entity : LinkedEntity | string) : DROP<unknown>
-	DROP : CQN.DROP["DROP"]
+
+    static entity (entity: Definition | string): DROP<unknown>
+    static entity (entity: LinkedEntity | string): DROP<unknown>
+    DROP: CQN.DROP['DROP']
+
 }

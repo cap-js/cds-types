@@ -12,84 +12,85 @@ type Key = number | string | unknown
 
 export class QueryAPI {
 
-  entities : LinkedCSN['entities']
+    entities: LinkedCSN['entities']
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  read: {
-    <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>
-    <T>(entity: LinkedDefinition | string, key?: Key): SELECT<T>
-  }
+    read: {
+        <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>;
+        <T>(entity: LinkedDefinition | string, key?: Key): SELECT<T>;
+    }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  create: {
-    <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): INSERT<T>
-    <T>(entity: LinkedDefinition | string, key?: Key): INSERT<T>
-  }
+    create: {
+        <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): INSERT<T>;
+        <T>(entity: LinkedDefinition | string, key?: Key): INSERT<T>;
+    }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  insert: {
-    <T extends ArrayConstructable<unknown>>(data: T): INSERT<T>
-    <T>(data: object | object[]): INSERT<T>
-  }
+    insert: {
+        <T extends ArrayConstructable<unknown>>(data: T): INSERT<T>;
+        <T>(data: object | object[]): INSERT<T>;
+    }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  upsert: {
-    <T extends ArrayConstructable<unknown>>(data: T): UPSERT<T>
-    <T>(data: object | object[]): UPSERT<T>
-  }
+    upsert: {
+        <T extends ArrayConstructable<unknown>>(data: T): UPSERT<T>;
+        <T>(data: object | object[]): UPSERT<T>;
+    }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  update: {
-    <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): UPDATE<T>
-    <T>(entity: LinkedDefinition | string, key?: Key): UPDATE<T>
-  }
+    update: {
+        <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): UPDATE<T>;
+        <T>(entity: LinkedDefinition | string, key?: Key): UPDATE<T>;
+    }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  run: {
-    (query: ConstructedQuery | ConstructedQuery[]): Promise<ResultSet | unknown>
-    (query: Query): Promise<ResultSet | unknown>
-    (query: string, args?: unknown[] | object): Promise<ResultSet | unknown>
-  }
+    run: {
+        (query: ConstructedQuery | ConstructedQuery[]): Promise<ResultSet | unknown>;
+        (query: Query): Promise<ResultSet | unknown>;
+        (query: string, args?: unknown[] | object): Promise<ResultSet | unknown>;
+    }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-stream-column)
    */
-  stream: {
-    (column: string): {
-      from(entity: LinkedDefinition | string): {
-        where(filter: unknown): ReadableStream
-      }
+    stream: {
+        (column: string): {
+            from(entity: LinkedDefinition | string): {
+                where(filter: unknown): ReadableStream;
+            };
+        };
+        (query: Query): Promise<ReadableStream>;
     }
-    (query: Query): Promise<ReadableStream>
-  }
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  delete<T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>
+    delete<T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>
 
-  /**
+    /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
    */
-  foreach(query: Query, callback: (row: object) => void): this
+    foreach (query: Query, callback: (row: object) => void): this
 
-  transaction: {
-    (fn: (tx: Transaction) => object): Promise<unknown>
-    (context?: object): Transaction
-    (context: object, fn: (tx: Transaction) => object): Promise<unknown>
-  }
+    transaction: {
+        (fn: (tx: Transaction) => object): Promise<unknown>;
+        (context?: object): Transaction;
+        (context: object, fn: (tx: Transaction) => object): Promise<unknown>;
+    }
+
 }
 
 
@@ -98,203 +99,214 @@ export class QueryAPI {
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
  */
 export class Service extends QueryAPI {
-  constructor(
-    name?: string,
-    model?: CSN,
-    options?: {
-      kind: string
-      impl: string | ServiceImpl
-    }
-  )
 
-  /**
+    constructor (
+        name?: string,
+        model?: CSN,
+        options?: {
+            kind: string;
+            impl: string | ServiceImpl;
+        }
+    )
+
+    /**
    * The kind of the service
    */
-  kind: string
+    kind: string
 
-  /**
+    /**
    * The name of the service
    */
-  name: string
+    name: string
 
-  /**
+    /**
    * The model from which the service's definition was loaded
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  model: LinkedCSN
+    model: LinkedCSN
 
-  /**
+    /**
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+    entities: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
-  /**
+    /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+    events: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
-  /**
+    /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+    types: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
-  /**
+    /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+    operations: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
 
-  /**
+    /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
    * You may register own handlers before the base class’s ones, to intercept requests before the default handlers snap in.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-init)
    */
-  init(): Promise<void>
+    init (): Promise<void>
 
-  /**
+    /**
    * Constructs and emits an asynchronous event.
    * @see [capire docs](https://cap.cloud.sap/docs/core-services#srv-emit-event)
    */
-  emit: {
-    <T = unknown>(details: { event: types.event; data?: object; headers?: object }): Promise<T>
-    <T = unknown>(event: types.event, data?: object, headers?: object): Promise<T>
-  }
+    emit: {
+        <T = unknown>(details: { event: types.event; data?: object; headers?: object }): Promise<T>;
+        <T = unknown>(event: types.event, data?: object, headers?: object): Promise<T>;
+    }
 
-  /**
+    /**
    * Constructs and sends a synchronous request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
    */
-  send: {
-    <T = unknown>(event: types.event, path: string, data?: object, headers?: object): Promise<T>
-    <T = unknown>(event: types.event, data?: object, headers?: object): Promise<T>
-    <T = unknown>(details: { event: types.event; data?: object; headers?: object }): Promise<T>
-    <T = unknown>(details: { query: ConstructedQuery; data?: object; headers?: object }): Promise<T>
-    <T = unknown>(details: { method: types.eventName; path: string; data?: object; headers?: object }): Promise<T>
-    <T = unknown>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object; headers?: object }): Promise<T>
-  }
+    send: {
+        <T = unknown>(event: types.event, path: string, data?: object, headers?: object): Promise<T>;
+        <T = unknown>(event: types.event, data?: object, headers?: object): Promise<T>;
+        <T = unknown>(details: { event: types.event; data?: object; headers?: object }): Promise<T>;
+        <T = unknown>(details: { query: ConstructedQuery; data?: object; headers?: object }): Promise<T>;
+        <T = unknown>(details: { method: types.eventName; path: string; data?: object; headers?: object }): Promise<T>;
+        <T = unknown>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object; headers?: object }): Promise<T>;
+    }
 
-  /**
+    /**
    * Constructs and sends a GET request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#rest-style-api)
    */
-  get<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
-  /**
+    get<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
+
+    /**
    * Constructs and sends a POST request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#rest-style-api)
    */
-  post<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
-  /**
+    post<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
+
+    /**
    * Constructs and sends a PUT request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#rest-style-api)
    */
-  put<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
-  /**
+    put<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
+
+    /**
    * Constructs and sends a PATCH request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#rest-style-api)
    */
-  patch<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
-  /**
+    patch<T = unknown>(entityOrPath: types.target, data?: object): Promise<T>
+
+    /**
    * Constructs and sends a DELETE request.
    */
-  delete: {
-    <T = unknown>(entityOrPath: types.target, data?: object): DELETE<T>
-    <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): DELETE<T>
-    <T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>
-  }
+    delete: {
+        <T = unknown>(entityOrPath: types.target, data?: object): DELETE<T>;
+        <T extends ArrayConstructable<unknown>>(entity: T, key?: Key): DELETE<T>;
+        <T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>;
+    }
 
-  // The central method to dispatch events
-  dispatch(msg: types.event): Promise<unknown>
+    // The central method to dispatch events
+    dispatch (msg: types.event): Promise<unknown>
 
-  // FIXME: not yet documented, will come in future version
-  //disconnect (tenant?: string): Promise<void>
+    // FIXME: not yet documented, will come in future version
+    // disconnect (tenant?: string): Promise<void>
 
-  // Provider API
-  prepend(fn: ServiceImpl): Promise<this>
-  on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
-  on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
-  on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
-  on(eve: types.event, entity: types.target, handler: OnEventHandler): this
-  on(eve: types.event, handler: OnEventHandler): this
-  on(eve: 'error', handler: OnErrorHandler): this
+    // Provider API
+    prepend (fn: ServiceImpl): Promise<this>
+    on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
+    on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
+    on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
+    on (eve: types.event, entity: types.target, handler: OnEventHandler): this
+    on (eve: types.event, handler: OnEventHandler): this
+    on (eve: 'error', handler: OnErrorHandler): this
 
 
-  // onSucceeded (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
-  // onSucceeded (eve: types.Events, handler: types.EventHandler): this
-  // onFailed (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
-  // onFailed (eve: types.Events, handler: types.EventHandler): this
-  before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>, InstanceType<T> | void | Error>): this
-  before(eve: types.event, entity: types.target, handler: EventHandler): this
-  before(eve: types.event, handler: EventHandler): this
-  after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>, InstanceType<T> | void | Error>): this
-  after(eve: types.event, entity: types.target, handler: ResultsHandler): this
-  after(eve: types.event, handler: ResultsHandler): this
-  reject(eves: types.event, ...entity: types.target[]): this
+    // onSucceeded (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
+    // onSucceeded (eve: types.Events, handler: types.EventHandler): this
+    // onFailed (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
+    // onFailed (eve: types.Events, handler: types.EventHandler): this
+    before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>, InstanceType<T> | void | Error>): this
+    before (eve: types.event, entity: types.target, handler: EventHandler): this
+    before (eve: types.event, handler: EventHandler): this
+    after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>, InstanceType<T> | void | Error>): this
+    after (eve: types.event, entity: types.target, handler: ResultsHandler): this
+    after (eve: types.event, handler: ResultsHandler): this
+    reject (eves: types.event, ...entity: types.target[]): this
+
 }
 
 export class ApplicationService extends Service {}
 export class MessagingService extends Service {}
 export class RemoteService extends Service {}
 export class DatabaseService extends Service {
-  deploy(model?: CSN | string): Promise<CSN>
-  begin(): Promise<void>
-  commit(): Promise<void>
-  rollback(): Promise<void>
+
+    deploy (model?: CSN | string): Promise<CSN>
+    begin (): Promise<void>
+    commit (): Promise<void>
+    rollback (): Promise<void>
+
 }
 
 
 export default class cds {
-  /**
+
+
+    /**
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  Service: typeof Service
+    Service: typeof Service
 
-  /**
+    /**
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/app-services)
    */
-  ApplicationService: typeof ApplicationService
+    ApplicationService: typeof ApplicationService
 
-  /**
+    /**
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/remote-services)
    */
-  RemoteService: typeof RemoteService
+    RemoteService: typeof RemoteService
 
-  /**
+    /**
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/messaging)
    */
-  MessagingService: typeof MessagingService
+    MessagingService: typeof MessagingService
 
-  /**
+    /**
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/databases)
    */
-  DatabaseService: typeof DatabaseService
+    DatabaseService: typeof DatabaseService
+
 }
 
 
 export interface Transaction extends Service {
-  commit(): Promise<void>
-  rollback(): Promise<void>
+    commit(): Promise<void>;
+    rollback(): Promise<void>;
 }
 
 interface ResultSet extends Array<object> {}
 
 interface ServiceImpl {
-  (this: Service, srv: Service): unknown
+    (this: Service, srv: Service): unknown;
 }
 
 interface EventHandler {
-  // (msg : types.EventMessage) : Promise<unknown> | unknown | void
-  (req: Request): Promise<unknown> | unknown | void
+    // (msg : types.EventMessage) : Promise<unknown> | unknown | void
+    (req: Request): Promise<unknown> | unknown | void;
 }
 
 interface OnEventHandler {
-  (req: Request, next: Function): Promise<unknown> | unknown | void
+    (req: Request, next: Function): Promise<unknown> | unknown | void;
 }
 
 interface OnErrorHandler {
-  (err: Error, req: Request): unknown | void
+    (err: Error, req: Request): unknown | void;
 }
 
 // `Partial` wraps any type and allows all properties to be undefined
@@ -307,33 +319,33 @@ type Partial<T> = { [Key in keyof T]: undefined | T[Key] }
 // Naming the first parameter in a handler `each` has special voodoo
 // semantic which makes it impossible for us to infer the exact behaviour on a type level.
 // So we always have to expect scalars as well as arrays in some callbacks.
-type OneOrMany<T> = T | T[];
+type OneOrMany<T> = T | T[]
 
 // functions generated by cds-typer explicitly carry types for
 // parameters and return type, as their names are not accessible from
 // function signatures to the type system.
 // This meta information is required in .on action handlers.
 type CdsFunction = {
-  (...args: unknown[]): unknown,
-  __parameters: object,
-  __returns: unknown
+    (...args: unknown[]): unknown;
+    __parameters: object;
+    __returns: unknown;
 }
 
 type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
 declare namespace CRUDEventHandler {
-  type Before<P,R> = (req: TypedRequest<P>) => Promise<R> | R
-  type On<P,R> = (req: TypedRequest<P>, next: (...args: unknown) => Promise<R> | R) => Promise<R> | R
-  type After<P,R> = (data: undefined | P, req: TypedRequest<P>) => Promise<R> | R
+  type Before<P, R> = (req: TypedRequest<P>) => Promise<R> | R
+  type On<P, R> = (req: TypedRequest<P>, next: (...args: unknown) => Promise<R> | R) => Promise<R> | R
+  type After<P, R> = (data: undefined | P, req: TypedRequest<P>) => Promise<R> | R
 }
 
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
-interface ActionEventHandler<P,R> {
-  (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R
+interface ActionEventHandler<P, R> {
+    (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R;
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.
@@ -344,25 +356,27 @@ interface ActionEventHandler<P,R> {
 // The user will therefore receive "any" as their result/ each. If we could some day differentiate,
 // we may want to add a generic to ResultsHandler which is passed from the EventHandlers down below.
 interface ResultsHandler {
-  (results: unknown[], req: Request): void
-  (each: unknown, req: Request): void
+    (results: unknown[], req: Request): void;
+    (each: unknown, req: Request): void;
 }
 
 interface SpawnEvents {
-  succeeded: (res: unknown) => void
-  failed: (error: unknown) => void
-  done: () => void
+    succeeded: (res: unknown) => void;
+    failed: (error: unknown) => void;
+    done: () => void;
 }
 
 declare class SpawnEventEmitter {
-  on<U extends keyof SpawnEvents>(
-    event: U, listener: SpawnEvents[U]
-  ): this;
 
-  emit<U extends keyof SpawnEvents>(
-    event: U, ...args: Parameters<SpawnEvents[U]>
-  ): boolean;
-  timer: unknown
+    on<U extends keyof SpawnEvents>(
+        event: U, listener: SpawnEvents[U]
+    ): this
+
+    emit<U extends keyof SpawnEvents>(
+        event: U, ...args: Parameters<SpawnEvents[U]>
+    ): boolean
+    timer: unknown
+
 }
 
 declare namespace types {
@@ -376,9 +390,9 @@ declare namespace types {
 }
 
 type SpawnOptions = {
-  [key: string]: unknown
-  every?: number
-  after?: number
+    [key: string]: unknown;
+    every?: number;
+    after?: number;
 }
 
 // FIXME: this was ?: EventContext before. Is context supposed to not be present sometimes?
@@ -391,7 +405,7 @@ export let context: EventContext | undefined
 /**
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx#cds-spawn)
 */
-export function spawn(options: SpawnOptions, fn: (tx: Transaction) => object): SpawnEventEmitter
+export function spawn (options: SpawnOptions, fn: (tx: Transaction) => object): SpawnEventEmitter
 
 
 // facade proxies into cds.db, which is a Service
@@ -400,9 +414,9 @@ export function spawn(options: SpawnOptions, fn: (tx: Transaction) => object): S
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
 */
 export const tx: {
-  (fn: (tx: Transaction) => object): Promise<unknown>
-  (context?: object): Transaction
-  (context: object, fn: (tx: Transaction) => object): Promise<unknown>
+    (fn: (tx: Transaction) => object): Promise<unknown>;
+    (context?: object): Transaction;
+    (context: object, fn: (tx: Transaction) => object): Promise<unknown>;
 }
 export const entities: Service['entities']
 export const run: Service['run']
@@ -415,7 +429,7 @@ export const update: Service['update']
 // temporarily moved to cds.d.ts, as "delete" is a reserved keyword
 // export const delete: Service['delete']
 // FIXME: see Service.disconnect comment
-//export const disconnect: Service['disconnect']
+// export const disconnect: Service['disconnect']
 export const transaction: Service['transaction']
 export const db: DatabaseService
-//export const upsert: Service['upsert']
+// export const upsert: Service['upsert']
