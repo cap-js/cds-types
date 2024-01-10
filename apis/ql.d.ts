@@ -306,7 +306,7 @@ export class UPSERT<T> extends ConstructedQuery {
 
 }
 
-
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class DELETE<T> extends ConstructedQuery {
 
     static from:
@@ -324,6 +324,7 @@ export class DELETE<T> extends ConstructedQuery {
 
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class UPDATE<T> extends ConstructedQuery {
 
     // cds-typer plural
@@ -350,6 +351,7 @@ export class UPDATE<T> extends ConstructedQuery {
 
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class CREATE<T> extends ConstructedQuery {
 
     static entity (entity: Definition | string): CREATE<unknown>
@@ -358,6 +360,7 @@ export class CREATE<T> extends ConstructedQuery {
 
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class DROP<T> extends ConstructedQuery {
 
     static entity (entity: Definition | string): DROP<unknown>
