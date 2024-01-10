@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Service, ServiceImpl } from "./services"
 import { CSN } from "./csn"
 import * as http from "http"

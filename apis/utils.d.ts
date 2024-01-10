@@ -43,16 +43,16 @@ declare const utils : {
 	/** 
 	 * @see https://cap.cloud.sap/docs/node.js/cds-utils#async-read-file
 	 */
-	read(file: string): Promise<Buffer | {}>
+	read(file: string): Promise<Buffer | object>
 
 	/** 
 	 * @see https://cap.cloud.sap/docs/node.js/cds-utils#async-write-data-to-file
 	 */
 	write: {
-		(data: Object): {
+		(data: object): {
 			to(...file: string[]): Promise<ReturnType<typeof fs.promises.writeFile>>
 		}
-		(file: string, data: Object): Promise<ReturnType<typeof fs.promises.writeFile>>
+		(file: string, data: object): Promise<ReturnType<typeof fs.promises.writeFile>>
 	}
 
 	/** 
