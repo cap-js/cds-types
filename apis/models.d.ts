@@ -1,7 +1,6 @@
 import { Query as CQN, expr, _xpr } from "./cqn"
 import { LinkedCSN } from "./linked"
 import { CSN } from "./csn"
-import * as cds from './cds'
 
 type _flavor = 'parsed' | 'xtended' | 'inferred'
 type _odata_options = {

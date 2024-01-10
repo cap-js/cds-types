@@ -129,7 +129,7 @@ declare class QL<T> {
 	UPDATE : typeof UPDATE
 		& typeof UPDATE.entity
 	DELETE : typeof DELETE
-	    & ((...entries:object[]) => DELETE<unknown>) & ((entries:object[]) => DELETE<unknown>)
+		& ((...entries:object[]) => DELETE<unknown>) & ((entries:object[]) => DELETE<unknown>)
 	CREATE : typeof CREATE
 	DROP : typeof DROP
 }
@@ -281,8 +281,8 @@ export class UPSERT<T> extends ConstructedQuery {
 export class DELETE<T> extends ConstructedQuery {
 	static from:
 TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<unknown>>>
-	 	& ((entity : Definition | string | ArrayConstructable, primaryKey? : PK) => DELETE<unknown>)
-	 	& ((entity : LinkedEntity | string | ArrayConstructable, primaryKey? : PK) => DELETE<unknown>)
+		& ((entity : Definition | string | ArrayConstructable, primaryKey? : PK) => DELETE<unknown>)
+		& ((entity : LinkedEntity | string | ArrayConstructable, primaryKey? : PK) => DELETE<unknown>)
 		& ((subject: ref) => DELETE<unknown>)
 	byKey (primaryKey? : PK) : this
 	where (predicate:object) : this
