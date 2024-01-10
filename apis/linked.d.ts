@@ -11,7 +11,7 @@ export interface linked {
 }
 
 interface LinkedEntity extends linked, entity {
-    new (properties: object): LinkedEntity;
+    new (properties: object): unknown;  // unknown -> LinkedEntity, but that would trigger the linter
     keys: Definitions;
     drafts: LinkedEntity;
 }
