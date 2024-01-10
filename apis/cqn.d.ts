@@ -59,12 +59,12 @@ export type DROP = {DROP:{
 /** @private */
 type scalar = number | string | boolean | null
 /** @private */
-type data = Record<string,any>
+type data = Record<string,unknown>
 /** @private */
 type name = string
 /** @private */
 type source = ( ref | SELECT ) & { as?: name, join?:name, on?:xpr }
-export type column_expr = expr & { as?: name, cast?:any, expand?: column_expr[], inline?: column_expr[] }
+export type column_expr = expr & { as?: name, cast?:unknown, expand?: column_expr[], inline?: column_expr[] }
 export type predicate = _xpr
 /** @private */
 type ordering_term = expr & { sort?: "asc"|"desc", nulls?: "first"|"last" }
@@ -73,7 +73,7 @@ export type expr = ref | val | xpr | function_call | SELECT
 /** @private */
 type ref = {ref:( name & { id?:string, where?:expr, args?:expr[] } )[]}
 /** @private */
-type val = {val:any}
+type val = {val:unknown}
 /** @private */
 type xpr = {xpr:_xpr}
 /** @private */

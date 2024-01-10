@@ -43,7 +43,7 @@ export const builtin: {
     struct: struct
     service: service
   }
-  types: {}
+  types: object
 }
 
 /**
