@@ -20,7 +20,8 @@
   "scripts": {
     "test": "jest --silent",
     "api-extractor": "api-extractor run --local --verbose",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "peerDependencies": {
     "@sap/cds": ">=7"
