@@ -18,49 +18,49 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
     read: {
-        <T extends ArrayConstructable>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>;
-        <T>(entity: LinkedDefinition | string, key?: Key): SELECT<T>;
+        <T extends ArrayConstructable>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>,
+        <T>(entity: LinkedDefinition | string, key?: Key): SELECT<T>,
     }
 
     /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
     create: {
-        <T extends ArrayConstructable>(entity: T, key?: Key): INSERT<T>;
-        <T>(entity: LinkedDefinition | string, key?: Key): INSERT<T>;
+        <T extends ArrayConstructable>(entity: T, key?: Key): INSERT<T>,
+        <T>(entity: LinkedDefinition | string, key?: Key): INSERT<T>,
     }
 
     /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
     insert: {
-        <T extends ArrayConstructable>(data: T): INSERT<T>;
-        <T>(data: object | object[]): INSERT<T>;
+        <T extends ArrayConstructable>(data: T): INSERT<T>,
+        <T>(data: object | object[]): INSERT<T>,
     }
 
     /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
     upsert: {
-        <T extends ArrayConstructable>(data: T): UPSERT<T>;
-        <T>(data: object | object[]): UPSERT<T>;
+        <T extends ArrayConstructable>(data: T): UPSERT<T>,
+        <T>(data: object | object[]): UPSERT<T>,
     }
 
     /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
     update: {
-        <T extends ArrayConstructable>(entity: T, key?: Key): UPDATE<T>;
-        <T>(entity: LinkedDefinition | string, key?: Key): UPDATE<T>;
+        <T extends ArrayConstructable>(entity: T, key?: Key): UPDATE<T>,
+        <T>(entity: LinkedDefinition | string, key?: Key): UPDATE<T>,
     }
 
     /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
     run: {
-        (query: ConstructedQuery | ConstructedQuery[]): Promise<ResultSet | any>;
-        (query: Query): Promise<ResultSet | any>;
-        (query: string, args?: any[] | object): Promise<ResultSet | any>;
+        (query: ConstructedQuery | ConstructedQuery[]): Promise<ResultSet | any>,
+        (query: Query): Promise<ResultSet | any>,
+        (query: string, args?: any[] | object): Promise<ResultSet | any>,
     }
 
     /**
@@ -69,10 +69,10 @@ export class QueryAPI {
     stream: {
         (column: string): {
             from(entity: LinkedDefinition | string): {
-                where(filter: any): ReadableStream;
-            };
-        };
-        (query: Query): Promise<ReadableStream>;
+                where(filter: any): ReadableStream,
+            },
+        },
+        (query: Query): Promise<ReadableStream>,
     }
 
     /**
@@ -86,9 +86,9 @@ export class QueryAPI {
     foreach (query: Query, callback: (row: object) => void): this
 
     transaction: {
-        (fn: (tx: Transaction) => object): Promise<any>;
-        (context?: object): Transaction;
-        (context: object, fn: (tx: Transaction) => object): Promise<any>;
+        (fn: (tx: Transaction) => object): Promise<any>,
+        (context?: object): Transaction,
+        (context: object, fn: (tx: Transaction) => object): Promise<any>,
     }
 
 }
@@ -104,8 +104,8 @@ export class Service extends QueryAPI {
         name?: string,
         model?: CSN,
         options?: {
-            kind: string;
-            impl: string | ServiceImpl;
+            kind: string,
+            impl: string | ServiceImpl,
         }
     )
 
@@ -161,8 +161,8 @@ export class Service extends QueryAPI {
    * @see [capire docs](https://cap.cloud.sap/docs/core-services#srv-emit-event)
    */
     emit: {
-        <T = any>(details: { event: types.event; data?: object; headers?: object }): Promise<T>;
-        <T = any>(event: types.event, data?: object, headers?: object): Promise<T>;
+        <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
+        <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     }
 
     /**
@@ -170,12 +170,12 @@ export class Service extends QueryAPI {
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
    */
     send: {
-        <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>;
-        <T = any>(event: types.event, data?: object, headers?: object): Promise<T>;
-        <T = any>(details: { event: types.event; data?: object; headers?: object }): Promise<T>;
-        <T = any>(details: { query: ConstructedQuery; data?: object; headers?: object }): Promise<T>;
-        <T = any>(details: { method: types.eventName; path: string; data?: object; headers?: object }): Promise<T>;
-        <T = any>(details: { event: types.eventName; entity: LinkedDefinition | string; data?: object; params?: object; headers?: object }): Promise<T>;
+        <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>,
+        <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
+        <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
+        <T = any>(details: { query: ConstructedQuery, data?: object, headers?: object }): Promise<T>,
+        <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
+        <T = any>(details: { event: types.eventName, entity: LinkedDefinition | string, data?: object, params?: object, headers?: object }): Promise<T>,
     }
 
     /**
@@ -206,9 +206,9 @@ export class Service extends QueryAPI {
    * Constructs and sends a DELETE request.
    */
     delete: {
-        <T = any>(entityOrPath: types.target, data?: object): DELETE<T>;
-        <T extends ArrayConstructable>(entity: T, key?: Key): DELETE<T>;
-        <T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>;
+        <T = any>(entityOrPath: types.target, data?: object): DELETE<T>,
+        <T extends ArrayConstructable>(entity: T, key?: Key): DELETE<T>,
+        <T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>,
     }
 
     // The central method to dispatch events
@@ -286,27 +286,27 @@ export default class cds {
 
 
 export interface Transaction extends Service {
-    commit(): Promise<void>;
-    rollback(): Promise<void>;
+    commit(): Promise<void>
+    rollback(): Promise<void>
 }
 
 interface ResultSet extends Array<object> {}
 
 interface ServiceImpl {
-    (this: Service, srv: Service): any;
+    (this: Service, srv: Service): any
 }
 
 interface EventHandler {
     // (msg : types.EventMessage) : Promise<any> | any | void
-    (req: Request): Promise<any> | any | void;
+    (req: Request): Promise<any> | any | void
 }
 
 interface OnEventHandler {
-    (req: Request, next: Function): Promise<any> | any | void;
+    (req: Request, next: Function): Promise<any> | any | void
 }
 
 interface OnErrorHandler {
-    (err: Error, req: Request): any | void;
+    (err: Error, req: Request): any | void
 }
 
 // `Partial` wraps any type and allows all properties to be undefined
@@ -326,9 +326,9 @@ type OneOrMany<T> = T | T[]
 // function signatures to the type system.
 // This meta information is required in .on action handlers.
 type CdsFunction = {
-    (...args: any[]): any;
-    __parameters: object;
-    __returns: any;
+    (...args: any[]): any,
+    __parameters: object,
+    __returns: any,
 }
 
 type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
@@ -345,7 +345,7 @@ declare namespace CRUDEventHandler {
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
 interface ActionEventHandler<P, R> {
-    (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R;
+    (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.
@@ -356,14 +356,14 @@ interface ActionEventHandler<P, R> {
 // The user will therefore receive "any" as their result/ each. If we could some day differentiate,
 // we may want to add a generic to ResultsHandler which is passed from the EventHandlers down below.
 interface ResultsHandler {
-    (results: any[], req: Request): void;
-    (each: any, req: Request): void;
+    (results: any[], req: Request): void
+    (each: any, req: Request): void
 }
 
 interface SpawnEvents {
-    succeeded: (res: any) => void;
-    failed: (error: any) => void;
-    done: () => void;
+    succeeded: (res: any) => void
+    failed: (error: any) => void
+    done: () => void
 }
 
 declare class SpawnEventEmitter {
@@ -390,9 +390,9 @@ declare namespace types {
 }
 
 type SpawnOptions = {
-    [key: string]: any;
-    every?: number;
-    after?: number;
+    [key: string]: any,
+    every?: number,
+    after?: number,
 }
 
 // FIXME: this was ?: EventContext before. Is context supposed to not be present sometimes?
@@ -414,9 +414,9 @@ export function spawn (options: SpawnOptions, fn: (tx: Transaction) => object): 
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
 */
 export const tx: {
-    (fn: (tx: Transaction) => object): Promise<any>;
-    (context?: object): Transaction;
-    (context: object, fn: (tx: Transaction) => object): Promise<any>;
+    (fn: (tx: Transaction) => object): Promise<any>,
+    (context?: object): Transaction,
+    (context: object, fn: (tx: Transaction) => object): Promise<any>,
 }
 export const entities: Service['entities']
 export const run: Service['run']

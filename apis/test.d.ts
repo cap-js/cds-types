@@ -63,12 +63,12 @@ declare class Test extends Axios {
     get cds (): _cds
 
     log (): {
-        output: string;
-        clear(): void;
-        release(): void;
+        output: string,
+        clear(): void,
+        release(): void,
     }
 
-    then (r: (args: { server: http.Server; url: string }) => void): void
+    then (r: (args: { server: http.Server, url: string }) => void): void
 
     // get sleep(): (ms: number) => Promise<void>;
     // get spy(): <T, K extends keyof T>(o: T, f: K) => T[K] extends (...args: infer TArgs) => infer TReturnValue
@@ -85,17 +85,17 @@ declare class Test extends Axios {
 // }
 
 declare const test: {
-    Test: typeof Test;
+    Test: typeof Test,
 
     /**
      * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test#class-cds-test-test)
      */
-    (dirname: string): Test;
+    (dirname: string): Test,
 
     /**
      * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-test#class-cds-test-test)
      */
-    (command: string, ...args: string[]): Test;
+    (command: string, ...args: string[]): Test,
 
-    in (dirname: string): Test;
+    in (dirname: string): Test,
 }

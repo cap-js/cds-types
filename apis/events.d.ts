@@ -10,8 +10,8 @@ import * as express from 'express'
  */
 export class EventContext {
 
-    constructor (properties: { event: string; data?: object; query?: object; headers?: object })
-    http?: { req: express.Request; res: express.Response }
+    constructor (properties: { event: string, data?: object, query?: object, headers?: object })
+    http?: { req: express.Request, res: express.Response }
 
     tenant: string
 
@@ -84,11 +84,11 @@ export class Request extends Event {
     error (message: string, target?: string, args?: any[]): Error
     reject (message: string, target?: string, args?: any[]): Error
 
-    notify (message: { code?: number | string; message: string; target?: string; args?: any[] }): Error
-    info (message: { code?: number | string; message: string; target?: string; args?: any[] }): Error
-    warn (message: { code?: number | string; message: string; target?: string; args?: any[] }): Error
-    error (message: { code?: number | string; message: string; target?: string; args?: any[]; status?: number }): Error
-    reject (message: { code?: number | string; message: string; target?: string; args?: any[]; status?: number }): Error
+    notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+    info (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+    warn (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+    error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+    reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
 
 }
 
@@ -99,7 +99,7 @@ export class Request extends Event {
  */
 export class User {
 
-    constructor (obj?: string | { id: string; attr: Record<string, string>; roles: Record<string, string> } | User)
+    constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Record<string, string> } | User)
     id: string
 
     /**

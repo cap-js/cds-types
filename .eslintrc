@@ -15,6 +15,22 @@
     "@stylistic/quotes": ["error", "single"],
     "@stylistic/semi": ["error", "never"],
     "@stylistic/object-curly-spacing": ["error", "always"],
+    "@stylistic/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "comma"
+      },
+      "singleline": {
+        "delimiter": "comma"
+      },
+      "multilineDetection": "brackets",
+      "overrides": {
+        "interface": {
+          "multiline": {
+            "delimiter": "none"
+          }
+        }
+      }
+    }],
     // FIXME: turn this on if we decide on a conventional nomenclature for our types
     //"@typescript-eslint/naming-convention": ["error", { "selector": "typeLike", "format": ["PascalCase"] }]
     // FIXME: turn this back on once we have resolved all the any-quirks

@@ -37,16 +37,16 @@ export const builtin: {
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
    */
     classes: {
-        Association: Association;
-        Composition: Composition;
-        entity: entity;
-        event: event;
-        type: type;
-        array: array;
-        struct: struct;
-        service: service;
-    };
-    types: object;
+        Association: Association,
+        Composition: Composition,
+        entity: entity,
+        event: event,
+        type: type,
+        array: array,
+        struct: struct,
+        service: service,
+    },
+    types: object,
 }
 
 /**
@@ -61,7 +61,7 @@ export const builtin: {
  * ```
  */
 export function extend<T> (target: T): {
-    with<E extends readonly any[]>(...ext: E): T & Intersect<E>;
+    with<E extends readonly any[]>(...ext: E): T & Intersect<E>,
 }
 
 /**

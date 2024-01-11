@@ -13,20 +13,20 @@ export const connect: {
 		 * Connects to a specific datasource.
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
 		 */
-    to(datasource: string, options?: cds_connect_options): Promise<Service>;
+    to(datasource: string, options?: cds_connect_options): Promise<Service>,
 
     /**
 		 * Connects to a specific datasource via options.
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
 		 */
-    to(options: cds_connect_options): Promise<Service>;
+    to(options: cds_connect_options): Promise<Service>,
 
     /**
 		 * Connects the primary datasource.
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect)
 		 */
     // API extractor cannot handle the direct usages of the cds namespace in typeof cds, so add an indirection.
-    (options?: string | cds_connect_options): Promise<_cds>; // > cds.connect(<options>)
+    (options?: string | cds_connect_options): Promise<_cds>, // > cds.connect(<options>)
 }
 
 /**
@@ -39,9 +39,9 @@ export const server: Function
 	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-serve)
 	 */
 export const serve: (service: string, options?: {
-    service?: string;
-    from?: '*' | 'all' | string;
-    [key: string]: any;
+    service?: string,
+    from?: '*' | 'all' | string,
+    [key: string]: any,
 }) => Promise<cds_services> & cds_serve_fluent
 
 /**
@@ -81,8 +81,8 @@ export function once (event: 'served', listener: (all: cds_services) => void): _
 	 * Emitted by the default, built-in `server.js` when the http server
 	 * is started and listening for incoming requests.
 	 */
-export function on (event: 'listening', listener: (args: { server: http.Server; url: string }) => void): _cds
-export function once (event: 'listening', listener: (args: { server: http.Server; url: string }) => void): _cds
+export function on (event: 'listening', listener: (args: { server: http.Server, url: string }) => void): _cds
+export function once (event: 'listening', listener: (args: { server: http.Server, url: string }) => void): _cds
 
 /**
 	 * Emitted by the default, built-in `server.js` when the http server
@@ -115,31 +115,31 @@ export type service = {
 	 * Dummy wrapper for service implementation functions.
 	 * Use that in modules to get IntelliSense.
 	 */
-    impl (impl: ServiceImpl): typeof impl;
+    impl (impl: ServiceImpl): typeof impl,
     // impl <T> (srv:T, impl: (  _cds: T, srv: (T) ) => any) : typeof impl
 
     /**
 	 * Array of all services constructed.
 	 */
-    providers: Service[];
+    providers: Service[],
 }
 
 
 type cds_services = { [name: string]: Service }
 
 interface cds_serve_fluent {
-    from (model: string | CSN): cds_serve_fluent;
-    to (protocol: string): cds_serve_fluent;
-    at (path: string): cds_serve_fluent;
-    in (app: Application): cds_serve_fluent;
-    with (impl: ServiceImpl | string): cds_serve_fluent;
+    from (model: string | CSN): cds_serve_fluent
+    to (protocol: string): cds_serve_fluent
+    at (path: string): cds_serve_fluent
+    in (app: Application): cds_serve_fluent
+    with (impl: ServiceImpl | string): cds_serve_fluent
     // (req,res) : void
 }
 
 interface cds_connect_options {
-    impl?: string;
-    service?: string;
-    kind?: string;
-    model?: string;
-    credentials?: object;
+    impl?: string
+    service?: string
+    kind?: string
+    model?: string
+    credentials?: object
 }

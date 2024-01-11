@@ -32,7 +32,7 @@ type QLExtensions_<T> = {
     /**
 	 * Alias for this attribute.
 	 */
-    as: (alias: string) => void;
+    as: (alias: string) => void,
 
     /**
 	 * Accesses any nested attribute based on a [path](https://cap.cloud.sap/cap/docs/java/query-api#path-expressions):
@@ -41,7 +41,7 @@ type QLExtensions_<T> = {
 	 * To still have access to typed results, use
 	 * `X.a().b().c().d()` instead.
 	 */
-    get: (path: string) => any;
+    get: (path: string) => any,
 
     // have to exclude undefined from the type, or we'd end up with a distribution of Subqueryable
     // over T and undefined, which gives us zero code completion within the callable.
@@ -72,7 +72,7 @@ T extends Primitive	? unknown
 	 *
 	 * Note that you do not need to return anything from these subqueries.
 	 */
-        (fn: ((a: QLExtensions<T[number]>) => any) | '*'): T[number];
+        (fn: ((a: QLExtensions<T[number]>) => any) | '*'): T[number],
     }
     // composition of one/ association to one
         : {
@@ -92,7 +92,7 @@ T extends Primitive	? unknown
 	 *
 	 * Note that you do not need to return anything from these subqueries.
 	 */
-            (fn: ((a: QLExtensions<T>) => any) | '*'): T;
+            (fn: ((a: QLExtensions<T>) => any) | '*'): T,
         }
 
 
@@ -209,10 +209,10 @@ export class SELECT<T> extends ConstructedQuery {
     //   & ((predicate:object) => this)
 
     SELECT: CQN.SELECT['SELECT'] & {
-        forUpdate?: { wait: number };
-        forShareLock?: { wait: number };
-        search?: CQN.predicate;
-        count?: boolean;
+        forUpdate?: { wait: number },
+        forShareLock?: { wait: number },
+        search?: CQN.predicate,
+        count?: boolean,
     }
 
 }
