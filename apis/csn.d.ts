@@ -5,34 +5,34 @@ import { SELECT, ref, predicate } from './cqn'
  */
 export interface CSN {
 
-    /**
+  /**
    * The assigned namespace. If parsed from multiple sources,
    * this is the topmost model's namespace, if any, not the
    * ones of imported models.
    */
-    namespace?: string
+  namespace?: string
 
-    /**
+  /**
    * The list of usings in this parsed model. Not available after
    * imports have been resolved into a merged model.
    */
-    requires?: string[]
+  requires?: string[]
 
-    /**
+  /**
    * All definitions in the model including those from imported models.
    */
-    definitions?: Record<FQN, Definition>
+  definitions?: Record<FQN, Definition>
 
-    /**
+  /**
    * All extensions in the model including those from imported models.
    * Not available after extensions have been applied.
    */
-    extensions?: Extension[]
+  extensions?: Extension[]
 
-    /**
+  /**
    * The names of the files from which this model has been loaded.
    */
-    $sources?: string[]
+  $sources?: string[]
 }
 
 /**
@@ -50,9 +50,9 @@ export type Definition = context & service & type & struct & entity & Associatio
  * Extensions capture `extend Foo with { ... }` directives.
  */
 export type Extension = {
-    extend: FQN,
-    elements?: { [name: string]: Element },
-    includes?: FQN[],
+  extend: FQN,
+  elements?: { [name: string]: Element },
+  includes?: FQN[],
 }
 
 export type Element = type & struct & Association
@@ -60,67 +60,67 @@ export type Element = type & struct & Association
 export type kinds = 'type' | 'entity' | 'event' | 'service' | 'context' | 'struct'
 
 export interface any_ {
-    kind?: kinds
+  kind?: kinds
 }
 export interface context extends any_ { }
 export interface service extends any_ { }
 
 export interface type extends any_ {
-    type?: FQN
-    items?: type
+  type?: FQN
+  items?: type
 }
 
 export interface struct extends type {
 
-    /**
+  /**
    * References to definitions to be included.
    * Not available after extensions have been applied.
   */
-    includes?: FQN[]
-    elements: { [name: string]: Element }
+  includes?: FQN[]
+  elements: { [name: string]: Element }
 }
 
 export interface entity extends Omit<struct, 'elements'> {
 
-    /**
+  /**
    * Entities with a query signify a view
    */
-    query?: SELECT
+  query?: SELECT
 
-    /**
+  /**
    * Elements of entities may have additional qualifiers
    */
-    elements: EntityElements
-    // REVISIT: following should move to LinkedCSN
-    keys: { [name: string]: Definition }
-    drafts: entity
+  elements: EntityElements
+  // REVISIT: following should move to LinkedCSN
+  keys: { [name: string]: Definition }
+  drafts: entity
 }
 
 export type EntityElements = {
-    [name: string]: Element & {
-        key?: boolean,
-        virtual?: boolean,
-        unique?: boolean,
-        notNull?: boolean,
-    },
+  [name: string]: Element & {
+    key?: boolean,
+    virtual?: boolean,
+    unique?: boolean,
+    notNull?: boolean,
+  },
 }
 
 export interface Association extends type {
-    type: 'cds.Association' | 'cds.Composition'
-    target: FQN
+  type: 'cds.Association' | 'cds.Composition'
+  target: FQN
 
-    /**
+  /**
    * The specified cardinality. to-one = `{max:1}`, to-many = `{max:'*'}`
    */
-    cardinality?: { src?: 1, min?: 1 | 0, max?: 1 | '*' }
+  cardinality?: { src?: 1, min?: 1 | 0, max?: 1 | '*' }
 
-    /**
+  /**
    * The parsed on condition in case of unmanaged Associations
    */
-    on?: predicate
+  on?: predicate
 
-    /**
+  /**
    * The optionally specified keys in case of managed Associations
    */
-    keys?: (ref & { as: string })[]
+  keys?: (ref & { as: string })[]
 }

@@ -4,14 +4,14 @@
 
 
 export interface Constructable<T = any> {
-    new(...args: any[]): T
+  new(...args: any[]): T
 }
 
 // any class (not value) of array to represent plural types used in cds-typer.
 // Mainly used as pattern match for SingularType
 // type ArrayConstructable = Constructable<Array<any>>
 export interface ArrayConstructable<T = any> {
-    new(...args: any[]): T[]
+  new(...args: any[]): T[]
 }
 
 // concrete singular type.
@@ -26,7 +26,7 @@ export type SingularType<T extends ArrayConstructable<T>> = InstanceType<T>[numb
 // This type introduces an indirection that streamlines their behaviour for both cases.
 // For any scalar type `Unwrap` behaves idempotent.
 export type Unwrap<T> = T extends ArrayConstructable
-    ? SingularType<T>
-    : T extends Array<infer U>
-        ? U
-        : T
+  ? SingularType<T>
+  : T extends Array<infer U>
+    ? U
+    : T

@@ -24,14 +24,14 @@ declare const delete_: Service['delete']
 export { delete_ as delete }
 
 declare global {
-    // these provide the functionality from SELECT, INSERT, etc in the global facade
-    const SELECT: ql.QL<any>['SELECT']
-    const INSERT: ql.QL<any>['INSERT']
-    const UPSERT: ql.QL<any>['UPSERT']
-    const UPDATE: ql.QL<any>['UPDATE']
-    const DELETE: ql.QL<any>['DELETE']
-    const CREATE: ql.QL<any>['CREATE']
-    const DROP: ql.QL<any>['DROP']
+  // these provide the functionality from SELECT, INSERT, etc in the global facade
+  const SELECT: ql.QL<any>['SELECT']
+  const INSERT: ql.QL<any>['INSERT']
+  const UPSERT: ql.QL<any>['UPSERT']
+  const UPDATE: ql.QL<any>['UPDATE']
+  const DELETE: ql.QL<any>['DELETE']
+  const CREATE: ql.QL<any>['CREATE']
+  const DROP: ql.QL<any>['DROP']
 
 	// and these allow us to use them as type too, i.e. `const q: SELECT<Book> = ...`
 	type SELECT<T> = ql.SELECT<T>

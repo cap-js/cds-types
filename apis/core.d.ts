@@ -3,8 +3,8 @@ import * as csn from './csn'
 import { service } from './server'
 
 type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer Tail]
-    ? Head & Intersect<Tail>
-    : unknown
+  ? Head & Intersect<Tail>
+  : unknown
 
 // These are classes actually -> using the new() => interface trick
 /**
@@ -32,21 +32,21 @@ export type struct = new(_?: object) => linked & csn.struct
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
 
-    /**
+  /**
    * Base classes of linked definitions from reflected models.
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
    */
-    classes: {
-        Association: Association,
-        Composition: Composition,
-        entity: entity,
-        event: event,
-        type: type,
-        array: array,
-        struct: struct,
-        service: service,
-    },
-    types: object,
+  classes: {
+    Association: Association,
+    Composition: Composition,
+    entity: entity,
+    event: event,
+    type: type,
+    array: array,
+    struct: struct,
+    service: service,
+  },
+  types: object,
 }
 
 /**
@@ -61,7 +61,7 @@ export const builtin: {
  * ```
  */
 export function extend<T> (target: T): {
-    with<E extends readonly any[]>(...ext: E): T & Intersect<E>,
+  with<E extends readonly any[]>(...ext: E): T & Intersect<E>,
 }
 
 /**

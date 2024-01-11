@@ -10,20 +10,20 @@ import * as express from 'express'
  */
 export class EventContext {
 
-    constructor (properties: { event: string, data?: object, query?: object, headers?: object })
-    http?: { req: express.Request, res: express.Response }
+  constructor (properties: { event: string, data?: object, query?: object, headers?: object })
+  http?: { req: express.Request, res: express.Response }
 
-    tenant: string
+  tenant: string
 
-    user: User
+  user: User
 
-    id: string
+  id: string
 
-    locale: `${string}_${string}`
+  locale: `${string}_${string}`
 
-    timestamp: Date
+  timestamp: Date
 
-    features?: { [key: string]: boolean }
+  features?: { [key: string]: boolean }
 
 }
 
@@ -32,11 +32,11 @@ export class EventContext {
  */
 export class Event extends EventContext {
 
-    event: string
+  event: string
 
-    data: any
+  data: any
 
-    headers: any
+  headers: any
 
 }
 
@@ -45,50 +45,50 @@ export class Event extends EventContext {
  */
 export class Request extends Event {
 
-    params: (string | object)[]
+  params: (string | object)[]
 
-    method: string
+  method: string
 
-    path: string
+  path: string
 
-    target: LinkedDefinition
+  target: LinkedDefinition
 
 
-    /**
+  /**
    * Shortcut to {@link Request.target | target (entity) name}
    * @see https://cap.cloud.sap/docs/node.js/events#req-entity
    */
-    entity: string
+  entity: string
 
-    query: Query
+  query: Query
 
-    subject: ref
+  subject: ref
 
-    reply (results: any): void
+  reply (results: any): void
 
-    notify (code: number, message: string, target?: string, args?: any[]): Error
-    info (code: number, message: string, target?: string, args?: any[]): Error
-    warn (code: number, message: string, target?: string, args?: any[]): Error
-    error (code: number, message: string, target?: string, args?: any[]): Error
-    reject (code: number, message: string, target?: string, args?: any[]): Error
+  notify (code: number, message: string, target?: string, args?: any[]): Error
+  info (code: number, message: string, target?: string, args?: any[]): Error
+  warn (code: number, message: string, target?: string, args?: any[]): Error
+  error (code: number, message: string, target?: string, args?: any[]): Error
+  reject (code: number, message: string, target?: string, args?: any[]): Error
 
-    notify (code: number, message: string, args?: any[]): Error
-    info (code: number, message: string, args?: any[]): Error
-    warn (code: number, message: string, args?: any[]): Error
-    error (code: number, message: string, args?: any[]): Error
-    reject (code: number, message: string, args?: any[]): Error
+  notify (code: number, message: string, args?: any[]): Error
+  info (code: number, message: string, args?: any[]): Error
+  warn (code: number, message: string, args?: any[]): Error
+  error (code: number, message: string, args?: any[]): Error
+  reject (code: number, message: string, args?: any[]): Error
 
-    notify (message: string, target?: string, args?: any[]): Error
-    info (message: string, target?: string, args?: any[]): Error
-    warn (message: string, target?: string, args?: any[]): Error
-    error (message: string, target?: string, args?: any[]): Error
-    reject (message: string, target?: string, args?: any[]): Error
+  notify (message: string, target?: string, args?: any[]): Error
+  info (message: string, target?: string, args?: any[]): Error
+  warn (message: string, target?: string, args?: any[]): Error
+  error (message: string, target?: string, args?: any[]): Error
+  reject (message: string, target?: string, args?: any[]): Error
 
-    notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
-    info (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
-    warn (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
-    error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
-    reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+  notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+  info (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+  warn (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+  error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+  reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
 
 }
 
@@ -99,25 +99,25 @@ export class Request extends Event {
  */
 export class User {
 
-    constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Record<string, string> } | User)
-    id: string
+  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Record<string, string> } | User)
+  id: string
 
-    /**
+  /**
    * @deprecated Use https://cap.cloud.sap/docs/node.js/events#locale instead
    */
-    locale: string
+  locale: string
 
-    /**
+  /**
    * @deprecated Use https://cap.cloud.sap/docs/node.js/events#tenant instead
    */
-    tenant: string | undefined
+  tenant: string | undefined
 
-    attr: Record<string, string>
+  attr: Record<string, string>
 
-    roles: Array<string> | Record<string, string>
+  roles: Array<string> | Record<string, string>
 
-    static Privileged: typeof Privileged
-    is (role: string): boolean
+  static Privileged: typeof Privileged
+  is (role: string): boolean
 
 }
 
@@ -126,7 +126,7 @@ export class User {
  */
 declare class Privileged extends User {
 
-    constructor ()
-    is (): boolean
+  constructor ()
+  is (): boolean
 
 }
