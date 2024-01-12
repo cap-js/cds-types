@@ -9,7 +9,6 @@ type _cds = typeof cds
 declare class Axios {
 
   get axios (): AxiosInstance
-
   get: AxiosInstance['get'];
 
   put: AxiosInstance['put']
@@ -23,10 +22,15 @@ declare class Axios {
   options: AxiosInstance['options']
 
   get GET (): Axios['get']
+
   get PUT (): Axios['put']
+
   get POST (): Axios['post']
+
   get PATCH (): Axios['patch']
+
   get DELETE (): Axios['delete']
+
   get OPTIONS (): Axios['options']
 
 }
@@ -34,6 +38,7 @@ declare class Axios {
 declare class DataUtil {
 
   delete (db?: Service): Promise<void>
+
   reset (db?: Service): Promise<void>
 
   /**
@@ -48,7 +53,9 @@ declare class Test extends Axios {
   test: Test
 
   run (cmd: string, ...args: string[]): this
+
   in (...paths: string[]): this
+
   silent (): this
 
   /**
@@ -57,9 +64,13 @@ declare class Test extends Axios {
   verbose (v: boolean): this
 
   get chai (): typeof chai
+
   get expect (): typeof chai.expect
+
   get assert (): typeof chai.assert
+
   get data (): DataUtil
+
   get cds (): _cds
 
   log (): {

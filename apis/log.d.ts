@@ -76,8 +76,8 @@ declare class Logger {
 
 
   /**
-     * Logs with 'trace' level
-     */
+    * Logs with 'trace' level
+    */
   trace: Log
 
   /**

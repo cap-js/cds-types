@@ -16,6 +16,7 @@
     "@stylistic/quotes": ["error", "single"],
     "@stylistic/semi": ["error", "never"],
     "@stylistic/object-curly-spacing": ["error", "always"],
+    "@stylistic/no-multiple-empty-lines": ["error"],
     "@stylistic/member-delimiter-style": ["error", {
       "multiline": {
         "delimiter": "comma"

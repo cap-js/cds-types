@@ -53,7 +53,6 @@ export class Request extends Event {
 
   target: LinkedDefinition
 
-
   /**
    * Shortcut to {@link Request.target | target (entity) name}
    * @see https://cap.cloud.sap/docs/node.js/events#req-entity
@@ -67,27 +66,43 @@ export class Request extends Event {
   reply (results: any): void
 
   notify (code: number, message: string, target?: string, args?: any[]): Error
+
   info (code: number, message: string, target?: string, args?: any[]): Error
+
   warn (code: number, message: string, target?: string, args?: any[]): Error
+
   error (code: number, message: string, target?: string, args?: any[]): Error
+
   reject (code: number, message: string, target?: string, args?: any[]): Error
 
   notify (code: number, message: string, args?: any[]): Error
+
   info (code: number, message: string, args?: any[]): Error
+
   warn (code: number, message: string, args?: any[]): Error
+
   error (code: number, message: string, args?: any[]): Error
+
   reject (code: number, message: string, args?: any[]): Error
 
   notify (message: string, target?: string, args?: any[]): Error
+
   info (message: string, target?: string, args?: any[]): Error
+
   warn (message: string, target?: string, args?: any[]): Error
+
   error (message: string, target?: string, args?: any[]): Error
+
   reject (message: string, target?: string, args?: any[]): Error
 
   notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+
   info (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+
   warn (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+
   error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+
   reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
 
 }
@@ -117,6 +132,7 @@ export class User {
   roles: Array<string> | Record<string, string>
 
   static Privileged: typeof Privileged
+
   is (role: string): boolean
 
 }
@@ -127,6 +143,7 @@ export class User {
 declare class Privileged extends User {
 
   constructor ()
+
   is (): boolean
 
 }

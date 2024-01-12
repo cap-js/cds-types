@@ -84,7 +84,6 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
    */
   foreach (query: Query, callback: (row: object) => void): this
-
   transaction: {
     (fn: (tx: Transaction) => object): Promise<any>,
     (context?: object): Transaction,
@@ -219,11 +218,17 @@ export class Service extends QueryAPI {
 
   // Provider API
   prepend (fn: ServiceImpl): Promise<this>
+
   on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
+
   on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
+
   on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
+
   on (eve: types.event, entity: types.target, handler: OnEventHandler): this
+
   on (eve: types.event, handler: OnEventHandler): this
+
   on (eve: 'error', handler: OnErrorHandler): this
 
 
@@ -232,11 +237,17 @@ export class Service extends QueryAPI {
   // onFailed (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
   // onFailed (eve: types.Events, handler: types.EventHandler): this
   before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>, InstanceType<T> | void | Error>): this
+
   before (eve: types.event, entity: types.target, handler: EventHandler): this
+
   before (eve: types.event, handler: EventHandler): this
+
   after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>, InstanceType<T> | void | Error>): this
+
   after (eve: types.event, entity: types.target, handler: ResultsHandler): this
+
   after (eve: types.event, handler: ResultsHandler): this
+
   reject (eves: types.event, ...entity: types.target[]): this
 
 }
@@ -247,8 +258,11 @@ export class RemoteService extends Service {}
 export class DatabaseService extends Service {
 
   deploy (model?: CSN | string): Promise<CSN>
+
   begin (): Promise<void>
+
   commit (): Promise<void>
+
   rollback (): Promise<void>
 
 }

@@ -52,8 +52,7 @@ type QLExtensions_<T> = {
  * The final result of each subquery will be the property itself:
  * `Book.title` == `Subqueryable<Book>.title()`
  */
-type Subqueryable<T> =
-T extends Primitive	? unknown
+type Subqueryable<T> = T extends Primitive	? unknown
 // composition of many/ association to many
   : T extends readonly unknown[] ? {
 
@@ -191,10 +190,12 @@ export class SELECT<T> extends ConstructedQuery {
 
   limit: TaggedTemplateQueryPart<this>
   & ((rows: number, offset?: number) => this)
-  forShareLock (): this
-  forUpdate ({ wait }?: { wait?: number }): this
-  alias (as: string): this
 
+  forShareLock (): this
+
+  forUpdate ({ wait }?: { wait?: number }): this
+
+  alias (as: string): this
   elements: EntityElements
 
 
@@ -272,11 +273,17 @@ export class INSERT<T> extends ConstructedQuery {
   & ((entity: Definition | string) => this)
 
   data (block: (e: T) => void): this
+
   entries (...entries: object[]): this
+
   columns (...col: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]): this
+
   columns (...col: string[]): this
+
   values (...val: any[]): this
+
   rows (...row: any[]): this
+
   as (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 
@@ -297,10 +304,15 @@ export class UPSERT<T> extends ConstructedQuery {
   & ((entity: Definition | string) => this)
 
   data (block: (e: T) => void): this
+
   entries (...entries: object[]): this
+
   columns (...col: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]): this
+
   columns (...col: string[]): this
+
   values (...val: any[]): this
+
   rows (...row: any[]): this
   UPSERT: CQN.UPSERT['UPSERT']
 
@@ -316,9 +328,13 @@ export class DELETE<T> extends ConstructedQuery {
     & ((subject: ref) => DELETE<any>)
 
   byKey (primaryKey?: PK): this
+
   where (predicate: object): this
+
   where (...expr: any[]): this
+
   and (predicate: object): this
+
   and (...expr: any[]): this
   DELETE: CQN.DELETE['DELETE']
 
@@ -331,21 +347,28 @@ export class UPDATE<T> extends ConstructedQuery {
   static entity<T extends ArrayConstructable<any>> (entity: T, primaryKey?: PK): UPDATE<SingularType<T>>
 
   static entity (entity: Definition | string, primaryKey?: PK): UPDATE<any>
+
   static entity (entity: LinkedEntity | string, primaryKey?: PK): UPDATE<any>
+
   static entity<T> (entity: Constructable<T>, primaryKey?: PK): UPDATE<T>
+
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
+
   byKey (primaryKey?: PK): this
   // with (block: (e:T)=>void) : this
   // set (block: (e:T)=>void) : this
   set: TaggedTemplateQueryPart<this>
-  & ((data: object) => this)
+  & ((data: object) => this);
 
   with: TaggedTemplateQueryPart<this>
     & ((data: object) => this)
 
   where (predicate: object): this
+
   where (...expr: any[]): this
+
   and (predicate: object): this
+
   and (...expr: any[]): this
   UPDATE: CQN.UPDATE['UPDATE']
 
@@ -355,6 +378,7 @@ export class UPDATE<T> extends ConstructedQuery {
 export class CREATE<T> extends ConstructedQuery {
 
   static entity (entity: Definition | string): CREATE<any>
+
   static entity (entity: LinkedEntity | string): CREATE<any>
   CREATE: CQN.CREATE['CREATE']
 
@@ -364,6 +388,7 @@ export class CREATE<T> extends ConstructedQuery {
 export class DROP<T> extends ConstructedQuery {
 
   static entity (entity: Definition | string): DROP<any>
+
   static entity (entity: LinkedEntity | string): DROP<any>
   DROP: CQN.DROP['DROP']
 
