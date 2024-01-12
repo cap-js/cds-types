@@ -11,21 +11,23 @@ type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer T
  * Base class for linked Associations from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
  */
-export type Association = new(_?:object) => LinkedAssociation
+export const Association: new(_?:object) => LinkedAssociation
+
 /**
  * Base class for linked Compositions from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
  */
-export type Composition = new(_?:object) => LinkedAssociation
+export const Composition: new(_?:object) => LinkedAssociation
+
 /**
  * Base class for linked entities from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-entity)
  */
-export type entity = new(_?:object) => LinkedEntity
-export type event = new(_?:object) => linked & csn.struct
-export type type = new(_?:object) => linked & csn.type
-export type array = new(_?:object) => linked & csn.type
-export type struct = new(_?:object) => linked & csn.struct
+export const entity: new(_?:object) => LinkedEntity
+export const event: new(_?:object) => linked & csn.struct
+export const type: new(_?:object) => linked & csn.type
+export const array: new(_?:object) => linked & csn.type
+export const struct: new(_?:object) => linked & csn.struct
 
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
@@ -34,13 +36,13 @@ export const builtin: {
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
    */
   classes: {
-    Association: Association
-    Composition: Composition
-    entity: entity
-    event: event
-    type: type
-    array: array
-    struct: struct
+    Association: typeof Association
+    Composition: typeof Composition
+    entity: typeof entity
+    event: typeof event
+    type: typeof type
+    array: typeof array
+    struct: typeof struct
     service: service
   }
   types: {}

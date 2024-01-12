@@ -32,7 +32,7 @@ type filename = string
  * The effective CDS model loaded during bootstrapping, which contains all service and entity definitions,
  * including required services.
  */
-export const model : LinkedCSN | undefined  // was ?: LinkedCSN
+export let model : LinkedCSN | undefined  // was ?: LinkedCSN
 
 /**
  * Provides a set of methods to parse a given model, query or expression.

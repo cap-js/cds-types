@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@sap/cds": "^7.4.0",
+    "@types/jest": "^29.5.11",
     "@types/node": "^20",
     "axios": "^1.6.2",
     "chai": "^4.3.10",
