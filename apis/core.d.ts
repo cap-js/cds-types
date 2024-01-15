@@ -6,18 +6,19 @@ type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer T
   ? Head & Intersect<Tail>
   : unknown
 
-// These are classes actually -> using the new() => interface trick
 /**
  * Base class for linked Associations from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
  */
-export const Association: new(_?:object) => LinkedAssociation
+export interface Association extends LinkedAssociation {}
+export declare class Association { constructor(_?:object) }
 
 /**
  * Base class for linked Compositions from reflected models.
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-composition)
  */
-export const Composition: new(_?:object) => LinkedAssociation
+export interface Composition extends Association {}
+export declare class Composition { constructor(_?:object) }
 
 /**
  * Base class for linked entities from reflected models.
