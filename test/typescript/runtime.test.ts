@@ -1,6 +1,5 @@
 import cds, { User, Query } from '@sap/cds';
 import { struct } from '@sap/cds/apis/csn';
-
 import {
   Service,
   EventContext,

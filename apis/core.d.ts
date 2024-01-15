@@ -23,11 +23,16 @@ export const Composition: new(_?:object) => LinkedAssociation
  * Base class for linked entities from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-entity)
  */
-export const entity: new(_?:object) => LinkedEntity
-export const event: new(_?:object) => linked & csn.struct
-export const type: new(_?:object) => linked & csn.type
-export const array: new(_?:object) => linked & csn.type
-export const struct: new(_?:object) => linked & csn.struct
+export interface entity extends LinkedEntity {}
+export declare class entity { constructor(_?:object) }
+export interface event extends linked, csn.struct {}
+export class event { constructor(_?:object) }
+export interface type extends linked, csn.type {}
+export class type { constructor(_?:object) }
+export interface array extends linked, csn.type {}
+export class array { constructor(_?:object) }
+export interface struct extends linked, csn.struct {}
+export class struct { constructor(_?:object) }
 
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
