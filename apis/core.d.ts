@@ -36,6 +36,7 @@ export class struct { constructor(_?:object) }
 
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
+
   /**
    * Base classes of linked definitions from reflected models.
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
@@ -64,8 +65,8 @@ export const builtin: {
  *    }.prototype)
  * ```
  */
-export function extend<T>(target: T): {
-  with<E extends readonly unknown[]>(...ext: E): T & Intersect<E>
+export function extend<T> (target: T): {
+  with<E extends readonly any[]>(...ext: E): T & Intersect<E>,
 }
 
 /**
@@ -82,7 +83,7 @@ export function extend<T>(target: T): {
  * The first usage of `facade.sub` will load the sub module
  * using standard Node.js's `module.require` functions.
  */
-export function lazify <T>(target: T) : T
+export function lazify<T> (target: T): T
 
 /**
  * Prepare a node module for lazy-loading submodules instead
@@ -99,4 +100,4 @@ export function lazify <T>(target: T) : T
  * The first usage of `facade.sub` will load the sub module
  * using standard Node.js's `module.require` functions.
  */
-export function lazified <T>(target: T) : T
+export function lazified<T> (target: T): T
