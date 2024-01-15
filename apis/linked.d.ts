@@ -13,7 +13,7 @@ export interface linked {
 interface LinkedEntity extends linked, entity {
 	constructor (properties: object)
 	keys: Definitions
-	drafts: LinkedEntity | undefined
+	drafts?: LinkedEntity
 }
 
 interface LinkedAssociation extends linked, Association {
