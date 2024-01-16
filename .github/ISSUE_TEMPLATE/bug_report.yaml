@@ -30,8 +30,17 @@ body:
   validations:
     required: true
 - type: textarea
+  id: versions
   attributes:
-    label: Anything else?
+    label: Versions
+    description: |
+      Run `cds v -i` in your project and copy the output here. 
+      Also include a link to the branch in your GitHub repo.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Anything else? Logs?
     description: |
       Anything that will give us more context about the issue you are encountering!
 
