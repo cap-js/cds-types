@@ -93,7 +93,7 @@ export interface entity extends Omit<struct, 'elements'> {
   elements: EntityElements
   // REVISIT: following should move to LinkedCSN
   keys: { [name: string]: Definition }
-  drafts: entity
+  drafts?: entity
 }
 
 export type EntityElements = {

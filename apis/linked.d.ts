@@ -11,9 +11,8 @@ export interface linked {
 }
 
 interface LinkedEntity extends linked, entity {
-  new (properties: object): any // any -> LinkedEntity, but that would trigger the linter
   keys: Definitions
-  drafts: LinkedEntity
+  drafts?: LinkedEntity
 }
 
 interface LinkedAssociation extends linked, Association {
