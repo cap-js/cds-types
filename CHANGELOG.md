@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 - `srv.send` overload to also allow optional headers
+- Reflected types like `cds.entity`, `cds.struct`, `cds.Association` are now properly exposed
+- `cds.builtin.types` got a more accurate type
+- The `LinkedEntity.drafts` property is now optional.  At runtime, it's only set for drafted entities.
+- `cds.model` is marked as modifiable (for tests only!)
 
 
 ## Version 0.1.0 - 2023-12-13
