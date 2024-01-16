@@ -114,7 +114,7 @@ export class Request extends Event {
  */
 export class User {
 
-  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Record<string, string> } | User)
+  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Array<string> | Record<string, string> } | User)
   id: string
 
   /**
