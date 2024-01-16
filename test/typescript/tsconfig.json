@@ -1,8 +1,11 @@
 {
-  "files": ["test.ts"],
   "compilerOptions": {
-    "esModuleInterop": true, // required for import cds from '@sap/cds'
-    "types": [ "node" ], // to ignore @types/mocha and others
-    "outDir": "_out"
+    "module": "ES2022",
+    "target": "ES2022",
+    // "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "noEmit": true,
   }
 }
