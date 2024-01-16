@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.2.0 - tbd
 
-### Changed
+### Added
+
+- Type for special error listener `srv.on('error')`
+
+### Fixed
+
+- `srv.send` overload to also allow optional headers
 
 
 ## Version 0.1.0 - 2023-12-13
