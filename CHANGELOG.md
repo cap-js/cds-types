@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - Type for special error listener `srv.on('error')`
 
+### Changed
+
+- `source`, `column_expr`, and `predicate` have been converted to partial intersection types. This offers all possible optional properties. You will have to make sure to check their presence when accessing them
+
 ### Fixed
 
 - `srv.send` overload to also allow optional headers
@@ -19,7 +23,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- Rework of the export structure of the main `cds` facade object, so that e.g. `cds.Request` and `cds.User` work again.
+- Rework of the export structure of the main `cds` facade object, so that e.g. `cds.Request` and `cds.User` work again
 
 ### Fixed
 

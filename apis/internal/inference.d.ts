@@ -30,3 +30,37 @@ export type Unwrap<T> = T extends ArrayConstructable
   : T extends Array<infer U>
     ? U
     : T
+
+
+/*
+ * the following three types are used to convert union types to intersection types. 
+ * We need these as our types currently lack generics in places where we would need them to clearly decide
+ * on a subtype in the case of a union type. This leads to the following problem:
+ * 
+ * ```ts
+ * type A = { a: number }
+ * type B = { b: string }
+ * type Foo = A | B
+ * function f(): Foo { ... }
+ * const x = f()
+ * x.a  // error, could also be B
+ * ```
+ *
+ * While we should have:
+ * 
+ * ```ts
+ * function f<T extends Foo>(): T { ... }
+ * const x = f<A>()
+ * x.a
+ * ```ts
+ * 
+ * Since we don't do that yet, we opt for intersection types instead.
+ * By also wrapping it in Partial, we at least force the user to check for the presence of any
+ * attribute they try to access.
+ * 
+ * Places where these types are used are subject to a rework!
+ * the idea behind the conversion can be found in this excellent writeup: https://fettblog.eu/typescript-union-to-intersection/
+ */
+export type Scalarise<A> = A extends Array<infer N> ? N : A
+export type UnionToIntersection<U> = Partial<(U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never>
+export type UnionsToIntersections<U> = Array<UnionToIntersection<Scalarise<U>>>
