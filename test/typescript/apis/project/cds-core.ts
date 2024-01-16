@@ -1,4 +1,4 @@
-import cds from '../../../../apis/cds'
+import cds from '@sap/cds'
 
 const x = cds.extend({ a: 42 }).with({ b: 'hello world' })
 const a: number = x.a

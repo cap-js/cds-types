@@ -1,5 +1,4 @@
-import cds from '../../../..'
-import { User } from '../../../../apis/cds'
+import cds, { User } from '@sap/cds'
 
 // accepts no args
 const user = new User()

@@ -24,6 +24,7 @@ jobs:
     - name: Run Unit Tests
       run: |
         npm install
+        npm install file:. --no-save --force
         npm run test
 
     - name: get-version
