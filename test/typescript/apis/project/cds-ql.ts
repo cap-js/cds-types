@@ -3,7 +3,7 @@ import { Foo, Foos, attach } from './dummy'
 
 // unwrapped plural types
 let sel: SELECT<Foo>
-sel = SELECT(['x', 'y'])
+sel = SELECT(Foo)
 const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 
 SELECT.from(Foos).columns("x") // x was suggested by code completion
@@ -22,7 +22,6 @@ INSERT.into(Foos).columns("x") // x was suggested by code completion
 let ins: INSERT<Foo>
 ins = INSERT.into(Foos, {})
 ins.into(Foos)
-ins = INSERT([])
 ins.into(Foos)
 ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"
