@@ -29,6 +29,7 @@
   "devDependencies": {
     "@sap/cds": "^7.4.0",
     "@stylistic/eslint-plugin": "^1.5.3",
+    "@types/jest": "^29.5.11",
     "@types/node": "^20",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
