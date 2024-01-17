@@ -3,7 +3,7 @@ import { Foo, Foos, attach } from './dummy'
 
 // unwrapped plural types
 let sel: SELECT<Foo>
-sel = SELECT(['x', 'y'])
+sel = SELECT(Foo)
 const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 
 SELECT.from(Foos).columns("x") // x was suggested by code completion
@@ -11,11 +11,17 @@ sel.from(Foos)
 sel.columns("x") // x was suggested by code completion
 sel.SELECT.columns?.filter(e => !e) // check if this is array
 
+// ensure ql returns a proper CQN
+const s = SELECT.from(Foos).columns('ID').where('ID =', 42)
+s.SELECT.from.ref
+s.SELECT.columns?.[0].ref
+s.SELECT.where?.[0].ref
+s.SELECT.where?.[2].val
+
 INSERT.into(Foos).columns("x") // x was suggested by code completion
 let ins: INSERT<Foo>
 ins = INSERT.into(Foos, {})
 ins.into(Foos)
-ins = INSERT([])
 ins.into(Foos)
 ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"

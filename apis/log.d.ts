@@ -16,11 +16,11 @@ export declare const log: LogFactory
  *
  * @param name - logger name
  */
-export declare function debug(name: string): undefined | Log
+export declare function debug (name: string): undefined | Log
 
 declare type LogFactory = {
 
-    /**
+  /**
      * Returns a trace logger for the given module if trace is switched on for it,
      * otherwise returns null. All cds runtime packages use this method for their
      * trace and debug output.
@@ -47,9 +47,9 @@ declare type LogFactory = {
      * @returns the logger
      * @see [capire](https://cap.cloud.sap/docs/node.js/cds-log)
      */
-    (name: string, options?: string | number | { level?: number, label?: string, prefix?: string }): Logger
+  (name: string, options?: string | number | { level?: number, label?: string, prefix?: string }): Logger,
 
-    /**
+  /**
      * Set a custom formatter function like that:
      * ```js
      *   cds.log.format = (module, level, ...args) => [ '[', module, ']', ...args ]
@@ -57,76 +57,80 @@ declare type LogFactory = {
      *
      * The formatter shall return an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-    format: Formatter
+  format: Formatter,
 
-    /**
+  /**
      * Set a custom logger.
      * ```js
      *   cds.log.Logger = ...
      * ```
      */
-    Logger: Logger
+  Logger: Logger,
 
-    winstonLogger (LoggerOptions?: {level?: string, levels?: any, format?: any, transports?: any, exitOnError?: boolean | Function, silent?: boolean})
+  // FIXME
+  /* eslint-disable-next-line @typescript-eslint/ban-types */
+  winstonLogger (LoggerOptions?: { level?: string, levels?: any, format?: any, transports?: any, exitOnError?: boolean | Function, silent?: boolean }),
 }
 
 declare class Logger {
-    /**
-     * Logs with 'trace' level
-     */
-    trace: Log
 
-    /**
+
+  /**
+    * Logs with 'trace' level
+    */
+  trace: Log
+
+  /**
      * Logs with 'debug' level
      */
-    debug: Log
+  debug: Log
 
-    /**
+  /**
      * Logs with 'info' level
      */
-    info: Log
+  info: Log
 
-    /**
+  /**
      * Logs with 'warn' level
      */
-    warn: Log
+  warn: Log
 
-    /**
+  /**
      * Logs with 'error' level
      */
-    error: Log
+  error: Log
 
-    /**
+  /**
      * Logs with default level
      */
-    log: Log
+  log: Log
 
-    /**
+  /**
      * @returns whether 'trace' level is active
      */
-    _trace: boolean
+  _trace: boolean
 
-    /**
+  /**
      * @returns whether 'debug' level is active
      */
-     _debug: boolean
+  _debug: boolean
 
-    /**
+  /**
      * @returns whether 'info' level is active
      */
-     _info: boolean
+  _info: boolean
 
-    /**
+  /**
      * @returns whether 'warn' level is active
      */
-     _warn: boolean
+  _warn: boolean
 
-    /**
+  /**
      * @returns whether 'error' level is active
      */
-     _error: boolean
+  _error: boolean
 
-    /**
+  /**
      * Change the format for this logger instance:
      * ```
      *   cds.log('foo').setFormat((module, level, ...args) => [ '[', module, ']', ...args ])
@@ -134,11 +138,13 @@ declare class Logger {
      *
      * The formatter shall return an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-     setFormat(formatter: Formatter)
+  setFormat (formatter: Formatter)
+
 }
 
 declare type Formatter = {
-    /**
+
+  /**
      * Custom format function
      *
      * @param module - logger name
@@ -146,19 +152,22 @@ declare type Formatter = {
      * @param args - additional arguments
      * @returns an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-    (module: string, level: number, args: any[]): any[]
+  (module: string, level: number, args: any[]): any[],
 }
 
 declare type Log = {
-    /**
+
+  /**
      * Logs a message
      *
      * @param message - text to log
      * @param optionalParams - additional parameters, same as in `console.log(text, param1, ...)`
      */
-     (message?: any, ...optionalParams: any[]): void
+  (message?: any, ...optionalParams: any[]): void,
 }
 
 declare enum levels {
-    SILENT = 0, ERROR = 1, WARN = 2, INFO = 3, DEBUG = 4, TRACE = 5, SILLY = 5, VERBOSE = 5
+  // FIXME: check if this is a copy-paste error
+  /* eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values */
+  SILENT = 0, ERROR = 1, WARN = 2, INFO = 3, DEBUG = 4, TRACE = 5, SILLY = 5, VERBOSE = 5
 }

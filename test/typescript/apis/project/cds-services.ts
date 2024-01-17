@@ -1,4 +1,4 @@
-import cds from '../../../..'
+import cds from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
 
 const model = cds.reflect({})
@@ -103,6 +103,7 @@ await srv.emit({ event: 'UPDATE', data: {} })
 await srv.send({ event: 'AuthorCreated', data: {}, headers: {} })
 await srv.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 await srv.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}, params: {my: 7,new: 8}})
+await srv.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}, params: {my: 7,new: 8}, headers: {accept: 'application/json'}})
 
 // single args
 await srv.send('CREATE', 'Books', {}, {})
@@ -180,6 +181,11 @@ srv.on('CREATE', Books, (req, next) => {
   next()
 })
 
+// special error handler
+srv.on('error', (err, req) => {
+  err.message
+  req.event
+})
 
 // Typed bound/ unbound actions
 // The handler must return a number to be in line with action's signature (or void)

@@ -1,4 +1,4 @@
-import cds from '../../../..'
+import cds from '@sap/cds'
 
 const test = cds.test(__dirname).in('other')
 cds.test('serve', '--in-memory', '--project', __dirname)

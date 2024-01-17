@@ -6,44 +6,57 @@ type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer T
   ? Head & Intersect<Tail>
   : unknown
 
-// These are classes actually -> using the new() => interface trick
 /**
  * Base class for linked Associations from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
  */
-export type Association = new(_?:object) => LinkedAssociation
+export interface Association extends LinkedAssociation {}
+export declare class Association { constructor (_?: object) }
+
 /**
  * Base class for linked Compositions from reflected models.
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-composition)
  */
-export type Composition = new(_?:object) => LinkedAssociation
+export interface Composition extends Association {}
+export declare class Composition { constructor (_?: object) }
+
 /**
  * Base class for linked entities from reflected models.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-entity)
  */
-export type entity = new(_?:object) => LinkedEntity
-export type event = new(_?:object) => linked & csn.struct
-export type type = new(_?:object) => linked & csn.type
-export type array = new(_?:object) => linked & csn.type
-export type struct = new(_?:object) => linked & csn.struct
+export interface entity extends LinkedEntity {}
+export declare class entity { constructor (_?: object) }
+
+export interface event extends linked, csn.struct {}
+export class event { constructor (_?: object) }
+
+export interface type extends linked, csn.type {}
+export class type { constructor (_?: object) }
+
+export interface array extends linked, csn.type {}
+export class array { constructor (_?: object) }
+
+export interface struct extends linked, csn.struct {}
+export class struct { constructor (_?: object) }
 
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
+
   /**
    * Base classes of linked definitions from reflected models.
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
    */
   classes: {
-    Association: Association
-    Composition: Composition
-    entity: entity
-    event: event
-    type: type
-    array: array
-    struct: struct
-    service: service
-  }
-  types: {}
+    Association: typeof Association,
+    Composition: typeof Composition,
+    entity: typeof entity,
+    event: typeof event,
+    type: typeof type,
+    array: typeof array,
+    struct: typeof struct,
+    service: service,
+  },
+  types: Record<string, object>,
 }
 
 /**
@@ -57,8 +70,8 @@ export const builtin: {
  *    }.prototype)
  * ```
  */
-export function extend<T>(target: T): {
-  with<E extends readonly unknown[]>(...ext: E): T & Intersect<E>
+export function extend<T> (target: T): {
+  with<E extends readonly any[]>(...ext: E): T & Intersect<E>,
 }
 
 /**
@@ -75,7 +88,7 @@ export function extend<T>(target: T): {
  * The first usage of `facade.sub` will load the sub module
  * using standard Node.js's `module.require` functions.
  */
-export function lazify <T>(target: T) : T
+export function lazify<T> (target: T): T
 
 /**
  * Prepare a node module for lazy-loading submodules instead
@@ -92,4 +105,4 @@ export function lazify <T>(target: T) : T
  * The first usage of `facade.sub` will load the sub module
  * using standard Node.js's `module.require` functions.
  */
-export function lazified <T>(target: T) : T
+export function lazified<T> (target: T): T

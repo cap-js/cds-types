@@ -6,14 +6,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.2.0 - tbd
 
+### Added
+
+- Type for special error listener `srv.on('error')`
+
 ### Changed
+
+- `source`, `column_expr`, and `predicate` have been converted to partial intersection types. This offers all possible optional properties. You will have to make sure to check their presence when accessing them
+
+### Fixed
+
+- `srv.send` overload to also allow optional headers
+- Reflected types like `cds.entity`, `cds.struct`, `cds.Association` are now properly exposed
+- `cds.builtin.types` got a more accurate type
+- The `LinkedEntity.drafts` property is now optional.  At runtime, it's only set for drafted entities.
+- `cds.model` is marked as modifiable (for tests only!)
+- `SELECT.from` got its `ref` property back
 
 
 ## Version 0.1.0 - 2023-12-13
 
 ### Changed
 
-- Rework of the export structure of the main `cds` facade object, so that e.g. `cds.Request` and `cds.User` work again.
+- Rework of the export structure of the main `cds` facade object, so that e.g. `cds.Request` and `cds.User` work again
 
 ### Fixed
 
