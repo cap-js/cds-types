@@ -1,4 +1,5 @@
 import { entity } from './csn' // cyclic dependency
+import { UnionToIntersection, UnionsToIntersections } from './internal/inference'
 
 // FIXME: a union type would be more appropriate here
 export type Query = Partial<SELECT & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
@@ -66,9 +67,9 @@ type data = Record<string, any>
 type name = string
 
 /** @private */
-type source = (ref | SELECT) & { as?: name, join?: name, on?: xpr }
-export type column_expr = expr & { as?: name, cast?: any, expand?: column_expr[], inline?: column_expr[] }
-export type predicate = _xpr
+type source = UnionToIntersection<ref | SELECT> & { as?: name, join?: name, on?: xpr }
+export type column_expr = UnionToIntersection<expr> & { as?: name, cast?: any, expand?: column_expr[], inline?: column_expr[] }
+export type predicate = UnionsToIntersections<_xpr>
 
 /** @private */
 type ordering_term = expr & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
