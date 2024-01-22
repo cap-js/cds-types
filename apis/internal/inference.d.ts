@@ -16,7 +16,8 @@ export interface ArrayConstructable<T = any> {
 
 // concrete singular type.
 // `SingularType<typeof Books>` == `Book`.
-export type SingularType<T extends ArrayConstructable<T>> = InstanceType<T>[number]
+export type SingularInstanceType<T extends ArrayConstructable> = InstanceType<T>[number]
+export type PluralInstanceType<T extends Constructable> = InstanceType<Array<T>>
 
 // Convenient way of unwrapping the inner type from array-typed values, as well as the value type itself
 // `class MyArray<T> extends Array<T>``
@@ -26,7 +27,7 @@ export type SingularType<T extends ArrayConstructable<T>> = InstanceType<T>[numb
 // This type introduces an indirection that streamlines their behaviour for both cases.
 // For any scalar type `Unwrap` behaves idempotent.
 export type Unwrap<T> = T extends ArrayConstructable
-  ? SingularType<T>
+  ? SingularInstanceType<T>
   : T extends Array<infer U>
     ? U
     : T
@@ -62,5 +63,6 @@ export type Unwrap<T> = T extends ArrayConstructable
  * the idea behind the conversion can be found in this excellent writeup: https://fettblog.eu/typescript-union-to-intersection/
  */
 export type Scalarise<A> = A extends Array<infer N> ? N : A
+export type Pluralise<S> = S extends Array<any> ? S : Array<S>
 export type UnionToIntersection<U> = Partial<(U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never>
 export type UnionsToIntersections<U> = Array<UnionToIntersection<Scalarise<U>>>

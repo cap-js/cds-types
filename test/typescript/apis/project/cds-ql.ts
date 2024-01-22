@@ -34,6 +34,18 @@ upd.set({})
 upd = UPDATE.entity(Foos)
 upd.set({})
 upd.UPDATE.entity === "foo"
+// uniform behaviour for all variants
+upd = UPDATE.entity(Foos)
+upd = UPDATE.entity(Foo)
+upd = UPDATE.entity(new Foo)
+upd = UPDATE.entity(42)
+
+
+const upd2 = UPDATE.entity(new Foo())
+
+
+const asd = await UPDATE.entity({x: 42})
+asd
 
 let ups:UPSERT<Foo>
 ups = UPSERT.into(Foo)
@@ -45,6 +57,7 @@ del.DELETE.from === "foo"
 DELETE(Foo)
 DELETE(Foo, Foos)
 DELETE([Foo, Foos])
+
 
 let selectOne: Foo
 let selectMany: Foos
@@ -122,3 +135,4 @@ DELETE.from `${x}` .where `ID=${x}`
 SELECT.from(Foos).forUpdate()
 SELECT.from(Foos).forUpdate({wait: 5})
 SELECT.from(Foos).forShareLock()
+
