@@ -1,8 +1,11 @@
-import { entity } from './csn' // cyclic dependency
+import { EntityElements, entity } from './csn' // cyclic dependency
 import { UnionToIntersection, UnionsToIntersections } from './internal/inference'
 
 // FIXME: a union type would be more appropriate here
-export type Query = Partial<SELECT & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
+// FIXME: This type is also used for req.query.
+//				It misses the QL functionality of req.query.
+//				It includes SELECT.elements for now but that should be expressed differently.
+export type Query = Partial< (SELECT & {elements: EntityElements}) & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
 
 export type SELECT = { SELECT: {
   distinct?: true,
