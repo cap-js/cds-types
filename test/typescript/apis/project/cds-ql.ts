@@ -38,14 +38,6 @@ upd.UPDATE.entity === "foo"
 upd = UPDATE.entity(Foos)
 upd = UPDATE.entity(Foo)
 upd = UPDATE.entity(new Foo)
-upd = UPDATE.entity(42)
-
-
-const upd2 = UPDATE.entity(new Foo())
-
-
-const asd = await UPDATE.entity({x: 42})
-asd
 
 let ups:UPSERT<Foo>
 ups = UPSERT.into(Foo)
