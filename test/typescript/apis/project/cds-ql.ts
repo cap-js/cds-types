@@ -11,6 +11,13 @@ sel.from(Foos)
 sel.columns("x") // x was suggested by code completion
 sel.SELECT.columns?.filter(e => !e) // check if this is array
 
+// ensure ql returns a proper CQN
+const s = SELECT.from(Foos).columns('ID').where('ID =', 42)
+s.SELECT.from.ref
+s.SELECT.columns?.[0].ref
+s.SELECT.where?.[0].ref
+s.SELECT.where?.[2].val
+
 INSERT.into(Foos).columns("x") // x was suggested by code completion
 let ins: INSERT<Foo>
 ins = INSERT.into(Foos, {})

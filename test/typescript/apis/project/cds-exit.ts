@@ -1,3 +1,3 @@
-import cds from '../../../../apis/cds'
+import cds from '@sap/cds'
 
 cds.exit()

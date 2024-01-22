@@ -1,4 +1,4 @@
-import cds from '../../../..'
+import cds from '@sap/cds'
 import * as winston from "winston"
 
 cds.log('foo').debug('message')

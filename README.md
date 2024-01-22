@@ -15,7 +15,18 @@ Find more information on the APIs in the [Node.js SDK documentation](https://cap
 
 ## Support, Feedback, Contributing
 
+### Local Setup
+
+After cloning, just run
+
+```sh
+npm run setup
+```
+
+which installs all dependencies.
+
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js/cds-types/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
+
 
 ## Security / Disclosure
 

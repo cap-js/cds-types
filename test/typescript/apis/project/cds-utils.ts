@@ -1,4 +1,4 @@
-import cds from '../../../..'
+import cds from '@sap/cds'
 
 const uuid: string = cds.utils.uuid()
 const decodeURI: string = cds.utils.decodeURI('https://developer.mozilla.org/docs/JavaScript%3A%20a_scripting_language')

@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -21,14 +21,16 @@
     "test": "jest --silent",
     "api-extractor": "api-extractor run --local --verbose",
     "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint:fix": "eslint . --ext .ts --fix",
+    "setup": "npm i && npm i file:. --no-save --force"
   },
   "peerDependencies": {
     "@sap/cds": ">=7"
   },
   "devDependencies": {
-    "@sap/cds": "^7.4.0",
+    "@sap/cds": "^7.5.0",
     "@stylistic/eslint-plugin": "^1.5.3",
+    "@types/jest": "^29.5.11",
     "@types/node": "^20",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
