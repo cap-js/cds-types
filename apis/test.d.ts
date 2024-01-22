@@ -31,6 +31,8 @@ declare class Axios {
 
   get DELETE (): Axios['delete']
 
+  get DEL (): Axios['delete']
+
   get OPTIONS (): Axios['options']
 
 }
