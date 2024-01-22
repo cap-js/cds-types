@@ -219,7 +219,7 @@ type SELECT_one =
 
 type SELECT_from<T> =
 // tagged template
-  TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<T>, InstanceType<any>>>
 &
 // calling with class
   (<T extends ArrayConstructable>
