@@ -217,7 +217,7 @@ export class Service extends QueryAPI {
   // disconnect (tenant?: string): Promise<void>
 
   // Provider API
-  prepend (fn: ServiceImpl): Promise<this>
+  prepend (fn: ServiceImpl): this
 
   on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
 

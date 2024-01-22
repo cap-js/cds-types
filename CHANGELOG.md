@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 
 ### Changed
+- `Service.prepend` is no longer async.
 
 ### Fixed
 
