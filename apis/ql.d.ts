@@ -163,6 +163,9 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
   static from: SELECT_from<T>
 
+  // overload for columns(...) specific for SELECT
+  columns (projection: Projection<T>): this
+
   from: SELECT_from & TaggedTemplateQueryPart<this>
   & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => this)
 
@@ -344,7 +347,6 @@ interface And {
 }
 
 interface Columns {
-  columns (projection: Projection<T>): this
   columns (...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]): this
   columns (...col: (string | column_expr)[]): this
   columns (col: (string | column_expr)[]): this
