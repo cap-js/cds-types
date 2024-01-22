@@ -4,7 +4,9 @@ import { Constructable, ArrayConstructable, SingularInstanceType, PluralInstance
 import { LinkedEntity } from './linked'
 import { ref, column_expr } from './cqn'
 
+type Primitive = string | number | boolean | Date
 export type Query = CQN.Query
+export type PK = number | string | object
 
 export class ConstructedQuery<T> {
   // branded type to break covariance for the subclasses
@@ -13,12 +15,6 @@ export class ConstructedQuery<T> {
   then (_resolved: (x: any) => any, _rejected: (e: Error) => any): any
 
 }
-
-
-export type PK = number | string | object
-
-
-type Primitive = string | number | boolean | Date
 
 // don't wrap QLExtensions in more QLExtensions (indirection to work around recursive definition)
 type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T>
@@ -34,7 +30,7 @@ type QLExtensions_<T> = {
   /**
 	 * Alias for this attribute.
 	 */
-  as: (alias: string) => void,
+  as (alias: string): void,
 
   /**
 	 * Accesses any nested attribute based on a [path](https://cap.cloud.sap/cap/docs/java/query-api#path-expressions):
@@ -43,7 +39,7 @@ type QLExtensions_<T> = {
 	 * To still have access to typed results, use
 	 * `X.a().b().c().d()` instead.
 	 */
-  get: (path: string) => any,
+  get (path: string): any,
 
   // have to exclude undefined from the type, or we'd end up with a distribution of Subqueryable
   // over T and undefined, which gives us zero code completion within the callable.
@@ -130,16 +126,19 @@ declare class QL<T> {
   SELECT: StaticSELECT<T>
 
   INSERT: typeof INSERT
-  & ((...entries: object[]) => INSERT<any>) & ((entries: object[]) => INSERT<any>)
+  & ((...entries: object[]) => INSERT<any>)
+  & ((entries: object[]) => INSERT<any>)
 
   UPSERT: typeof UPSERT
-  & ((...entries: object[]) => UPSERT<any>) & ((entries: object[]) => UPSERT<any>)
+  & ((...entries: object[]) => UPSERT<any>)
+  & ((entries: object[]) => UPSERT<any>)
 
   UPDATE: typeof UPDATE
   & typeof UPDATE.entity
 
   DELETE: typeof DELETE
-  & ((...entries: object[]) => DELETE<any>) & ((entries: object[]) => DELETE<any>)
+  & ((...entries: object[]) => DELETE<any>)
+  & ((entries: object[]) => DELETE<any>)
 
   CREATE: typeof CREATE
 
@@ -198,7 +197,6 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
 }
 
-
 type SELECT_one =
   TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 &
@@ -244,8 +242,7 @@ export class INSERT<T> extends ConstructedQuery<T> {
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
-    & ((entity: Definition | string, entries?: object | object[]) => INSERT<any>)
-    & ((entity: LinkedEntity | string, entries?: object | object[]) => INSERT<any>)
+    & ((entity: LinkedEntity | Definition | string, entries?: object | object[]) => INSERT<any>)
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
 
@@ -272,8 +269,7 @@ export class UPSERT<T> extends ConstructedQuery<T> {
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<unknown>>)
-    & ((entity: Definition | string, entries?: object | object[]) => UPSERT<any>)
-    & ((entity: LinkedEntity | string, entries?: object | object[]) => UPSERT<any>)
+    & ((entity: LinkedEntity | Definition | string, entries?: object | object[]) => UPSERT<any>)
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
 
@@ -293,14 +289,12 @@ export class UPSERT<T> extends ConstructedQuery<T> {
 
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 interface DELETE extends Where, And {}
 export class DELETE<T> extends ConstructedQuery<T> {
 
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
-    & ((entity: Definition | string | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
-    & ((entity: LinkedEntity | string | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
+    & ((entity: LinkedEntity | Definition | string | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
     & ((subject: ref) => DELETE<any>)
 
   byKey (primaryKey?: PK): this
@@ -315,20 +309,18 @@ export class UPDATE<T> extends ConstructedQuery<T> {
   static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<InstanceType<T>>
   static entity<T extends Constructable> (entity: T, primaryKey?: PK): UPDATE<PluralInstanceType<T>>
 
-  static entity (entity: Definition | string, primaryKey?: PK): UPDATE<any>
-
-  static entity (entity: LinkedEntity | string, primaryKey?: PK): UPDATE<any>
+  static entity (entity: LinkedEntity | Definition | string, primaryKey?: PK): UPDATE<any>
 
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<Pluralise<T>>
 
   byKey (primaryKey?: PK): this
   // with (block: (e:T)=>void) : this
   // set (block: (e:T)=>void) : this
+  set (data: object): this
   set: TaggedTemplateQueryPart<this>
-  & ((data: object) => this);
 
+  with (data: object): this
   with: TaggedTemplateQueryPart<this>
-    & ((data: object) => this)
 
   UPDATE: CQN.UPDATE['UPDATE']
 
@@ -375,7 +367,6 @@ interface Limit {
 }
 
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class CREATE<T> extends ConstructedQuery<T> {
 
   static entity (entity: Definition | string): CREATE<T>
@@ -385,7 +376,6 @@ export class CREATE<T> extends ConstructedQuery<T> {
 
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class DROP<T> extends ConstructedQuery<T> {
 
   static entity (entity: Definition | string): DROP<T>
