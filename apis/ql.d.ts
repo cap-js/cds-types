@@ -120,8 +120,8 @@ export type StaticSELECT<T> = typeof SELECT
   & ((...columns: string[]) => SELECT<T>)
   & ((columns: string[]) => SELECT<T>)
   & (TaggedTemplateQueryPart<SELECT<T>>)
-  & SELECT_one // as it is not directly quantified, ...
-  & SELECT_from // ...we should expect both a scalar and a list
+  & SELECT_from // as it is not directly quantified, ...
+  & SELECT_one // ...we should expect both a scalar and a list
 
 declare class QL<T> {
 
