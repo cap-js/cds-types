@@ -118,7 +118,7 @@ export type Awaitable<T, I> = T & Promise<I>
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
 export type StaticSELECT<T> = typeof SELECT
-  & ((...columns: (T extends ArrayConstructable<any> ? keyof SingularInstanceType<T> : keyof T)[]) => SELECT<T>)
+  & ((...columns: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]) => SELECT<T>)
   & ((...columns: string[]) => SELECT<T>)
   & ((columns: string[]) => SELECT<T>)
   & (TaggedTemplateQueryPart<SELECT<T>>)
@@ -155,7 +155,7 @@ declare class QL<T> {
 type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unknown[]) => T
 
 interface SELECT extends Columns, Where, And, Having, GroupBy, OrderBy, Limit {}
-export class SELECT<T> extends ConstructedQuery {
+export class SELECT<T> extends ConstructedQuery<T> {
 
   static one: SELECT_one<T> & { from: SELECT_one<T> }
 
@@ -200,11 +200,11 @@ type SELECT_one =
   TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 &
 // calling with class
-  (<T extends ArrayConstructable<any>>
+  (<T extends ArrayConstructable>
   (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
   => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
 &
-  (<T extends ArrayConstructable<any>>
+  (<T extends ArrayConstructable>
   (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
   => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
 
@@ -221,11 +221,11 @@ type SELECT_from<T> =
   TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
 &
 // calling with class
-  (<T extends ArrayConstructable<any>>
+  (<T extends ArrayConstructable>
   (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
   => Awaitable<SELECT<T>, InstanceType<T>>)
 &
-  (<T extends ArrayConstructable<any>>
+  (<T extends ArrayConstructable>
   (entityType: T, primaryKey: PK, projection?: Projection<SingularInstanceType<T>>)
   => Awaitable<SELECT<SingularInstanceType<T>>, InstanceType<SingularInstanceType<T>>>) // when specifying a key, we expect a single element as result
 // calling with definition
@@ -267,7 +267,7 @@ export class INSERT<T> extends ConstructedQuery<T> {
 interface UPSERT extends Columns {}
 export class UPSERT<T> extends ConstructedQuery<T> {
 
-  static into: (<T extends ArrayConstructable<any>> (entity: T, entries?: object | object[]) => UPSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<unknown>>)
     & ((entity: Definition | string, entries?: object | object[]) => UPSERT<any>)
     & ((entity: LinkedEntity | string, entries?: object | object[]) => UPSERT<any>)
@@ -305,8 +305,6 @@ export class DELETE<T> extends ConstructedQuery<T> {
   DELETE: CQN.DELETE['DELETE']
 
 }
-
-
 
 export interface UPDATE extends Whereable, Andable {}
 export class UPDATE<T> extends ConstructedQuery<T> {
@@ -347,7 +345,7 @@ interface And {
 
 interface Columns {
   columns (projection: Projection<T>): this
-  columns (...col: (T extends ArrayConstructable<any> ? keyof SingularInstanceType<T> : keyof T)[]): this
+  columns (...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]): this
   columns (...col: (string | column_expr)[]): this
   columns (col: (string | column_expr)[]): this
   columns: TaggedTemplateQueryPart<this>
