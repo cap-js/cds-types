@@ -50,11 +50,13 @@ declare class DataUtil {
 
 }
 
+type RunArgs = '--project' | '--in-memory' | '--port' | string
+
 declare class Test extends Axios {
 
   test: Test
 
-  run (cmd: 'serve' | 'run' | string, ...args: string[]): this
+  run (cmd: 'serve' | 'run' | string, ...args: RunArgs[]): this
 
   in (...paths: string[]): this
 
