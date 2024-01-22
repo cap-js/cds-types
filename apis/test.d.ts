@@ -46,7 +46,7 @@ declare class DataUtil {
   /**
    * @deprecated if needed, call `reset()`, considering test performance
    */
-  autoReset (enabled: boolean): this
+  autoReset (): void
 
 }
 
@@ -54,7 +54,7 @@ declare class Test extends Axios {
 
   test: Test
 
-  run (cmd: string, ...args: string[]): this
+  run (cmd: 'serve' | 'run' | string, ...args: string[]): this
 
   in (...paths: string[]): this
 
