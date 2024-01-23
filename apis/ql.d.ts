@@ -5,8 +5,37 @@ import { LinkedEntity } from './linked'
 import { ref, column_expr } from './cqn'
 
 type Primitive = string | number | boolean | Date
+type EntityDescription = LinkedEntity | Definition | string
+type PK = number | string | object
 export type Query = CQN.Query
-export type PK = number | string | object
+
+interface Columns {
+  columns (...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]): this
+  columns (...col: (string | column_expr)[]): this
+  columns (col: (string | column_expr)[]): this
+  columns: TaggedTemplateQueryPart<this>
+}
+
+interface Having {
+  having (...expr: string[]): this
+  having (predicate: object): this
+  having: TaggedTemplateQueryPart<this>
+}
+
+interface GroupBy {
+  groupBy (...expr: string[]): this
+  groupBy: TaggedTemplateQueryPart<this>
+}
+
+interface OrderBy {
+  orderBy (...expr: string[]): this
+  orderBy: TaggedTemplateQueryPart<this>
+}
+
+interface Limit {
+  limit (rows: number, offset?: number): this
+  limit: TaggedTemplateQueryPart<this>
+}
 
 export class ConstructedQuery<T> {
   // branded type to break covariance for the subclasses
@@ -209,8 +238,7 @@ type SELECT_one =
   (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
   => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
 
-  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
-  & ((entity: LinkedEntity | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
+  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
   & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
@@ -230,8 +258,7 @@ type SELECT_from<T> =
   (entityType: T, primaryKey: PK, projection?: Projection<SingularInstanceType<T>>)
   => Awaitable<SELECT<SingularInstanceType<T>>, InstanceType<SingularInstanceType<T>>>) // when specifying a key, we expect a single element as result
 // calling with definition
-  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
-  & ((entity: LinkedEntity | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
+  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
 // calling with concrete list
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
@@ -242,7 +269,7 @@ export class INSERT<T> extends ConstructedQuery<T> {
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
-    & ((entity: LinkedEntity | Definition | string, entries?: object | object[]) => INSERT<any>)
+    & ((entity: EntityDescription, entries?: object | object[]) => INSERT<any>)
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
 
@@ -269,7 +296,7 @@ export class UPSERT<T> extends ConstructedQuery<T> {
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<unknown>>)
-    & ((entity: LinkedEntity | Definition | string, entries?: object | object[]) => UPSERT<any>)
+    & ((entity: EntityDescription, entries?: object | object[]) => UPSERT<any>)
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
 
@@ -294,7 +321,7 @@ export class DELETE<T> extends ConstructedQuery<T> {
 
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
-    & ((entity: LinkedEntity | Definition | string | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
+    & ((entity: EntityDescription | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
     & ((subject: ref) => DELETE<any>)
 
   byKey (primaryKey?: PK): this
@@ -309,7 +336,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
   static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<InstanceType<T>>
   static entity<T extends Constructable> (entity: T, primaryKey?: PK): UPDATE<PluralInstanceType<T>>
 
-  static entity (entity: LinkedEntity | Definition | string, primaryKey?: PK): UPDATE<any>
+  static entity (entity: EntityDescription, primaryKey?: PK): UPDATE<any>
 
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<Pluralise<T>>
 
@@ -337,36 +364,6 @@ interface And {
   and: ((...expr: any[]) => this)
   and: TaggedTemplateQueryPart<this>
 }
-
-interface Columns {
-  columns (...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]): this
-  columns (...col: (string | column_expr)[]): this
-  columns (col: (string | column_expr)[]): this
-  columns: TaggedTemplateQueryPart<this>
-}
-
-interface Having {
-  having (...expr: string[]): this
-  having (predicate: object): this
-  having: TaggedTemplateQueryPart<this>
-}
-
-interface GroupBy {
-  groupBy (...expr: string[]): this
-  groupBy: TaggedTemplateQueryPart<this>
-}
-
-interface OrderBy {
-  orderBy (...expr: string[]): this
-  orderBy: TaggedTemplateQueryPart<this>
-}
-
-interface Limit {
-  limit (rows: number, offset?: number): this
-  limit: TaggedTemplateQueryPart<this>
-}
-
-
 export class CREATE<T> extends ConstructedQuery<T> {
 
   static entity (entity: Definition | string): CREATE<T>
