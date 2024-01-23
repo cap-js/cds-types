@@ -34,6 +34,20 @@ type QLThing = {
 
 }
 
+// Type for query pieces that can either be chained to build more complex queries or
+// awaited to materialise the result:
+// `Awaitable<SELECT<Book>, Book> = SELECT<Book> & Promise<Book>`
+//
+// While the benefit is probably not immediately obvious as we don't exactly
+// save a lot of typing over explicitly writing `SELECT<Book> & Promise<Book>`,
+// it makes the semantics more explicit. Also sets us up for when TypeScript ever
+// improves their generics to support:
+//
+// `Awaitable<T> = T extends unknown<infer I> ? (T & Promise<I>) : never`
+// (at the time of writing, infering the first generic parameter of ANY type
+// does not seem to be possible.)
+export type Awaitable<T, I> = T & Promise<I>
+
 // note to self: don't try to rewrite these intersection types into overloads.
 // It does not work because TaggedTemplateQueryPart will not fit in as regular overload
 export interface Columns {

@@ -1,8 +1,7 @@
 import { Definition, EntityElements } from './csn'
 import * as CQN from './cqn'
 import { Constructable, ArrayConstructable, SingularInstanceType, PluralInstanceType, Pluralise } from './internal/inference'
-import { Columns, Where, And, Having, GroupBy, OrderBy, Limit } from './internal/ql'
-import { LinkedEntity } from './linked'
+import { Columns, Where, And, Having, GroupBy, OrderBy, Limit, EntityDescription, Awaitable } from './internal/ql'
 import { ref } from './cqn'
 
 export type { QLExtensions } from './cds'
@@ -16,20 +15,6 @@ export class ConstructedQuery<T> {
   then (_resolved: (x: any) => any, _rejected: (e: Error) => any): any
 
 }
-
-// Type for query pieces that can either be chained to build more complex queries or
-// awaited to materialise the result:
-// `Awaitable<SELECT<Book>, Book> = SELECT<Book> & Promise<Book>`
-//
-// While the benefit is probably not immediately obvious as we don't exactly
-// save a lot of typing over explicitly writing `SELECT<Book> & Promise<Book>`,
-// it makes the semantics more explicit. Also sets us up for when TypeScript ever
-// improves their generics to support:
-//
-// `Awaitable<T> = T extends unknown<infer I> ? (T & Promise<I>) : never`
-// (at the time of writing, infering the first generic parameter of ANY type
-// does not seem to be possible.)
-export type Awaitable<T, I> = T & Promise<I>
 
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
@@ -239,18 +224,14 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 
 export class CREATE<T> extends ConstructedQuery<T> {
 
-  static entity (entity: Definition | string): CREATE<T>
-
-  static entity (entity: LinkedEntity | string): CREATE<T>
+  static entity (entity: EntityDescription): CREATE<T>
   CREATE: CQN.CREATE['CREATE']
 
 }
 
 export class DROP<T> extends ConstructedQuery<T> {
 
-  static entity (entity: Definition | string): DROP<T>
-
-  static entity (entity: LinkedEntity | string): DROP<T>
+  static entity (entity: EntityDescription): DROP<T>
   DROP: CQN.DROP['DROP']
 
 }
