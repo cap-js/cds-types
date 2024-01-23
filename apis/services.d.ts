@@ -217,7 +217,7 @@ export class Service extends QueryAPI {
   // disconnect (tenant?: string): Promise<void>
 
   // Provider API
-  prepend (fn: ServiceImpl): Promise<this>
+  prepend (fn: ServiceImpl): this
 
   on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
 
@@ -447,3 +447,6 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
+
+export const outboxed: (service: Service) => Service
+export const unboxed: (service: Service) => Service
