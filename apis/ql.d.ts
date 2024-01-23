@@ -327,15 +327,15 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 }
 
 interface Where {
-  where: TaggedTemplateQueryPart<this>
   where: ((predicate: object) => this)
   where: ((...expr: any[]) => this)
+  where: TaggedTemplateQueryPart<this>
 }
 
 interface And {
-  and: TaggedTemplateQueryPart<this>
   and: ((predicate: object) => this)
   and: ((...expr: any[]) => this)
+  and: TaggedTemplateQueryPart<this>
 }
 
 interface Columns {
