@@ -8,6 +8,7 @@ const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 
 SELECT.from(Foos).columns("x") // x was suggested by code completion
 sel.from(Foos)
+sel.columns(``)  // template strings from Columns interface still works
 sel.columns("x") // x was suggested by code completion
 sel.SELECT.columns?.filter(e => !e) // check if this is array
 
