@@ -1,6 +1,6 @@
 import type { Definition, EntityElements } from './csn'
 import type { Constructable, ArrayConstructable, SingularInstanceType, PluralInstanceType, Pluralise } from './internal/inference'
-import type { Columns, Where, And, Having, GroupBy, OrderBy, Limit, EntityDescription, Awaitable, TaggedTemplateQueryPart, Projection } from './internal/ql'
+import type { Columns, Where, And, Having, GroupBy, OrderBy, Limit, EntityDescription, Awaitable, TaggedTemplateQueryPart, Projection, QLExtensions } from './internal/ql'
 import type { ref } from './cqn'
 import * as CQN from './cqn'
 
@@ -228,15 +228,6 @@ export class CREATE<T> extends ConstructedQuery<T> {
   CREATE: CQN.CREATE['CREATE']
 
 }
-
-export interface F {
-  new (...args: any[]): any
-  x(data: Record<string, unknown>): InstanceType<this>
-}
-
-interface G extends F {}
-class G {}
-
 
 export class DROP<T> extends ConstructedQuery<T> {
 
