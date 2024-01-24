@@ -48,8 +48,6 @@ type QLThing = {
 // does not seem to be possible.)
 export type Awaitable<T, I> = T & Promise<I>
 
-type CoalesceThis<T extends Columns<unknown>> = T extends (Columns<infer This>) ? This extends undefined ? T : This : never
-
 // note to self: don't try to rewrite these intersection types into overloads.
 // It does not work because TaggedTemplateQueryPart will not fit in as regular overload
 export interface Columns<This = undefined> {
