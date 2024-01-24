@@ -199,7 +199,7 @@ export class DELETE<T> extends ConstructedQuery<T> {
 
 }
 
-export interface UPDATE extends Whereable, Andable {}
+export interface UPDATE extends Where, And {}
 export class UPDATE<T> extends ConstructedQuery<T> {
   // cds-typer plural, singular
   static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<InstanceType<T>>
