@@ -48,13 +48,15 @@ type QLThing = {
 // does not seem to be possible.)
 export type Awaitable<T, I> = T & Promise<I>
 
+type CoalesceThis<T extends Columns<unknown>> = T extends (Columns<infer This>) ? This extends undefined ? T : This : never
+
 // note to self: don't try to rewrite these intersection types into overloads.
 // It does not work because TaggedTemplateQueryPart will not fit in as regular overload
-export interface Columns {
-  columns: TaggedTemplateQueryPart<this>
-  & (<T>(...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]) => this)
-  & ((...col: (string | column_expr)[]) => this)
-  & ((col: (string | column_expr)[]) => this)
+export interface Columns<This = undefined> {
+  columns: TaggedTemplateQueryPart<This extends undefined ? this : This>
+  & (<T>(...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]) => This extends undefined ? this : This)
+  & ((...col: (string | column_expr)[]) => This extends undefined ? this : This)
+  & ((col: (string | column_expr)[]) => This extends undefined ? this : This)
 }
 
 export interface Having {

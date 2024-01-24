@@ -1,8 +1,8 @@
-import { Definition, EntityElements } from './csn'
+import type { Definition, EntityElements } from './csn'
+import type { Constructable, ArrayConstructable, SingularInstanceType, PluralInstanceType, Pluralise } from './internal/inference'
+import type { Columns, Where, And, Having, GroupBy, OrderBy, Limit, EntityDescription, Awaitable, TaggedTemplateQueryPart, Projection } from './internal/ql'
+import type { ref } from './cqn'
 import * as CQN from './cqn'
-import { Constructable, ArrayConstructable, SingularInstanceType, PluralInstanceType, Pluralise } from './internal/inference'
-import { Columns, Where, And, Having, GroupBy, OrderBy, Limit, EntityDescription, Awaitable } from './internal/ql'
-import { ref } from './cqn'
 
 export type { QLExtensions } from './cds'
 export type { Query } from './cqn'
@@ -18,15 +18,15 @@ export class ConstructedQuery<T> {
 
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
-export type StaticSELECT<T> = typeof SELECT
+export type StaticSELECT<T> = typeof SELECT<T>
   & ((...columns: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]) => SELECT<T>)
   & ((...columns: string[]) => SELECT<T>)
   & ((columns: string[]) => SELECT<T>)
   & (TaggedTemplateQueryPart<SELECT<T>>)
-  & SELECT_one // as it is not directly quantified, ...
-  & SELECT_from // ...we should expect both a scalar and a list
+  & SELECT_one<T> // as it is not directly quantified, ...
+  & SELECT_from<T> // ...we should expect both a scalar and a list
 
-declare class QL<T> {
+export declare class QL<T> {
 
   SELECT: StaticSELECT<T>
 
@@ -51,9 +51,9 @@ declare class QL<T> {
 
 }
 
-export interface SELECT extends Columns, Where, And, Having, GroupBy, OrderBy, Limit {
+export interface SELECT extends Where, And, Having, GroupBy, OrderBy, Limit {
   // overload specific to SELECT
-  columns: Columns['columns'] & ((projection: Projection<T>) => this)
+  columns: Columns<this>['columns'] & ((projection: Projection<T>) => this)
 }
 export class SELECT<T> extends ConstructedQuery<T> {
 
@@ -95,8 +95,8 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
 }
 
-type SELECT_one =
-  TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
+type SELECT_one<T> =
+  TaggedTemplateQueryPart<Awaitable<SELECT<T>, InstanceType<any>>>
 &
 // calling with class
   (<T extends ArrayConstructable>
@@ -228,6 +228,15 @@ export class CREATE<T> extends ConstructedQuery<T> {
   CREATE: CQN.CREATE['CREATE']
 
 }
+
+export interface F {
+  new (...args: any[]): any
+  x(data: Record<string, unknown>): InstanceType<this>
+}
+
+interface G extends F {}
+class G {}
+
 
 export class DROP<T> extends ConstructedQuery<T> {
 
