@@ -212,11 +212,12 @@ export class UPDATE<T> extends ConstructedQuery<T> {
   byKey (primaryKey?: PK): this
   // with (block: (e:T)=>void) : this
   // set (block: (e:T)=>void) : this
-  set (data: object): this
-  set: TaggedTemplateQueryPart<this>
 
-  with (data: object): this
+  set: TaggedTemplateQueryPart<this>
+  & ((data: object) => this)
+
   with: TaggedTemplateQueryPart<this>
+    & ((data: object) => this)
 
   UPDATE: CQN.UPDATE['UPDATE']
 
