@@ -15,6 +15,7 @@ export const env: {
   query: any,
   sql: any,
   features: {
+
     /**
      * @see [capire](https://cap.cloud.sap/docs/guides/databases#db-constraints)
      */
@@ -71,8 +72,8 @@ export const env: {
     /**
      * @private
      */
-    with_parameters: boolean
-  }
+    with_parameters: boolean,
+  },
 } & { [key: string]: any } // to allow additional values we have not yet captured
 
 export const requires: any
