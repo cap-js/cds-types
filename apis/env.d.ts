@@ -75,11 +75,9 @@ export default class {
       */
       with_parameters: boolean
     }
-  }
+  } & { [key: string]: any } // to allow additional values we have not yet captured
 
-  requires: any
-  version: string
-  home: string
-  root: string
-
-}
+export const requires: any
+export const version: string
+export const home: string
+export const root: string

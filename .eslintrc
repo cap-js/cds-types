@@ -1,0 +1,45 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "@stylistic"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@stylistic/all-extends"
+  ],
+  "rules": {
+    "@stylistic/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "@stylistic/padded-blocks": ["off"],
+    "@stylistic/indent": ["error", 2],
+    "@stylistic/quotes": ["error", "single"],
+    "@stylistic/semi": ["error", "never"],
+    "@stylistic/object-curly-spacing": ["error", "always"],
+    "@stylistic/no-multiple-empty-lines": ["error"],
+    "@stylistic/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "comma"
+      },
+      "singleline": {
+        "delimiter": "comma"
+      },
+      "multilineDetection": "brackets",
+      "overrides": {
+        "interface": {
+          "multiline": {
+            "delimiter": "none"
+          }
+        }
+      }
+    }],
+    // FIXME: turn this on if we decide on a conventional nomenclature for our types
+    //"@typescript-eslint/naming-convention": ["error", { "selector": "typeLike", "format": ["PascalCase"] }]
+    // FIXME: turn this back on once we have resolved all the any-quirks
+
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unsafe-declaration-merging": "off"
+  }
+}

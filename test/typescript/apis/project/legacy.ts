@@ -29,17 +29,16 @@ import {
   Service,
 } from "@sap/cds/apis/services";
 
-// --- works again with sap/cds >= 7.5
-// import {
-//   Definition as DefinitionRefl,
-//   entity as entityRefl,
-//   LinkedModel,
-//   LinkedDefinition as LinkedDefinitionRefl,
-//   ParsedModel,
-//   ReflectedModel,
-//   ReflectedDefinitions,
-// } from "@sap/cds/apis/reflect";
+import {
+  Definition as DefinitionRefl,
+  entity as entityRefl,
+  LinkedModel,
+  LinkedDefinition as LinkedDefinitionRefl,
+  ParsedModel,
+  ReflectedModel,
+  ReflectedDefinitions,
+} from "@sap/cds/apis/reflect";
 
-// import { Definitions } from '@sap/cds/apis/csn'
-// import { User as CoreUser } from '@sap/cds/apis/core'
-// import { Logger } from '@sap/cds/apis/log'
+import { Definitions } from '@sap/cds/apis/csn'
+import { User as CoreUser } from '@sap/cds/apis/core'
+import { Logger } from '@sap/cds/apis/log'

@@ -1,8 +1,10 @@
-import cds from '../../../..'
+import cds from '@sap/cds'
 
 const test = cds.test(__dirname).in('other')
 cds.test('serve', '--in-memory', '--project', __dirname)
-cds.test('dir').run('cmd', '--arg1', '--arg2')
+cds.test('dir').run('cmd', '--arg1', '--arg2');
+(new cds.test.Test).run(...['1','2','3'])
+
 
 const {GET, DELETE, POST, PUT} = test
 const {get, delete:del, post, put} = test
