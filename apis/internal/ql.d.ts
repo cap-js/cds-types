@@ -7,7 +7,7 @@ import type { ArrayConstructable, SingularInstanceType } from './inference'
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
 type Projection<T> = (e: QLExtensions<T extends ArrayConstructable ? SingularInstanceType<T> : T>) => void
 type Primitive = string | number | boolean | Date
-type EntityDescription = LinkedEntity | Definition | string
+type EntityDescription = LinkedEntity | Definition | string // FIXME: Definition not allowed here?, FIXME: { name: string } | ?
 type PK = number | string | object
 // used as a catch-all type for using tagged template strings: SELECT `foo`. from `bar` etc.
 // the resulting signatures are actually not very strongly typed, but they at least accept template strings

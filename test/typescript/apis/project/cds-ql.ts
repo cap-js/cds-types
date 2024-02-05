@@ -129,4 +129,3 @@ DELETE.from `${x}` .where `ID=${x}`
 SELECT.from(Foos).forUpdate()
 SELECT.from(Foos).forUpdate({wait: 5})
 SELECT.from(Foos).forShareLock()
-

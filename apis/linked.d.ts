@@ -1,7 +1,7 @@
 import { CSN, FQN, Association, Definition, entity, kinds } from './csn'
 
-export type LinkedDefinition = linked & Definition & LinkedEntity & LinkedAssociation
-export type Definitions = { [name: string]: LinkedDefinition }
+export type LinkedDefinition = UnionToIntersection<linked | Definition | LinkedEntity | LinkedAssociation>
+export type Definitions<T extends LinkedDefinition> = { [name: string]: T }
 // FIXME: this is only a temporary alias. Definitions is actually correct,
 // but the name may be misleading, as it is indeed a mapping of strings to LinkedDefinition objects.
 export type LinkedDefinitions = Definitions

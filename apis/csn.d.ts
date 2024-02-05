@@ -1,4 +1,5 @@
 import { SELECT, ref, predicate } from './cqn'
+import type { UnionToIntersection } from './internal/inference'
 
 /**
  * A parsed CDS model in CSN object notation.
@@ -43,7 +44,7 @@ export type FQN = string
 /**
  * Definitions are the central elements of a CDS model.
  */
-export type Definition = context & service & type & struct & entity & Association
+export type Definition = UnionToIntersection<context | service | type | struct | entity | Association>
 // NOTE: If we use & instead of | CSN.definitions values would be reduced to <never>
 
 /**
@@ -55,7 +56,7 @@ export type Extension = {
   includes?: FQN[],
 }
 
-export type Element = type & struct & Association
+export type Element = UnionToIntersection<type | struct | Association>
 
 export type kinds = 'type' | 'entity' | 'event' | 'service' | 'context' | 'struct'
 
