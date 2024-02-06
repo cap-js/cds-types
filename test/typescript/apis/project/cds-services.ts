@@ -287,3 +287,8 @@ await cds.tx (async (tx) => {
   await tx.run(SELECT(1).from(Books,201).forUpdate())
 })
 cds.db.entities('draftModelAuth')
+
+//tests outbox
+const outboxedService = cds.outboxed(srv)
+await outboxedService.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
+await cds.unboxed(outboxedService).send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})

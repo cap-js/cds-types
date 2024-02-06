@@ -19,6 +19,8 @@ s.SELECT.columns?.[0].ref
 s.SELECT.where?.[0].ref
 s.SELECT.where?.[2].val
 
+SELECT(Foos) === SELECT.from(Foos)
+
 INSERT.into(Foos).columns("x") // x was suggested by code completion
 let ins: INSERT<Foo>
 ins = INSERT.into(Foos, {})

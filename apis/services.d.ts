@@ -447,3 +447,6 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
+
+export const outboxed: (service: Service) => Service
+export const unboxed: (service: Service) => Service

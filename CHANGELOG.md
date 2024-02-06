@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.3.0 - tbd
 
 ### Added
+- Added signatures for `cds.outboxed` and `cds.unboxed`
 
 ### Changed
 - `Service.prepend` is no longer async.
