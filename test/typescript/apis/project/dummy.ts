@@ -5,13 +5,13 @@ import { Subqueryable } from '../../../../apis/ql'
 
 // dummies to test singular and plural types in queries with
 export class Foo {
-    static drafts = []
+    static readonly drafts: typeof Foo
     x: number = 42
     ref?: Foo
     refs?: Foo[]
   }
 
-export class Foos extends Array<Foo> {}
+export class Foos extends Array<Foo> { static readonly drafts: typeof Foo }
 
 
 // for bound/ unbound actions
