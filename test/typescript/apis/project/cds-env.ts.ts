@@ -10,6 +10,7 @@ cds.env.features.odata_new_parser = true
 cds.env.features.optimized_search = true
 cds.env.features.rest_new_adapter = true
 cds.env.features.serve_on_root = true
+cds.env.features.stream_compat = true
 cds.env.features.skip_unused = 'all'
 cds.env.features.skip_unused = false
 cds.env.features.with_mocks = true
