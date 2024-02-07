@@ -52,6 +52,11 @@ export const env: {
      */
     serve_on_root: boolean,
 
+    /**
+     * @see [capire](https://cap.cloud.sap/docs/releases/jan24#media-data-and-large-binaries)
+     */
+    stream_compat: boolean,
+
     with_mocks: boolean,
 
     /**
