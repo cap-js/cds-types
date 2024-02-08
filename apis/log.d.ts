@@ -47,7 +47,7 @@ declare type LogFactory = {
      * @returns the logger
      * @see [capire](https://cap.cloud.sap/docs/node.js/cds-log)
      */
-  (name: string, options?: string | number | { level?: number, label?: string, prefix?: string }): Logger,
+  (name: string, options?: string | number | { level?: LogLevel, label?: string, prefix?: string }): Logger,
 
   /**
      * Set a custom formatter function like that:
@@ -167,7 +167,9 @@ declare type Log = {
 }
 
 declare enum levels {
-  // FIXME: check if this is a copy-paste error
+  // SILLY and VERBOSE are aliases for TRACE
   /* eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values */
   SILENT = 0, ERROR = 1, WARN = 2, INFO = 3, DEBUG = 4, TRACE = 5, SILLY = 5, VERBOSE = 5
 }
+
+type LogLevel = keyof typeof levels | Lowercase<keyof typeof levels> | levels

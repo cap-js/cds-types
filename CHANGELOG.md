@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
 - `SELECT.from` and related variants now work on the `.drafts` property
+- `cds.log` can now also be called with the names of log levels
 
 
 ## Version 0.2.0 - 2024-01-17
