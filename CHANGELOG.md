@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - `Service.prepend` is no longer async.
 
 ### Fixed
+- `SELECT.from` and related variants now work on the `.drafts` property
 
 
 ## Version 0.2.0 - 2024-01-17
