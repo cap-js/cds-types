@@ -4,10 +4,12 @@ import { Foo, Foos, attach } from './dummy'
 // unwrapped plural types
 let sel: SELECT<Foo>
 sel = SELECT(Foo)
+sel = SELECT(Foo, 42)
 sel = SELECT(Foo.drafts)
 sel = SELECT(Foos.drafts)
 sel = SELECT.from(Foo.drafts)
 sel = SELECT.from(Foos.drafts)
+sel = SELECT.from(Foos.drafts, 42)
 
 const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 

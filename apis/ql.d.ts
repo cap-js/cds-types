@@ -258,6 +258,13 @@ type SELECT_from =
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & ((subject: ref) => SELECT<any>)
+// put these overloads at the very end, as they would also match the above
+  & (<T extends Constructable<any>>
+  (entityType: T, projection?: Projection<InstanceType<T>>)
+  => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
+  & (<T extends Constructable<any>>
+  (entityType: T, primaryKey: PK, projection?: Projection<InstanceType<T>>)
+  => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
 
 export class INSERT<T> extends ConstructedQuery {
 
