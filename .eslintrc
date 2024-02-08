@@ -12,6 +12,7 @@
     "plugin:@stylistic/all-extends"
   ],
   "rules": {
+    "@stylistic/quote-props": ["off"],
     "@stylistic/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "@stylistic/padded-blocks": ["off"],
     "@stylistic/indent": ["error", 2],
