@@ -15,6 +15,8 @@ const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 
 SELECT.from(Foos).columns("x") // x was suggested by code completion
 sel.from(Foos)
+sel.columns(``).where(['asd'])
+sel.columns(``)  // template strings from Columns interface still works
 sel.columns("x") // x was suggested by code completion
 sel.SELECT.columns?.filter(e => !e) // check if this is array
 
@@ -43,6 +45,10 @@ upd.set({})
 upd = UPDATE.entity(Foos)
 upd.set({})
 upd.UPDATE.entity === "foo"
+// uniform behaviour for all variants
+upd = UPDATE.entity(Foos)
+upd = UPDATE.entity(Foo)
+upd = UPDATE.entity(new Foo)
 
 let ups:UPSERT<Foo>
 ups = UPSERT.into(Foo)
@@ -54,6 +60,7 @@ del.DELETE.from === "foo"
 DELETE(Foo)
 DELETE(Foo, Foos)
 DELETE([Foo, Foos])
+
 
 let selectOne: Foo
 let selectMany: Foos

@@ -2,11 +2,12 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { LinkedCSN, LinkedDefinition, Definitions as LinkedDefinitions, LinkedEntity } from './linked'
+import { IterableMap, LinkedCSN, LinkedDefinition, LinkedEntity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
 import { ReadableStream } from 'node:stream/web'
+import { type } from './core'
 
 type Key = number | string | any
 
@@ -92,7 +93,6 @@ export class QueryAPI {
 
 }
 
-
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -128,25 +128,25 @@ export class Service extends QueryAPI {
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  entities: IterableMap<LinkedEntity>
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  events: IterableMap<LinkedEntity> // FIXME: only Event -> "Event" not part of LinkedEntity?
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  types: IterableMap<type>
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  operations: IterableMap<LinkedDefinition> // FIXME-D: only action/function -> what type is that?
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.

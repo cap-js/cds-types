@@ -31,6 +31,8 @@ declare class Axios {
 
   get DELETE (): Axios['delete']
 
+  get DEL (): Axios['delete']
+
   get OPTIONS (): Axios['options']
 
 }
@@ -44,15 +46,17 @@ declare class DataUtil {
   /**
    * @deprecated if needed, call `reset()`, considering test performance
    */
-  autoReset (enabled: boolean): this
+  autoReset (): void
 
 }
+
+type RunArgs = '--project' | '--in-memory' | '--port' | string
 
 declare class Test extends Axios {
 
   test: Test
 
-  run (cmd: string, ...args: string[]): this
+  run (cmd: 'serve' | 'run' | string, ...args: RunArgs[]): this
 
   in (...paths: string[]): this
 
