@@ -1,7 +1,7 @@
 import { CSN, FQN, Association, Definition, entity, kinds } from './csn'
 
-export type LinkedDefinition = UnionToIntersection<linked | Definition | LinkedEntity | LinkedAssociation>
-export type Definitions<T extends LinkedDefinition> = { [name: string]: T }
+export type LinkedDefinition = linked | Definition | LinkedEntity | LinkedAssociation
+export type IterableMap<T extends LinkedDefinition> = { [name: string]: T } & ((namespace: string) => IterableMap<T>) & Iterable<T>  // FIXME-D: should the lambda part return IterableMap again? That allows x(...)(...)(...)...
 // FIXME: this is only a temporary alias. Definitions is actually correct,
 // but the name may be misleading, as it is indeed a mapping of strings to LinkedDefinition objects.
 export type LinkedDefinitions = Definitions

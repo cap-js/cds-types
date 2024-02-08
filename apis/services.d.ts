@@ -2,7 +2,7 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { Definitions, LinkedCSN, LinkedDefinition, Definitions as LinkedDefinitions, LinkedEntity } from './linked'
+import { IterableMap, LinkedCSN, LinkedDefinition, LinkedEntity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
@@ -93,8 +93,6 @@ export class QueryAPI {
 
 }
 
-type ModelCategory<T extends LinkedDefinition> = Definitions<T> & ((namespace: string) => Definitions<T>)
-
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -130,25 +128,25 @@ export class Service extends QueryAPI {
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: ModelCategory<LinkedEntity>
+  entities: IterableMap<LinkedEntity>
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: ModelCategory<LinkedEntity> // FIXME: only Event -> "Event" not part of LinkedEntity?
+  events: IterableMap<LinkedEntity> // FIXME: only Event -> "Event" not part of LinkedEntity?
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: ModelCategory<type>
+  types: IterableMap<type>
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: ModelCategory<LinkedDefinition> // FIXME: only action/function -> what type is that?
+  operations: IterableMap<LinkedDefinition> // FIXME-D: only action/function -> what type is that?
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -219,7 +217,7 @@ export class Service extends QueryAPI {
   // disconnect (tenant?: string): Promise<void>
 
   // Provider API
-  prepend (fn: ServiceImpl): Promise<this>
+  prepend (fn: ServiceImpl): this
 
   on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
 
@@ -449,3 +447,6 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
+
+export const outboxed: (service: Service) => Service
+export const unboxed: (service: Service) => Service

@@ -7,10 +7,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.3.0 - tbd
 
 ### Added
+- Added signatures for `cds.outboxed` and `cds.unboxed`
 
 ### Changed
+- `Service.prepend` is no longer async.
 
 ### Fixed
+- `SELECT.from` and related variants now work on the `.drafts` property
 
 
 ## Version 0.2.0 - 2024-01-17

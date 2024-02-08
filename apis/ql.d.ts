@@ -23,8 +23,8 @@ export type StaticSELECT<T> = typeof SELECT<T>
   & ((...columns: string[]) => SELECT<T>)
   & ((columns: string[]) => SELECT<T>)
   & (TaggedTemplateQueryPart<SELECT<T>>)
-  & SELECT_one<T> // as it is not directly quantified, ...
-  & SELECT_from<T> // ...we should expect both a scalar and a list
+  & SELECT_from // as it is not directly quantified, ...
+  & SELECT_one // ...we should expect both a scalar and a list
 
 export declare class QL<T> {
 
@@ -132,6 +132,13 @@ type SELECT_from<T> =
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & ((subject: ref) => SELECT<any>)
+// put these overloads at the very end, as they would also match the above
+  & (<T extends Constructable<any>>
+  (entityType: T, projection?: Projection<InstanceType<T>>)
+  => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
+  & (<T extends Constructable<any>>
+  (entityType: T, primaryKey: PK, projection?: Projection<InstanceType<T>>)
+  => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
 
 export interface INSERT extends Columns {}
 export class INSERT<T> extends ConstructedQuery<T> {
