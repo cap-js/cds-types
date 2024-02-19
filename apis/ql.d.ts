@@ -268,7 +268,7 @@ type SELECT_from =
     entityType: T,
     primaryKey: PK,
     projection?: Projection<InstanceType<T>>
-  ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>);
+  ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>)
 
 export class INSERT<T> extends ConstructedQuery {
 
