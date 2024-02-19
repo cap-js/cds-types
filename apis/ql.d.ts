@@ -1,6 +1,6 @@
 import { Definition, EntityElements } from './csn'
 import * as CQN from './cqn'
-import { Constructable, ArrayConstructable, SingularType } from './internal/inference'
+import { Constructable, ArrayConstructable, SingularType, PluralType } from './internal/inference'
 import { LinkedEntity } from './linked'
 import { ref, column_expr } from './cqn'
 
@@ -258,13 +258,17 @@ type SELECT_from =
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & ((subject: ref) => SELECT<any>)
-// put these overloads at the very end, as they would also match the above
-  & (<T extends Constructable<any>>
-  (entityType: T, projection?: Projection<InstanceType<T>>)
-  => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
-  & (<T extends Constructable<any>>
-  (entityType: T, primaryKey: PK, projection?: Projection<InstanceType<T>>)
-  => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
+  // put these overloads at the very end, as they would also match the above
+  // We expect these to be the overloads for scalars since we covered arrays above -> wrap them back in Array
+  & (<T extends Constructable<any>>(
+    entityType: T,
+    projection?: Projection<InstanceType<T>>
+  ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>)
+  & (<T extends Constructable<any>>(
+    entityType: T,
+    primaryKey: PK,
+    projection?: Projection<InstanceType<T>>
+  ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>);
 
 export class INSERT<T> extends ConstructedQuery {
 
