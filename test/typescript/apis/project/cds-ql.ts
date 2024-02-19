@@ -2,7 +2,7 @@ import { QLExtensions } from '../../../../apis/ql'
 import { Foo, Foos, attach } from './dummy'
 
 // unwrapped plural types
-let sel: SELECT<Foo>
+let sel: SELECT<Foos>
 sel = SELECT(Foo)
 sel = SELECT(Foo, 42)
 sel = SELECT(Foo.drafts)
