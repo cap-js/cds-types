@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - `Service.prepend` is no longer async.
 
 ### Fixed
-- `SELECT.from` and related variants now work on the `.drafts` property
+- `SELECT.from` and related variants now work on the `.drafts` property and behave like `SELECT.from(<Plural>)`
 - `cds.log` can now also be called with the names of log levels
 
 
