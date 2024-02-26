@@ -85,10 +85,16 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
    */
   foreach (query: Query, callback: (row: object) => void): this
-  transaction: {
-    (fn: (tx: Transaction) => object): Promise<any>,
+
+  /**
+   * @deprecated use @see{@link QueryAPI.tx} instead
+   */
+  transaction: QueryAPI['tx']
+
+  tx: {
+    (fn: (tx: Transaction) => {}): Promise<unknown>,
     (context?: object): Transaction,
-    (context: object, fn: (tx: Transaction) => object): Promise<any>,
+    (context: object, fn: (tx: Transaction) => {}): Promise<unknown>,
   }
 
 }
