@@ -66,3 +66,4 @@ export type Scalarise<A> = A extends Array<infer N> ? N : A
 export type Pluralise<S> = S extends Array<any> ? S : Array<S>
 export type UnionToIntersection<U> = Partial<(U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never>
 export type UnionsToIntersections<U> = Array<UnionToIntersection<Scalarise<U>>>
+export type FIXME = any
