@@ -16,7 +16,7 @@ type PK = number | string | object
 // Defining overloads with it will override preceding signatures and the other way around.
 type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unknown[]) => T
 
-type QLThing = {
+type QueryArtefact = {
 
   /**
 	 * Alias for this attribute.
@@ -99,7 +99,7 @@ export type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T
 */
 // have to exclude undefined from the type, or we'd end up with a distribution of Subqueryable
 // over T and undefined, which gives us zero code completion within the callable.
-type QLExtensions_<T> = { [Key in keyof T]: QLExtensions<T[Key]> } & QLThing & Subqueryable<Exclude<T, undefined>>
+type QLExtensions_<T> = { [Key in keyof T]: QLExtensions<T[Key]> } & QueryArtefact & Subqueryable<Exclude<T, undefined>>
 
 /**
  * Adds the ability for subqueries to structured properties.
