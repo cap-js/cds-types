@@ -18,6 +18,8 @@ export interface ArrayConstructable<T = any> {
 // `SingularType<typeof Books>` == `Book`.
 export type SingularType<T extends ArrayConstructable<T>> = InstanceType<T>[number]
 
+export type PluralType<T extends Constructable> = Array<InstanceType<T>>
+
 // Convenient way of unwrapping the inner type from array-typed values, as well as the value type itself
 // `class MyArray<T> extends Array<T>``
 // The latter is used heavily in the CDS typer, but its behaviour depends based on how the types are imported:
