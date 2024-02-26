@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 - `SELECT.from` and related variants now work on the `.drafts` property and behave like `SELECT.from(<Plural>)`
 - `cds.log` can now also be called with the names of log levels
-
+- Reintroduced missing `QueryAPI.tx` and add deprecation note for `QueryAPI.transaction`
 
 ## Version 0.2.0 - 2024-01-17
 
