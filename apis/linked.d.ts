@@ -1,5 +1,7 @@
 import { CSN, FQN, Association, Definition, entity, kinds } from './csn'
+import { UnionToIntersection } from './internal/inference'
 
+export type ModelPart<T extends UnionToIntersection<LinkedDefinition>> = { [name: string]: T } & ((namespace: string) => ModelPart<T>) & Iterable<T>  // FIXME-D: should the lambda part return IterableMap again? That allows x(...)(...)(...)...
 export type LinkedDefinition = linked & Definition & LinkedEntity & LinkedAssociation
 export type Definitions = { [name: string]: LinkedDefinition }
 // FIXME: this is only a temporary alias. Definitions is actually correct,
