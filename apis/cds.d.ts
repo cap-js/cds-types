@@ -1,6 +1,7 @@
 export * from './core'
 export * from './server'
 export * from './env'
+export * from './linked'
 export * from './models'
 export * from './services'
 export * from './events'
@@ -40,5 +41,5 @@ declare global {
 	type UPDATE<T> = ql.UPDATE<T>
 	type DELETE<T> = ql.DELETE<T>
 	type CREATE<T> = ql.CREATE<T>
-	type DROP<T> = ql.DROP<T>
+	type DROP<T>   = ql.DROP<T>
 }
