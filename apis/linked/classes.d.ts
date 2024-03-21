@@ -1,4 +1,5 @@
 import type { TODO } from '../internal/util'
+import { ModelPart } from '../linked'
 
 type Column = { ref: [string], as?: string }
 type Kind = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'struct' | 'array'
@@ -64,6 +65,20 @@ declare class struct<K extends Kind = 'struct'> extends type<K> implements WithE
 }
 
 declare class context extends any_ { }
+declare class service extends context {
+  get entities (): ModelPart<entity>
+  get types (): ModelPart<type>
+  get events (): Modelpart<event>
+  get actions (): ModelPart<action | any_<'function'>> // TODO: according to the impl this returns actions and functions. Should this be the case? See: operations
+  get operations (): ModelPart<action | any_<'function'>>
+  get protocols (): TODO
+
+  static get protocols (): TODO
+  static get bindings (): TODO
+  static get factory (): TODO
+  static get endpoints4 (..._: TODO[]): TODO
+  static get path4 (..._: TODO[]): TODO
+}
 
 declare class action extends any_<'action'> {} // TODO: class 'function' missing
 declare class event extends aspect<'event'> {}
