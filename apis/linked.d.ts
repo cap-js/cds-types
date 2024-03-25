@@ -1,15 +1,8 @@
 import { CSN, FQN, Association as Association_, entity as entity_, kinds } from './csn'
 import { UnionToIntersection } from './internal/inference'
-import { any_, event, type, action, context } from './linked/classes'
+import { type } from './linked/classes'
 
-// ArrayLike is taken since es5
-export type ArrayEsque<T> = Iterable<T> & {
-  forEach: (handler: (element: T) => any) => void,
-  filter: (predicate: (element: T) => boolean) => Array<T>,
-  map: <R>(converter: (element: T) => R) => Array<R>,
-  some: (predicate: (element: T) => boolean) => boolean,
-  find: (predicate: (element: T) => boolean) => T | undefined,
-}
+
 export type IterableMap<T> = { [name: string]: T } & ArrayEsque<T>
 export type ModelPart<T extends UnionToIntersection<LinkedDefinition>> = IterableMap<T> & ((namespace: string) => ModelPart<T>)
 
