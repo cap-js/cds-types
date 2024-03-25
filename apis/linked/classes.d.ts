@@ -1,19 +1,14 @@
-import type { TODO } from '../internal/util'
+import type { IterableMap, TODO } from '../internal/util'
 // import { ModelPart } from '../linked' // TODO: this should actually be "LinkedDefinitions", see below
 
 type Column = { ref: [string], as?: string }
 type Kind = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'struct' | 'array'
 
-// ArrayLike is taken since es5
-export type ArrayEsque<T> = Iterable<T> & {
-  forEach: (handler: (element: T) => any) => void,
-  filter: (predicate: (element: T) => boolean) => Array<T>,
-  map: <R>(converter: (element: T) => R) => Array<R>,
-  some: (predicate: (element: T) => boolean) => boolean,
-  find: (predicate: (element: T) => boolean) => T | undefined,
-}
-export type IterableMap<T> = { [name: string]: T } & ArrayEsque<T>
-export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T> & ((namespace: string) => LinkedDefinitions<T>)
+
+/**
+ * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
+ */
+export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T> //& ((namespace: string) => LinkedDefinitions<T>)
 
 interface WithElements {
   elements: TODO // LinkedDefinitions_
@@ -146,16 +141,13 @@ declare class Association extends type {
 
   is2Many: boolean
 
-  keys: Column[]
-
-  foreignKeys: TODO
 }
 
 // TODO: should this exist? same as association in capire?
 declare class Composition extends Association {}
 
 declare type ManagedAssociation = Association & {
-  foreignKeys: TODO, //LinkedDefinitions_,
+  foreignKeys: TODO,
   keys: Column[],
 }
 

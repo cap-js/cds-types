@@ -1,6 +1,5 @@
 import { CSN, FQN, Association as Association_, entity as entity_, kinds } from './csn'
 import { UnionToIntersection } from './internal/inference'
-import { TODO } from './internal/util'
 import { any_, event, type, action, context } from './linked/classes'
 
 // ArrayLike is taken since es5
@@ -119,22 +118,6 @@ type Filter = string | ((def: LinkedDefinition) => boolean)
 
 type LinkedDefinitions_<T = type> = { [name: string]: T } & ArrayEsque<T>
 type ModelPart_<T extends type = type> = LinkedDefinitions_<T> & { (namespace: string): LinkedDefinitions_<T> }
-
-
-declare class service extends context {
-  get entities (): ArrayEsque<any_<'entity'>>
-  get types (): ArrayEsque<type>
-  get events (): ArrayEsque<event>
-  get actions (): ArrayEsque<action | any_<'function'>>
-  get operations (): ArrayEsque<action | any_<'function'>>
-  get protocols (): TODO
-  static protocols (): TODO
-  static bindings (): TODO
-  static factory (): TODO
-  static endpoints4 (..._: TODO[]): TODO
-  static path4 (..._: TODO[]): TODO
-}
-
 
 
 export * from './linked/classes'
