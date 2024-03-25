@@ -1,12 +1,24 @@
-import { CSN, FQN, Association, Definition, entity, kinds } from './csn'
+import { CSN, FQN, Association as Association_, entity as entity_, kinds } from './csn'
 import { UnionToIntersection } from './internal/inference'
+import { TODO } from './internal/util'
+import { any_, event, type, action, context } from './linked/classes'
 
-export type ModelPart<T extends UnionToIntersection<LinkedDefinition>> = { [name: string]: T } & ((namespace: string) => ModelPart<T>) & Iterable<T>  // FIXME-D: should the lambda part return IterableMap again? That allows x(...)(...)(...)...
-export type LinkedDefinition = linked & Definition & LinkedEntity & LinkedAssociation
-export type Definitions = { [name: string]: LinkedDefinition }
+// ArrayLike is taken since es5
+export type ArrayEsque<T> = Iterable<T> & {
+  forEach: (handler: (element: T) => any) => void,
+  filter: (predicate: (element: T) => boolean) => Array<T>,
+  map: <R>(converter: (element: T) => R) => Array<R>,
+  some: (predicate: (element: T) => boolean) => boolean,
+  find: (predicate: (element: T) => boolean) => T | undefined,
+}
+export type IterableMap<T> = { [name: string]: T } & ArrayEsque<T>
+export type ModelPart<T extends UnionToIntersection<LinkedDefinition>> = IterableMap<T> & ((namespace: string) => ModelPart<T>)
+
+//   export type LinkedDefinition = linked & Definition & LinkedEntity & LinkedAssociation
+//   export type Definitions = { [name: string]: LinkedDefinition }
 // FIXME: this is only a temporary alias. Definitions is actually correct,
 // but the name may be misleading, as it is indeed a mapping of strings to LinkedDefinition objects.
-export type LinkedDefinitions = Definitions
+//   export type LinkedDefinitions = Definitions
 export interface linked {
   is(kind: kinds | 'Association' | 'Composition'): boolean
   name: FQN
@@ -17,7 +29,7 @@ interface LinkedEntity extends linked, entity {
   drafts?: LinkedEntity
 }
 
-interface LinkedAssociation extends linked, Association {
+interface LinkedAssociation extends linked, Association_ {
   is2one: boolean
   is2many: boolean
 }
@@ -104,3 +116,25 @@ export interface LinkedCSN extends CSN {
 
 type Visitor = (def: LinkedDefinition, name: string, parent: LinkedDefinition, defs: Definitions) => void
 type Filter = string | ((def: LinkedDefinition) => boolean)
+
+type LinkedDefinitions_<T = type> = { [name: string]: T } & ArrayEsque<T>
+type ModelPart_<T extends type = type> = LinkedDefinitions_<T> & { (namespace: string): LinkedDefinitions_<T> }
+
+
+declare class service extends context {
+  get entities (): ArrayEsque<any_<'entity'>>
+  get types (): ArrayEsque<type>
+  get events (): ArrayEsque<event>
+  get actions (): ArrayEsque<action | any_<'function'>>
+  get operations (): ArrayEsque<action | any_<'function'>>
+  get protocols (): TODO
+  static protocols (): TODO
+  static bindings (): TODO
+  static factory (): TODO
+  static endpoints4 (..._: TODO[]): TODO
+  static path4 (..._: TODO[]): TODO
+}
+
+
+
+export * from './linked/classes'

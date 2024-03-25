@@ -1,6 +1,5 @@
 import cds from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
-
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 
