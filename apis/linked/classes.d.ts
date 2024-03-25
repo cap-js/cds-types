@@ -1,5 +1,5 @@
 import * as csn from '../csn'
-import type { IterableMap, TODO } from '../internal/util'
+import type { IterableMap } from '../internal/util'
 // import { ModelPart } from '../linked' // TODO: this should actually be "LinkedDefinitions", see below
 
 type Column = { ref: [string], as?: string }
@@ -12,34 +12,29 @@ type Kind = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'st
 export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T> // & ((namespace: string) => LinkedDefinitions<T>)
 
 interface WithElements {
-  elements: TODO // LinkedDefinitions_
+  elements: LinkedDefinitions<type>
 }
 
-// TODO: should this actually be called LinkedDefinition? Or aliased as such?
-declare interface any_ extends csn.any_ {} // TODO: .kind also in csn.any_
+declare interface any_ extends csn.any_ {} // TODO: .kind also in csn.any_ -> no, exact same
 declare class any_<K extends Kind = Kind> {
   private _: K // break covariance
   constructor (...aspects: any[])
-  get name (): string // TODO: actually getter, setter?
+
+  readonly name: string
+
   //get kind (): K | undefined
-  valueOf (): string | this
-  toJSON (): JSON
-  own (property: TODO, ifAbsent: TODO): TODO
-  set (property: string, value: any, enumerable?: boolean): TODO
-  dataIn (d: TODO, prefix?: string): TODO
-  // not public API yet
-  // is (kind: Kind): boolean
 
   // needed to allow arbitrary properties to be added during runtime via mixin()
-  [_: string | number | symbol]: unknown
+  [_: string | number | symbol]: unknown // require explicit cast?
 }
 
 
 declare class aspect<K extends Kind = 'aspect'> extends type<K> { }
-declare interface type extends csn.type {} // TODO: recursively change type of .items?
+declare interface type extends Omit<csn.type, 'items'> {
+  items: type
+}
 declare class type<K extends Kind = 'type'> extends any_<K> { }
 
-// FIXME: do scalar and its subclasses have their own, specific kind?
 declare class scalar extends type { }
 declare class boolean_ extends scalar { }
 declare const boolean: typeof boolean_
@@ -81,15 +76,15 @@ declare interface struct extends csn.struct {}
 declare class struct<K extends Kind = 'struct'> extends type<K> implements WithElements {
   is_struct: true
 
-  data (d: TODO): TODO // TODO: from impl?
-
-  //elements: LinkedDefinitions<any_> // TODO: can we already restrict generic parameter here?
+  elements: LinkedDefinitions<type<'type'>>
 }
 
 declare interface context extends csn.context {}
 declare class context extends any_ { }
 
 declare interface service extends csn.service {}
+
+type Protocol = 'odata' | 'rest'
 
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-service)
@@ -99,45 +94,44 @@ declare class service extends context {
   get entities (): LinkedDefinitions<entity>
   get types (): LinkedDefinitions<type>
   get events (): LinkedDefinitions<event>
-  // TODO: missing in capire
-  get actions (): LinkedDefinitions<action | any_<'function'>> // TODO: according to the impl this returns actions and functions. Should this be the case? See: operations
-  // TODO: missing in capire
-  get operations (): LinkedDefinitions<action | any_<'function'>>
-  // TODO: missing in capire
-  get protocols (): TODO
+  get actions (): LinkedDefinitions<action>
 
-  // TODO: missing in capire (everything below)
-  static get protocols (): TODO
-  static get bindings (): TODO
-  static get factory (): TODO
-  //static get endpoints4 (..._: TODO[]): TODO
-  //static get path4 (..._: TODO[]): TODO
+  /**
+   * @deprecated use `.actions` instead
+   */
+  get operations (): LinkedDefinitions<action>
+  // not public yet
+  // get protocols (): { [protocol: Protocol]: boolean? }
 }
 
-declare class action extends any_<'action'> {} // TODO: class 'function' missing
+declare class action extends any_<'action' | 'function'> {}
 declare class event extends aspect<'event'> {}
 
-// TODO: recursively change type of .elements?
+// TODO: recursively change type of .elements? -> can come from struct
 declare interface entity extends Omit<csn.entity, 'elements'> {}
 
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-entity)
  */
+// TODO: does not exist in impl file ->
+// https://github.tools.sap/cap/cds/blob/8c4aaa7be1b081782d3beae74734fcb4604e61c7/lib/linked/entities.js
 declare class entity extends struct<'entity'> {
   is_entity: true
 
-  //keys: TODO
+  keys: LinkedDefinitions<type>
 
-  associations: TODO
+  associations: LinkedDefinitions<Association>
 
-  compositions: TODO
+  compositions: LinkedDefinitions<Composition>
 
-  actions: TODO
+  actions: LinkedDefinitions<action>
 
-  texts: TODO | undefined
+  texts?: entity
 
-  //drafts: TODO
+  drafts?: entity
 }
+
+new entity().elements.at(0)
 
 declare interface Association extends Omit<csn.Association, 'type'> {}
 
@@ -145,11 +139,9 @@ declare interface Association extends Omit<csn.Association, 'type'> {}
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-association)
  */
 declare class Association extends type {
-  _target: TODO // TODO^2: in csn.Association it is .target
+  _target: entity
 
-  isAssociation: true // TODO: why not is_association here?
-
-  isComposition?: true // TODO: ?: true or bool? move to Composition?
+  isAssociation: true
 
   is2one: boolean
 
@@ -158,13 +150,13 @@ declare class Association extends type {
 }
 
 
-// TODO: should this exist? same as association in capire?
-declare class Composition extends Association {}
+declare class Composition extends Association {
+  isComposition: true
+}
 
 declare type ManagedAssociation = Association & {
-  foreignKeys: TODO,
+  foreignKeys: LinkedDefinitions<type>,
   keys: Column[],
 }
 
-// TODO: using this will break the existing types
 export function mixin (...classes: (new () => any)[]): void
