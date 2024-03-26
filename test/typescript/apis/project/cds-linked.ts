@@ -15,7 +15,19 @@ new entity().actions.find(Boolean)
 new entity().texts?.kind === 'entity'
 new entity().drafts?.kind === 'entity'
 new entity().is_entity === true
+new entity().is_struct === true
 new entity().elements.find(x => x.items.kind === 'type')
+new entity().items?.kind
+new entity().name
+// @ts-expect-error
+new entity().FOO
+
+new struct().name
+
+new type().name
+new type().items
+new type().is('Association')
+
 // @ts-expect-error
 new entity().elements.find(x => x.items.charAt(0)) // .elements should not be FQN from CSN anymore, but linked
 

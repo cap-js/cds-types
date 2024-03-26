@@ -71,7 +71,7 @@ declare class array extends type<'array'> { }
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-struct)
  */
-declare interface struct extends csn.struct {}
+declare interface struct extends Omit<csn.struct, 'items' | 'elements'> {}
 declare class struct<K extends kinds = 'struct'> extends type<K> implements WithElements {
   is_struct: true
 
@@ -101,7 +101,7 @@ declare class service extends context {
    * @alpha
    * not public yet
    */
-  get protocols (): { [protocol: Protocol]: boolean? }
+  get protocols (): { [protocol in Protocol]?: boolean | undefined }
 }
 
 declare class action extends any_<'action' | 'function'> {}
@@ -110,7 +110,7 @@ declare class event extends aspect<'event'> {}
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-entity)
  */
-declare interface entity extends Omit<csn.entity, 'elements'> {}
+declare interface entity extends Omit<csn.entity, 'elements' | 'items' | 'keys' | 'drafts'> {}
 declare class entity extends struct<'entity'> {
   is_entity: true
 
@@ -130,7 +130,7 @@ declare class entity extends struct<'entity'> {
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-association)
  */
-declare interface Association extends Omit<csn.Association, 'type'> {}
+declare interface Association extends Omit<csn.Association, 'type' | 'items'> {}
 declare class Association extends type {
   _target: entity
 
