@@ -4,7 +4,7 @@ import { LinkedDefinitions, any_, entity, service } from './linked/classes'
 
 export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => ModelPart<T>)
 type Visitor = (def: any_, name: string, parent: any_, defs: LinkedDefinitions) => void
-type Filter = string | ((def: any_) => boolean)
+type Filter = string | (<T extends any_ = any_>(def: T) => boolean)
 
 export type LinkedDefinition = any_
 
@@ -20,13 +20,13 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 	 *   let entities = m.all('entity')        //> equivalent shortcut
 	 * ```
 	 */
-  each(x: Filter, defs?: LinkedDefinitions): IterableIterator<any>
+  each<T extends any_>(x: Filter, defs?: LinkedDefinitions<T>): IterableIterator<T>
 
   /**
 	 * Fetches definitions matching the given filter, returning them in an array.
 	 * Convenience shortcut for `[...reflect.each('entity')]`
 	 */
-  all(x: Filter, defs?: LinkedDefinitions): any[] // TODO: what is this actually?
+  all<T extends any_>(x: Filter, defs?: LinkedDefinitions<T>): T[]
 
   /**
 	 * Fetches definitions matching the given filter, returning the first match, if any.
@@ -35,7 +35,7 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 	 * @param x - the filter
 	 * @param defs - the definitions to fetch in, default: `this.definitions`
 	 */
-  find(x: Filter, defs?: LinkedDefinitions): any // TODO: what is this actually?
+  find<T extends any_>(x: Filter, defs?: LinkedDefinitions<T>): T | undefined
 
   /**
 	 * Calls the visitor for each definition matching the given filter.

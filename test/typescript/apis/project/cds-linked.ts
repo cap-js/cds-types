@@ -6,6 +6,11 @@ const linkedCsn = undefined as unknown as LinkedCSN
 linkedCsn.exports[0].name
 linkedCsn.exports['foo'].name
 linkedCsn.exports('foo').bar
+const es: entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
+// @ts-expect-error
+const ts: type[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
+const one: entity | undefined = linkedCsn.find(x => Boolean(x.name), linkedCsn.entities)
+for (const each of linkedCsn.each(e => true, linkedCsn.entities)) each.keys
 
 new entity().kind === 'entity'
 new entity().keys.find
