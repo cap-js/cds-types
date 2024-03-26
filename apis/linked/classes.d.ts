@@ -4,11 +4,11 @@
  * They mirror the class hierarchy of the original CSN, but also inherit the original CSN class
  * of the same name. So we have to resolve a diamond inheritance problem here:
  * ```
- * csn.type   <--  linked.type
+ * csn.type   <-- linked.type
  *   ^               ^
- * csn.struct <--  linked.struct
+ * csn.struct <-- linked.struct
  *   ^               ^
- * csn.entity <--  linked.entity
+ * csn.entity <-- linked.entity
  * ```
  * To address this, we use declaration merging to express the relationship between csn.X and linked.X
  * while using regular inheritance for the classes in the linked namespace.
@@ -47,7 +47,9 @@ declare class any_<K extends kinds = kinds> {
   is (kind: kinds | 'Association' | 'Composition'): boolean
 }
 
-declare class aspect<K extends kinds = 'aspect'> extends type<K> { }
+declare class aspect<K extends kinds = 'aspect'> extends type<K> implements WithElements {
+  elements: LinkedDefinitions<type<'type'>>
+}
 declare interface type extends Omit<csn.type, 'items'> {
   items: type
 }

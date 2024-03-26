@@ -6,8 +6,9 @@ export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) =>
 type Visitor = (def: any_, name: string, parent: any_, defs: LinkedDefinitions) => void
 type Filter = string | ((def: any_) => boolean)
 
+export type LinkedDefinition = any_
 
-export interface LinkedCSN extends CSN {
+export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 
   /**
 	 * Fetches definitions matching the given filter, returning an iterator on them.
@@ -88,3 +89,5 @@ export interface LinkedCSN extends CSN {
 }
 
 export * from './linked/classes'
+// FIXME: only for compat in ql.d.ts and services.d.ts, remove asap
+export type LinkedEntity = entity

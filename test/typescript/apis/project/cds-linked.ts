@@ -43,6 +43,7 @@ new type().kind === 'type'
 // @ts-expect-error
 new type().kind === 'type_'
 
+new event().elements
 new event().kind === 'event'
 // @ts-expect-error
 new event().kind === 'event_'

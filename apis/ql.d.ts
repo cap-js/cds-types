@@ -281,7 +281,7 @@ export class INSERT<T> extends ConstructedQuery {
 
   into: (<T extends ArrayConstructable> (entity: T) => this)
   & TaggedTemplateQueryPart<this>
-  & ((entity: Definition | string) => this)
+  & ((entity: LinkedEntity | Definition | string) => this) // TODO: accept both LinkedEntity and Definition?
 
   data (block: (e: T) => void): this
 
@@ -305,14 +305,13 @@ export class UPSERT<T> extends ConstructedQuery {
 
   static into: (<T extends ArrayConstructable<any>> (entity: T, entries?: object | object[]) => UPSERT<SingularType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<unknown>>)
-    & ((entity: Definition | string, entries?: object | object[]) => UPSERT<any>)
-    & ((entity: LinkedEntity | string, entries?: object | object[]) => UPSERT<any>)
+    & ((entity: LinkedEntity | Definition | string, entries?: object | object[]) => UPSERT<any>) // TODO: accept both LinkedEntity and Definition?
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
 
   into: (<T extends ArrayConstructable> (entity: T) => this)
   & TaggedTemplateQueryPart<this>
-  & ((entity: Definition | string) => this)
+  & ((entity: LinkedEntity | Definition | string) => this) // TODO: allow both LinkedEntity and Definition?
 
   data (block: (e: T) => void): this
 

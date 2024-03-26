@@ -1,43 +1,11 @@
-import { LinkedAssociation, LinkedEntity, linked } from './linked'
-import * as csn from './csn'
 import { service } from './server'
+import * as linked from './linked'
 
 type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer Tail]
   ? Head & Intersect<Tail>
   : unknown
 
-/**
- * Base class for linked Associations from reflected models.
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-Association)
- */
-export interface Association extends LinkedAssociation {}
-export declare class Association { constructor (_?: object) }
-
-/**
- * Base class for linked Compositions from reflected models.
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-composition)
- */
-export interface Composition extends Association {}
-export declare class Composition { constructor (_?: object) }
-
-/**
- * Base class for linked entities from reflected models.
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-entity)
- */
-export interface entity extends LinkedEntity {}
-export declare class entity { constructor (_?: object) }
-
-export interface event extends linked, csn.struct {}
-export class event { constructor (_?: object) }
-
-export interface type extends linked, csn.type {}
-export class type { constructor (_?: object) }
-
-export interface array extends linked, csn.type {}
-export class array { constructor (_?: object) }
-
-export interface struct extends linked, csn.struct {}
-export class struct { constructor (_?: object) }
+export { entity, event, type, array, struct, Association, Composition } from './linked/classes'
 
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
@@ -47,13 +15,13 @@ export const builtin: {
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
    */
   classes: {
-    Association: typeof Association,
-    Composition: typeof Composition,
-    entity: typeof entity,
-    event: typeof event,
-    type: typeof type,
-    array: typeof array,
-    struct: typeof struct,
+    Association: typeof linked.Association,
+    Composition: typeof linked.Composition,
+    entity: typeof linked.entity,
+    event: typeof linked.event,
+    type: typeof linked.type,
+    array: typeof linked.array,
+    struct: typeof linked.struct,
     service: service,
   },
   types: Record<string, object>,
