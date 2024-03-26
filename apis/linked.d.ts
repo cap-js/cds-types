@@ -1,30 +1,11 @@
-import { CSN, FQN, Association as Association_, entity as entity_, kinds } from './csn'
-import { UnionToIntersection } from './internal/inference'
-import { type } from './linked/classes'
+import { CSN } from './csn'
+import { IterableMap } from './internal/util'
+import { LinkedDefinitions, any_, entity, service } from './linked/classes'
 
+export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => ModelPart<T>)
+type Visitor = (def: any_, name: string, parent: any_, defs: LinkedDefinitions) => void
+type Filter = string | ((def: any_) => boolean)
 
-export type IterableMap<T> = { [name: string]: T } & ArrayEsque<T>
-export type ModelPart<T extends UnionToIntersection<LinkedDefinition>> = IterableMap<T> & ((namespace: string) => ModelPart<T>)
-
-//   export type LinkedDefinition = linked & Definition & LinkedEntity & LinkedAssociation
-//   export type Definitions = { [name: string]: LinkedDefinition }
-// FIXME: this is only a temporary alias. Definitions is actually correct,
-// but the name may be misleading, as it is indeed a mapping of strings to LinkedDefinition objects.
-//   export type LinkedDefinitions = Definitions
-export interface linked {
-  is(kind: kinds | 'Association' | 'Composition'): boolean
-  name: FQN
-}
-
-interface LinkedEntity extends linked, entity {
-  keys: Definitions
-  drafts?: LinkedEntity
-}
-
-interface LinkedAssociation extends linked, Association_ {
-  is2one: boolean
-  is2many: boolean
-}
 
 export interface LinkedCSN extends CSN {
 
@@ -38,13 +19,13 @@ export interface LinkedCSN extends CSN {
 	 *   let entities = m.all('entity')        //> equivalent shortcut
 	 * ```
 	 */
-  each(x: Filter, defs?: Definitions): IterableIterator<any>
+  each(x: Filter, defs?: LinkedDefinitions): IterableIterator<any>
 
   /**
 	 * Fetches definitions matching the given filter, returning them in an array.
 	 * Convenience shortcut for `[...reflect.each('entity')]`
 	 */
-  all(x: Filter, defs?: Definitions): any[]
+  all(x: Filter, defs?: LinkedDefinitions): any[] // TODO: what is this actually?
 
   /**
 	 * Fetches definitions matching the given filter, returning the first match, if any.
@@ -53,21 +34,21 @@ export interface LinkedCSN extends CSN {
 	 * @param x - the filter
 	 * @param defs - the definitions to fetch in, default: `this.definitions`
 	 */
-  find(x: Filter, defs?: Definitions): any
+  find(x: Filter, defs?: LinkedDefinitions): any // TODO: what is this actually?
 
   /**
 	 * Calls the visitor for each definition matching the given filter.
 	 * @see [capire](https://github.wdf.sap.corp/pages/cap/node.js/api#cds-reflect-foreach)
 	 */
-  foreach(x: Filter, visitor: Visitor, defs?: Definitions): this
-  foreach(visitor: Visitor, defs?: Definitions): this
+  foreach(x: Filter, visitor: Visitor, defs?: LinkedDefinitions): this
+  foreach(visitor: Visitor, defs?: LinkedDefinitions): this
 
   /**
 	 * Same as foreach but recursively visits each element definition
 	 * @see [capire](https://github.wdf.sap.corp/pages/cap/node.js/api#cds-reflect-foreach)
 	 */
-  forall(x: Filter, visitor: Visitor, defs?: Definitions): this
-  forall(visitor: Visitor, defs?: Definitions): this
+  forall(x: Filter, visitor: Visitor, defs?: LinkedDefinitions): this
+  forall(visitor: Visitor, defs?: LinkedDefinitions): this
 
   /**
 	 * Fetches definitions declared as children of a given parent context or service.
@@ -81,7 +62,7 @@ export interface LinkedCSN extends CSN {
 	 * @param parent - either the parent itself or its fully-qualified name
 	 * @param filter - an optional filter to apply before picking a child
 	 */
-  childrenOf(parent: any | string, filter?: ((def: LinkedDefinition) => boolean)): Definitions
+  childrenOf(parent: any | string, filter?: ((def: any_) => boolean)): LinkedDefinitions
 
   /**
 	 * Provides convenient access to the model's top-level definitions.
@@ -99,18 +80,11 @@ export interface LinkedCSN extends CSN {
 	 * SELECT.from (Books) .where ({ID:11})
 	 * ```
 	 */
-  exports: Definitions & ((namespace: string) => Definitions)
-  entities: Definitions & ((namespace: string) => Definitions)
-  services: Definitions & ((namespace: string) => Definitions)
-  definitions: Definitions
+  exports: ModelPart<any_>
+  entities: ModelPart<entity>
+  services: ModelPart<service>
+  definitions: ModelPart<any_>
 
 }
-
-type Visitor = (def: LinkedDefinition, name: string, parent: LinkedDefinition, defs: Definitions) => void
-type Filter = string | ((def: LinkedDefinition) => boolean)
-
-type LinkedDefinitions_<T = type> = { [name: string]: T } & ArrayEsque<T>
-type ModelPart_<T extends type = type> = LinkedDefinitions_<T> & { (namespace: string): LinkedDefinitions_<T> }
-
 
 export * from './linked/classes'

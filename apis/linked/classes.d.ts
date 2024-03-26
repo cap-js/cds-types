@@ -1,39 +1,39 @@
 import * as csn from '../csn'
 import type { IterableMap } from '../internal/util'
-// import { ModelPart } from '../linked' // TODO: this should actually be "LinkedDefinitions", see below
+import { kinds } from '../csn'
 
+/**
+ * @alpha
+ * related to .protocols getters
+ */
+type Protocol = 'odata' | 'rest'
 type Column = { ref: [string], as?: string }
-type Kind = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'struct' | 'array'
-
 
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
  */
 export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T> // & ((namespace: string) => LinkedDefinitions<T>)
 
+
 interface WithElements {
   elements: LinkedDefinitions<type>
 }
 
-declare interface any_ extends csn.any_ {} // TODO: .kind also in csn.any_ -> no, exact same
-declare class any_<K extends Kind = Kind> {
+declare interface any_ extends csn.any_ {}
+declare class any_<K extends kinds = kinds> {
   private _: K // break covariance
   constructor (...aspects: any[])
 
   readonly name: string
-
-  //get kind (): K | undefined
-
-  // needed to allow arbitrary properties to be added during runtime via mixin()
-  [_: string | number | symbol]: unknown // require explicit cast?
+  // TODO: deprecated?
+  is (kind: kinds | 'Association' | 'Composition'): boolean
 }
 
-
-declare class aspect<K extends Kind = 'aspect'> extends type<K> { }
+declare class aspect<K extends kinds = 'aspect'> extends type<K> { }
 declare interface type extends Omit<csn.type, 'items'> {
   items: type
 }
-declare class type<K extends Kind = 'type'> extends any_<K> { }
+declare class type<K extends kinds = 'type'> extends any_<K> { }
 
 declare class scalar extends type { }
 declare class boolean_ extends scalar { }
@@ -68,12 +68,12 @@ declare class TimeStamp extends DateTime { }
 
 declare class array extends type<'array'> { }
 
-declare interface struct extends csn.struct {}
-
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-struct)
  */
-declare class struct<K extends Kind = 'struct'> extends type<K> implements WithElements {
+declare interface struct extends csn.struct {}
+
+declare class struct<K extends kinds = 'struct'> extends type<K> implements WithElements {
   is_struct: true
 
   elements: LinkedDefinitions<type<'type'>>
@@ -82,13 +82,10 @@ declare class struct<K extends Kind = 'struct'> extends type<K> implements WithE
 declare interface context extends csn.context {}
 declare class context extends any_ { }
 
-declare interface service extends csn.service {}
-
-type Protocol = 'odata' | 'rest'
-
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-service)
  */
+declare interface service extends csn.service {}
 declare class service extends context {
   is_service: true
   get entities (): LinkedDefinitions<entity>
@@ -100,8 +97,12 @@ declare class service extends context {
    * @deprecated use `.actions` instead
    */
   get operations (): LinkedDefinitions<action>
-  // not public yet
-  // get protocols (): { [protocol: Protocol]: boolean? }
+
+  /**
+   * @alpha
+   * not public yet
+   */
+  get protocols (): { [protocol: Protocol]: boolean? }
 }
 
 declare class action extends any_<'action' | 'function'> {}
@@ -113,8 +114,6 @@ declare interface entity extends Omit<csn.entity, 'elements'> {}
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-entity)
  */
-// TODO: does not exist in impl file ->
-// lib/linked/entities.js
 declare class entity extends struct<'entity'> {
   is_entity: true
 
@@ -131,13 +130,10 @@ declare class entity extends struct<'entity'> {
   drafts?: entity
 }
 
-new entity().elements.at(0)
-
-declare interface Association extends Omit<csn.Association, 'type'> {}
-
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-association)
  */
+declare interface Association extends Omit<csn.Association, 'type'> {}
 declare class Association extends type {
   _target: entity
 
@@ -149,7 +145,6 @@ declare class Association extends type {
 
 }
 
-
 declare class Composition extends Association {
   isComposition: true
 }
@@ -159,4 +154,24 @@ declare type ManagedAssociation = Association & {
   keys: Column[],
 }
 
+/**
+ * Using this will require you to explicitly cast all classes you added mixins to
+ * to be able to access the additional properties. If you want to allow any additional
+ * properties, you can use the {@link MixedIn} type.
+ * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#mixin)
+ */
 export function mixin (...classes: (new () => any)[]): void
+
+/**
+ * Allows arbitrary property access. Can be used for explicitly casting
+ * classes you have added {@link mixin}s to.
+ * Use with caution, as the type system will no longer
+ * warn you about possibly missing properties.
+ * @example
+ * ```ts
+ * mixin(class struct { foo: string }))
+ * const s1 = new struct() as MixedIn<struct>
+ * const s2 = new struct() as struct & { foo: string }  // better!
+ * ```
+ */
+export type MixedIn<T> = T & { [key: string | number | symbol]: unknown }

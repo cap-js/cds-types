@@ -57,7 +57,7 @@ export type Extension = {
 
 export type Element = type & struct & Association
 
-export type kinds = 'type' | 'entity' | 'event' | 'service' | 'context' | 'struct'
+export type kinds = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'struct' | 'array'
 
 export interface any_ {
   kind?: kinds

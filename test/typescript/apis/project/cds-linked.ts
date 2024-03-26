@@ -1,4 +1,23 @@
-import { ArrayEsque, action, aspect, event, mixin, scalar, struct, type,  } from "../../../../apis/linked";
+import { LinkedCSN, MixedIn, action, aspect, entity, event, mixin, scalar, struct, type,  } from "../../../../apis/linked";
+import { _ArrayLike } from "../../../../apis/internal/util";
+
+const linkedCsn = undefined as unknown as LinkedCSN
+
+linkedCsn.exports[0].name
+linkedCsn.exports['foo'].name
+linkedCsn.exports('foo').bar
+
+new entity().kind === 'entity'
+new entity().keys.find
+new entity().associations.find(Boolean)
+new entity().compositions.find(Boolean)
+new entity().actions.find(Boolean)
+new entity().texts?.kind === 'entity'
+new entity().drafts?.kind === 'entity'
+new entity().is_entity === true
+new entity().elements.find(x => x.items.kind === 'type')
+// @ts-expect-error
+new entity().elements.find(x => x.items.charAt(0)) // .elements should not be FQN from CSN anymore, but linked
 
 new aspect().kind === 'aspect'
 // @ts-expect-error
@@ -24,7 +43,7 @@ mixin(class {}, class {})
 // @ts-expect-error
 mixin(42)
 
-const arr: ArrayEsque<number> = undefined as unknown as ArrayEsque<number>
+const arr: _ArrayLike<number> = undefined as unknown as _ArrayLike<number>
 // @ts-expect-error
 arr.length
 const v: void = arr.forEach(x => x + 1)
