@@ -2,7 +2,7 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { ModelPart, LinkedCSN, LinkedDefinition, LinkedDefinitions, LinkedEntity, event, type, action, entity } from './linked'
+import { ModelPart, LinkedCSN, LinkedDefinition, LinkedEntity, event, type, action, entity } from './linked'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
