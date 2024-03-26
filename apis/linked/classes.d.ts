@@ -72,7 +72,6 @@ declare class array extends type<'array'> { }
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-struct)
  */
 declare interface struct extends csn.struct {}
-
 declare class struct<K extends kinds = 'struct'> extends type<K> implements WithElements {
   is_struct: true
 
@@ -108,12 +107,10 @@ declare class service extends context {
 declare class action extends any_<'action' | 'function'> {}
 declare class event extends aspect<'event'> {}
 
-// TODO: recursively change type of .elements? -> can come from struct
-declare interface entity extends Omit<csn.entity, 'elements'> {}
-
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-entity)
  */
+declare interface entity extends Omit<csn.entity, 'elements'> {}
 declare class entity extends struct<'entity'> {
   is_entity: true
 
