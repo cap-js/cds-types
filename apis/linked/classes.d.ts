@@ -33,7 +33,6 @@ type Column = { ref: [string], as?: string }
  */
 export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T>
 
-
 interface WithElements {
   elements: LinkedDefinitions<type>
 }
