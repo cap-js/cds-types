@@ -2,7 +2,7 @@
  * @privateRemarks
  * These classes represent the components of the model after being run through cds.linked.
  * They mirror the class hierarchy of the original CSN, but also inherit the original CSN class
- * of the same name. So we have to resolve a diamond inheritance problem here.
+ * of the same name. So we have to resolve a diamond inheritance problem here:
  * ```
  * csn.type   <--  linked.type
  *   ^               ^
@@ -12,7 +12,7 @@
  * ```
  * To address this, we use declaration merging to express the relationship between csn.X and linked.X
  * while using regular inheritance for the classes in the linked namespace.
- * As we also have to adjust some of the properties accordingly from csn.Y to linked.Y,
+ * As we also have to adjust the types of some of the properties accordingly from csn.Y to linked.Y,
  * we have explicitly take away some of the properties using `Omit<...>`
  * and redeclare them with the proper type.
  */
