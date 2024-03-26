@@ -68,7 +68,7 @@ describe('runtime tests', () => {
       let baz = (<struct>bar).elements.baz
 
       let m = cds.linked(csn)
-      let Foo2 = m.definitions.Foo
+      let Foo2 = m.entities.Foo
       Foo2.name
       Foo2.keys
       Foo2.is('entity')
@@ -245,7 +245,7 @@ describe('runtime tests', () => {
       let { Foo } = csn.definitions!
       // Foo.name //> error: .name is not defined on unlinked CSN definitions
       let m = cds.linked(csn)
-      let { Bar } = m.definitions
+      let { Bar } = m.entities
       Bar.name //> ok: .name is defined on linked definitions
       SELECT.from(Bar.drafts || Bar).where({ID:1})
     }
