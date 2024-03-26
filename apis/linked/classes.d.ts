@@ -114,7 +114,7 @@ declare interface entity extends Omit<csn.entity, 'elements'> {}
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-entity)
  */
 // TODO: does not exist in impl file ->
-// https://github.tools.sap/cap/cds/blob/8c4aaa7be1b081782d3beae74734fcb4604e61c7/lib/linked/entities.js
+// lib/linked/entities.js
 declare class entity extends struct<'entity'> {
   is_entity: true
 
