@@ -12,7 +12,7 @@ type Column = { ref: [string], as?: string }
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
  */
-export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T> // & ((namespace: string) => LinkedDefinitions<T>)
+export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T>
 
 
 interface WithElements {
