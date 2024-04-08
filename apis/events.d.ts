@@ -25,6 +25,8 @@ export class EventContext {
 
   features?: { [key: string]: boolean }
 
+  path: String
+
 }
 
 /**
