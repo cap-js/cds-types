@@ -43,8 +43,8 @@ declare class any_<K extends kinds = kinds> {
   constructor (...aspects: any[])
 
   readonly name: string
-  // TODO: deprecated?
-  is (kind: kinds | 'Association' | 'Composition'): boolean
+  // parked, might be deprecated
+  // is (kind: kinds | 'Association' | 'Composition'): boolean
 }
 
 declare class aspect<K extends kinds = 'aspect'> extends type<K> implements WithElements {
@@ -86,13 +86,13 @@ declare class Time extends date { }
 declare class DateTime extends date { }
 declare class TimeStamp extends DateTime { }
 
-declare class array extends type<'array'> { }
+declare class array extends type<'type' | 'elements'> { }
 
 /**
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-struct)
  */
 declare interface struct extends Omit<csn.struct, 'items' | 'elements'> {}
-declare class struct<K extends kinds = 'struct'> extends type<K> implements WithElements {
+declare class struct<K extends kinds = 'elements' | 'type'> extends type<K> implements WithElements {
   is_struct: true
 
   elements: LinkedDefinitions<type<'type'>>

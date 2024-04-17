@@ -1,5 +1,5 @@
-import { LinkedCSN, MixedIn, action, aspect, entity, event, mixin, scalar, struct, type,  } from "../../../../apis/linked";
-import { _ArrayLike } from "../../../../apis/internal/util";
+import { LinkedCSN, action, aspect, entity, event, mixin, scalar, struct, type,  } from '../../../../apis/linked';
+import { _ArrayLike } from '../../../../apis/internal/util';
 
 const linkedCsn = undefined as unknown as LinkedCSN
 
@@ -31,7 +31,7 @@ new struct().name
 
 new type().name
 new type().items
-new type().is('Association')
+//new type().is('Association')
 
 // @ts-expect-error
 new entity().elements.find(x => x.items.charAt(0)) // .elements should not be FQN from CSN anymore, but linked
