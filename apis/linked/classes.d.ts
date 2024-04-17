@@ -19,6 +19,7 @@
 
 import * as csn from '../csn'
 import type { IterableMap } from '../internal/util'
+import type { number_, string_, boolean_ } from './internal'
 import { kinds } from '../csn'
 
 /**
@@ -47,6 +48,8 @@ declare class any_<K extends kinds = kinds> {
   // is (kind: kinds | 'Association' | 'Composition'): boolean
 }
 
+declare const any: typeof any_
+
 declare class aspect<K extends kinds = 'aspect'> extends type<K> implements WithElements {
   elements: LinkedDefinitions<type<'type'>>
 }
@@ -56,11 +59,9 @@ declare interface type extends Omit<csn.type, 'items'> {
 declare class type<K extends kinds = 'type'> extends any_<K> { }
 
 declare class scalar extends type { }
-declare class boolean_ extends scalar { }
 declare const boolean: typeof boolean_
 declare class Boolean extends boolean { }
 
-declare class string_ extends scalar { }
 declare const string: typeof string_
 declare class UUID extends string { }
 declare class String extends string { }
@@ -69,7 +70,7 @@ declare class Binary extends string { }
 declare class LargeBinary extends Binary { }
 declare class Vector extends Binary { }
 
-declare class number_ extends scalar { }
+// declare class number_ extends scalar { }
 declare const number: typeof number_
 declare class Integer extends number { }
 declare class UInt8 extends Integer { }

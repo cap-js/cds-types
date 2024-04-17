@@ -5,9 +5,10 @@ export * from './models'
 export * from './services'
 export * from './events'
 export * from './utils'
+export * from './cqn'
 export { log, debug } from './log'
 export { test } from './test'
-export * from './cqn'
+export { Association, Composition, entity, event, type, array, struct, service } from './linked/classes'
 
 // FIXME: sort out what needs to be exported from csn/linked and under which namespace
 // export { Association, CSN, Definition, Extension, Element, EntityElements, FQN, kinds } from './csn'

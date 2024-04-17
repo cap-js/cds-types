@@ -2,7 +2,7 @@ import { CSN } from './csn'
 import { IterableMap } from './internal/util'
 import { LinkedDefinitions, any_, entity, service } from './linked/classes'
 
-export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => ModelPart<T>)
+export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
 type Visitor = (def: any_, name: string, parent: any_, defs: LinkedDefinitions) => void
 type Filter = string | (<T extends any_ = any_>(def: T) => boolean)
 
@@ -88,6 +88,5 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 
 }
 
-export * from './linked/classes'
 // FIXME: only for compat in ql.d.ts and services.d.ts, remove asap
 export type LinkedEntity = entity

@@ -1,5 +1,7 @@
-import { LinkedCSN, action, aspect, entity, event, mixin, scalar, struct, type,  } from '../../../../apis/linked';
+import { LinkedCSN } from '../../../../apis/linked';
+import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../apis/linked/classes';
 import { _ArrayLike } from '../../../../apis/internal/util';
+import cds from '../../../../apis/cds';
 
 const linkedCsn = undefined as unknown as LinkedCSN
 
@@ -70,3 +72,21 @@ const xs: number[] = arr.filter(x => x > 0)
 const x: number | undefined = arr.find(x => x > 0)
 const b: boolean = arr.some(x => x > 0)
 for (const n of arr) n + 1
+
+// spot check to make sure linked classes are properly exposed cds.linked.classes...
+cds.linked.classes.entity === entity
+// @ts-expect-error
+cds.linked.classes.entity === event
+
+// ...via cds.builtin.classes
+cds.linked.classes.service === cds.builtin.classes.service
+// @ts-expect-error
+cds.linked.classes.service === cds.builtin.classes.Composition
+
+// ... and also via facade...
+cds.linked.classes.Association === cds.Association
+// @ts-expect-error
+cds.linked.classes.Association === cds.linked.classes.event
+
+// but make sure we can still call .linked(CSN)
+const ln: LinkedCSN = cds.linked({})

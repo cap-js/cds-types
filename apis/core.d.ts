@@ -1,5 +1,4 @@
-import { service } from './server'
-import * as linked from './linked'
+import * as models from './models'
 
 type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer Tail]
   ? Head & Intersect<Tail>
@@ -11,20 +10,10 @@ export { entity, event, type, array, struct, Association, Composition } from './
 export const builtin: {
 
   /**
-   * Base classes of linked definitions from reflected models.
-   * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
+   * @see {@link models.linked.classes}
    */
-  classes: {
-    Association: typeof linked.Association,
-    Composition: typeof linked.Composition,
-    entity: typeof linked.entity,
-    event: typeof linked.event,
-    type: typeof linked.type,
-    array: typeof linked.array,
-    struct: typeof linked.struct,
-    service: service,
-  },
-  types: Record<string, object>,
+  classes: typeof models.linked.classes,
+  types: Record<string, object>, // FIXME: value should be any class part of linked.classes
 }
 
 /**
