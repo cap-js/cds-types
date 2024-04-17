@@ -12,7 +12,6 @@ export class ConstructedQuery {
 
 }
 
-
 export type PK = number | string | object
 
 
@@ -20,6 +19,11 @@ type Primitive = string | number | boolean | Date
 
 // don't wrap QLExtensions in more QLExtensions (indirection to work around recursive definition)
 type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T>
+
+/**
+ * Target for any QL operation
+ */
+type Target = LinkedEntity | Definition | string
 
 /**
  * QLExtensions are properties that are attached to entities in CQL contexts.
@@ -161,7 +165,7 @@ export class SELECT<T> extends ConstructedQuery {
   static from: SELECT_from
 
   from: SELECT_from & TaggedTemplateQueryPart<this>
-  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => this)
+  & ((entity: Target, primaryKey?: PK, projection?: Projection<unknown>) => this)
 
   byKey (primaryKey?: PK): this
   columns: TaggedTemplateQueryPart<this>
@@ -231,8 +235,7 @@ type SELECT_one =
   (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularType<T>>>)
   => Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
 
-  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
-  & ((entity: LinkedEntity | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
+  & ((entity: Target, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
   & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
@@ -252,8 +255,7 @@ type SELECT_from =
   (entityType: T, primaryKey: PK, projection?: Projection<SingularType<T>>)
   => Awaitable<SELECT<SingularType<T>>, InstanceType<SingularType<T>>>) // when specifying a key, we expect a single element as result
 // calling with definition
-  & ((entity: Definition | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
-  & ((entity: LinkedEntity | string, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
+  & ((entity: Target, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
 // calling with concrete list
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
@@ -270,18 +272,18 @@ type SELECT_from =
     projection?: Projection<InstanceType<T>>
   ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>)
 
+
 export class INSERT<T> extends ConstructedQuery {
 
   static into: (<T extends ArrayConstructable<any>> (entity: T, entries?: object | object[]) => INSERT<SingularType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
-    & ((entity: Definition | string, entries?: object | object[]) => INSERT<any>)
-    & ((entity: LinkedEntity | string, entries?: object | object[]) => INSERT<any>)
+    & ((entity: Target, entries?: object | object[]) => INSERT<any>)
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
 
   into: (<T extends ArrayConstructable> (entity: T) => this)
   & TaggedTemplateQueryPart<this>
-  & ((entity: LinkedEntity | Definition | string) => this) // TODO: accept both LinkedEntity and Definition?
+  & ((entity: Target) => this)
 
   data (block: (e: T) => void): this
 
@@ -305,13 +307,13 @@ export class UPSERT<T> extends ConstructedQuery {
 
   static into: (<T extends ArrayConstructable<any>> (entity: T, entries?: object | object[]) => UPSERT<SingularType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<unknown>>)
-    & ((entity: LinkedEntity | Definition | string, entries?: object | object[]) => UPSERT<any>) // TODO: accept both LinkedEntity and Definition?
+    & ((entity: Target, entries?: object | object[]) => UPSERT<any>)
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
 
   into: (<T extends ArrayConstructable> (entity: T) => this)
   & TaggedTemplateQueryPart<this>
-  & ((entity: LinkedEntity | Definition | string) => this) // TODO: allow both LinkedEntity and Definition?
+  & ((entity: Target) => this)
 
   data (block: (e: T) => void): this
 
@@ -333,8 +335,7 @@ export class DELETE<T> extends ConstructedQuery {
 
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
-    & ((entity: Definition | string | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
-    & ((entity: LinkedEntity | string | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
+    & ((entity: Target | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
     & ((subject: ref) => DELETE<any>)
 
   byKey (primaryKey?: PK): this
@@ -356,9 +357,7 @@ export class UPDATE<T> extends ConstructedQuery {
   // cds-typer plural
   static entity<T extends ArrayConstructable<any>> (entity: T, primaryKey?: PK): UPDATE<SingularType<T>>
 
-  static entity (entity: Definition | string, primaryKey?: PK): UPDATE<any>
-
-  static entity (entity: LinkedEntity | string, primaryKey?: PK): UPDATE<any>
+  static entity (entity: Target, primaryKey?: PK): UPDATE<any>
 
   static entity<T> (entity: Constructable<T>, primaryKey?: PK): UPDATE<T>
 
@@ -387,9 +386,8 @@ export class UPDATE<T> extends ConstructedQuery {
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class CREATE<T> extends ConstructedQuery {
 
-  static entity (entity: Definition | string): CREATE<any>
+  static entity (entity: Target): CREATE<any>
 
-  static entity (entity: LinkedEntity | string): CREATE<any>
   CREATE: CQN.CREATE['CREATE']
 
 }
@@ -397,9 +395,8 @@ export class CREATE<T> extends ConstructedQuery {
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export class DROP<T> extends ConstructedQuery {
 
-  static entity (entity: Definition | string): DROP<any>
+  static entity (entity: Target): DROP<any>
 
-  static entity (entity: LinkedEntity | string): DROP<any>
   DROP: CQN.DROP['DROP']
 
 }
