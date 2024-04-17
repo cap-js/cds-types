@@ -4,7 +4,7 @@ type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer T
   ? Head & Intersect<Tail>
   : unknown
 
-export { entity, event, type, array, struct, Association, Composition } from './linked/classes'
+export { entity, event, type, array, struct, Association, Composition, service } from './linked/classes'
 
 // infer (query : cqn, model : csn) : LinkedDefinition
 export const builtin: {
