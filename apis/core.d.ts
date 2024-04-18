@@ -4,8 +4,6 @@ type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer T
   ? Head & Intersect<Tail>
   : unknown
 
-// TODO: exporting service here collides with server.d.ts.service. Not sure how to resolve this.
-// Do both need to be exposed here? Does one take precedence?
 export { entity, event, type, array, struct, Association, Composition } from './linked/classes'
 
 // infer (query : cqn, model : csn) : LinkedDefinition
