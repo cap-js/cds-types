@@ -188,8 +188,16 @@ export function mixin (...classes: (new () => any)[]): void
  * @example
  * ```ts
  * mixin(class struct { foo: string }))
+ *
  * const s1 = new struct() as MixedIn<struct>
+ * s1.is_struct
+ * s1.foo
+ * s1.bar  // no error, despite not being defined :(
+ *
  * const s2 = new struct() as struct & { foo: string }  // better!
+ * s2.is_struct
+ * s2.foo
+ * s2.bar  // error :)
  * ```
  */
 export type MixedIn<T> = T & { [key: string | number | symbol]: unknown }
