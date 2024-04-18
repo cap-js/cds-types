@@ -7,7 +7,10 @@ const linkedCsn = undefined as unknown as LinkedCSN
 
 linkedCsn.exports[0].name
 linkedCsn.exports['foo'].name
+// @ts-expect-error only for entities and services
 linkedCsn.exports('foo').bar
+linkedCsn.exports.map(e => e.kind)
+linkedCsn.entities('foo').bar
 const es: entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
 // @ts-expect-error
 const ts: type[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)

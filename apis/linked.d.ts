@@ -81,10 +81,10 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 	 * SELECT.from (Books) .where ({ID:11})
 	 * ```
 	 */
-  exports: ModelPart<any_>
+  exports: IterableMap<any_>
+  definitions: IterableMap<any_>
   entities: ModelPart<entity>
   services: ModelPart<service>
-  definitions: ModelPart<any_>
 
 }
 
