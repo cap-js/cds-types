@@ -10,7 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Added signatures for `cds.outboxed` and `cds.unboxed`
 
 ### Changed
-- `Service.prepend` is no longer async.
+- `Service.prepend` is no longer async
+- All linked classes are now available via `cds.linked.classes` (and partially via the facade)
+- Getters in `service` instances now return the appropriate classes. E.g. `service.entities` returns instances of `linked.entity`
+- [breaking] Linked definitions are no longer an intersection type of all possible linked classes, but more specific to their actual use (see above). This implies that users may have to narrow the type they are using explicitly, use another getter (see above), or use explicit casts.
 
 ### Fixed
 - `SELECT.from` and related variants now work on the `.drafts` property and behave like `SELECT.from(<Plural>)`

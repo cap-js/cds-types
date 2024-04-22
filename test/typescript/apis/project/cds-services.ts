@@ -1,6 +1,5 @@
 import cds from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
-
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 
@@ -287,3 +286,12 @@ cds.db.entities('draftModelAuth')
 const outboxedService = cds.outboxed(srv)
 await outboxedService.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 await cds.unboxed(outboxedService).send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
+
+srv.entities('namespace')
+srv.entities('namespace').map(e => e.keys) // .keys only available on entities
+// @ts-expect-error
+srv.events('namespace').map(e => e.keys)
+srv.events('namespace').map(e => e.elements)
+
+// @ts-expect-error
+srv.entities('namespace')('and again')

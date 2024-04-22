@@ -2,7 +2,8 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable } from './internal/inference'
-import { LinkedCSN, LinkedDefinition, Definitions as LinkedDefinitions, LinkedEntity } from './linked'
+import { ModelPart, LinkedCSN, LinkedDefinition, LinkedEntity } from './linked'
+import * as linked from './linked/classes'
 import { CSN } from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
@@ -98,7 +99,6 @@ export class QueryAPI {
 
 }
 
-
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -134,25 +134,25 @@ export class Service extends QueryAPI {
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  entities: ModelPart<linked.entity>
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  events: ModelPart<linked.event>
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  types: ModelPart<linked.type>
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: LinkedDefinitions & ((namespace: string) => LinkedDefinitions)
+  operations: ModelPart<linked.action>
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.

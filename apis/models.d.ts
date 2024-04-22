@@ -1,5 +1,6 @@
 import { Query as CQN, expr, _xpr } from './cqn'
 import { LinkedCSN } from './linked'
+import * as LinkedClasses from './linked/classes'
 import { CSN } from './csn'
 
 type _flavor = 'parsed' | 'xtended' | 'inferred'
@@ -74,17 +75,26 @@ export function load (files: '*' | filename | filename[], o?: _options): Promise
  */
 export function resolve (files: '*' | filename | filename[]): filename[] | undefined
 
-/**
- * Turns the given plain CSN model into a linked model
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
- */
-declare const linked: (model: CSN) => LinkedCSN
+export const linked: {
+
+  /**
+   * Turns the given plain CSN model into a linked model
+   * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
+   */
+  (model: CSN): LinkedCSN,
+
+  /**
+   * Base classes of linked definitions from reflected models.
+   * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
+   */
+  classes: typeof LinkedClasses,
+}
 
 /**
  * Turns the given plain CSN model into a reflected model
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
  */
-export const reflect: (model: CSN) => LinkedCSN
+export function reflect (model: CSN): LinkedCSN
 
 /**
 * Provides a set of methods to parse a given model, query or expression.
