@@ -8,6 +8,7 @@ export type _TODO = any
  * A subset of array-like methods, but not `ArrayLike`, as it does not expose `.length`.
  * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
  * @internal
+ * @since cds 7.9
  */
 export type _ArrayLike<T> = Iterable<T> & {
   forEach: (handler: (element: T) => any) => void,
