@@ -39,6 +39,7 @@ import {
   ReflectedDefinitions,
 } from "@sap/cds/apis/reflect";
 
-import { Definitions } from '@sap/cds/apis/csn'
+// removed, as is it no longer compatible with latest version of cds-types
+//import { Definitions } from '@sap/cds/apis/csn'
 import { User as CoreUser } from '@sap/cds/apis/core'
 import { Logger } from '@sap/cds/apis/log'
