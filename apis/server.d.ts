@@ -151,5 +151,5 @@ interface cds_connect_options {
 type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
-  add: (middleware: RequestHandler, pos?: { at: number } | { after: PhasMiddleswarese } | { before: Middleswares }) => void,
+  add: (middleware: RequestHandler, pos?: { at: number } | { after: Middleswares } | { before: Middleswares }) => void,
 }
