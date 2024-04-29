@@ -208,7 +208,10 @@ srv.on('READ', Foos, (req, next) => { isMany(req); return next() })
 srv.before('READ', Foo, req => { isMany(req); return req.data })
 srv.before('READ', Foos, req => isMany(req))
 srv.after('READ', Foo, (data) => { isOne(data); return data })
-srv.after('READ', Foos, (data) => isMany(data))
+srv.after('READ', Foos, (data) => isOne(data))
+
+srv.after('EACH', Foo, (data) => { isOne(data); return data })
+srv.after('EACH', Foos, (data) => isOne(data))
 
 srv.on('UPDATE', Foo, (req, next) => { isMany(req); return next() })
 srv.on('UPDATE', Foos, (req, next) => { isMany(req); return next() })
