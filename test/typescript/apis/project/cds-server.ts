@@ -1,8 +1,11 @@
 import cds from '../../../../apis/server'
+import express from 'express'
 
-cds.middlewares.add({})
-cds.middlewares.add({}, {at: 42})
-cds.middlewares.add({}, {before: 'foo'})
-cds.middlewares.add({}, {after: 'foo'})
-cds.middlewares.add({}, {before: 'foo', after: 'foo'})
-cds.middlewares.add({}, {after: 'foo', at: 2})
+const h = undefined as unknown as express.RequestHandler
+
+cds.middlewares.add(h)
+cds.middlewares.add(h, {at: 42})
+cds.middlewares.add(h, {before: 'foo'})
+cds.middlewares.add(h, {after: 'foo'})
+cds.middlewares.add(h, {before: 'foo', after: 'foo'})
+cds.middlewares.add(h, {after: 'foo', at: 2})
