@@ -225,33 +225,32 @@ export class Service extends QueryAPI {
   // Provider API
   prepend (fn: ServiceImpl): this
 
-  on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
-
+  on<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>, InstanceType<T> | void | Error>): this
+  on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<Array<InstanceType<T>>, Array<InstanceType<T>> | void | Error>): this
   on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
-
   on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
-
   on (eve: types.event, entity: types.target, handler: OnEventHandler): this
-
   on (eve: types.event, handler: OnEventHandler): this
-
   on (eve: 'error', handler: OnErrorHandler): this
-
 
   // onSucceeded (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
   // onSucceeded (eve: types.Events, handler: types.EventHandler): this
   // onFailed (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
   // onFailed (eve: types.Events, handler: types.EventHandler): this
-  before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>, InstanceType<T> | void | Error>): this
-
+  before<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>, InstanceType<T> | void | Error>): this
+  before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<Array<InstanceType<T>>, Array<InstanceType<T>> | void | Error>): this
   before (eve: types.event, entity: types.target, handler: EventHandler): this
-
   before (eve: types.event, handler: EventHandler): this
 
-  after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>, InstanceType<T> | void | Error>): this
-
+  // order relevant:
+  // (2) check if T is arrayable -> use T directly
+  // (3) check if T is scalar -> wrap into array
+  // this streamlines that in _most_ cases, handlers will receive an array.
+  // _Except_ for after.read handlers (1), which will change its inflection based on T.
+  after<T extends Constructable>(event: 'READ', entity: T, handler: CRUDEventHandler.After<InstanceType<T>, InstanceType<T> | void | Error>): this
+  after<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>, InstanceType<T> | void | Error>): this
+  after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<Array<InstanceType<T>>, Array<InstanceType<T>> | void | Error>): this
   after (eve: types.event, entity: types.target, handler: ResultsHandler): this
-
   after (eve: types.event, handler: ResultsHandler): this
 
   reject (eves: types.event, ...entity: types.target[]): this
@@ -262,20 +261,14 @@ export class ApplicationService extends Service {}
 export class MessagingService extends Service {}
 export class RemoteService extends Service {}
 export class DatabaseService extends Service {
-
   deploy (model?: CSN | string): Promise<CSN>
-
   begin (): Promise<void>
-
   commit (): Promise<void>
-
   rollback (): Promise<void>
-
 }
 
 
 export default class cds {
-
 
   /**
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
