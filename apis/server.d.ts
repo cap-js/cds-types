@@ -143,3 +143,15 @@ interface cds_connect_options {
   model?: string
   credentials?: object
 }
+
+// @types/express
+// req: Request, res: Response, next: NextFunction
+// express.use(THIS) as first param of .add
+// cds.serve.app : express.Application
+import type express from '@types/express'
+
+type Phase = 'context' | 'trace' | 'auth' | 'ctx_model' | string
+
+export const middlewares: {
+  add: (middleware: ParameterType<typeof express.application.use>, pos?: { at: number } | { after: Phase } | { before: Phase }) => void,
+}
