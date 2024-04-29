@@ -3,7 +3,7 @@ import { Service, ServiceImpl } from './services'
 import { CSN } from './csn'
 import * as http from 'http'
 import * as cds from './cds'
-import { Application } from 'express'
+import { Application, RequestHandler } from 'express'
 
 type _cds = typeof cds
 
@@ -148,10 +148,8 @@ interface cds_connect_options {
 // req: Request, res: Response, next: NextFunction
 // express.use(THIS) as first param of .add
 // cds.serve.app : express.Application
-import type express from '@types/express'
-
-type Phase = 'context' | 'trace' | 'auth' | 'ctx_model' | string
+type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
-  add: (middleware: ParameterType<typeof express.application.use>, pos?: { at: number } | { after: Phase } | { before: Phase }) => void,
+  add: (middleware: RequestHandler, pos?: { at: number } | { after: PhasMiddleswarese } | { before: Middleswares }) => void,
 }
