@@ -4,6 +4,7 @@ import { CSN } from './csn'
 import * as http from 'http'
 import * as cds from './cds'
 import { Application, RequestHandler } from 'express'
+import { XOR } from './internal/util'
 
 type _cds = typeof cds
 
@@ -144,12 +145,8 @@ interface cds_connect_options {
   credentials?: object
 }
 
-// @types/express
-// req: Request, res: Response, next: NextFunction
-// express.use(THIS) as first param of .add
-// cds.serve.app : express.Application
 type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
-  add: (middleware: RequestHandler, pos?: { at: number } | { after: Middleswares } | { before: Middleswares }) => void,
+  add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middleswares }>, { before: Middleswares }>) => void,
 }

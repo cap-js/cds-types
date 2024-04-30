@@ -1,7 +1,14 @@
+/** @internal */
+export type _TODO = any
+
 /**
+ * https://stackoverflow.com/a/53229567
  * @internal
  */
-export type _TODO = any
+type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
+
+/** @internal */
+export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U
 
 // "ArrayLike" is taken since es5, so the underscore is both for @internal and to avoid clashes
 /**
