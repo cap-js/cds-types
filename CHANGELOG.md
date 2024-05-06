@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 - Added signatures for `cds.outboxed` and `cds.unboxed`
-- Added signatures for `cds.middlewares`
+- Added signature for `cds.middlewares.add`
 
 ### Changed
 - `Service.prepend` is no longer async
