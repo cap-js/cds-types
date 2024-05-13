@@ -28,7 +28,7 @@
     "@sap/cds": ">=7"
   },
   "devDependencies": {
-    "@sap/cds": "^7.5.0",
+    "@sap/cds": ">=7.5.0",
     "@stylistic/eslint-plugin": "^1.5.3",
     "@types/jest": "^29.5.11",
     "@types/node": "^20",
@@ -46,5 +46,8 @@
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     }
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21"
   }
 }

@@ -8,7 +8,6 @@ export const env: {
   build: any,
   hana: any,
   i18n: any,
-  mtx: any,
   requires: any,
   folders: any,
   folders: {

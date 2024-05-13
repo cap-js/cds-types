@@ -3,7 +3,8 @@ import { Service, ServiceImpl } from './services'
 import { CSN } from './csn'
 import * as http from 'http'
 import * as cds from './cds'
-import { Application } from 'express'
+import { Application, RequestHandler } from 'express'
+import { XOR } from './internal/util'
 
 type _cds = typeof cds
 
@@ -142,4 +143,10 @@ interface cds_connect_options {
   kind?: string
   model?: string
   credentials?: object
+}
+
+type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
+
+export const middlewares: {
+  add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middleswares }>, { before: Middleswares }>) => void,
 }
