@@ -9,9 +9,9 @@ export const env: {
   hana: any,
   i18n: {
     languages: string[],
-    default_language: string
+    default_language: string,
     folders: string[],
-    [key: string]: any
+    [key: string]: any,
   },
   requires: any,
   folders: any,
