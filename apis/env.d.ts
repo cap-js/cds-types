@@ -9,7 +9,6 @@ export const env: {
   hana: any,
   i18n: any,
   requires: any,
-  folders: any,
   folders: {
     app: string,
     db: string,
