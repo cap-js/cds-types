@@ -14,7 +14,13 @@ export const env: {
     [key: string]: any,
   },
   requires: any,
-  folders: any,
+  folders: {
+    app: string,
+    db: string,
+    srv: string,
+    fts: string,
+    [key: string]: string, // to allow additional values
+  },
   odata: any,
   query: any,
   sql: any,
