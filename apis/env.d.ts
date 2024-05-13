@@ -15,7 +15,7 @@ export const env: {
     db: string,
     srv: string,
     fts: string,
-    [key: string]: string
+    [key: string]: string,
   },
   odata: any,
   query: any,
