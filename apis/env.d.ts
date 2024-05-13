@@ -11,6 +11,13 @@ export const env: {
   mtx: any,
   requires: any,
   folders: any,
+  folders: {
+    app: string,
+    db: string,
+    srv: string,
+    fts: string,
+    [key: string]: string
+  },
   odata: any,
   query: any,
   sql: any,
