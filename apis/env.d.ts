@@ -8,10 +8,10 @@ export const env: {
   build: any,
   hana: any,
   i18n: {
-    languages: [string],
-    default_language: string,
-    folders: [string],
-    [key: string]: any,
+    languages: string[],
+    default_language: string
+    folders: string[],
+    [key: string]: any
   },
   requires: any,
   folders: any,
