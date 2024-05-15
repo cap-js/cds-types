@@ -87,7 +87,7 @@ export class QueryAPI {
   foreach (query: Query, callback: (row: object) => void): this
 
   /**
-   * @deprecated use @see{@link QueryAPI.tx} instead
+   * @deprecated use {@link QueryAPI.tx} instead
    */
   transaction: QueryAPI['tx']
 
