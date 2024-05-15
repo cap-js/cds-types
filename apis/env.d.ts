@@ -4,9 +4,11 @@
  * filtered through the currently active profiles, thus highly dependent on the current working
  * directory and process environment.
  */
+type TODO = any
+
 export const env: {
-  build: any,
-  hana: any,
+  build: TODO,
+  hana: TODO,
   requires: _requires,
   folders: {
     app: string,
@@ -16,66 +18,91 @@ export const env: {
     [key: string]: string
   },
   i18n: {
-    languages: [string],
+    languages: string[],
     default_language: string
-    folders: [string],
+    folders: string[],
     [key: string]: any
   },
-  odata: any,
-  query: any,
-  sql: any,
+  odata: TODO,
+  query: TODO,
+  sql: TODO,
 } & { [key: string]: any } // to allow additional values we have not yet captured
 
 type _extensibility = boolean | {
-  model: [string],
-  tenantCheckInterval: number = 1000
+  model: string[],
+  tenantCheckInterval: number = 60000,
+  [key: string]: any
 }
 
 type _binding = {
   type: 'cf' | 'k8s' | string,
-  apiEndpoint?: 'string',
-  org?: 'string',
-  space?: 'string',
-  instance?: 'string',
-  key?: 'string'
+  apiEndpoint?: string,
+  org?: string,
+  space?: string,
+  instance?: string,
+  key?: string
+}
+
+interface User {
+  tenant?: string
+  roles?: string[]
+  features?: string[]
+}
+
+interface Users {
+  alice: User, bob: User, carol: User, dave: User, erin: User, fred: User
+  [key: string]: User | undefined
 }
 
 type _requires = {
   auth: {
     kind: 'dummy' | 'mocked' | 'basic' | 'xsuaa' | 'ias' | string,
     impl: string,
-    users?: {
-      [key: 'alice' | 'bob' | 'carol' | 'dave' | 'erin' | 'fred' | string]: {
-        tenant?: string
-        roles?: [string],
-        features?: [string]
-      }
-    },
+    users?: Users,
     tenants?: {
       [key: string]: {
-        features?: [string]
+        features?: string[]
       }
     },
-    credentials?: {
-
-    }
+    credentials?: _credentials,
+    binding?: _binding,
+    [key: string]: any
   },
   db: {
     kind: 'hana' | 'sqlite' | 'sql' | string
+    binding?: _binding
   },
-  multitenancy: boolean | { kind: string, jobs: { clusterSize: number, workerSize: number } },
+  multitenancy: boolean | { kind: string, jobs: {
+    clusterSize: number,
+    workerSize: number,
+    t0: string
+  }},
+  toggles: boolean,
   extensibility: _extensibility,
   messaging: {
-    kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared'
+    kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
+    format: 'cloudevents' | string
   },
+  [key: string]: any
 }
 
-type _requiresMTX = {
-  'cds.xt.SaasProvisioningService': boolean,
-  'cds.xt.DeploymentService': boolean,
-  'cds.xt.ModelProviderService': boolean,
-  'cds.xt.JobsService': boolean,
-  'cds.xt.ExtensibilityService': boolean,
+type _binding = {
+  type: 'cf' | 'k8s' | string,
+  apiEndpoint?: string,
+  org?: string,
+  space?: string,
+  instance?: string,
+  key?: string
+}
+
+type _credentials = {
+  clientid?: string,
+  clientsecret?: string,
+  url?: string,
+  xsappname?: string,
+  certurl?: string,
+  certificate?: string,
+  [key: string]: any
 }
 
 export const requires: _requires
