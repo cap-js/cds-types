@@ -28,22 +28,22 @@ export const env: {
   sql: TODO,
 } & { [key: string]: any } // to allow additional values we have not yet captured
 
-interface User {
+interface MockUser {
   tenant?: string
   roles?: string[]
   features?: string[]
 }
 
-interface Users {
-  alice: User, bob: User, carol: User, dave: User, erin: User, fred: User
-  [key: string]: User | undefined
+interface MockUsers {
+  alice: MockUser, bob: MockUser, carol: MockUser, dave: MockUser, erin: MockUser, fred: MockUser
+  [key: string]: MockUser | undefined
 }
 
 type _requires = {
   auth: {
     kind: 'dummy' | 'mocked' | 'basic' | 'xsuaa' | 'ias' | string,
     impl: string,
-    users?: Users,
+    users?: MockUsers,
     tenants?: {
       [key: string]: {
         features?: string[]
@@ -65,7 +65,7 @@ type _requires = {
   toggles: boolean,
   extensibility: boolean | {
     model: string[],
-    tenantCheckInterval: number = 60000,
+    tenantCheckInterval: number,
     [key: string]: any,
   },
   messaging: {
