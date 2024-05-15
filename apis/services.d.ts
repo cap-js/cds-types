@@ -92,9 +92,9 @@ export class QueryAPI {
   transaction: QueryAPI['tx']
 
   tx: {
-    (fn: (tx: Transaction) => {}): Promise<unknown>,
+    (fn: (tx: Transaction) => object): Promise<unknown>,
     (context?: object): Transaction,
-    (context: object, fn: (tx: Transaction) => {}): Promise<unknown>,
+    (context: object, fn: (tx: Transaction) => object): Promise<unknown>,
   }
 
 }
