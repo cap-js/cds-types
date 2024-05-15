@@ -9,19 +9,19 @@ type TODO = any
 export const env: {
   build: TODO,
   hana: TODO,
-  requires: _requires,
   i18n: {
     languages: string[],
-    default_language: string
+    default_language: string,
     folders: string[],
-    [key: string]: any
+    [key: string]: any,
   },
+  requires: _requires,
   folders: {
     app: string,
     db: string,
     srv: string,
     fts: string,
-    [key: string]: string
+    [key: string]: string,
   },
   odata: TODO,
   query: TODO,
@@ -31,7 +31,7 @@ export const env: {
 type _extensibility = boolean | {
   model: string[],
   tenantCheckInterval: number = 60000,
-  [key: string]: any
+  [key: string]: any,
 }
 
 type _binding = {
@@ -40,7 +40,7 @@ type _binding = {
   org?: string,
   space?: string,
   instance?: string,
-  key?: string
+  key?: string,
 }
 
 interface User {
@@ -69,13 +69,13 @@ type _requires = {
     [key: string]: any
   },
   db: {
-    kind: 'hana' | 'sqlite' | 'sql' | string
+    kind: 'hana' | 'sqlite' | 'sql' | string,
     binding?: _binding
   },
   multitenancy: boolean | { kind: string, jobs: {
     clusterSize: number,
     workerSize: number,
-    t0: string
+    t0: string,
   }},
   toggles: boolean,
   extensibility: _extensibility,
@@ -92,7 +92,7 @@ type _binding = {
   org?: string,
   space?: string,
   instance?: string,
-  key?: string
+  key?: string,
 }
 
 type _credentials = {
@@ -102,7 +102,7 @@ type _credentials = {
   xsappname?: string,
   certurl?: string,
   certificate?: string,
-  [key: string]: any
+  [key: string]: any,
 }
 
 export const requires: _requires
