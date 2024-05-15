@@ -1,4 +1,4 @@
-import cds from '@sap/cds'
+import cds, { TypedRequest } from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -187,18 +187,47 @@ srv.on('error', (err, req) => {
   req.event
 })
 
+
+function isOne(p: TypedRequest<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
+function isMany(p: TypedRequest<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
+
 // Typed bound/ unbound actions
 // The handler must return a number to be in line with action's signature (or void)
 srv.on(action, req => req.data.foo.x)
 srv.on(action, 'FooService', req => req.data.foo.x)
 
+srv.on('CREATE', Foo, (req, next) => { isMany(req); return next() })
+srv.on('CREATE', Foos, (req, next) => { isMany(req); return next() })
+srv.before('CREATE', Foo, req => { isMany(req); return req.data })
+srv.before('CREATE', Foos, req => isMany(req))
+srv.after('CREATE', Foo, (data) => { isMany(data); return data })
+srv.after('CREATE', Foos, (data) => isMany(data))
+
 // Handlers with classes. Singular and plural are to be reflected in what the handler receives
-srv.on('READ', Foo, (req, next) => { req.data.x?.toFixed(); return next() })
-srv.on('READ', Foos, (req, next) => { req.data.at(0)?.x?.toFixed(); return next() })
-srv.before('READ', Foo, req => { req.data.x?.toFixed(); return req.data })
-srv.before('READ', Foos, req => req.data[0].x?.toFixed())
-srv.after('READ', Foo, (data) => { data?.x.toFixed(); return data })
-srv.after('READ', Foos, (data) => data?.at(0)?.x?.toFixed())
+srv.on('READ', Foo, (req, next) => { isMany(req); return next() })
+srv.on('READ', Foos, (req, next) => { isMany(req); return next() })
+srv.before('READ', Foo, req => { isMany(req); return req.data })
+srv.before('READ', Foos, req => isMany(req))
+srv.after('READ', Foo, (data) => { isOne(data); return data })
+srv.after('READ', Foos, (data) => isOne(data))
+
+srv.after('EACH', Foo, (data) => { isOne(data); return data })
+srv.after('EACH', Foos, (data) => isOne(data))
+
+srv.on('UPDATE', Foo, (req, next) => { isMany(req); return next() })
+srv.on('UPDATE', Foos, (req, next) => { isMany(req); return next() })
+srv.before('UPDATE', Foo, req => { isMany(req); return req.data })
+srv.before('UPDATE', Foos, req => isMany(req))
+srv.after('UPDATE', Foo, (data) => { isMany(data); return data })
+srv.after('UPDATE', Foos, (data) => isMany(data))
+
+srv.on('DELETE', Foo, (req, next) => { isMany(req); return next() })
+srv.on('DELETE', Foos, (req, next) => { isMany(req); return next() })
+srv.before('DELETE', Foo, req => { isMany(req); return req.data })
+srv.before('DELETE', Foos, req => isMany(req))
+srv.after('DELETE', Foo, (data) => { isMany(data); return data })
+srv.after('DELETE', Foos, (data) => isMany(data))
+
 
 srv.before("UPDATE", "TestEntity", async (req) => {
   await SELECT.one.from(req.subject)
