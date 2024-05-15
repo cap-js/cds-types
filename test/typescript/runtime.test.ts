@@ -1,5 +1,4 @@
 import cds, { User, Query } from '@sap/cds';
-import { struct } from '@sap/cds/apis/csn';
 import {
   Service,
   EventContext,
@@ -65,7 +64,6 @@ describe('runtime tests', () => {
       }
 
       let {bar} = Foo.elements
-      let baz = (<struct>bar).elements.baz
 
       let m = cds.linked(csn)
       let Foo2 = m.entities.Foo
