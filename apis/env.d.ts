@@ -7,10 +7,20 @@
 export const env: {
   build: any,
   hana: any,
-  i18n: any,
-  mtx: any,
+  i18n: {
+    languages: string[],
+    default_language: string,
+    folders: string[],
+    [key: string]: any,
+  },
   requires: any,
-  folders: any,
+  folders: {
+    app: string,
+    db: string,
+    srv: string,
+    fts: string,
+    [key: string]: string, // to allow additional values
+  },
   odata: any,
   query: any,
   sql: any,
