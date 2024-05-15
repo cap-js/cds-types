@@ -61,11 +61,13 @@ type _requires = {
   db: {
     kind: 'hana' | 'sqlite' | 'sql' | string,
     binding?: _binding,
+    [key: string]: any,
   },
   multitenancy: boolean | { kind: string, jobs: {
     clusterSize: number,
     workerSize: number,
     t0: string,
+    [key: string]: any,
   },},
   toggles: boolean,
   extensibility: boolean | {
@@ -76,6 +78,7 @@ type _requires = {
   messaging: {
     kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
     format: 'cloudevents' | string,
+    [key: string]: any,
   },
   [key: string]: any,
 }
