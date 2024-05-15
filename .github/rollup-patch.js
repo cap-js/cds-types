@@ -2,12 +2,13 @@
 
 (async () => {
 
+  /* eslint-disable @typescript-eslint/no-var-requires */
   const { readFile, writeFile } = require('fs/promises')
   const rollupFile = './dist/cds-types.d.ts'
   let rollup = (await readFile(rollupFile)).toString()
 
   rollup = rollup
-    .replace(`export declare const delete: Service\['delete'\];`, `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
+    .replace(`export declare const delete: Service['delete'];`, `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
     .replace(/^(\s*)delete,/m, `$1delete_ as delete,`)
 
 

@@ -1,7 +1,6 @@
 // This file contains dummy data that is used
-// to test cds components. 
+// to test cds components.
 // The definitions in here are not part of cds itself.
-import { Subqueryable } from '../../../../apis/ql'
 
 // dummies to test singular and plural types in queries with
 export class Foo {
@@ -16,10 +15,10 @@ export class Foos extends Array<Foo> { static readonly drafts: typeof Foo }
 
 // for bound/ unbound actions
 export const action = ((foo: Foo) => 42) as Action
-export type Action = { 
-  (foo: Foo): number,  
-  __parameters: {foo: Foo}, 
-  __returns: number 
+export type Action = {
+  (foo: Foo): number,
+  __parameters: {foo: Foo},
+  __returns: number
 }
 
 // little 'trust me, type system!' helper to make T|undefined into T.
