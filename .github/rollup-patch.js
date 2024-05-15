@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 
-(async () => {
+/* eslint-disable @typescript-eslint/no-var-requires*/
+/* eslint-disable no-undef */
+const { readFile, writeFile } = require('fs/promises')
 
-  /* eslint-disable @typescript-eslint/no-var-requires */
-  const { readFile, writeFile } = require('fs/promises')
+;(async () => {
+
   const rollupFile = './dist/cds-types.d.ts'
   let rollup = (await readFile(rollupFile)).toString()
 
+  // fix `delete` keyword as const - api-extractor does not support it
   rollup = rollup
-    .replace(`export declare const delete: Service['delete'];`, `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
+    .replace(`export declare const delete: Service['delete'];`,
+             `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
     .replace(/^(\s*)delete,/m, `$1delete_ as delete,`)
-
 
   // augmented namespaces are not supported by api-extractor
   // see https://github.com/microsoft/rushstack/issues/1709
