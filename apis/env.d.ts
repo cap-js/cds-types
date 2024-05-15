@@ -35,7 +35,12 @@ interface MockUser {
 }
 
 interface MockUsers {
-  alice: MockUser, bob: MockUser, carol: MockUser, dave: MockUser, erin: MockUser, fred: MockUser
+  alice: MockUser
+  bob: MockUser
+  carol: MockUser
+  dave: MockUser
+  erin: MockUser
+  fred: MockUser
   [key: string]: MockUser | undefined
 }
 
@@ -46,22 +51,22 @@ type _requires = {
     users?: MockUsers,
     tenants?: {
       [key: string]: {
-        features?: string[]
-      }
+        features?: string[],
+      },
     },
     credentials?: _credentials,
     binding?: _binding,
-    [key: string]: any
+    [key: string]: any,
   },
   db: {
     kind: 'hana' | 'sqlite' | 'sql' | string,
-    binding?: _binding
+    binding?: _binding,
   },
   multitenancy: boolean | { kind: string, jobs: {
     clusterSize: number,
     workerSize: number,
     t0: string,
-  }},
+  },},
   toggles: boolean,
   extensibility: boolean | {
     model: string[],
@@ -70,9 +75,9 @@ type _requires = {
   },
   messaging: {
     kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
-    format: 'cloudevents' | string
+    format: 'cloudevents' | string,
   },
-  [key: string]: any
+  [key: string]: any,
 }
 
 type _binding = {
