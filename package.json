@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "test": "jest --silent",
-    "api-extractor": "api-extractor run --local --verbose",
+    "api-extractor": "rm -rf dist/ && api-extractor run --local --verbose",
+    "postapi-extractor": ".github/rollup-patch.js && npm pkg set typings=dist/cds-types.d.ts",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "setup": "npm i && npm i file:. --no-save --force"
