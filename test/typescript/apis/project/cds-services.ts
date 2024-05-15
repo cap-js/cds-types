@@ -2,6 +2,7 @@ import cds, { TypedRequest } from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
+import express from 'express'
 
 // connect
 let srv = await cds.connect.to('service')
@@ -33,7 +34,7 @@ cds.serve('SomeService', { service: '*' })
 cds.serve('SomeService', { from: '*' })
 cds.serve('SomeService', { service: '*', from: '*' })
 cds.serve('SomeService', { someOtherOption: true })
-cds.serve('SomeService').at('path').from('model').in('dir').to('protocol')
+cds.serve('SomeService').at('path').from('model').in(express()).to('protocol')
 
 // CRUD
 await srv.read(Books, 'ID')

@@ -8,8 +8,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 - Added signatures for `cds.outboxed` and `cds.unboxed`
+- Added signature for `cds.middlewares.add`
 
 ### Changed
+- Improved signatures for `cds.env.folders` and `cds.env.i18n` from `any` to a more descriptive type
 - `Service.prepend` is no longer async
 - All linked classes are now available via `cds.linked.classes` (and partially via the facade)
 - Getters in `service` instances now return the appropriate classes. E.g. `service.entities` returns instances of `linked.entity`
