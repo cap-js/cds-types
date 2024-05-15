@@ -28,21 +28,6 @@ export const env: {
   sql: TODO,
 } & { [key: string]: any } // to allow additional values we have not yet captured
 
-type _extensibility = boolean | {
-  model: string[],
-  tenantCheckInterval: number = 60000,
-  [key: string]: any,
-}
-
-type _binding = {
-  type: 'cf' | 'k8s' | string,
-  apiEndpoint?: string,
-  org?: string,
-  space?: string,
-  instance?: string,
-  key?: string,
-}
-
 interface User {
   tenant?: string
   roles?: string[]
@@ -78,7 +63,11 @@ type _requires = {
     t0: string,
   }},
   toggles: boolean,
-  extensibility: _extensibility,
+  extensibility: boolean | {
+    model: string[],
+    tenantCheckInterval: number = 60000,
+    [key: string]: any,
+  },
   messaging: {
     kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
     format: 'cloudevents' | string
