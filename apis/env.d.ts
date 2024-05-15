@@ -10,18 +10,18 @@ export const env: {
   build: TODO,
   hana: TODO,
   requires: _requires,
+  i18n: {
+    languages: string[],
+    default_language: string
+    folders: string[],
+    [key: string]: any
+  },
   folders: {
     app: string,
     db: string,
     srv: string,
     fts: string,
     [key: string]: string
-  },
-  i18n: {
-    languages: string[],
-    default_language: string
-    folders: string[],
-    [key: string]: any
   },
   odata: TODO,
   query: TODO,
