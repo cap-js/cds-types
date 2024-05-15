@@ -15,6 +15,7 @@
   // see https://github.com/microsoft/rushstack/issues/1709
   if (!rollup.includes('declare global')) {
     const filterFile = (await readFile('./apis/global.d.ts')).toString()
+      .replace(`import * as ql from './ql'\n`, '')
     rollup += filterFile
   }
 

@@ -1,4 +1,4 @@
-import cds from '../../../../apis/server'
+import cds from '../../../..'
 import express from 'express'
 
 const h = undefined as unknown as express.RequestHandler
