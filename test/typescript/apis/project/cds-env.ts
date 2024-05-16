@@ -29,3 +29,8 @@ env.requires.multitenancy = { kind: 'shared', jobs: { clusterSize:1, workerSize:
 env.requires.messaging = { kind: '', format: '', foo: '' }
 
 env.foo = {}
+
+// exported types through namespace 'env'
+const req = {} as env.Requires
+const users = {} as env.MockUsers
+const alice = {} as env.MockUser

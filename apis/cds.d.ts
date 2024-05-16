@@ -23,6 +23,13 @@ import { Service } from './services'
 declare const delete_: Service['delete']
 export { delete_ as delete }
 
+export const version: string
+export const home: string
+export const root: string
+
+import { env } from './env'
+export const requires: env.Requires
+
 declare global {
   // these provide the functionality from SELECT, INSERT, etc in the global facade
   const SELECT: ql.QL<any>['SELECT']
