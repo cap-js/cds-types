@@ -44,6 +44,7 @@ export namespace env {
     [key: string]: MockUser | undefined
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   type Requires = {
     auth: {
       kind: 'dummy' | 'mocked' | 'basic' | 'xsuaa' | 'ias' | string,
