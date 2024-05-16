@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 - Added signatures for `cds.outboxed` and `cds.unboxed`
 - Added signature for `cds.middlewares.add`
+- More `cds.env` properties and types
 
 ### Changed
 - Improved signatures for `cds.env.folders` and `cds.env.i18n` from `any` to a more descriptive type

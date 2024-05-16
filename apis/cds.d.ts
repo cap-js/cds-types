@@ -23,3 +23,10 @@ export { QLExtensions } from './ql' // cds-ql.ts test tries to import this from 
 import { Service } from './services'
 declare const delete_: Service['delete']
 export { delete_ as delete }
+
+export const version: string
+export const home: string
+export const root: string
+
+import { env } from './env'
+export const requires: env.Requires
