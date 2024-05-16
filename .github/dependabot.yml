@@ -4,8 +4,8 @@ updates:
 - package-ecosystem: npm
   directory: /
   versioning-strategy: increase-if-necessary
-  # schedule:
-  #   interval: weekly
+  schedule:
+    interval: daily
   ignore:
     - dependency-name: "chai"
         # chai 5 doesn't work atm w/ cds.test
