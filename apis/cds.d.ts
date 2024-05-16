@@ -42,3 +42,7 @@ declare global {
 	type CREATE<T> = ql.CREATE<T>
 	type DROP<T> = ql.DROP<T>
 }
+
+export const version: string
+export const home: string
+export const root: string

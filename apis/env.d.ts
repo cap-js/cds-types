@@ -4,18 +4,16 @@
  * filtered through the currently active profiles, thus highly dependent on the current working
  * directory and process environment.
  */
-type TODO = any
-
 export const env: {
-  build: TODO,
-  hana: TODO,
+  build: _TODO,
+  hana: _TODO,
   i18n: {
     languages: string[],
     default_language: string,
     folders: string[],
     [key: string]: any,
   },
-  requires: _requires,
+  requires: env.Requires,
   folders: {
     app: string,
     db: string,
@@ -23,86 +21,91 @@ export const env: {
     fts: string,
     [key: string]: string, // to allow additional values
   },
-  odata: TODO,
-  query: TODO,
-  sql: TODO,
+  odata: _TODO,
+  query: _TODO,
+  sql: _TODO,
 } & { [key: string]: any } // to allow additional values we have not yet captured
 
-interface MockUser {
-  tenant?: string
-  roles?: string[]
-  features?: string[]
-}
+export namespace env {
 
-interface MockUsers {
-  alice: MockUser
-  bob: MockUser
-  carol: MockUser
-  dave: MockUser
-  erin: MockUser
-  fred: MockUser
-  [key: string]: MockUser | undefined
-}
+  interface MockUser {
+    tenant?: string
+    roles?: string[]
+    features?: string[]
+  }
 
-type _requires = {
-  auth: {
-    kind: 'dummy' | 'mocked' | 'basic' | 'xsuaa' | 'ias' | string,
-    impl: string,
-    users?: MockUsers,
-    tenants?: {
-      [key: string]: {
-        features?: string[],
+  interface MockUsers {
+    alice: MockUser
+    bob: MockUser
+    carol: MockUser
+    dave: MockUser
+    erin: MockUser
+    fred: MockUser
+    [key: string]: MockUser | undefined
+  }
+
+  type Requires = {
+    auth: {
+      kind: 'dummy' | 'mocked' | 'basic' | 'xsuaa' | 'ias' | string,
+      impl: string,
+      users?: MockUsers,
+      tenants?: {
+        [key: string]: {
+          features?: string[],
+        },
       },
+      credentials?: Credentials,
+      binding?: Binding,
+      [key: string]: any,
     },
-    credentials?: _credentials,
-    binding?: _binding,
+    db: {
+      kind: 'hana' | 'sqlite' | 'sql' | string,
+      binding?: Binding,
+      [key: string]: any,
+    },
+    multitenancy: boolean | { kind: string, jobs: {
+      clusterSize: number,
+      workerSize: number,
+      t0: string,
+      [key: string]: any,
+    },},
+    toggles: boolean,
+    extensibility: boolean | {
+      model: string[],
+      tenantCheckInterval: number,
+      [key: string]: any,
+    },
+    messaging: {
+      kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
+      format: 'cloudevents' | string,
+      [key: string]: any,
+    },
     [key: string]: any,
-  },
-  db: {
-    kind: 'hana' | 'sqlite' | 'sql' | string,
-    binding?: _binding,
+  }
+
+  type Binding = {
+    type: 'cf' | 'k8s' | string,
+    apiEndpoint?: string,
+    org?: string,
+    space?: string,
+    instance?: string,
+    key?: string,
+  }
+
+  type Credentials = {
+    clientid?: string,
+    clientsecret?: string,
+    url?: string,
+    xsappname?: string,
+    certurl?: string,
+    certificate?: string,
     [key: string]: any,
-  },
-  multitenancy: boolean | { kind: string, jobs: {
-    clusterSize: number,
-    workerSize: number,
-    t0: string,
-    [key: string]: any,
-  },},
-  toggles: boolean,
-  extensibility: boolean | {
-    model: string[],
-    tenantCheckInterval: number,
-    [key: string]: any,
-  },
-  messaging: {
-    kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
-    format: 'cloudevents' | string,
-    [key: string]: any,
-  },
-  [key: string]: any,
+  }
 }
 
-type _binding = {
-  type: 'cf' | 'k8s' | string,
-  apiEndpoint?: string,
-  org?: string,
-  space?: string,
-  instance?: string,
-  key?: string,
-}
+/**
+ * DO NOT USE
+ * @internal
+ */
+type _TODO = any
 
-type _credentials = {
-  clientid?: string,
-  clientsecret?: string,
-  url?: string,
-  xsappname?: string,
-  certurl?: string,
-  certificate?: string,
-  [key: string]: any,
-}
-
-export const requires: _requires
-export const version: string
-export const home: string
-export const root: string
