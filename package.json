@@ -13,19 +13,24 @@
   "license": "SEE LICENSE IN LICENSE",
   "typings": "apis/cds.d.ts",
   "files": [
-    "apis/",
+    "dist/",
     "LICENSE",
     "README.md"
   ],
   "scripts": {
     "test": "jest --silent",
-    "api-extractor": "api-extractor run --local --verbose",
+    "rollup": "rm -rf dist/ && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
+    "rollup:on": "npm pkg set typings=dist/cds-types.d.ts && [ -d 'apis' ] && mv -- apis -apis || true",
+    "rollup:off": "npm pkg set typings=apis/cds.d.ts  && [ -d '-apis' ] && mv -- -apis apis || true",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "setup": "npm i && npm i file:. --no-save --force"
   },
   "peerDependencies": {
     "@sap/cds": ">=7"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21"
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
@@ -47,8 +52,5 @@
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     }
-  },
-  "dependencies": {
-    "@types/express": "^4.17.21"
   }
 }

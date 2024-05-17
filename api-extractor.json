@@ -126,14 +126,14 @@
         ],
         "lib": [
           "es2021"
-        ],
+        ]
       },
       "exclude": [
         "node_modules",
         "dist",
         "test"
       ]
-    },
+    }
     /**
      * This option causes the compiler to be invoked with the --skipLibCheck option. This option is not recommended
      * and may cause API Extractor to produce incomplete or incorrect declarations, but it may be required when

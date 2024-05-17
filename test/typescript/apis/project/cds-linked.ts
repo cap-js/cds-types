@@ -1,7 +1,7 @@
 import { LinkedCSN } from '../../../../apis/linked';
 import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../apis/linked/classes';
 import { _ArrayLike } from '../../../../apis/internal/util';
-import cds from '../../../../apis/cds';
+import cds from '../../../..';
 
 const linkedCsn = undefined as unknown as LinkedCSN
 

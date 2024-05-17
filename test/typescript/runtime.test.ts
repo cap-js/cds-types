@@ -1,5 +1,4 @@
 import cds, { User, Query } from '@sap/cds';
-import { struct } from '@sap/cds/apis/csn';
 import {
   Service,
   EventContext,
@@ -65,7 +64,6 @@ describe('runtime tests', () => {
       }
 
       let {bar} = Foo.elements
-      let baz = (<struct>bar).elements.baz
 
       let m = cds.linked(csn)
       let Foo2 = m.entities.Foo
@@ -215,16 +213,15 @@ describe('runtime tests', () => {
     expect (cds.Association)
     expect (cds.Composition)
 
-    cds.env.fiori.lean_draft = false
+    // .drafts is not available in lean draft mode in cds 8
     let Books = new cds.entity({name:'Books', elements: { HasDraftEntity:true }})
-    expect(Books.name).toBe('Books')
-    expect(Books.drafts.name).toBe('Books_drafts')
+    // expect(Books.name).toBe('Books')
+    // expect(Books.drafts.name).toBe('Books_drafts')
+    // DELETE.from(Books.drafts || Books).where({ID:1})
+    // UPDATE(Books.drafts || Books).with({}).where({ID:1})
+    // INSERT.into(Books.drafts || Books).entries({})
     let q = SELECT.from(Books).where({ID:1})
-    // expect(q.SELECT.from.ref[0]).toBe('Books') // FIXME: from.ref should work
-    DELETE.from(Books.drafts || Books).where({ID:1})
-    UPDATE(Books.drafts || Books).with({}).where({ID:1})
-    INSERT.into(Books.drafts || Books).entries({})
-    cds.env.fiori.lean_draft = true
+    expect(q.SELECT.from.ref[0]).toBe('Books')
 
     if (global.false) {
       let srv = new cds.Service
