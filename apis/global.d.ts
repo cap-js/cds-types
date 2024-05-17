@@ -1,4 +1,4 @@
-import * as ql from './ql'
+import * as ql from './ql'  // referenced in rollup-patch.js, so be careful when changing it
 
 declare global {
   // these provide the functionality from SELECT, INSERT, etc in the global facade

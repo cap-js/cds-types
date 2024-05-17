@@ -15,11 +15,12 @@ const { readFile, writeFile } = require('fs/promises')
              `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
     .replace(/^(\s*)delete,/m, `$1delete_ as delete,`)
 
-  // augmented namespaces are not supported by api-extractor
+  // augmented namespaces like 'global' are not supported by api-extractor
   // see https://github.com/microsoft/rushstack/issues/1709
-  if (!rollup.includes('declare global')) {
+  // so copy file contents manually
+  if (!rollup.includes('declare global')) { // for idempotency
     const filterFile = (await readFile('./apis/global.d.ts')).toString()
-      .replace(`import * as ql from './ql'\n`, '')
+      .replace(/^.*?import .*?\n/mgs, '') // strip off import as this would be wrong in rollup
     rollup += filterFile
   }
 
