@@ -45,13 +45,6 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
   foreach(visitor: Visitor, defs?: LinkedDefinitions): this
 
   /**
-	 * Same as foreach but recursively visits each element definition
-	 * @see [capire](https://github.wdf.sap.corp/pages/cap/node.js/api#cds-reflect-foreach)
-	 */
-  forall(x: Filter, visitor: Visitor, defs?: LinkedDefinitions): this
-  forall(visitor: Visitor, defs?: LinkedDefinitions): this
-
-  /**
 	 * Fetches definitions declared as children of a given parent context or service.
 	 * It fetches all definitions whose fully-qualified names start with the parent's name.
 	 * Returns the found definitions as an object with the local names as keys.
