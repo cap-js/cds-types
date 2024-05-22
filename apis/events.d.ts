@@ -1,4 +1,4 @@
-import { LinkedDefinition } from './linked'
+import { Definition } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
@@ -51,7 +51,7 @@ export class Request extends Event {
 
   path: string
 
-  target: LinkedDefinition
+  target: Definition
 
   /**
    * Shortcut to {@link Request.target | target (entity) name}

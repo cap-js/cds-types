@@ -2,9 +2,9 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable, Unwrap } from './internal/inference'
-import { ModelPart, LinkedCSN, LinkedDefinition, LinkedEntity } from './linked'
-import * as linked from './linked/classes'
-import { CSN } from './csn'
+//import { ModelPart, CSN, LinkedDefinition, LinkedEntity } from './linked'
+import * as linked from './linked'
+import * as csn from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
 import { ReadableStream } from 'node:stream/web'
@@ -13,14 +13,14 @@ type Key = number | string | any
 
 export class QueryAPI {
 
-  entities: LinkedCSN['entities']
+  entities: linked.CSN['entities']
 
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
   read: {
     <T extends ArrayConstructable>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>,
-    <T>(entity: LinkedDefinition | string, key?: Key): SELECT<T>,
+    <T>(entity: linked.Definition | string, key?: Key): SELECT<T>,
   }
 
   /**
@@ -28,7 +28,7 @@ export class QueryAPI {
    */
   create: {
     <T extends ArrayConstructable>(entity: T, key?: Key): INSERT<T>,
-    <T>(entity: LinkedDefinition | string, key?: Key): INSERT<T>,
+    <T>(entity: linked.Definition | string, key?: Key): INSERT<T>,
   }
 
   /**
@@ -52,7 +52,7 @@ export class QueryAPI {
    */
   update: {
     <T extends ArrayConstructable>(entity: T, key?: Key): UPDATE<T>,
-    <T>(entity: LinkedDefinition | string, key?: Key): UPDATE<T>,
+    <T>(entity: linked.Definition | string, key?: Key): UPDATE<T>,
   }
 
   /**
@@ -69,7 +69,7 @@ export class QueryAPI {
    */
   stream: {
     (column: string): {
-      from(entity: LinkedDefinition | string): {
+      from(entity: linked.Definition | string): {
         where(filter: any): ReadableStream,
       },
     },
@@ -79,7 +79,7 @@ export class QueryAPI {
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
-  delete<T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>
+  delete<T>(entity: linked.Definition | string, key?: Key): DELETE<T>
 
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#srv-foreach-entity)
@@ -107,7 +107,7 @@ export class Service extends QueryAPI {
 
   constructor (
     name?: string,
-    model?: CSN,
+    model?: csn.CSN,
     options?: {
       kind: string,
       impl: string | ServiceImpl,
@@ -128,31 +128,31 @@ export class Service extends QueryAPI {
    * The model from which the service's definition was loaded
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  model: LinkedCSN
+  model: linked.CSN
 
   /**
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: ModelPart<linked.entity>
+  entities: linked.ModelPart<linked.entity>
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: ModelPart<linked.event>
+  events: linked.ModelPart<linked.event>
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: ModelPart<linked.type>
+  types: linked.ModelPart<linked.type>
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: ModelPart<linked.action>
+  operations: linked.ModelPart<linked.action>
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -180,7 +180,7 @@ export class Service extends QueryAPI {
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { query: ConstructedQuery, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { event: types.eventName, entity: LinkedDefinition | string, data?: object, params?: object, headers?: object }): Promise<T>,
+    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
   }
 
   /**
@@ -213,7 +213,7 @@ export class Service extends QueryAPI {
   delete: {
     <T = any>(entityOrPath: types.target, data?: object): DELETE<T>,
     <T extends ArrayConstructable>(entity: T, key?: Key): DELETE<T>,
-    <T>(entity: LinkedDefinition | string, key?: Key): DELETE<T>,
+    <T>(entity: linked.Definition | string, key?: Key): DELETE<T>,
   }
 
   // The central method to dispatch events
@@ -262,7 +262,7 @@ export class ApplicationService extends Service {}
 export class MessagingService extends Service {}
 export class RemoteService extends Service {}
 export class DatabaseService extends Service {
-  deploy (model?: CSN | string): Promise<CSN>
+  deploy (model?: csn.CSN | string): Promise<csn.CSN>
   begin (): Promise<void>
   commit (): Promise<void>
   rollback (): Promise<void>
@@ -400,7 +400,7 @@ declare namespace types {
     | 'NEW' | 'EDIT' | 'PATCH' | 'SAVE'
     | 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
     | 'COMMIT' | 'ROLLBACK'
-  type target = string | LinkedDefinition | LinkedEntity | (string | LinkedDefinition | LinkedEntity)[] | ArrayConstructable
+  type target = string | linked.Definition | linked.entity | (string | linked.Definition | linked.entity)[] | ArrayConstructable
 }
 
 type SpawnOptions = {

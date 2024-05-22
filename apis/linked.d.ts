@@ -1,14 +1,14 @@
-import { CSN } from './csn'
+import * as csn from './csn'
 import { IterableMap } from './internal/util'
-import { LinkedDefinitions, any_, entity, service } from './linked/classes'
+import { Definitions, any_, entity, service_ } from './linked/classes'
 
 export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
-type Visitor = (def: any_, name: string, parent: any_, defs: LinkedDefinitions) => void
+type Visitor = (def: any_, name: string, parent: any_, defs: Definitions) => void
 type Filter = string | (<T extends any_ = any_>(def: T) => boolean)
 
-export type LinkedDefinition = any_
+export type Definition = any_
 
-export interface LinkedCSN extends Omit<CSN, 'definitions'> {
+export interface CSN extends Omit<csn.CSN, 'definitions'> {
 
   /**
 	 * Fetches definitions matching the given filter, returning an iterator on them.
@@ -20,13 +20,13 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 	 *   let entities = m.all('entity')        //> equivalent shortcut
 	 * ```
 	 */
-  each<T extends any_>(x: Filter, defs?: LinkedDefinitions<T>): IterableIterator<T>
+  each<T extends any_>(x: Filter, defs?: Definitions<T>): IterableIterator<T>
 
   /**
 	 * Fetches definitions matching the given filter, returning them in an array.
 	 * Convenience shortcut for `[...reflect.each('entity')]`
 	 */
-  all<T extends any_>(x: Filter, defs?: LinkedDefinitions<T>): T[]
+  all<T extends any_>(x: Filter, defs?: Definitions<T>): T[]
 
   /**
 	 * Fetches definitions matching the given filter, returning the first match, if any.
@@ -35,21 +35,21 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 	 * @param x - the filter
 	 * @param defs - the definitions to fetch in, default: `this.definitions`
 	 */
-  find<T extends any_>(x: Filter, defs?: LinkedDefinitions<T>): T | undefined
+  find<T extends any_>(x: Filter, defs?: Definitions<T>): T | undefined
 
   /**
 	 * Calls the visitor for each definition matching the given filter.
 	 * @see [capire](https://github.wdf.sap.corp/pages/cap/node.js/api#cds-reflect-foreach)
 	 */
-  foreach(x: Filter, visitor: Visitor, defs?: LinkedDefinitions): this
-  foreach(visitor: Visitor, defs?: LinkedDefinitions): this
+  foreach(x: Filter, visitor: Visitor, defs?: Definitions): this
+  foreach(visitor: Visitor, defs?: Definitions): this
 
   /**
 	 * Same as foreach but recursively visits each element definition
 	 * @see [capire](https://github.wdf.sap.corp/pages/cap/node.js/api#cds-reflect-foreach)
 	 */
-  forall(x: Filter, visitor: Visitor, defs?: LinkedDefinitions): this
-  forall(visitor: Visitor, defs?: LinkedDefinitions): this
+  forall(x: Filter, visitor: Visitor, defs?: Definitions): this
+  forall(visitor: Visitor, defs?: Definitions): this
 
   /**
 	 * Fetches definitions declared as children of a given parent context or service.
@@ -63,7 +63,7 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 	 * @param parent - either the parent itself or its fully-qualified name
 	 * @param filter - an optional filter to apply before picking a child
 	 */
-  childrenOf(parent: any | string, filter?: ((def: any_) => boolean)): LinkedDefinitions
+  childrenOf(parent: any | string, filter?: ((def: any_) => boolean)): Definitions
 
   /**
 	 * Provides convenient access to the model's top-level definitions.
@@ -84,9 +84,8 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
   exports: IterableMap<any_>
   definitions: IterableMap<any_>
   entities: ModelPart<entity>
-  services: ModelPart<service>
+  services: ModelPart<service_>
 
 }
 
-// FIXME: only for compat in ql.d.ts and services.d.ts, remove asap
-export type LinkedEntity = entity
+export * from './linked/classes'

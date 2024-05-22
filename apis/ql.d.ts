@@ -1,7 +1,7 @@
 import { Definition, EntityElements } from './csn'
 import * as CQN from './cqn'
 import { Constructable, ArrayConstructable, SingularType, PluralType } from './internal/inference'
-import { LinkedEntity } from './linked'
+import * as linked from './linked'
 import { ref, column_expr } from './cqn'
 
 export type Query = CQN.Query
@@ -23,7 +23,7 @@ type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T>
 /**
  * Target for any QL operation
  */
-type Target = LinkedEntity | Definition | string
+type Target = linked.entity | Definition | string
 
 /**
  * QLExtensions are properties that are attached to entities in CQL contexts.

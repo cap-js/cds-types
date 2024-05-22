@@ -1,7 +1,7 @@
 import { Query as CQN, expr, _xpr } from './cqn'
-import { LinkedCSN } from './linked'
+import * as ln from './linked'
 import * as LinkedClasses from './linked/classes'
-import { CSN } from './csn'
+import * as csn from './csn'
 
 type _flavor = 'parsed' | 'xtended' | 'inferred'
 type _odata_options = {
@@ -33,7 +33,7 @@ type filename = string
  * including required services.
  * Should only be ever set explictly in test scenarios!
  */
-export let model: LinkedCSN | undefined
+export let model: ln.CSN | undefined
 
 /**
  * Provides a set of methods to parse a given model, query or expression.
@@ -42,8 +42,8 @@ export let model: LinkedCSN | undefined
 export const parse: {
 
   /** Shortcut to `cds.parse.cdl()` */
-  (cdl: CDL): CSN,
-  cdl (cdl: CDL): CSN,
+  (cdl: CDL): csn.CSN,
+  cdl (cdl: CDL): csn.CSN,
   cql (src: string): CQN,
   expr (src: string): expr,
   xpr (src: string): _xpr,
@@ -56,13 +56,13 @@ export const parse: {
  * Essentially a shortcut for `cds.compile.to.csn(files)`
  * @param files - filenames of models or if folder containing models
  */
-export function get (files: '*' | filename | filename[], o?: _options): Promise<CSN>
+export function get (files: '*' | filename | filename[], o?: _options): Promise<csn.CSN>
 
 /**
  * Shortcut for `cds.get(files, 'inferred')`
  * @param files - filenames of models or if folder containing models
  */
-export function load (files: '*' | filename | filename[], o?: _options): Promise<CSN>
+export function load (files: '*' | filename | filename[], o?: _options): Promise<csn.CSN>
 
 
 /**
@@ -81,7 +81,7 @@ export const linked: {
    * Turns the given plain CSN model into a linked model
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
    */
-  (model: CSN): LinkedCSN,
+  (model: csn.CSN): ln.CSN,
 
   /**
    * Base classes of linked definitions from reflected models.
@@ -94,7 +94,7 @@ export const linked: {
  * Turns the given plain CSN model into a reflected model
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
  */
-export function reflect (model: CSN): LinkedCSN
+export function reflect (model: csn.CSN): ln.CSN
 
 /**
 * Provides a set of methods to parse a given model, query or expression.
@@ -103,49 +103,49 @@ export function reflect (model: CSN): LinkedCSN
 export const compile: {
 
   /** Shortcut for `cds.compile.to.csn()` */
-  cdl (model: CDL, o?: _options): CSN,
+  cdl (model: CDL, o?: _options): csn.CSN,
 
   for: {
-    odata (model: CSN, o?: _options): CSN,
-    sql (model: CSN, o?: _options): CSN,
+    odata (model: csn.CSN, o?: _options): csn.CSN,
+    sql (model: csn.CSN, o?: _options): csn.CSN,
   },
   to: {
     parsed: {
-      csn (files: filename[], o?: _options): Promise<CSN>,
-      csn (model: CDL, o?: _options): CSN,
+      csn (files: filename[], o?: _options): Promise<csn.CSN>,
+      csn (model: CDL, o?: _options): csn.CSN,
     },
     xtended: {
-      csn (files: filename[], o?: _options): Promise<CSN>,
-      csn (model: CDL, o?: _options): CSN,
+      csn (files: filename[], o?: _options): Promise<csn.CSN>,
+      csn (model: CDL, o?: _options): csn.CSN,
     },
     inferred: {
-      csn (files: filename[], o?: _options): Promise<CSN>,
-      csn (model: CDL, o?: _options): CSN,
+      csn (files: filename[], o?: _options): Promise<csn.CSN>,
+      csn (model: CDL, o?: _options): csn.CSN,
     },
-    csn (files: filename[], o?: _options): Promise<CSN>,
-    csn (model: CDL, o?: _options): CSN,
-    yml (model: CSN, o?: _options): YAML,
-    yaml (model: CSN, o?: _options): YAML,
-    json (model: CSN, o?: _options): JSON,
-    sql (model: CSN, o?: _options): SQL[],
-    cdl (model: CSN, o?: _options): CDL | Iterable<[CDL, { file: filename }]>,
-    edm (model: CSN, o?: _options | _odata_options): EDM | string,
-    edmx (model: CSN, o?: _options | _odata_options): EDMX | Iterable<[EDMX, { file: filename }]>,
-    hdbcds (model: CSN, o?: _options): SQL | Iterable<[SQL, { file: filename }]>,
-    hdbtable (model: CSN, o?: _options): SQL | Iterable<[SQL, { file: filename }]>,
+    csn (files: filename[], o?: _options): Promise<csn.CSN>,
+    csn (model: CDL, o?: _options): csn.CSN,
+    yml (model: csn.CSN, o?: _options): YAML,
+    yaml (model: csn.CSN, o?: _options): YAML,
+    json (model: csn.CSN, o?: _options): JSON,
+    sql (model: csn.CSN, o?: _options): SQL[],
+    cdl (model: csn.CSN, o?: _options): CDL | Iterable<[CDL, { file: filename }]>,
+    edm (model: csn.CSN, o?: _options | _odata_options): EDM | string,
+    edmx (model: csn.CSN, o?: _options | _odata_options): EDMX | Iterable<[EDMX, { file: filename }]>,
+    hdbcds (model: csn.CSN, o?: _options): SQL | Iterable<[SQL, { file: filename }]>,
+    hdbtable (model: csn.CSN, o?: _options): SQL | Iterable<[SQL, { file: filename }]>,
   },
 
   /** Fluent API variant */
-  (model: CSN | CDL): {
+  (model: csn.CSN | CDL): {
     for: {
-      odata (o?: _options): CSN,
-      sql (o?: _options): CSN,
+      odata (o?: _options): csn.CSN,
+      sql (o?: _options): csn.CSN,
     },
     to: {
-      parsed: { csn (o?: _options): CSN },
-      xtended: { csn (o?: _options): CSN },
-      inferred: { csn (o?: _options): CSN },
-      csn (o?: _options): CSN,
+      parsed: { csn (o?: _options): csn.CSN },
+      xtended: { csn (o?: _options): csn.CSN },
+      inferred: { csn (o?: _options): csn.CSN },
+      csn (o?: _options): csn.CSN,
       yml (o?: _options): YAML,
       yaml (o?: _options): YAML,
       json (o?: _options): JSON,
@@ -161,14 +161,14 @@ export const compile: {
   /** Async fluent variant reading from files */
   (files: filename[]): {
     for: {
-      odata (o?: _options): Promise<CSN>,
-      sql (o?: _options): Promise<CSN>,
+      odata (o?: _options): Promise<csn.CSN>,
+      sql (o?: _options): Promise<csn.CSN>,
     },
     to: {
-      parsed: { csn (o?: _options): Promise <CSN> },
-      xtended: { csn (o?: _options): Promise <CSN> },
-      inferred: { csn (o?: _options): Promise <CSN> },
-      csn (o?: _options): Promise <CSN>,
+      parsed: { csn (o?: _options): Promise <csn.CSN> },
+      xtended: { csn (o?: _options): Promise <csn.CSN> },
+      inferred: { csn (o?: _options): Promise <csn.CSN> },
+      csn (o?: _options): Promise <csn.CSN>,
       yml (o?: _options): Promise <YAML>,
       yaml (o?: _options): Promise <YAML>,
       json (o?: _options): Promise <JSON>,
