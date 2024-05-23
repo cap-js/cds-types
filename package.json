@@ -24,7 +24,8 @@
     "rollup:off": "npm pkg set typings=apis/cds.d.ts  && [ -d '-apis' ] && mv -- -apis apis || true",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
-    "setup": "npm i && npm i file:. --no-save --force"
+    "setup": "npm i && npm i file:. --no-save --force",
+    "prelease:ci-fix": ".github/prelease-fix.js",
   },
   "peerDependencies": {
     "@sap/cds": ">=7"
