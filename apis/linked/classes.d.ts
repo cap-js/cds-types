@@ -30,7 +30,7 @@ type Protocol = 'odata' | 'rest'
 type Column = { ref: [string], as?: string }
 
 /**
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
  */
 export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T>
 
@@ -90,7 +90,7 @@ declare class TimeStamp extends DateTime { }
 declare class array extends type<'type' | 'elements'> { }
 
 /**
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-struct)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-struct)
  */
 declare interface struct extends Omit<csn.struct, 'items' | 'elements'> {}
 declare class struct<K extends kinds = 'elements' | 'type'> extends type<K> implements WithElements {
@@ -103,7 +103,7 @@ declare interface context extends csn.context {}
 declare class context extends any_ { }
 
 /**
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-service)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-service)
  */
 declare interface service extends csn.service {}
 declare class service extends context {
@@ -129,7 +129,7 @@ declare class action extends any_<'action' | 'function'> {}
 declare class event extends aspect<'event'> {}
 
 /**
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-entity)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-entity)
  */
 declare interface entity extends Omit<csn.entity, 'elements' | 'items' | 'keys' | 'drafts'> {}
 declare class entity extends struct<'entity'> {
@@ -149,7 +149,7 @@ declare class entity extends struct<'entity'> {
 }
 
 /**
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#cds-association)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-association)
  */
 declare interface Association extends Omit<csn.Association, 'type' | 'items'> {}
 declare class Association extends type {
@@ -176,7 +176,7 @@ declare type ManagedAssociation = Association & {
  * Using this will require you to explicitly cast all classes you added mixins to
  * to be able to access the additional properties. If you want to allow any additional
  * properties, you can use the {@link MixedIn} type.
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#mixin)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#mixin)
  */
 export function mixin (...classes: (new () => any)[]): void
 
