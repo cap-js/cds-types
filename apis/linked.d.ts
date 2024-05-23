@@ -46,7 +46,7 @@ export interface LinkedCSN extends Omit<CSN, 'definitions'> {
 
   /**
 	 * Same as foreach but recursively visits each element definition
-	 * @see [capire](https://github.wdf.sap.corp/pages/cap/node.js/api#cds-reflect-foreach)
+	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#foreach)
 	 */
   forall(x: Filter, visitor: Visitor, defs?: LinkedDefinitions): this
   forall(visitor: Visitor, defs?: LinkedDefinitions): this
