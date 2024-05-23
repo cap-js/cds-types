@@ -13,7 +13,7 @@ export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<
 // "ArrayLike" is taken since es5, so the underscore is both for @internal and to avoid clashes
 /**
  * A subset of array-like methods, but not `ArrayLike`, as it does not expose `.length`.
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
  * @internal
  * @since cds 7.9
  */
@@ -27,6 +27,6 @@ export type _ArrayLike<T> = Iterable<T> & {
 
 /**
  * Object structure that exposes both array-like and object-like behaviour.
- * @see [capire](https://pages.github.tools.sap/cap/docs/node.js/cds-reflect#iterable)
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
  */
 export type IterableMap<T> = { [name: string]: T } & _ArrayLike<T>
