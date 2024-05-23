@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.3.0 - tbd
 
-## Version 0.3.0-beta.1 - 2014-05-23
+## Version 0.3.0-beta.1 - 2024-05-23
 
 ### Added
 - Added signatures for `cds.outboxed` and `cds.unboxed`

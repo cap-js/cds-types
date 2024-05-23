@@ -24,7 +24,7 @@ jobs:
       run: |
         npm ci
         npm install file:. --no-save --force
-
+        npm run prerelease:ci-fix
         npm run rollup:off
         npm run test
 

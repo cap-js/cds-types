@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.3.0",
+  "version": "0.3.0-beta.1",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -24,7 +24,8 @@
     "rollup:off": "npm pkg set typings=apis/cds.d.ts  && [ -d '-apis' ] && mv -- -apis apis || true",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
-    "setup": "npm i && npm i file:. --no-save --force"
+    "setup": "npm i && npm i file:. --no-save --force",
+    "prerelease:ci-fix": ".github/prerelease-fix.js"
   },
   "peerDependencies": {
     "@sap/cds": ">=7"
