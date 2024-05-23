@@ -32,10 +32,10 @@ type Column = { ref: [string], as?: string }
 /**
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
  */
-export type LinkedDefinitions<T extends any_ = any_> = IterableMap<T>
+export type Definitions<T extends any_ = any_> = IterableMap<T>
 
 interface WithElements {
-  elements: LinkedDefinitions<type>
+  elements: Definitions<type>
 }
 
 declare interface any_ extends csn.any_ {}
@@ -51,7 +51,7 @@ declare class any_<K extends kinds = kinds> {
 declare const any: typeof any_
 
 declare class aspect<K extends kinds = 'aspect'> extends type<K> implements WithElements {
-  elements: LinkedDefinitions<type<'type'>>
+  elements: Definitions<type<'type'>>
 }
 declare interface type extends Omit<csn.type, 'items'> {
   items: type
@@ -96,27 +96,29 @@ declare interface struct extends Omit<csn.struct, 'items' | 'elements'> {}
 declare class struct<K extends kinds = 'elements' | 'type'> extends type<K> implements WithElements {
   is_struct: true
 
-  elements: LinkedDefinitions<type<'type'>>
+  elements: Definitions<type<'type'>>
 }
 
-declare interface context extends csn.context {}
-declare class context extends any_ { }
+// clashes with services.context when exported from facade
+declare interface context_ extends csn.context {}
+declare class context_ extends any_ { }
 
+// clashes with server.service when exported from facade
 /**
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-service)
  */
-declare interface service extends csn.service {}
-declare class service extends context {
+declare interface service_ extends csn.service {}
+declare class service_ extends context_ {
   is_service: true
-  get entities (): LinkedDefinitions<entity>
-  get types (): LinkedDefinitions<type>
-  get events (): LinkedDefinitions<event>
-  get actions (): LinkedDefinitions<action>
+  get entities (): Definitions<entity>
+  get types (): Definitions<type>
+  get events (): Definitions<event>
+  get actions (): Definitions<action>
 
   /**
    * @deprecated use `.actions` instead
    */
-  get operations (): LinkedDefinitions<action>
+  get operations (): Definitions<action>
 
   /**
    * @alpha
@@ -135,13 +137,13 @@ declare interface entity extends Omit<csn.entity, 'elements' | 'items' | 'keys' 
 declare class entity extends struct<'entity'> {
   is_entity: true
 
-  keys: LinkedDefinitions<type>
+  keys: Definitions<type>
 
-  associations: LinkedDefinitions<Association>
+  associations: Definitions<Association>
 
-  compositions: LinkedDefinitions<Composition>
+  compositions: Definitions<Composition>
 
-  actions: LinkedDefinitions<action>
+  actions: Definitions<action>
 
   texts?: entity
 
@@ -168,7 +170,7 @@ declare class Composition extends Association {
 }
 
 declare type ManagedAssociation = Association & {
-  foreignKeys: LinkedDefinitions<type>,
+  foreignKeys: Definitions<type>,
   keys: Column[],
 }
 

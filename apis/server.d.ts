@@ -7,6 +7,7 @@ import { Application, RequestHandler } from 'express'
 import { XOR } from './internal/util'
 
 type _cds = typeof cds
+type cds_services = { [name: string]: Service }
 
 export const connect: {
 
@@ -124,9 +125,6 @@ export type service = {
 	 */
   providers: Service[],
 }
-
-
-type cds_services = { [name: string]: Service }
 
 interface cds_serve_fluent {
   from (model: string | CSN): cds_serve_fluent

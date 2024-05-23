@@ -1,9 +1,17 @@
-import { LinkedCSN } from '../../../../apis/linked';
-import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../apis/linked/classes';
+import { CSN } from '../../../../apis/linked';
+import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../';
 import { _ArrayLike } from '../../../../apis/internal/util';
 import cds from '../../../..';
+import { csn } from '../../../..';
 
-const linkedCsn = undefined as unknown as LinkedCSN
+const linkedCsn = undefined as unknown as CSN
+
+// linked versions exported in facade
+const facadeStruct: struct = undefined as unknown as struct
+facadeStruct.is_struct
+const csnStruct: csn.struct = undefined as unknown as csn.struct
+// @ts-expect-error only present in linked.struct
+csnStruct.is_struct
 
 linkedCsn.exports[0].name
 linkedCsn.exports['foo'].name
@@ -82,9 +90,9 @@ cds.linked.classes.entity === entity
 cds.linked.classes.entity === event
 
 // ...via cds.builtin.classes
-cds.linked.classes.service === cds.builtin.classes.service
+cds.linked.classes.service_ === cds.builtin.classes.service_
 // @ts-expect-error
-cds.linked.classes.service === cds.builtin.classes.Composition
+cds.linked.classes.service_ === cds.builtin.classes.Composition
 
 // ... and also via facade...
 cds.linked.classes.Association === cds.Association
@@ -92,4 +100,4 @@ cds.linked.classes.Association === cds.Association
 cds.linked.classes.Association === cds.linked.classes.event
 
 // but make sure we can still call .linked(CSN)
-const ln: LinkedCSN = cds.linked({})
+const ln: CSN = cds.linked({})

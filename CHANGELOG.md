@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.3.0 - tbd
 
+## Version 0.3.0-beta.1 - 2014-05-23
+
 ### Added
 - Added signatures for `cds.outboxed` and `cds.unboxed`
 - Added signature for `cds.middlewares.add`
 - More `cds.env` properties and types
+- Exposed types related to `cds.linked` through the facade. Types describing unlinked CSN should generally not be needed, but are still available through `cds.csn.…`
 
 ### Changed
 - Improved signatures for `cds.env.folders` and `cds.env.i18n` from `any` to a more descriptive type

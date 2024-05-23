@@ -22,8 +22,8 @@ export type INSERT = { INSERT: {
   into: ref | name,
   entries: data[],
   columns: string[],
-  values: scalar[],
-  rows: scalar[][],
+  values: primitive[],
+  rows: primitive[][],
   as: SELECT,
 }, }
 
@@ -31,8 +31,8 @@ export type UPSERT = { UPSERT: {
   into: ref | name,
   columns: string[],
   entries: data[],
-  values: scalar[],
-  rows: scalar[][],
+  values: primitive[],
+  rows: primitive[][],
 }, }
 
 export type UPDATE = { UPDATE: {
@@ -58,7 +58,7 @@ export type DROP = { DROP: {
 }, }
 
 /** @private */
-type scalar = number | string | boolean | null
+type primitive = number | string | boolean | null
 
 /** @private */
 type data = Record<string, any>
