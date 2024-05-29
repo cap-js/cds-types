@@ -29,7 +29,7 @@ declare const utils: {
   /**
 	 * @see https://cap.cloud.sap/docs/node.js/cds-utils#exists-file
 	 */
-  exist(file: string): boolean,
+  exists(file: string): boolean,
 
   /**
 	 * @see https://cap.cloud.sap/docs/node.js/cds-utils#isdir-file

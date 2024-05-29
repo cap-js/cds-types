@@ -4,7 +4,7 @@ const uuid: string = cds.utils.uuid()
 const decodeURI: string = cds.utils.decodeURI('https://developer.mozilla.org/docs/JavaScript%3A%20a_scripting_language')
 const decodeComponent: string = cds.utils.decodeURIComponent('JavaScript_%D1%88%D0%B5%D0%BB%D0%BB%D1%8B')
 const local: string =cds.utils.local('myFile.json')
-const result: boolean = cds.utils.exist('server.js')
+const result: boolean = cds.utils.exists('server.js')
 const isDir: string = cds.utils.isdir('app')
 const isFile: string = cds.utils.isfile('package.json')
 
