@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## Version 0.3.0 - tbd
+## Version 0.5.0 - TBD
+
+## Version 0.4.0 - 2024-05-23
+This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.
+
 ### Fixed
 - Corrected `exist(…)` to `exists(…)`
 
