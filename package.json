@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.3.0-beta.1",
+  "version": "0.4.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
