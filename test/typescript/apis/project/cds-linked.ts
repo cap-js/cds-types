@@ -3,13 +3,18 @@ import { action, aspect, entity, event, mixin, scalar, struct, type } from '../.
 import { _ArrayLike } from '../../../../apis/internal/util';
 import cds from '../../../..';
 import { csn } from '../../../..';
+import { as } from './dummy';
 
-const linkedCsn = undefined as unknown as CSN
+// is exported from top level
+as<CSN>() === as<cds.CSN>()
+// legacy aliases
+as<CSN>() === as<cds.LinkedCSN>()
+const linkedCsn = as<CSN>()
 
 // linked versions exported in facade
-const facadeStruct: struct = undefined as unknown as struct
+const facadeStruct: struct = as<struct>()
 facadeStruct.is_struct
-const csnStruct: csn.struct = undefined as unknown as csn.struct
+const csnStruct: csn.struct = as<csn.struct>()
 // @ts-expect-error only present in linked.struct
 csnStruct.is_struct
 
@@ -74,7 +79,7 @@ mixin(class {}, class {})
 // @ts-expect-error
 mixin(42)
 
-const arr: _ArrayLike<number> = undefined as unknown as _ArrayLike<number>
+const arr: _ArrayLike<number> = as<_ArrayLike<number>>()
 // @ts-expect-error
 arr.length
 const v: void = arr.forEach(x => x + 1)

@@ -31,4 +31,14 @@ export const home: string
 export const root: string
 
 import { env } from './env'
+import { ModelPart } from './linked'
 export const requires: env.Requires
+
+// deprecated legacy aliases
+import * as linked from './linked'
+/** @deprected use {@link cds.CSN} instead */
+export type LinkedCSN = linked.CSN
+/** @deprected use the member of {@link cds.linked.classes} that is most appropriate for you*/
+export type LinkedDefinition = linked.any_
+/** @deprecated */
+export type LinkedDefinitions = ModelPart<csn.any_>
