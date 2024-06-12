@@ -41,4 +41,4 @@ export type LinkedCSN = linked.CSN
 /** @deprected use the member of {@link cds.linked.classes} that is most appropriate for you*/
 export type LinkedDefinition = linked.any_
 /** @deprecated */
-export type LinkedDefinitions = ModelPart<csn.any_>
+export type LinkedDefinitions = ModelPart<linked.any_>
