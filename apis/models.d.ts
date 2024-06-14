@@ -2,6 +2,7 @@ import { Query as CQN, expr, _xpr } from './cqn'
 import * as ln from './linked'
 import * as LinkedClasses from './linked/classes'
 import * as csn from './csn'
+import { IterableMap } from './internal/util'
 
 type _flavor = 'parsed' | 'xtended' | 'inferred'
 type _odata_options = {
@@ -33,7 +34,7 @@ type filename = string
  * including required services.
  * Should only be ever set explictly in test scenarios!
  */
-export let model: ln.CSN | undefined
+export let model: ln.LinkedCSN | undefined
 
 /**
  * Provides a set of methods to parse a given model, query or expression.
@@ -81,20 +82,30 @@ export const linked: {
    * Turns the given plain CSN model into a linked model
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
    */
-  (model: csn.CSN): ln.CSN,
+  (model: csn.CSN): ln.LinkedCSN,
 
   /**
    * Base classes of linked definitions from reflected models.
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-builtin-classes)
    */
   classes: typeof LinkedClasses,
+
+  /**
+   * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#linked-csn)
+   */
+  LinkedCSN: ln.LinkedCSN,
+
+  /**
+   * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
+   */
+  LinkedDefinitions: IterableMap<ln.any_>,
 }
 
 /**
  * Turns the given plain CSN model into a reflected model
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
  */
-export function reflect (model: csn.CSN): ln.CSN
+export function reflect (model: csn.CSN): ln.LinkedCSN
 
 /**
 * Provides a set of methods to parse a given model, query or expression.

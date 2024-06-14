@@ -13,7 +13,7 @@ type Key = number | string | any
 
 export class QueryAPI {
 
-  entities: linked.CSN['entities']
+  entities: linked.LinkedCSN['entities']
 
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
@@ -128,7 +128,7 @@ export class Service extends QueryAPI {
    * The model from which the service's definition was loaded
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  model: linked.CSN
+  model: linked.LinkedCSN
 
   /**
    * Provides access to the entities exposed by a service

@@ -88,4 +88,4 @@ export interface LinkedCSN extends Omit<csn.CSN, 'definitions'> {
 
 }
 
-export * from './linked/classes'
+export * as classes from './linked/classes'

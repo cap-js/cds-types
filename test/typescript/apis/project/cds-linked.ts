@@ -1,18 +1,23 @@
-import { CSN } from '../../../../apis/linked';
-import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../';
+import { LinkedCSN } from '../../../../apis/linked';
+//import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../';
 import { _ArrayLike } from '../../../../apis/internal/util';
 import cds from '../../../..';
 import { csn } from '../../../..';
 import { as } from './dummy';
 
+
+const { action, aspect, entity, event, mixin, scalar, struct, type } = cds.linked.classes
+
 // is exported from top level
-as<CSN>() === as<cds.CSN>()
-// legacy aliases
-as<CSN>() === as<cds.LinkedCSN>()
-const linkedCsn = as<CSN>()
+as<LinkedCSN>() === as<typeof cds.linked.LinkedCSN>()
+// @ts-expect-error not exported from top level
+as<LinkedCSN>() === as<typeof cds.LinkedCSN>()
+
+// working as callable
+const linkedCsn: typeof cds.linked.LinkedCSN = cds.linked(as<csn.CSN>())
 
 // linked versions exported in facade
-const facadeStruct: struct = as<struct>()
+const facadeStruct = new cds.linked.classes.struct()
 facadeStruct.is_struct
 const csnStruct: csn.struct = as<csn.struct>()
 // @ts-expect-error only present in linked.struct
@@ -23,11 +28,11 @@ linkedCsn.exports['foo'].name
 // @ts-expect-error only for entities and services
 linkedCsn.exports('foo').bar
 linkedCsn.exports.map(e => e.kind)
-linkedCsn.entities('foo').bar
-const es: entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
+linkedCsn.entities('foo')
+const es: typeof cds.linked.classes.entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
 // @ts-expect-error
 const ts: type[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
-const one: entity | undefined = linkedCsn.find(x => Boolean(x.name), linkedCsn.entities)
+const one: typeof entity | undefined = linkedCsn.find(x => Boolean(x.name), linkedCsn.entities)
 for (const each of linkedCsn.each(e => true, linkedCsn.entities)) each.keys
 
 new entity().kind === 'entity'
@@ -105,4 +110,4 @@ cds.linked.classes.Association === cds.Association
 cds.linked.classes.Association === cds.linked.classes.event
 
 // but make sure we can still call .linked(CSN)
-const ln: CSN = cds.linked({})
+const ln: LinkedCSN = cds.linked({})
