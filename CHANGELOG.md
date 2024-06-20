@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.5.0 - TBD
+### Fixed
+- Linekd definitions are now available via `cds.linked`, especially `cds.linked.LinkedCSN` and `cds.linked.classes` with its relevant type definitions 
 
 ## Version 0.4.0 - 2024-05-23
 This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.
