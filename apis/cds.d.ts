@@ -7,8 +7,6 @@ export * from './events'
 export * from './utils'
 export * from './cqn'
 export * from './global'
-// FIXME: cant export this anymore, as it clashes with model.linked
-//export * as linked from './linked'
 export { log, debug } from './log'
 export { test } from './test'
 
@@ -32,5 +30,4 @@ export const home: string
 export const root: string
 
 import { env } from './env'
-import { ModelPart } from './linked'
 export const requires: env.Requires
