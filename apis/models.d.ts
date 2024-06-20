@@ -106,54 +106,92 @@ export const linked: {
 // const x: cds.linked.classes.struct = new cds.linked.classes.struct()
 //                    ^                            ^
 //        from the namespace             from the above const
-// Anything that is changed in the above const has to be reflected in the following namespace.
+// !! Anything that is changed in the above const has to be reflected in the following namespace. !!
+// To add insult to injury, the rollup utility get confused by this hack, as it removes all module aliases first and
+// thinks something like linked.classes.type = linked.classes.type is a circular reference.
+// The same happens when we just alias the types during imports (import { type as _type } from './linked/classes')
+// So we have to break this up by explicitly aliasing each linked type locally here (which will also be exported, sadly)
+// We can not mark them as internal with an annotation either, as those annotations would then be visible on cds.linked.classes
+
+type __type = LinkedClasses.type
+type __aspect = LinkedClasses.aspect
+type __any_ = LinkedClasses.any_
+type __scalar = LinkedClasses.scalar
+type __Boolean = LinkedClasses.Boolean
+type __UUID = LinkedClasses.UUID
+type __String = LinkedClasses.String
+type __LargeString = LinkedClasses.LargeString
+type __Binary = LinkedClasses.Binary
+type __LargeBinary = LinkedClasses.LargeBinary
+type __Vector = LinkedClasses.Vector
+type __Integer = LinkedClasses.Integer
+type __UInt8 = LinkedClasses.UInt8
+type __Int16 = LinkedClasses.Int16
+type __Int32 = LinkedClasses.Int32
+type __Int64 = LinkedClasses.Int64
+type __Float = LinkedClasses.Float
+type __Double = LinkedClasses.Double
+type __Decimal = LinkedClasses.Decimal
+type __date = LinkedClasses.date
+type __Date = LinkedClasses.Date
+type __Time = LinkedClasses.Time
+type __DateTime = LinkedClasses.DateTime
+type __TimeStamp = LinkedClasses.TimeStamp
+type __array = LinkedClasses.array
+type __struct = LinkedClasses.struct
+type __context_ = LinkedClasses.context_
+type __service = LinkedClasses.service_
+type __entity = LinkedClasses.entity
+type __Association = LinkedClasses.Association
+type __Composition = LinkedClasses.Composition
+
 export namespace linked {
   export type LinkedDefinitions = IterableMap<ln.classes.any_>
   export type LinkedCSN = ln.LinkedCSN
 
   export namespace classes {
-    export type type = LinkedClasses.type
-    export type aspect = LinkedClasses.aspect
+    export type type = __type
+    export type aspect = __aspect
 
-    export type any_ = LinkedClasses.any_
+    export type any_ = __any_
 
-    export type scalar = LinkedClasses.scalar
+    export type scalar = __scalar
     // can not shadow builtins. Same for string and number...
     //export type boolean = LinkedClasses.Boolean  // on purpose
-    export type Boolean = LinkedClasses.Boolean
+    export type Boolean = __Boolean
 
-    export type UUID = LinkedClasses.UUID
+    export type UUID = __UUID
     //export type string = LinkedClasses.String  // on purpose
-    export type String = LinkedClasses.String
-    export type LargeString = LinkedClasses.LargeString
-    export type Binary = LinkedClasses.Binary
-    export type LargeBinary = LinkedClasses.Binary
-    export type Vector = LinkedClasses.Vector
+    export type String = __String
+    export type LargeString = __LargeString
+    export type Binary = __Binary
+    export type LargeBinary = __LargeBinary
+    export type Vector = __Vector
 
     //export type number = LinkedClasses.scalar  // currently no better way to do this
-    export type Integer = LinkedClasses.Integer
-    export type UInt8 = LinkedClasses.UInt8
-    export type Int16 = LinkedClasses.Int16
-    export type Int32 = LinkedClasses.Int32
-    export type Int64 = LinkedClasses.Int64
-    export type Float = LinkedClasses.Float
-    export type Double = LinkedClasses.Double
-    export type Decimal = LinkedClasses.Decimal
+    export type Integer = __Integer
+    export type UInt8 = __UInt8
+    export type Int16 = __Int16
+    export type Int32 = __Int32
+    export type Int64 = __Int64
+    export type Float = __Float
+    export type Double = __Double
+    export type Decimal = __Decimal
 
-    export type date = LinkedClasses.date
-    export type Date = LinkedClasses.Date
-    export type Time = LinkedClasses.Time
-    export type DateTime = LinkedClasses.DateTime
-    export type TimeStamp = LinkedClasses.TimeStamp
+    export type date = __date
+    export type Date = __Date
+    export type Time = __Time
+    export type DateTime = __DateTime
+    export type TimeStamp = __TimeStamp
 
-    export type array = LinkedClasses.array
+    export type array = __array
 
-    export type struct = LinkedClasses.struct
-    export type context_ = LinkedClasses.context_
-    export type service = LinkedClasses.service_
-    export type entity = LinkedClasses.entity
-    export type Association = LinkedClasses.Association
-    export type Composition = LinkedClasses.Composition
+    export type struct = __struct
+    export type context_ = __context_
+    export type service = __service
+    export type entity = __entity
+    export type Association = __Association
+    export type Composition = __Composition
   }
 }
 
