@@ -23,7 +23,7 @@ type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T>
 /**
  * Target for any QL operation
  */
-type Target = linked.entity | Definition | string
+type Target = linked.classes.entity | Definition | string
 
 /**
  * QLExtensions are properties that are attached to entities in CQL contexts.

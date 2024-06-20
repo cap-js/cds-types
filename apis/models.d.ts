@@ -98,7 +98,7 @@ export const linked: {
   /**
    * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
    */
-  LinkedDefinitions: IterableMap<ln.any_>,
+  LinkedDefinitions: IterableMap<ln.classes.any_>,
 }
 
 // as linked is both a namespace and a function, we need to explicitly provide
@@ -108,7 +108,7 @@ export const linked: {
 //        from the namespace             from the above const
 // Anything that is changed in the above const has to be reflected in the following namespace.
 export namespace linked {
-  export type LinkedDefinitions = IterableMap<ln.any_>
+  export type LinkedDefinitions = IterableMap<ln.classes.any_>
   export type LinkedCSN = ln.LinkedCSN
 
   export namespace classes {
