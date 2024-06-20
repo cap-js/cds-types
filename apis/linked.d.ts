@@ -88,4 +88,5 @@ export interface LinkedCSN extends Omit<csn.CSN, 'definitions'> {
 
 }
 
+// for any changes, see models.d.ts linked!
 export * as classes from './linked/classes'

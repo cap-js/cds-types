@@ -101,6 +101,61 @@ export const linked: {
   LinkedDefinitions: IterableMap<ln.any_>,
 }
 
+// as linked is both a namespace and a function, we need to explicitly provide
+// a nested namespace for the classes to be usable as types.
+// const x: cds.linked.classes.struct = new cds.linked.classes.struct()
+//                    ^                            ^
+//        from the namespace             from the above const
+// Anything that is changed in the above const has to be reflected in the following namespace.
+export namespace linked {
+  export type LinkedDefinitions = IterableMap<ln.any_>
+  export type LinkedCSN = ln.LinkedCSN
+
+  export namespace classes {
+    export type type = LinkedClasses.type
+    export type aspect = LinkedClasses.aspect
+
+    export type any_ = LinkedClasses.any_
+
+    export type scalar = LinkedClasses.scalar
+    export type boolean = LinkedClasses.Boolean  // on purpose
+    export type Boolean = LinkedClasses.Boolean
+
+    export type UUID = LinkedClasses.UUID
+    export type string = LinkedClasses.String  // on purpose
+    export type String = LinkedClasses.String
+    export type LargeString = LinkedClasses.LargeString
+    export type Binary = LinkedClasses.Binary
+    export type LargeBinary = LinkedClasses.Binary
+    export type Vector = LinkedClasses.Vector
+
+    export type number = LinkedClasses.scalar  // currently no better way to do this
+    export type Integer = LinkedClasses.Integer
+    export type UInt8 = LinkedClasses.UInt8
+    export type Int16 = LinkedClasses.Int16
+    export type Int32 = LinkedClasses.Int32
+    export type Int64 = LinkedClasses.Int64
+    export type Float = LinkedClasses.Float
+    export type Double = LinkedClasses.Double
+    export type Decimal = LinkedClasses.Decimal
+
+    export type date = LinkedClasses.date
+    export type Date = LinkedClasses.Date
+    export type Time = LinkedClasses.Time
+    export type DateTime = LinkedClasses.DateTime
+    export type TimeStamp = LinkedClasses.TimeStamp
+
+    export type array = LinkedClasses.array
+
+    export type struct = LinkedClasses.struct
+    export type context_ = LinkedClasses.context_
+    export type service = LinkedClasses.service_
+    export type entity = LinkedClasses.entity
+    export type Association = LinkedClasses.Association
+    export type Composition = LinkedClasses.Composition
+  }
+}
+
 /**
  * Turns the given plain CSN model into a reflected model
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
