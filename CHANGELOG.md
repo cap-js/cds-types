@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.6.0 - TBD
 
 ## Version 0.5.0 - 2024-06-20
+This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.
+
 ### Fixed
 - Linked definitions are now available via `cds.linked`, especially `cds.linked.LinkedCSN` and `cds.linked.classes` with its relevant type definitions 
 
