@@ -134,25 +134,25 @@ export class Service extends QueryAPI {
    * Provides access to the entities exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  entities: linked.ModelPart<linked.entity>
+  entities: linked.ModelPart<linked.classes.entity>
 
   /**
    * Provides access to the events declared by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  events: linked.ModelPart<linked.event>
+  events: linked.ModelPart<linked.classes.event>
 
   /**
    * Provides access to the types exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  types: linked.ModelPart<linked.type>
+  types: linked.ModelPart<linked.classes.type>
 
   /**
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
-  operations: linked.ModelPart<linked.action>
+  operations: linked.ModelPart<linked.classes.action>
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -400,7 +400,7 @@ declare namespace types {
     | 'NEW' | 'EDIT' | 'PATCH' | 'SAVE'
     | 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
     | 'COMMIT' | 'ROLLBACK'
-  type target = string | linked.Definition | linked.entity | (string | linked.Definition | linked.entity)[] | ArrayConstructable
+  type target = string | linked.Definition | linked.classes.entity | (string | linked.Definition | linked.classes.entity)[] | ArrayConstructable
 }
 
 type SpawnOptions = {
