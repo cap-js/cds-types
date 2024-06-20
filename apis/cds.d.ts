@@ -7,7 +7,6 @@ export * from './events'
 export * from './utils'
 export * from './cqn'
 export * from './global'
-export * from './linked'
 export { log, debug } from './log'
 export { test } from './test'
 

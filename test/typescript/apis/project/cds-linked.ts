@@ -1,15 +1,29 @@
-import { CSN } from '../../../../apis/linked';
-import { action, aspect, entity, event, mixin, scalar, struct, type } from '../../../../';
+import { LinkedCSN } from '../../../../apis/linked';
 import { _ArrayLike } from '../../../../apis/internal/util';
 import cds from '../../../..';
 import { csn } from '../../../..';
+import { as } from './dummy';
 
-const linkedCsn = undefined as unknown as CSN
+const { action, aspect, entity, event, mixin, scalar, struct, type } = cds.linked.classes
+
+// is exported from top level
+as<LinkedCSN>() === as<cds.linked.LinkedCSN>()
+// @ts-expect-error not exported from top level
+as<LinkedCSN>() === as<cds.LinkedCSN>()
+
+// LinkedDefinitions available from cds.linked
+const linkedDefs: cds.linked.LinkedDefinitions = as<cds.linked.LinkedDefinitions>()
+
+// working as callable
+const linkedCsn: cds.linked.LinkedCSN = cds.linked(as<csn.CSN>())
 
 // linked versions exported in facade
-const facadeStruct: struct = undefined as unknown as struct
+const facadeStruct: cds.linked.classes.struct = new cds.linked.classes.struct()
 facadeStruct.is_struct
-const csnStruct: csn.struct = undefined as unknown as csn.struct
+// deconstructed works (only on value level though)
+const facadeStruct2: cds.linked.classes.struct = new struct()
+facadeStruct2.is_struct
+const csnStruct: csn.struct = as<csn.struct>()
 // @ts-expect-error only present in linked.struct
 csnStruct.is_struct
 
@@ -18,11 +32,11 @@ linkedCsn.exports['foo'].name
 // @ts-expect-error only for entities and services
 linkedCsn.exports('foo').bar
 linkedCsn.exports.map(e => e.kind)
-linkedCsn.entities('foo').bar
-const es: entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
+linkedCsn.entities('foo')
+const es: cds.linked.classes.entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
 // @ts-expect-error
 const ts: type[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
-const one: entity | undefined = linkedCsn.find(x => Boolean(x.name), linkedCsn.entities)
+const one: cds.linked.classes.entity | undefined = linkedCsn.find(x => Boolean(x.name), linkedCsn.entities)
 for (const each of linkedCsn.each(e => true, linkedCsn.entities)) each.keys
 
 new entity().kind === 'entity'
@@ -74,7 +88,7 @@ mixin(class {}, class {})
 // @ts-expect-error
 mixin(42)
 
-const arr: _ArrayLike<number> = undefined as unknown as _ArrayLike<number>
+const arr: _ArrayLike<number> = as<_ArrayLike<number>>()
 // @ts-expect-error
 arr.length
 const v: void = arr.forEach(x => x + 1)
@@ -100,4 +114,4 @@ cds.linked.classes.Association === cds.Association
 cds.linked.classes.Association === cds.linked.classes.event
 
 // but make sure we can still call .linked(CSN)
-const ln: CSN = cds.linked({})
+const ln: LinkedCSN = cds.linked({})

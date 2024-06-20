@@ -25,3 +25,6 @@ export type Action = {
 // useful for tricking the type system into accepting uninitialised properties
 // from classes (e.g. Foo.x) in definitely attached parameters.
 export const attach = <T>(x?: T): T => x as T
+
+// wrapper to get rid of all the "undefined as unknown as Foo"
+export const as = <T>() => undefined as unknown as T

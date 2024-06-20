@@ -8,7 +8,7 @@ type Filter = string | (<T extends any_ = any_>(def: T) => boolean)
 
 export type Definition = any_
 
-export interface CSN extends Omit<csn.CSN, 'definitions'> {
+export interface LinkedCSN extends Omit<csn.CSN, 'definitions'> {
 
   /**
 	 * Fetches definitions matching the given filter, returning an iterator on them.
@@ -88,4 +88,6 @@ export interface CSN extends Omit<csn.CSN, 'definitions'> {
 
 }
 
-export * from './linked/classes'
+// for any changes, see models.d.ts linked!
+import * as classes from './linked/classes'
+export { classes }
