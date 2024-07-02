@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.6.0 - TBD
+### Changed
+- Wrapped all types into an augmented module declaration for `@sap/cds`.
 
 ## Version 0.5.0 - 2024-06-20
 This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.

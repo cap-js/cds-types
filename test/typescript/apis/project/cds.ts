@@ -1,4 +1,4 @@
-import cds from '../../../../';
+import cds from '@sap/cds';
 
 cds.version === '1.2.3'
 cds.home === 'path/to/cds'

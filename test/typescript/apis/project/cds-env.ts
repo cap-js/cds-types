@@ -1,4 +1,4 @@
-import { env } from '../../../..'
+import { env } from '@sap/cds'
 
 env.folders.db = ''
 env.folders.srv = ''
