@@ -81,7 +81,7 @@ function replaceImports (src) {
 
   // put all exports into an augmented module declaration. Remove all "declare" modifiers
   // as they will now already be in an ambient context
-  //rollup = rollup.replaceAll('declare ','')
+  rollup = rollup.replaceAll('declare ','')
   rollup = `declare module '@sap/cds' {\n${rollup}\n}`
 
   await writeFile(rollupFile, rollup)
