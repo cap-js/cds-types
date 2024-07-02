@@ -6,19 +6,22 @@ const { readFile, writeFile } = require('fs/promises')
 
 /** @param {string} src */
 function _getImports (src) {
-  const named = src.matchAll(/import \* as (.*) from '(.*)'/g) ?? []
-  const destructured = src.matchAll(/import { (.*) } from '(.*)'/g) ?? []
-
-  return {
-    named: [...named].map(([,alias, package]) => ({
-      alias,
-      package
-    })),
-    destructured: [...destructured].map(([, props, package]) => ({
-      package,
-      properties: props.split(', ').map(p => p.trim())
-    }))
+  const named = []
+  const destructured = []
+  for (const [, what, from] of [...src.matchAll(/import (?:\* as )?(.*) from '(.*)'/g)]) {
+    if (what.includes('{')) {
+      destructured.push({
+        package: from.trim(),
+        properties: what.replace('{','').replace('}','').split(',').map(p => p.trim())
+      })
+    } else {
+      named.push({
+        package: from,
+        alias: what.trim()
+      })
+    }
   }
+  return { named, destructured }
 }
 
 /**
@@ -30,35 +33,43 @@ function _getImports (src) {
  * @param {string} src 
  */
 function replaceImports (src) {
-  const re = id => new RegExp(`\\b${id}\\b(?!\\?)`, 'g')  // match whole word, but not if it's a type assertion (x?: T)
+  const re = id => new RegExp(`\\b${id}\\b(?!\\?|:)`, 'g')  // match whole word, but not if it's a type assertion (x?: T)
   const { named, destructured } = _getImports(src)
+
+  function replace (l, what, wth) {
+    if (l.match(/\s*\*/)) return l // ignore comments
+    const [head, ...tail] = l.split(':')
+    if (!tail.length) return l  // ignore lines not containing type-stuff
+    return [head, tail.map(p => p.replaceAll(what, wth))]
+      .flat()
+      .join(':')
+  }
 
   // remove module imports
   src = src.replaceAll(/^\s*import .* from '.*'.*$/gm, '')
 
-  // split to be able to leave out comments
+  // split to be able to skip comments
   let lines = src.split('\n')
 
-  // import * as foo from 'foo'; x: foo.bar
+  // import * as foo from 'foo'; const x: foo.bar
   // v
   // x: import('foo').bar
   for (const { alias, package } of named) {
-    lines = lines.map(l => l.match(/\s*\*/) ? l : l.replaceAll(re(alias), `import('${package}')`))
+    lines = lines.map(l => replace(l, re(alias), `import('${package}')`))
   }
 
-  // import { bar } from 'foo'; x: bar
+  // import { bar } from 'foo'; const x: bar
   // v
   // x: import('foo').bar
   for (const { package, properties } of destructured) {
     for (const prop of properties) {
-      lines = lines.map(l => l.match(/\s*\*/) ? l : l.replaceAll(re(prop), `import('${package}').${prop}`))
+      lines = lines.map(l => replace(l, re(prop), `import('${package}').${prop}`))
     }
   }
   return lines.join('\n')
 }
 
 ;(async () => {
-
   const rollupFile = './dist/cds-types.d.ts'
   let rollup = (await readFile(rollupFile)).toString()
 
