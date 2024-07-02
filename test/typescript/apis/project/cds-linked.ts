@@ -1,6 +1,6 @@
 import { LinkedCSN } from '../../../../apis/linked';
 import { _ArrayLike } from '../../../../apis/internal/util';
-import cds from '../../../..';
+import cds from '@sap/cds';
 import { csn } from '../../../..';
 import { as } from './dummy';
 

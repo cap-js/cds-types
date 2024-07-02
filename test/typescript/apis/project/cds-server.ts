@@ -1,4 +1,4 @@
-import cds from '../../../..'
+import cds from '@sap/cds'
 import express from 'express'
 
 const h = undefined as unknown as express.RequestHandler
