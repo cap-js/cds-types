@@ -33,7 +33,7 @@ function _getImports (src) {
  * @param {string} src 
  */
 function replaceImports (src) {
-  const re = id => new RegExp(`\\b${id}\\b(?!\\?|:)`, 'g')  // match whole word, but not if it's a type assertion (x?: T)
+  const re = id => new RegExp(`\\b${id}\\b(?!\\?|:)`, 'g')  // match whole word, but only if it's a type assertion (x?: T)
   const { named, destructured } = _getImports(src)
 
   function replace (l, what, wth) {
