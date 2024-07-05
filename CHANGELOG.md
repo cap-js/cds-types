@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## Version 0.6.0 - TBD
+## Version 0.6.0 - 2024-07-05
+This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.
 ### Changed
 - Wrapped all types into an augmented module declaration for `@sap/cds`.
+- Added a postinstall script to symlink `@cap-js/cds-types` to `@types/sap__cds` to benefit from the default type resolution mechanism employed by Definitely Typed.
 
 ## Version 0.5.0 - 2024-06-20
 This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.
