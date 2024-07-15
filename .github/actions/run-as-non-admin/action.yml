@@ -8,6 +8,7 @@ inputs:
   args:
     description: Arguments to pass to the command
     required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -25,7 +26,6 @@ runs:
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $username = -join ((65..90) + (97..122) | Get-Random -Count 12 | % {[char]$_})
-        echo "::notice ::Username: $username"
 
         $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
         New-LocalUser $username -Password $password
