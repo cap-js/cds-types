@@ -48,7 +48,7 @@ jobs:
         $scriptBlock = {
           $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
           $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-          echo "elevated: $isElevated"
+          echo "elevated: $env:isElevated"
           npm run test > stdout.txt 2>stderr.txt
         }
         $encodedScriptBlock = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlock))
