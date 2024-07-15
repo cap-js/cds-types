@@ -19,7 +19,6 @@ describe('postinstall', () => {
 
     test('create symlink correctly', async () => {
         const projectRoot = path.join(__dirname, '..')
-        cp.execSync('npm init -y', { cwd: tempFolder })
         cp.execSync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
 
         const typesPackageJsonFile = path.join(tempFolder, 'node_modules/@types/sap__cds/package.json')
