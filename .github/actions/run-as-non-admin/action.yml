@@ -11,10 +11,10 @@ inputs:
     default: ''
 
 runs:
-  using: 'composite'
+  using: composite
 
   steps:
-    - name: Set env
+    - name: Prepare env and run cmd as non-admin user
       shell: powershell
       env:
         OS: ${{ runner.os }}
