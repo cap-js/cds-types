@@ -48,11 +48,6 @@ jobs:
         $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
         echo $isElevated
 
-        runas /user:nonadmin "npm run test > output.txt 2> error.txt"
-        Get-Content "output.txt"
-        Get-Content "error.txt"
-        echo 5
-
     - name: Run Unit Tests
       if: matrix.os != 'windows-latest'
       run: |
@@ -61,3 +56,8 @@ jobs:
     - run: |
         npm run rollup && npm run rollup:on
         npm run test
+
+      #         runas /user:nonadmin "npm run test > output.txt 2> error.txt"
+      # Get-Content "output.txt"
+      # Get-Content "error.txt"
+      # echo 5
