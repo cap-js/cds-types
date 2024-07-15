@@ -15,6 +15,7 @@ runs:
   steps:
     - name: Set env
       env:
+        OS: ${{ runner.os }}
         CMD: ${{ inputs.cmd }}
         ARGS: ${{ inputs.args }}
       shell: pwsh
