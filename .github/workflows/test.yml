@@ -7,16 +7,12 @@ on:
     branches: [main]
   workflow_dispatch:
 
-    # os: [ubuntu-latest, windows-latest, macos-latest]
-    # version: [20, 18]
-
 jobs:
   test:
     strategy:
       matrix:
-        version: [18]
-        os: [windows-latest]
-    runs-on: ${{ matrix.os }}
+        version: [20, 18]
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -24,46 +20,13 @@ jobs:
       with:
         node-version: ${{ matrix.version }}
 
-    - run: |
+    - name: Run Unit Tests
+      run: |
         npm ci
         npm install file:. --no-save --force
-
-    - run: |
         npm run prerelease:ci-fix
         npm run rollup:off
-
-    - name: Create non-admin user
-      if: matrix.os == 'windows-latest'
-      shell: pwsh
-      run: |
-        icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
-
-        $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
-        New-LocalUser "nonadmin" -Password $password
-        Add-LocalGroupMember -Group "Users" -Member "nonadmin"
-        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
-        $process = Start-Process -FilePath "npm" -ArgumentList "run test" -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
-        Get-Content output.txt
-        Get-Content error.txt
-
-        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
-
-    - name: Run Unit Tests
-      if: matrix.os != 'windows-latest'
-      run: |
         npm run test
 
-    - run: |
-        npm run rollup
-        npm run rollup:on
-
-    - if: matrix.os == 'windows-latest'
-      uses: ./.github/actions/run-as-non-admin
-      with:
-        cmd: npm
-        args: run test
-
-    - name: Run Unit Tests
-      if: matrix.os != 'windows-latest'
-      run: |
+        npm run rollup && npm run rollup:on
         npm run test
