@@ -1,0 +1,32 @@
+name: run-as-non-admin
+description: Run script without admin user privileges in windows runner
+
+inputs:
+  cmd:
+    description: Command to run, e.g. npm
+    required: true
+  args:
+    description: Arguments to pass to the command
+    required: false
+
+runs:
+  using: 'composite'
+
+  steps:
+    - name: Set env
+      env:
+        CMD: ${{ inputs.cmd }}
+        ARGS: ${{ inputs.args }}
+      shell: pwsh
+      run: |
+        icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
+
+        $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
+        New-LocalUser "nonadmin" -Password $password
+        Add-LocalGroupMember -Group "Users" -Member "nonadmin"
+        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
+        $process = Start-Process -FilePath $env:CMD -ArgumentList $env:ARGS -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+        Get-Content output.txt
+        Get-Content error.txt
+
+        if ($process.ExitCode -ne 0) { exit $process.ExitCode }

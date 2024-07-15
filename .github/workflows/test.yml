@@ -54,13 +54,9 @@ jobs:
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
-        echo 1
         New-LocalUser "nonadmin" -Password $password
-        echo 2
         Add-LocalGroupMember -Group "Users" -Member "nonadmin"
-        echo 3
         $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
-        echo 4
         $process = Start-Process -FilePath "npm" -ArgumentList "run test" -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
         Get-Content output.txt
         Get-Content error.txt
@@ -74,9 +70,14 @@ jobs:
 
     - run: |
         npm run rollup && npm run rollup:on
-        npm run test
 
-      #         runas /user:nonadmin "npm run test > output.txt 2> error.txt"
-      # Get-Content "output.txt"
-      # Get-Content "error.txt"
-      # echo 5
+    - if: matrix.os == 'windows-latest'
+      uses: ./.github/actions/run-as-non-admin
+      with:
+        cmd: npm
+        args: run test
+
+    - name: Run Unit Tests
+      if: matrix.os != 'windows-latest'
+      run: |
+        npm run test
