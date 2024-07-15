@@ -48,7 +48,7 @@ jobs:
         $scriptBlock = {
           $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
           $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-          echo $isElevated
+          echo "elevated" $isElevated
         }
         $encodedScriptBlock = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlock))
         Start-Process powershell.exe -ArgumentList "-NoProfile -EncodedCommand $encodedScriptBlock" -Credential $credential -Wait -NoNewWindow
