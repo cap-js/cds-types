@@ -21,13 +21,18 @@ jobs:
       with:
         node-version: ${{ matrix.version }}
 
-    - name: Run Unit Tests
-      run: |
+    - run: |
         npm ci
         npm install file:. --no-save --force
+
+    - run: |
         npm run prerelease:ci-fix
         npm run rollup:off
+
+    - name: Run Unit Tests
+      run: |
         npm run test
 
+    - run: |
         npm run rollup && npm run rollup:on
         npm run test
