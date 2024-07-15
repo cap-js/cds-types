@@ -44,6 +44,10 @@ jobs:
         echo 3
         $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
         echo 4
+        $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+        $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        echo $isElevated
+
         runas /user:nonadmin "npm run test > output.txt 2> error.txt"
         Get-Content "output.txt"
         Get-Content "error.txt"
