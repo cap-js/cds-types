@@ -32,6 +32,16 @@ jobs:
     # Add a conditional step for creating a non-admin user on Windows
     # runas /user:nonadmin "npm run test"
     # $process = Start-Process -FilePath "npm" -ArgumentList "run test" -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+
+    # $scriptBlock = {
+    #   $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    #   $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    #   echo "elevated: $isElevated"
+    #   npm run test > stdout.txt 2>stderr.txt
+    # }
+    # $encodedScriptBlock = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlock))
+    # Start-Process powershell.exe -ArgumentList "-NoProfile -EncodedCommand $encodedScriptBlock" -Credential $credential -Wait -NoNewWindow
+
     - name: Create non-admin user
       if: matrix.os == 'windows-latest'
       shell: pwsh
@@ -44,15 +54,7 @@ jobs:
         echo 3
         $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
         echo 4
-
-        $scriptBlock = {
-          $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-          $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-          echo "elevated: $isElevated"
-          npm run test > stdout.txt 2>stderr.txt
-        }
-        $encodedScriptBlock = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlock))
-        Start-Process powershell.exe -ArgumentList "-NoProfile -EncodedCommand $encodedScriptBlock" -Credential $credential -Wait -NoNewWindow
+        Start-Process -FilePath "npm" -ArgumentList "run test > stdout.txt 2>stderr.txt" -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
 
         Get-Content stdout.txt
         Get-Content stderr.txt
