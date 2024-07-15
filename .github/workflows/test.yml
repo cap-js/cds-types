@@ -60,10 +60,10 @@ jobs:
         $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
         echo 4
         $process = Start-Process -FilePath "npm" -ArgumentList "run test" -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
-        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
-
         Get-Content output.txt
         Get-Content error.txt
+
+        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
     - name: Run Unit Tests
       if: matrix.os != 'windows-latest'
