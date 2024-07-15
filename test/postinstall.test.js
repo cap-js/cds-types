@@ -23,7 +23,7 @@ describe('postinstall', () => {
         cp.execSync('npm init -y', { cwd: tempFolder })
         cp.execSync(`npm i ${projectRoot} `, { cwd: tempFolder })
 
-        const types = path.join(tempFolder, 'node_modules/@types/xsap__cds/package.json')
+        const types = path.join(tempFolder, 'node_modules/@types/sap__cds/package.json')
         const packageJson = await fs.readFile(types, 'utf8')
         const packageJsonObj = JSON.parse(packageJson)
         expect(packageJsonObj.name).toBe('@cap-js/cds-types')
