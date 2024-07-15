@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         version: [18, 20]
-        os: [windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -33,7 +33,7 @@ jobs:
     - run: |
         npm ci
 
-    - name: Create non-admin user
+    - name: Run integration test with non-admin user on windows
       if: matrix.os == 'windows-latest'
       shell: pwsh
       run: |
@@ -49,7 +49,7 @@ jobs:
 
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
-    - name: Run Unit Tests
+    - name: Run integration tests
       if: matrix.os != 'windows-latest'
       run: |
         npm run test:integration
