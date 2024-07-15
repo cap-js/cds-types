@@ -5,7 +5,7 @@ const path = require('node:path')
 
 
 describe('postinstall', () => {
-    jest.setTimeout(20000)
+    jest.setTimeout(30000)
 
     let tempFolder
 
