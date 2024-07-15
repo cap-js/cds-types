@@ -8,24 +8,33 @@ inputs:
   args:
     description: Arguments to pass to the command
     required: false
+  user:
+    description: User to run the command as
+    required: false
+    default: nonadmin
 
 runs:
   using: 'composite'
 
   steps:
+    - if: ${{ runner.os != 'windows' }}
+      shell: pwsh
+      run: |
+        exit 1
+
     - name: Set env
+      shell: pwsh
       env:
-        OS: ${{ runner.os }}
         CMD: ${{ inputs.cmd }}
         ARGS: ${{ inputs.args }}
-      shell: pwsh
+        NO_ADMIN_USER: ${{ inputs.user }}
       run: |
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
-        New-LocalUser "nonadmin" -Password $password
-        Add-LocalGroupMember -Group "Users" -Member "nonadmin"
-        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
+        New-LocalUser $env:NO_ADMIN_USER -Password $password
+        Add-LocalGroupMember -Group "Users" -Member $env:NO_ADMIN_USER
+        $credential = New-Object System.Management.Automation.PSCredential ($env:NO_ADMIN_USER, $password)
         $process = Start-Process -FilePath $env:CMD -ArgumentList $env:ARGS -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
         Get-Content output.txt
         Get-Content error.txt
