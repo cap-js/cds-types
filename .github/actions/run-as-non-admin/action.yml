@@ -15,7 +15,7 @@ runs:
 
   steps:
     - name: Set env
-      shell: powershel
+      shell: powershell
       env:
         OS: ${{ runner.os }}
         CMD: ${{ inputs.cmd }}
