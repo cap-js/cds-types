@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires*/
 /* eslint-disable no-undef */
 const fs = require('node:fs')
-const { platform } = require('node:os')
+// const { platform } = require('node:os')
 const { join } = require('node:path')
 
 if (!process.env.INIT_CWD) return
