@@ -44,8 +44,6 @@ jobs:
         echo 3
         $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
         echo 4
-        Start-Process -FilePath "npm" -ArgumentList "run test" -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
-
 
         $scriptBlock = {
           $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
