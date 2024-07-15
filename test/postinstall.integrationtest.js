@@ -18,14 +18,13 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
-
         const projectRoot = path.join(__dirname, '..')
         cp.execSync('npm init -y', { cwd: tempFolder })
-        cp.execSync(`npm i ${projectRoot} `, { cwd: tempFolder })
+        cp.execSync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
 
-        const types = path.join(tempFolder, 'node_modules/@types/sap__cds/package.json')
-        const packageJson = await fs.readFile(types, 'utf8')
-        const packageJsonObj = JSON.parse(packageJson)
-        expect(packageJsonObj.name).toBe('@cap-js/cds-types')
+        const typesPackageJsonFile = path.join(tempFolder, 'node_modules/@types/sap__cds/package.json')
+        const typesPackageJsonFileContent = await fs.readFile(typesPackageJsonFile, 'utf8')
+        const packageJson = JSON.parse(typesPackageJsonFileContent)
+        expect(packageJson.name).toBe('@cap-js/cds-types')
     })
 })
