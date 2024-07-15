@@ -41,7 +41,7 @@ jobs:
         echo 2
         Add-LocalGroupMember -Group "Users" -Member "nonadmin"
         echo 3
-        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $securePassword)
+        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
         echo 4
         Start-Process -FilePath "npm" -ArgumentList "run test" -Credential $credential -Wait -NoNewWindow
         echo 5
