@@ -24,7 +24,7 @@ runs:
 
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
-        $username = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})
+        $username = -join ((65..90) + (97..122) | Get-Random -Count 12 | % {[char]$_})
         $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username

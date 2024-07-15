@@ -1,0 +1,55 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'test/**'
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'test/**'
+  workflow_dispatch:
+
+    # os: [ubuntu-latest, windows-latest, macos-latest]
+    # version: [20, 18]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        version: [18, 20]
+        os: [windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.version }}
+
+    - run: |
+        npm ci
+
+    - name: Create non-admin user
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
+
+        $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
+        New-LocalUser "nonadmin" -Password $password
+        Add-LocalGroupMember -Group "Users" -Member "nonadmin"
+        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $password)
+        $process = Start-Process -FilePath "npm" -ArgumentList "run test:integration" -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+        Get-Content output.txt
+        Get-Content error.txt
+
+        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
+
+    - name: Run Unit Tests
+      if: matrix.os != 'windows-latest'
+      run: |
+        npm run test:integration
