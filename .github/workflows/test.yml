@@ -49,12 +49,14 @@ jobs:
           $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
           $isElevated = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
           echo "elevated" $isElevated
-          npm run test > output.txt 2>&1
         }
         $encodedScriptBlock = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlock))
         Start-Process powershell.exe -ArgumentList "-NoProfile -EncodedCommand $encodedScriptBlock" -Credential $credential -Wait -NoNewWindow
 
-        Get-Content output.txt
+        Start-Process -FilePath "npm" -ArgumentList "run test > stdout.txt 2>stderr.txt" -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+
+        Get-Content stdout.txt
+        Get-Content stderr.txt
 
     - name: Run Unit Tests
       if: matrix.os != 'windows-latest'
