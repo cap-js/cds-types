@@ -30,6 +30,7 @@ jobs:
         npm run rollup:off
 
     # Add a conditional step for creating a non-admin user on Windows
+    # runas /user:nonadmin "npm run test"
     - name: Create non-admin user
       if: matrix.os == 'windows-latest'
       shell: pwsh
@@ -40,8 +41,10 @@ jobs:
         echo 2
         Add-LocalGroupMember -Group "Users" -Member "nonadmin"
         echo 3
-        runas /user:nonadmin "npm run test"
+        $credential = New-Object System.Management.Automation.PSCredential ("nonadmin", $securePassword)
         echo 4
+        Start-Process -FilePath "npm" -ArgumentList "run test" -Credential $credential -Wait -NoNewWindow
+        echo 5
 
     - name: Run Unit Tests
       if: matrix.os != 'windows-latest'
