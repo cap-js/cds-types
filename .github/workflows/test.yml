@@ -34,7 +34,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: pwsh
       run: |
-        $password = ConvertTo-SecureString "NonAdminPassword123" -AsPlainText -Force
+        $password = ConvertTo-SecureString "NonAdminPassword123$%" -AsPlainText -Force
         New-LocalUser "nonadmin" -Password $password
         Add-LocalGroupMember -Group "Users" -Member "nonadmin"
 
