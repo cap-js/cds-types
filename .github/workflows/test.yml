@@ -29,7 +29,23 @@ jobs:
         npm run prerelease:ci-fix
         npm run rollup:off
 
+    # Add a conditional step for creating a non-admin user on Windows
+    - name: Create non-admin user
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        $password = ConvertTo-SecureString "NonAdminPassword123" -AsPlainText -Force
+        New-LocalUser "nonadmin" -Password $password
+        Add-LocalGroupMember -Group "Users" -Member "nonadmin"
+
+    - name: Run commands as non-admin user
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        runas /user:nonadmin "npm run test"
+
     - name: Run Unit Tests
+      if: matrix.os != 'windows-latest'
       run: |
         npm run test
 
