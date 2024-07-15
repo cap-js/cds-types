@@ -8,33 +8,27 @@ inputs:
   args:
     description: Arguments to pass to the command
     required: false
-  user:
-    description: User to run the command as
-    required: false
-    default: nonadmin
 
 runs:
   using: 'composite'
 
   steps:
-    - if: ${{ runner.os != 'windows' }}
-      shell: pwsh
-      run: |
-        exit 1
-
     - name: Set env
       shell: pwsh
       env:
+        OS: ${{ runner.os }}
         CMD: ${{ inputs.cmd }}
         ARGS: ${{ inputs.args }}
-        NO_ADMIN_USER: ${{ inputs.user }}
       run: |
+        if ($env:OS -ne "Windows") { exit 1 }
+        $userName = -join ((65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})
+
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
-        New-LocalUser $env:NO_ADMIN_USER -Password $password
-        Add-LocalGroupMember -Group "Users" -Member $env:NO_ADMIN_USER
-        $credential = New-Object System.Management.Automation.PSCredential ($env:NO_ADMIN_USER, $password)
+        New-LocalUser $userName -Password $password
+        Add-LocalGroupMember -Group "Users" -Member $userName
+        $credential = New-Object System.Management.Automation.PSCredential ($userName, $password)
         $process = Start-Process -FilePath $env:CMD -ArgumentList $env:ARGS -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
         Get-Content output.txt
         Get-Content error.txt

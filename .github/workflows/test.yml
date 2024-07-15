@@ -62,7 +62,6 @@ jobs:
       with:
         cmd: npm
         args: run test
-        user: nonadmin2
 
     - name: Run Unit Tests
       if: matrix.os != 'windows-latest'
