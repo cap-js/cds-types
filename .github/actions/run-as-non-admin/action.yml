@@ -31,7 +31,7 @@ runs:
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
-        $session = New-PSSession -Credential $credential
+        $session = New-PSSession -Credential $credential -ComputerName localhost
         Enter-PSSession $session
 
          $commandToExecute = $env:CMD + " " + $env:ARGS
