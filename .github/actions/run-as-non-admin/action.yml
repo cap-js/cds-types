@@ -33,7 +33,9 @@ runs:
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
         $session = New-PSSession -ComputerName "ServerName" -Credential $credential
         Enter-PSSession $session
-        $env:CMD $env:ARGS
+
+         $commandToExecute = $env:CMD + " " + $env:ARGS
+         Invoke-Expression $commandToExecute
 
       # icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
