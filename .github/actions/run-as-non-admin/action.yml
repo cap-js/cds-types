@@ -31,11 +31,15 @@ runs:
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
+
+        Get-Service WinRM
+        Start-Service WinRM
+
         $session = New-PSSession -Credential $credential -ComputerName localhost
         Enter-PSSession $session
 
-         $commandToExecute = $env:CMD + " " + $env:ARGS
-         Invoke-Expression $commandToExecute
+        $commandToExecute = $env:CMD + " " + $env:ARGS
+        Invoke-Expression $commandToExecute
 
       # icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
