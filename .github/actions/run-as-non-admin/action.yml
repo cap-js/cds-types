@@ -31,8 +31,20 @@ runs:
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
-        $process = Start-Process -FilePath $env:CMD -ArgumentList $env:ARGS -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
-        Get-Content output.txt
-        Get-Content error.txt
+        $session = New-PSSession -ComputerName "ServerName" -Credential $credential
+        Enter-PSSession $session
+        $env:CMD $env:ARGS
 
-        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
+      # icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
+
+      # $username = -join ((65..90) + (97..122) | Get-Random -Count 12 | % {[char]$_})
+
+      # $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
+      # New-LocalUser $username -Password $password
+      # Add-LocalGroupMember -Group "Users" -Member $username
+      # $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
+      # $process = Start-Process -FilePath $env:CMD -ArgumentList $env:ARGS -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+      # Get-Content output.txt
+      # Get-Content error.txt
+
+      # if ($process.ExitCode -ne 0) { exit $process.ExitCode }
