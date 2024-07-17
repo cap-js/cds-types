@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.6.1 - TBD
 ### Fixed
 - Scripts `postinstall` and `prerelease:ci-fix` now work correctly on windows.
+- `postinstall` script now creates a relative symlink from `@types/sap__cds` to allow the project to be moved/ renamed.
 
 ## Version 0.6.0 - 2024-07-05
 This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.

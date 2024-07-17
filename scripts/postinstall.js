@@ -4,7 +4,7 @@
 /* eslint-disable no-undef */
 const fs = require('node:fs')
 const { platform } = require('node:os')
-const { join } = require('node:path')
+const { join, relative, dirname } = require('node:path')
 
 const IS_WIN = platform() === 'win32'
 
@@ -15,4 +15,8 @@ if (!fs.existsSync(nodeModules)) return
 const typesDir = join(nodeModules, '@types')
 if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir)
 
-fs.symlinkSync(join(nodeModules, '@cap-js/cds-types'), join(typesDir, 'sap__cds'), IS_WIN ? 'junction' : undefined)
+// use a relative target, in case the user moves the project
+const target = join(typesDir, 'sap__cds')
+const src = join(nodeModules, '@cap-js/cds-types')
+const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
+fs.symlinkSync(rel, target, IS_WIN ? 'junction' : undefined)
