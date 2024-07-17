@@ -5,7 +5,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.7.0 - TBD
-This is a prerelease version (`next`) as a preview for the upcoming release of cds 8.
 ### Fixed
 - Scripts `postinstall` and `prerelease:ci-fix` now work correctly on windows.
 
