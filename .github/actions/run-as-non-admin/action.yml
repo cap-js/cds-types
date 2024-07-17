@@ -53,7 +53,7 @@ runs:
         Write-Host "isAdmin: $isAdmin"
 
         npm run test:integration
-"@
+        "@
 
         $scriptBlockStr = $scriptBlock.ToString()
         $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($commands))
