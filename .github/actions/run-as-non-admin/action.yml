@@ -41,6 +41,8 @@ runs:
           $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
           Write-Host "isAdmin: $isAdmin"
+
+          npm run test:integration
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
