@@ -42,7 +42,7 @@ runs:
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
           Write-Host "isAdmin: $isAdmin"
 
-          & cmd.exec /c "npm run test:integration"
+          & cmd.exe /c "npm run test:integration"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
