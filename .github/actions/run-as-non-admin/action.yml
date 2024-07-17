@@ -42,7 +42,8 @@ runs:
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
           echo "isAdmin: $isAdmin"
 
-          C:\\Program Files\\nodejs\\npm.cmd run test:integration
+          echo "cmd: $env:CMD"
+          echo "argss: $env:ARGS"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
