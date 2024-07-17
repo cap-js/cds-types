@@ -35,18 +35,11 @@ runs:
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
-        $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-        $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
-        $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-        echo "isAdmin: $isAdmin"
-
         $scriptBlock = {
           $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
           $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
           echo "isAdmin: $isAdmin"
-
-          & $env:CMD $env:ARGS
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
@@ -54,6 +47,7 @@ runs:
 
         $process = Start-Process -FilePath "powershell.exe" `
             -ArgumentList "-NoProfile", `
+                          "-NonInteractive", `
                           "-ExecutionPolicy", "Bypass", `
                           "-EncodedCommand", $encodedCommand `
             -Credential $credential `
@@ -65,6 +59,21 @@ runs:
 
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
+
+      # $scriptBlock = {
+      #   $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+      #   $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+      #   $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+      #   echo "isAdmin: $isAdmin"
+
+      #   & $env:CMD $env:ARGS
+      # }
+
+
+      # $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+      # $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+      # $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+      # echo "isAdmin: $isAdmin"
 
       # # safe guard
       # if ($env:OS -ne "Windows") { exit 1 }
