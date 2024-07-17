@@ -3,6 +3,7 @@ description: Run script without admin user privileges in windows runner
 
 inputs:
   cmd:
+    # with node 22, you must use the full path, e.g. c:\Program Files\nodejs\npm.cmd
     description: Command to run, e.g. npm
     required: true
   args:
@@ -23,6 +24,7 @@ runs:
       run: |
         if ($env:OS -ne "Windows") { exit 1 }
 
+      # make temp writable for github user
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $username = "notAnAdmin"

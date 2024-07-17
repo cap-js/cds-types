@@ -15,4 +15,5 @@ if (!fs.existsSync(nodeModules)) return
 const typesDir = join(nodeModules, '@types')
 if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir)
 
-fs.symlinkSync(join(nodeModules, '@cap-js/cds-types'), join(typesDir, 'sap__cds'), IS_WIN ? 'junction' : undefined)
+// fs.symlinkSync(join(nodeModules, '@cap-js/cds-types'), join(typesDir, 'sap__cds'), IS_WIN ? 'junction' : undefined)
+fs.symlinkSync(join(nodeModules, '@cap-js/cds-types'), join(typesDir, 'sap__cds'))
