@@ -57,7 +57,6 @@ runs:
             -RedirectStandardOutput "output.txt" `
             -RedirectStandardError "error.txt" `
 
-        echo "process: $process.toString()"
         Get-Content output.txt
         Get-Content error.txt
 
