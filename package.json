@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -27,8 +27,8 @@
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "setup": "npm i && npm i file:. --no-save --force",
-    "prerelease:ci-fix": ".github/prerelease-fix.js",
-    "postinstall": "./scripts/postinstall.js"
+    "prerelease:ci-fix": "node .github/prerelease-fix.js",
+    "postinstall": "node ./scripts/postinstall.js"
   },
   "peerDependencies": {
     "@sap/cds": "^8.0.0"
