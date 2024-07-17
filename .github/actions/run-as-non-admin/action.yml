@@ -54,6 +54,7 @@ runs:
                           "-ExecutionPolicy", "Bypass", `
                           "-EncodedCommand", $encodedCommand, `
                           "-Credential", $credential `
+            -Credential $credential `
             -PassThru `
             -Wait `
             -NoNewWindow `
