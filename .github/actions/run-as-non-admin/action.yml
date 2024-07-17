@@ -36,14 +36,14 @@ runs:
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
         $scriptBlock = {
-          echo "start"
+          Write-Host "start"
           $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
           $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-          echo "isAdmin: $isAdmin"
+          Write-Host "isAdmin: $isAdmin"
 
-          echo "cmd: $env:CMD"
-          echo "argss: $env:ARGS"
+          Write-Host "cmd: $env:CMD"
+          Write-Host "args: $env:ARGS"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
