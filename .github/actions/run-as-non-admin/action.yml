@@ -45,8 +45,18 @@ runs:
           npm run test:integration
         }
 
+        $commands = @"
+        Write-Host "start"
+        $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+        $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+        Write-Host "isAdmin: $isAdmin"
+
+        npm run test:integration
+"@
+
         $scriptBlockStr = $scriptBlock.ToString()
-        $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlockStr))
+        $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($commands))
 
         $process = Start-Process -FilePath "powershell.exe" `
             -ArgumentList "-NoProfile", `
