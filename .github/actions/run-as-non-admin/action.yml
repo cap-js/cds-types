@@ -24,7 +24,6 @@ runs:
       run: |
         if ($env:OS -ne "Windows") { exit 1 }
 
-      # make temp writable for github user
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $username = "notAnAdmin"

@@ -8,7 +8,7 @@ const execAsync = util.promisify(cp.exec)
 
 
 describe('postinstall', () => {
-    jest.setTimeout(40 * 1000)
+    jest.setTimeout(40 * 1000) // timeout 40s for windows
 
     let tempFolder
 
