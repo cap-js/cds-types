@@ -35,7 +35,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: ./.github/actions/run-as-non-admin
       with:
-        cmd: npm
+        cmd: 'C:\\Program Files\\nodejs\\npm.cmd'
         args: run test:integration
 
     - name: Run integration tests
