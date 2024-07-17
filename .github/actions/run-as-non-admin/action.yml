@@ -31,15 +31,13 @@ runs:
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
+        $process = Start-Process -FilePath $env:CMD -ArgumentList $env:ARGS -Credential $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+        Get-Content output.txt
+        Get-Content error.txt
 
-        Get-Service WinRM
-        Start-Service WinRM
+        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
-        $session = New-PSSession -Credential $credential -ComputerName localhost
-        Enter-PSSession $session
 
-        $commandToExecute = $env:CMD + " " + $env:ARGS
-        Invoke-Expression $commandToExecute
 
       # icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
