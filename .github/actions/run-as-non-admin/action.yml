@@ -55,9 +55,12 @@ runs:
             -Wait `
             -NoNewWindow `
             -RedirectStandardOutput "output.txt" `
-            -RedirectStandardError "error.txt"
+            -RedirectStandardError "error.txt" `
 
-        echo "process: $process"
+        echo "process: $process.toString()"
+        Get-Content output.txt
+        Get-Content error.txt
+
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
 
