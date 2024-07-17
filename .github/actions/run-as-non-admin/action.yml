@@ -51,7 +51,7 @@ runs:
         $scriptBlockStr = $scriptBlock.ToString()
         $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlockStr))
 
-        Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", $encodedCommand, "-Credential", $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
+        $process = Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", $encodedCommand, "-Credential", $credential -PassThru -Wait -NoNewWindow -RedirectStandardOutput "output.txt" -RedirectStandardError "error.txt"
 
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
