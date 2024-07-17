@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## Version 0.7.0 - TBD
+## Version 0.6.1 - TBD
 ### Fixed
 - Scripts `postinstall` and `prerelease:ci-fix` now work correctly on windows.
 
