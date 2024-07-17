@@ -3,10 +3,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires*/
 /* eslint-disable no-undef */
 const fs = require('node:fs')
-const { platform } = require('node:os')
+// const { platform } = require('node:os')
 const { join } = require('node:path')
 
-const IS_WIN = platform() === 'win32'
+// const IS_WIN = platform() === 'win32'
 
 if (!process.env.INIT_CWD) return
 // TODO: check if were in a local install
