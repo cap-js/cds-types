@@ -42,8 +42,7 @@ runs:
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
           Write-Host "isAdmin: $isAdmin"
 
-          Write-Host "cmd: $env:CMD"
-          Write-Host "args: $env:ARGS"
+          & cmd.exec /c "npm run test:integration"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
