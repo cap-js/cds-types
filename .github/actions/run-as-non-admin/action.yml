@@ -37,13 +37,14 @@ runs:
 
         $scriptBlock = {
           echo "start"
+          $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+          $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+          $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
           echo "isAdmin: $isAdmin"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
         $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlockStr))
-
-        echo "scriptBlock: $scriptBlockStr"
 
         $process = Start-Process -FilePath "powershell.exe" `
             -ArgumentList "-NoProfile", `
