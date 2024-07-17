@@ -52,8 +52,7 @@ runs:
         $process = Start-Process -FilePath "powershell.exe" `
             -ArgumentList "-NoProfile", `
                           "-ExecutionPolicy", "Bypass", `
-                          "-EncodedCommand", $encodedCommand, `
-                          "-Credential", $credential `
+                          "-EncodedCommand", $encodedCommand `
             -Credential $credential `
             -PassThru `
             -Wait `
