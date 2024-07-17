@@ -35,6 +35,11 @@ runs:
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
+        $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+        $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+        echo "isAdmin: $isAdmin"
+
         $scriptBlock = {
           $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
           $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
