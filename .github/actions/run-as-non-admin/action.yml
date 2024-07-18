@@ -39,7 +39,7 @@ runs:
           $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
           $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-          Write-Host "$username: Admin=$isAdmin"
+          Write-Host "$username Admin=$isAdmin"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()
