@@ -21,13 +21,13 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
-        let out = await execAsync('Get-ItemProperty -Path "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock" ', { cwd: tempFolder })
-        console.log(out.stdout)
+        let out = await execAsync('powershell -Command "Get-ItemProperty -Path \'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock\'"', { shell: 'cmd', cwd: tempFolder });
+        console.log(out.stdout);
 
         try {
-        out = await execAsync('net session', { cwd: tempFolder })
-        console.log(out.stdout)
-        console.log(out.stderr)
+            out = await execAsync('net session', { cwd: tempFolder })
+            console.log(out.stdout)
+            console.log(out.stderr)
         } catch (e) {
             console.error(e)
         }
