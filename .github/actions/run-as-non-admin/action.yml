@@ -32,7 +32,7 @@ runs:
 
         $username = "nonadminuser"
         # random password fulfilling win requirements
-        $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
+        $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
 
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
