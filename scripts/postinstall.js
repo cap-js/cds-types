@@ -5,10 +5,8 @@
 const fs = require('node:fs')
 const { join, relative, dirname } = require('node:path')
 
-// const IS_WIN = platform() === 'win32'
-
 if (!process.env.INIT_CWD) return
-// TODO: check if were in a local install
+// TODO: check if we're in a local install
 const nodeModules = join(process.env.INIT_CWD, 'node_modules')
 if (!fs.existsSync(nodeModules)) return
 const typesDir = join(nodeModules, '@types')
@@ -27,5 +25,5 @@ try {
 }
 
 // 'junction' is needed to make it work on windows, others ignore
-// fs.symlinkSync(rel, target, 'junction')
-fs.symlinkSync(rel, target)
+fs.symlinkSync(rel, target, 'junction')
+// fs.symlinkSync(rel, target)

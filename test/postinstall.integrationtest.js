@@ -24,9 +24,6 @@ describe('postinstall', () => {
         const projectRoot = path.join(__dirname, '..')
         await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
 
-        console.log('projectRoot', projectRoot)
-        console.log('tempFolder', tempFolder)
-
         const typesPackageJsonFile = path.join(tempFolder, 'node_modules/@types/sap__cds/package.json')
         const typesPackageJsonFileContent = await fs.readFile(typesPackageJsonFile, 'utf8')
         const packageJson = JSON.parse(typesPackageJsonFileContent)
