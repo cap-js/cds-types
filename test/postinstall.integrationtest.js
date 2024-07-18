@@ -21,7 +21,10 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
-        const out = await execAsync('whoami', { cwd: tempFolder })
+        let out = await execAsync('whoami', { cwd: tempFolder })
+        console.log(out.stdout)
+
+        out = await execAsync('(New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)', { cwd: tempFolder })
         console.log(out.stdout)
 
         const projectRoot = path.join(__dirname, '..')
