@@ -21,7 +21,7 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
-        let out = await execAsync('whoami', { cwd: tempFolder })
+        let out = await execAsync('Get-ItemProperty -Path "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock" ', { cwd: tempFolder })
         console.log(out.stdout)
 
         try {
