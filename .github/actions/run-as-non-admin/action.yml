@@ -29,6 +29,7 @@ runs:
         icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
 
         $username = "nonadminuser"
+        # random password fulfilling win requirements
         $password = ConvertTo-SecureString "kragZTWET53$%" -AsPlainText -Force
 
         New-LocalUser $username -Password $password
