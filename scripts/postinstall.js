@@ -17,5 +17,12 @@ const target = join(typesDir, 'sap__cds')
 const src = join(nodeModules, '@cap-js/cds-types')
 const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
 
+// remove the existing symlink
+try {
+    fs.unlinkSync(target)
+} catch {
+    // symlink did not exist, continue
+}
+
 // 'junction' is needed to make it work on windows, others ignore
 fs.symlinkSync(rel, target, 'junction')
