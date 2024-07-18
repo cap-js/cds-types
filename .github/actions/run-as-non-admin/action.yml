@@ -35,9 +35,6 @@ runs:
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
-        $scriptBlockStr = $scriptBlock.ToString()
-        $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($scriptBlockStr))
-
         $process = Start-Process -FilePath $env:CMD `
             -ArgumentList $env:ARGS `
             -Credential $credential `
