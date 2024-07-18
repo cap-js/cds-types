@@ -35,7 +35,7 @@ runs:
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
-        reg delete "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock" /f
+        reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
         $process = Start-Process -FilePath $env:CMD `
             -ArgumentList $env:ARGS `
