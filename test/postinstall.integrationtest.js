@@ -2,7 +2,7 @@ const cp = require('node:child_process')
 const fs = require('node:fs').promises
 const os = require('node:os')
 const path = require('node:path')
-const util   = require('util')
+const util = require('util')
 
 const execAsync = util.promisify(cp.exec)
 
@@ -21,8 +21,10 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
+        await execAsync('whoami', { cwd: tempFolder })
+
         const projectRoot = path.join(__dirname, '..')
-        await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder, shell: true })
+        await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
 
         const typesPackageJsonFile = path.join(tempFolder, 'node_modules/@types/sap__cds/package.json')
         const typesPackageJsonFileContent = await fs.readFile(typesPackageJsonFile, 'utf8')
