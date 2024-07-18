@@ -24,8 +24,9 @@ describe('postinstall', () => {
         let out = await execAsync('whoami', { cwd: tempFolder })
         console.log(out.stdout)
 
-        out = await execAsync('(New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)', { cwd: tempFolder })
+        out = await execAsync('net session', { cwd: tempFolder })
         console.log(out.stdout)
+        console.log(out.stderr)
 
         const projectRoot = path.join(__dirname, '..')
         await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
