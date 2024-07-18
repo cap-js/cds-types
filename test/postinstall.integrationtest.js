@@ -21,7 +21,8 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
-        await execAsync('whoami', { cwd: tempFolder })
+        const out = await execAsync('whoami', { cwd: tempFolder })
+        console.log(out.stdout)
 
         const projectRoot = path.join(__dirname, '..')
         await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
