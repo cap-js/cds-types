@@ -22,7 +22,7 @@ runs:
         CMD: ${{ inputs.cmd }}
         ARGS: ${{ inputs.args }}
       run: |
-        # safe guard
+        # create non-admin user and run tests
         if ($env:OS -ne "Windows") { exit 1 }
 
         # make temp folder writable for all users
@@ -36,11 +36,10 @@ runs:
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
         $scriptBlock = {
-          Write-Host "start"
           $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
           $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
           $isAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-          Write-Host "isAdmin: $isAdmin"
+          Write-Host "$username: Admin=$isAdmin"
         }
 
         $scriptBlockStr = $scriptBlock.ToString()

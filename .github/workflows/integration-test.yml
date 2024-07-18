@@ -40,7 +40,7 @@ jobs:
 
     - name: Run integration test with non-admin user on windows
       if: matrix.os == 'windows-latest'
-      run:
+      run: |
         dir
         dir node_modules\@types
 
