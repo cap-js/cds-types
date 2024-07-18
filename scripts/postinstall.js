@@ -26,4 +26,3 @@ try {
 
 // 'junction' is needed to make it work on windows, others ignore
 fs.symlinkSync(rel, target, 'junction')
-// fs.symlinkSync(rel, target)
