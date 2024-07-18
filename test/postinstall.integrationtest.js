@@ -21,21 +21,6 @@ describe('postinstall', () => {
     })
 
     test('create symlink correctly', async () => {
-        try {
-            const out = await execAsync('powershell -Command "Get-ItemProperty -Path \'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock\'"', { shell: 'cmd', cwd: tempFolder });
-            console.log(out.stdout);
-        } catch (e) {
-            console.error(e)
-        }
-
-        try {
-            const out = await execAsync('net session', { cwd: tempFolder })
-            console.log(out.stdout)
-            console.log(out.stderr)
-        } catch (e) {
-            console.error(e)
-        }
-
         const projectRoot = path.join(__dirname, '..')
         await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
 
