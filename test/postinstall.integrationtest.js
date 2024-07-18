@@ -24,9 +24,13 @@ describe('postinstall', () => {
         let out = await execAsync('whoami', { cwd: tempFolder })
         console.log(out.stdout)
 
+        try {
         out = await execAsync('net session', { cwd: tempFolder })
         console.log(out.stdout)
         console.log(out.stderr)
+        } catch (e) {
+            console.error(e)
+        }
 
         const projectRoot = path.join(__dirname, '..')
         await execAsync(`npm i -D ${projectRoot} `, { cwd: tempFolder })
