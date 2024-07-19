@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [22] # , 20, 18]
+        version: [22, 20, 18]
         os: [windows-latest] #, ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
