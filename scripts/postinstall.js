@@ -26,7 +26,7 @@ if (IS_WIN) {
         fs.cpSync(join(src, 'scripts'), join(target, 'scripts'), { recursive: true, force: true })
         fs.copyFileSync(join(src, 'package.json'), join(target, 'package.json'))
     } catch (err) {
-        console.error(err)
+        console.warn(`Error creating sap__cds folder: ${err}`)
     }
 } else {
     try {
