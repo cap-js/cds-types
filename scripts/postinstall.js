@@ -20,14 +20,14 @@ const target = join(typesDir, 'sap__cds')
 const src = join(nodeModules, '@cap-js/cds-types')
 
 if (IS_WIN) {
-    try {
-        fs.rmSync(target, { recursive: true, force: true })
-        fs.cpSync(join(src, 'dist'), join(target, 'dist'), { recursive: true, force: true })
-        fs.cpSync(join(src, 'scripts'), join(target, 'scripts'), { recursive: true, force: true })
-        fs.copyFileSync(join(src, 'package.json'), join(target, 'package.json'))
-    } catch (err) {
-        console.error(err)
-    }
+    // try {
+    //     fs.rmSync(target, { recursive: true, force: true })
+    //     fs.cpSync(join(src, 'dist'), join(target, 'dist'), { recursive: true, force: true })
+    //     fs.cpSync(join(src, 'scripts'), join(target, 'scripts'), { recursive: true, force: true })
+    //     fs.copyFileSync(join(src, 'package.json'), join(target, 'package.json'))
+    // } catch (err) {
+    //     console.error(err)
+    // }
 } else {
     try {
         // remove the existing symlink
