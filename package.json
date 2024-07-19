@@ -22,7 +22,7 @@
     "test": "jest --silent",
     "test:integration": "jest --silent --testMatch \"**/test/**/*.integrationtest.js\"",
     "test:rollup": "npm run rollup; npm run rollup:on; npm run test; npm run rollup:off",
-    "rollup": "rm -rf dist/ && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
+    "rollup": "(rm -rf dist/ || rm -r dist/) && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
     "rollup:on": "npm pkg set typings=dist/cds-types.d.ts && [ -d 'apis' ] && mv -- apis -apis || true",
     "rollup:off": "npm pkg set typings=apis/cds.d.ts  && [ -d '-apis' ] && mv -- -apis apis || true",
     "lint": "npx eslint .",
