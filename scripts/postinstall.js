@@ -24,5 +24,10 @@ try {
     // symlink did not exist, continue
 }
 
-// 'junction' is needed to make it work on windows, others ignore
-fs.symlinkSync(rel, target, 'junction')
+try {
+    // 'junction' is needed to make it work on windows, others ignore
+    fs.symlinkSync(rel, target, 'junction')
+} catch (e) {
+    if (e.code !== 'EEXIST') throw e
+    // else: symlink exists (the previous unlink hasn't worked), ignore
+}
