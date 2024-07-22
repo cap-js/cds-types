@@ -42,25 +42,15 @@ jobs:
         npm run prerelease:ci-fix
         npm run rollup:off
 
-    # Workaround: re-install jest on windows with node 22 to avoid exit handler issue
-    # - name: Reinstall jest
-    #   if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
-    #   run: |
-    #     npm i -D jest
-
     - name: Run integration test with non-admin user on windows
       if: matrix.os == 'windows-latest'
       uses: ./.github/actions/run-as-non-admin
       with:
         run: |
-          echo "hallo"
-          (Get-Location).Path
+          echo "whoami: $(whoami)"
           npm run test:integration
-          echo "ende"
 
     - name: Run integration tests
       if: matrix.os != 'windows-latest'
       run: |
         npm run test:integration
-
-      # run: 'C:\\Program Files\\nodejs\\npm.cmd'
