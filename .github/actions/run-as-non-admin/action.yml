@@ -16,7 +16,7 @@ runs:
 
   steps:
     - name: Prepare env and run cmd as non-admin user
-      shell: powershell
+      shell: pwsh
       env:
         OS: ${{ runner.os }}
         CMD: ${{ inputs.cmd }}
