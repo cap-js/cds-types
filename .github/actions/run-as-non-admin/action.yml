@@ -49,5 +49,3 @@ runs:
         Get-Content error.txt
 
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
-
-# $commandLine = $env:RUN -replace "`r`n", ";"
