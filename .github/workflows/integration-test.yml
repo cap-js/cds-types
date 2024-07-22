@@ -36,7 +36,7 @@ jobs:
       if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
       run: |
         npm i -g npm@10.7.0
-        npm -v
+        C:\Program Files\nodejs\npm.cmd -v
 
     - run: |
         npm ci
