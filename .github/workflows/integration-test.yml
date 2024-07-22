@@ -40,7 +40,7 @@ jobs:
         npm run prerelease:ci-fix
         npm run rollup:off
 
-    # Workaround: re-install jest on windows with node 22 to avoid exit habdler issue
+    # Workaround: re-install jest on windows with node 22 to avoid exit handler issue
     - name: Reinstall jest
       if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
       run: |
