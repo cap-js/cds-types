@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires*/
 /* eslint-disable no-undef */
-const { readFile, rm, writeFile } = require('fs/promises')
+const { readFile, writeFile } = require('fs/promises')
 
 /** @param {string} src */
 function _getImports (src) {
@@ -30,7 +30,7 @@ function _getImports (src) {
  * the file from being global to a module.
  * We therefore have to remove all traditional imports and use
  * type imports instead (see: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types)
- * @param {string} src
+ * @param {string} src 
  */
 function replaceImports (src) {
   const re = id => new RegExp(`\\b${id}\\b(?!\\?|:)`, 'g')  // match whole word, but only if it's a type assertion (x?: T)
@@ -70,8 +70,6 @@ function replaceImports (src) {
 }
 
 ;(async () => {
-  await rm('./dist/', { force: true, recursive: true })
-
   const rollupFile = './dist/cds-types.d.ts'
   let rollup = (await readFile(rollupFile)).toString()
 
