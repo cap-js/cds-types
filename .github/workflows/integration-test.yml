@@ -34,7 +34,6 @@ jobs:
 
     - run: |
         npm ci
-        npm run rollup
 
     - name: Run integration test with non-admin user on windows
       if: matrix.os == 'windows-latest'

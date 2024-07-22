@@ -5,6 +5,7 @@ const path = require('node:path')
 const util = require('node:util')
 
 const execAsync = util.promisify(cp.exec)
+const IS_WIN = os.platform() === 'win32'
 
 
 describe('postinstall', () => {
@@ -32,8 +33,14 @@ describe('postinstall', () => {
         let packageJson = JSON.parse(typesPackageJsonFileContent)
         expect(packageJson.name).toBe('@cap-js/cds-types')
 
+        // rename the project folder
         const newProjectFolder = path.join(tempFolder, 'cds_prj_new')
         await fs.rename(projectFolder, newProjectFolder)
+
+        // after renaming the project folder, the symlink must be recreated on windows
+        if (IS_WIN) {
+            await execAsync(`npm i`, { cwd: newProjectFolder })
+        }
 
         typesPackageJsonFile = path.join(newProjectFolder, 'node_modules/@types/sap__cds/package.json')
         typesPackageJsonFileContent = await fs.readFile(typesPackageJsonFile, 'utf8')
