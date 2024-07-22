@@ -4,12 +4,14 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - '.github/**'
       - 'package.json'
       - 'scripts/**'
       - 'test/**/*.integrationtest.js'
   push:
     branches: [main]
     paths:
+      - '.github/**'
       - 'package.json'
       - 'scripts/**'
       - 'test/**/*.integrationtest.js'
