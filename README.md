@@ -2,8 +2,12 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/cap-js/cds-types)](https://api.reuse.software/info/github.com/cap-js/cds-types)
 ![Unit Tests passing](https://github.com/cap-js/cds-types/actions/workflows/test.yml/badge.svg)
+[![npmjsorg](https://img.shields.io/npm/v/@cap-js/cds-types?color=green&label=npmjs.org)](https://www.npmjs.com/package/@cap-js/cds-types)
+![downloads](https://img.shields.io/npm/dw/@cap-js/cds-types)
+[![deps](https://img.shields.io/librariesio/release/npm/@cap-js/cds-types?label=Dependencies)](https://www.npmjs.com/package/@cap-js/cds-types?activeTab=dependencies)
 
-## About this project
+
+## About this Project
 
 Contains type definitions for the [Node.js SDK](https://cap.cloud.sap/docs/node.js/) of the SAP Cloud Application Programming Model (CAP).
 
@@ -12,6 +16,9 @@ Contains type definitions for the [Node.js SDK](https://cap.cloud.sap/docs/node.
 Just install package `@sap/cds` into a Javascript or Typescript project, and the types will automatically be available in modern IDEs like VS Code.
 
 Find more information on the APIs in the [Node.js SDK documentation](https://cap.cloud.sap/docs/node.js/).
+
+## Note to Microsoft Windows Users
+If you rename your project after you installed the type definitions on Windows, you have to rerun `npm install` to correctly recreate the symlink `node_modules/@types/sap__cds`.
 
 ## Support, Feedback, Contributing
 

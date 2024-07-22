@@ -1,0 +1,56 @@
+name: Integration-Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/**'
+      - 'package.json'
+      - 'scripts/**'
+      - 'test/**/*.integrationtest.js'
+  push:
+    branches: [main]
+    paths:
+      - '.github/**'
+      - 'package.json'
+      - 'scripts/**'
+      - 'test/**/*.integrationtest.js'
+  workflow_dispatch:
+
+concurrency:
+  group: integration-test-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  integration-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [22, 20, 18]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.version }}
+
+    - run: |
+        npm ci
+        npm install file:. --no-save --force
+        npm run prerelease:ci-fix
+        npm run rollup:off
+
+    - name: Run integration test with non-admin user on windows
+      if: matrix.os == 'windows-latest'
+      uses: ./.github/actions/run-as-non-admin
+      with:
+        run: |
+          echo "whoami:$(whoami)"
+          npm run test:integration
+
+    - name: Run integration tests
+      if: matrix.os != 'windows-latest'
+      run: |
+        npm run test:integration
