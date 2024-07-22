@@ -53,8 +53,10 @@ jobs:
       uses: ./.github/actions/run-as-non-admin
       with:
         run: |
-          pwd
+          echo "hallo"
+          (Get-Location).Path
           npm run test:integration
+          echo "ende"
 
     - name: Run integration tests
       if: matrix.os != 'windows-latest'
