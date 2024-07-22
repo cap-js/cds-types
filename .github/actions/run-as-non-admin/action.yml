@@ -1,9 +1,19 @@
+# Usage
+
+# - name: Step name
+#   if: matrix.os == 'windows-latest'
+#   uses: ./.github/actions/run-as-non-admin
+#   with:
+#     run: |
+#       echo "whoami:$(whoami)"
+#       npm run test:integration
+
 name: run-as-non-admin
 description: Run script without admin user privileges in windows runner
 
 inputs:
   run:
-    description: Script to run, e.g. npm test
+    description: Multiline script to run, e.g. npm test
     required: true
 
 runs:
