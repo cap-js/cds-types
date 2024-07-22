@@ -7,11 +7,15 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   test:
     strategy:
       matrix:
-        version: [20, 18]
+        version: [22, 20, 18]
     runs-on: ubuntu-latest
 
     steps:
