@@ -5,11 +5,8 @@
 const fs = require('node:fs')
 const { join, relative, dirname } = require('node:path')
 
-const IS_WIN = process.platform === 'win32'
-
 if (!process.env.INIT_CWD) return
-
-// TODO: check if we're in a local install
+// TODO: check if were in a local install
 const nodeModules = join(process.env.INIT_CWD, 'node_modules')
 if (!fs.existsSync(nodeModules)) return
 const typesDir = join(nodeModules, '@types')
@@ -18,23 +15,14 @@ if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir)
 // use a relative target, in case the user moves the project
 const target = join(typesDir, 'sap__cds')
 const src = join(nodeModules, '@cap-js/cds-types')
+const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
 
-if (IS_WIN) {
-    try {
-        fs.rmSync(target, { recursive: true, force: true })
-        fs.cpSync(join(src, 'dist'), join(target, 'dist'), { recursive: true, force: true })
-        fs.cpSync(join(src, 'scripts'), join(target, 'scripts'), { recursive: true, force: true })
-        fs.copyFileSync(join(src, 'package.json'), join(target, 'package.json'))
-    } catch (err) {
-        console.warn(`Error creating sap__cds folder: ${err}`)
-    }
-} else {
-    try {
-        // remove the existing symlink
-        fs.unlinkSync(target)
-    } catch {
-        // symlink did not exist, continue
-    }
-    const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
-    fs.symlinkSync(rel, target)
+// remove the existing symlink
+try {
+    fs.unlinkSync(target)
+} catch {
+    // symlink did not exist, continue
 }
+
+// 'junction' is needed to make it work on windows, others ignore
+fs.symlinkSync(rel, target, 'junction')
