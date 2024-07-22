@@ -35,8 +35,7 @@ jobs:
     - name: Downgrade npm
       if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
       run: |
-        npm i -g npm@10.7.0
-        C:\Program\ Files\nodejs\npm.cmd -v
+        npm i -D jest
 
     - run: |
         npm ci
