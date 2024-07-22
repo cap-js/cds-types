@@ -35,12 +35,9 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
-        $commandLine = $env:RUN -replace "`r`n", ";"
-        write-host "Running command: $commandLine"
-
         # call command using non admin user
         $process = Start-Process -FilePath "pwsh" `
-            -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $commandLine `
+            -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
             -Credential $credential `
             -PassThru `
             -Wait `
@@ -52,3 +49,5 @@ runs:
         Get-Content error.txt
 
         if ($process.ExitCode -ne 0) { exit $process.ExitCode }
+
+# $commandLine = $env:RUN -replace "`r`n", ";"
