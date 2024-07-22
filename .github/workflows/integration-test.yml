@@ -47,7 +47,7 @@ jobs:
       uses: ./.github/actions/run-as-non-admin
       with:
         run: |
-          echo "whoami: $(whoami)"
+          echo "whoami:$(whoami)"
           npm run test:integration
 
     - name: Run integration tests
