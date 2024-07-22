@@ -6,11 +6,13 @@ on:
     paths:
       - 'package.json'
       - 'scripts/**'
+      - 'tests/**/*.integrationtest.js'
   push:
     branches: [main]
     paths:
       - 'package.json'
       - 'scripts/**'
+      - 'tests/**/*.integrationtest.js'
   workflow_dispatch:
 
 concurrency:
