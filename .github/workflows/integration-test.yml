@@ -33,7 +33,8 @@ jobs:
         node-version: ${{ matrix.version }}
 
     - run: |
-        npm ci
+        rm -r package-lock.json
+        npm i
         npm install file:. --no-save --force
         npm run prerelease:ci-fix
         npm run rollup:off
