@@ -2,14 +2,9 @@ name: run-as-non-admin
 description: Run script without admin user privileges in windows runner
 
 inputs:
-  cmd:
-    # with node 22, you must use the full path, e.g. c:\Program Files\nodejs\npm.cmd
-    description: Command to run, e.g. npm
+  run:
+    description: Script to run, e.g. npm test
     required: true
-  args:
-    description: Arguments to pass to the command
-    required: false
-    default: ''
 
 runs:
   using: composite
@@ -19,8 +14,7 @@ runs:
       shell: pwsh
       env:
         OS: ${{ runner.os }}
-        CMD: ${{ inputs.cmd }}
-        ARGS: ${{ inputs.args }}
+        RUN: ${{ inputs.run }}
       run: |
         # create non-admin user and run tests
 
@@ -41,9 +35,11 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
+        $commandLine = $env.RUN -replace "`r`n", ";"
+
         # call command using non admin user
-        $process = Start-Process -FilePath $env:CMD `
-            -ArgumentList $env:ARGS `
+        $process = Start-Process -FilePath "pwsh" `
+            -ArgumentList "-Command", $commandLine `
             -Credential $credential `
             -PassThru `
             -Wait `
