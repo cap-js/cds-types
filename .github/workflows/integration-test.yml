@@ -34,6 +34,7 @@ jobs:
 
     - run: |
         npm ci
+        npm install file:. --no-save --force
 
     - name: Run integration test with non-admin user on windows
       if: matrix.os == 'windows-latest'
