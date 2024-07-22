@@ -2,7 +2,6 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/cap-js/cds-types)](https://api.reuse.software/info/github.com/cap-js/cds-types)
 ![Unit Tests passing](https://github.com/cap-js/cds-types/actions/workflows/test.yml/badge.svg)
-
 [![npmjsorg](https://img.shields.io/npm/v/@cap-js/cds-types?color=green&label=npmjs.org)](https://www.npmjs.com/package/@cap-js/cds-types)
 ![downloads](https://img.shields.io/npm/dw/@cap-js/cds-types)
 [![deps](https://img.shields.io/librariesio/release/npm/@cap-js/cds-types?label=Dependencies)](https://www.npmjs.com/package/@cap-js/cds-types?activeTab=dependencies)
