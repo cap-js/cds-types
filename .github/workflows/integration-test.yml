@@ -32,9 +32,13 @@ jobs:
       with:
         node-version: ${{ matrix.version }}
 
+    - name: Run integration test with non-admin user on windows
+      if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
+      run: |
+        npm i -g npm@10.7.0
+
     - run: |
-        rm -r package-lock.json
-        npm i
+        npm ci
         npm install file:. --no-save --force
         npm run prerelease:ci-fix
         npm run rollup:off
