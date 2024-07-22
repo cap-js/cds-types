@@ -6,7 +6,7 @@ inputs:
     description: Script to run, e.g. npm test
     required: true
 
-runs:
+run:
   using: composite
 
   steps:
