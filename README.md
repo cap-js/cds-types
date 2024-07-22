@@ -13,6 +13,9 @@ Just install package `@sap/cds` into a Javascript or Typescript project, and the
 
 Find more information on the APIs in the [Node.js SDK documentation](https://cap.cloud.sap/docs/node.js/).
 
+## Note to Microsoft Windows users
+If you rename your project after you installed the type definitions on Windows, you have to rerun `npm install` to correctly recreate the symlink `node_modules/@types/sap__cds`.
+
 ## Support, Feedback, Contributing
 
 ### Local Setup

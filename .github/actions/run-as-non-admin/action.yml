@@ -1,0 +1,57 @@
+name: run-as-non-admin
+description: Run script without admin user privileges in windows runner
+
+inputs:
+  cmd:
+    # with node 22, you must use the full path, e.g. c:\Program Files\nodejs\npm.cmd
+    description: Command to run, e.g. npm
+    required: true
+  args:
+    description: Arguments to pass to the command
+    required: false
+    default: ''
+
+runs:
+  using: composite
+
+  steps:
+    - name: Prepare env and run cmd as non-admin user
+      shell: pwsh
+      env:
+        OS: ${{ runner.os }}
+        CMD: ${{ inputs.cmd }}
+        ARGS: ${{ inputs.args }}
+      run: |
+        # create non-admin user and run tests
+
+        # fail if not on windows
+        if ($env:OS -ne "Windows") { exit 1 }
+
+        # make temp folder writable for all users
+        icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
+
+        $username = "nonadminuser"
+        # random password fulfilling win requirements
+        $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
+
+        New-LocalUser $username -Password $password
+        Add-LocalGroupMember -Group "Users" -Member $username
+        $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
+
+        # remove dev mode so symlink fails if called without junction
+        reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
+
+        # call command using non admin user
+        $process = Start-Process -FilePath $env:CMD `
+            -ArgumentList $env:ARGS `
+            -Credential $credential `
+            -PassThru `
+            -Wait `
+            -NoNewWindow `
+            -RedirectStandardOutput "output.txt" `
+            -RedirectStandardError "error.txt" `
+
+        Get-Content output.txt
+        Get-Content error.txt
+
+        if ($process.ExitCode -ne 0) { exit $process.ExitCode }
