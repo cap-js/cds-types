@@ -31,7 +31,7 @@ describe('postinstall', () => {
         let typesPackageJsonFile = path.join(projectFolder, 'node_modules/@types/sap__cds/package.json')
         let typesPackageJsonFileContent = await fs.readFile(typesPackageJsonFile, 'utf8')
         let packageJson = JSON.parse(typesPackageJsonFileContent)
-        expect(packageJson.name).toBe('XX@cap-js/cds-types')
+        expect(packageJson.name).toBe('@cap-js/cds-types')
 
         // rename the project folder
         const newProjectFolder = path.join(tempFolder, 'cds_prj_new')
