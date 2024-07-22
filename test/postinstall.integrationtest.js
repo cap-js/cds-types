@@ -39,7 +39,7 @@ describe('postinstall', () => {
 
         // after renaming the project folder, the symlink must be recreated on windows
         if (IS_WIN) {
-            await execAsync(`npm i`, { cwd: newProjectFolder })
+            await execAsync('npm i', { cwd: newProjectFolder })
         }
 
         typesPackageJsonFile = path.join(newProjectFolder, 'node_modules/@types/sap__cds/package.json')
