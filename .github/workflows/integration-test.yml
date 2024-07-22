@@ -32,10 +32,11 @@ jobs:
       with:
         node-version: ${{ matrix.version }}
 
-    - name: Run integration test with non-admin user on windows
+    - name: Downgrade npm
       if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
       run: |
         npm i -g npm@10.7.0
+        npm -v
 
     - run: |
         npm ci
