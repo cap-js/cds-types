@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-/* eslint-disable @typescript-eslint/no-var-requires*/
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const fs = require('node:fs')
 const { join, relative, dirname } = require('node:path')
 

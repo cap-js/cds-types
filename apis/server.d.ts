@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { Service, ServiceImpl } from './services'
 import { CSN } from './csn'
 import * as http from 'http'
-import * as cds from './cds'
 import { Application, RequestHandler } from 'express'
 import { XOR } from './internal/util'
 
@@ -34,6 +32,7 @@ export const connect: {
 /**
 	 * The default bootstrap function as loaded from server.js
 	 */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const server: Function
 
 /**
