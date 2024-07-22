@@ -32,16 +32,16 @@ jobs:
       with:
         node-version: ${{ matrix.version }}
 
-    - name: Downgrade npm
-      if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
-      run: |
-        npm i -D jest
-
     - run: |
         npm ci
         npm install file:. --no-save --force
         npm run prerelease:ci-fix
         npm run rollup:off
+
+    - name: install jest
+      if: ${{ matrix.os == 'windows-latest' && matrix.version == 22 }}
+      run: |
+        npm i -D jest
 
     - name: Run integration test with non-admin user on windows
       if: matrix.os == 'windows-latest'
