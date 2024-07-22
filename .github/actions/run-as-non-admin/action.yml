@@ -35,7 +35,7 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
-        $commandLine = $env.RUN -replace "`r`n", ";"
+        $commandLine = $env:RUN -replace "`r`n", ";"
         write-host "Running command: $commandLine"
 
         # call command using non admin user
