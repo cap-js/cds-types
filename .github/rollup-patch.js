@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-/* eslint-disable @typescript-eslint/no-var-requires*/
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const { readFile, writeFile } = require('fs/promises')
 
 /** @param {string} src */
@@ -30,7 +31,7 @@ function _getImports (src) {
  * the file from being global to a module.
  * We therefore have to remove all traditional imports and use
  * type imports instead (see: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types)
- * @param {string} src 
+ * @param {string} src
  */
 function replaceImports (src) {
   const re = id => new RegExp(`\\b${id}\\b(?!\\?|:)`, 'g')  // match whole word, but only if it's a type assertion (x?: T)
