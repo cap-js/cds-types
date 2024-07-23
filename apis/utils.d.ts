@@ -1,4 +1,4 @@
-import * as fs from 'node:fs'
+import type * as fs from 'node:fs'
 
 /**
  * Provides a set of utility functionss
