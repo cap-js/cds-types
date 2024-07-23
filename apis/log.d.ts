@@ -68,7 +68,7 @@ declare type LogFactory = {
   Logger: Logger,
 
   // FIXME
-  /* eslint-disable-next-line @typescript-eslint/ban-types */
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   winstonLogger (LoggerOptions?: { level?: string, levels?: any, format?: any, transports?: any, exitOnError?: boolean | Function, silent?: boolean }),
 }
 
