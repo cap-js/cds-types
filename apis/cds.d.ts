@@ -1,3 +1,6 @@
 import * as cds from './facade'
 
-export = cds
+declare module '@sap/cds' {
+  export * from './facade'
+  export default cds
+}
