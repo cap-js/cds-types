@@ -8,7 +8,8 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "noEmit": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules"
