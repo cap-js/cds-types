@@ -9,7 +9,7 @@ const { readFile, writeFile } = require('fs/promises')
 function _getImports (src) {
   const named = []
   const destructured = []
-  for (const [, what, from] of [...src.matchAll(/import (?:\* as )?(.*) from '(.*)'/g)]) {
+  for (const [, what, from] of [...src.matchAll(/import (?:type )?(?:\* as )?(.*) from '(.*)'/g)]) {
     if (what.includes('{')) {
       destructured.push({
         package: from.trim(),
