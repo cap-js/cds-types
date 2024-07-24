@@ -7,6 +7,11 @@
 [![deps](https://img.shields.io/librariesio/release/npm/@cap-js/cds-types?label=Dependencies)](https://www.npmjs.com/package/@cap-js/cds-types?activeTab=dependencies)
 
 
+[![main test](https://img.shields.io/github/actions/workflow/status/cap-js/cds-types/test.yml?label=main%20test)](https://github.com/cap-js/cds-types/actions/workflows/test.yml?query=branch%3Amain)
+[![main integration test](https://img.shields.io/github/actions/workflow/status/cap-js/cds-types/integration-test.yml?label=main%20integration-test)](https://github.com/cap-js/cds-types/actions/workflows/integration-test.yml?query=branch%3Amain)
+[![main lint](https://img.shields.io/github/actions/workflow/status/cap-js/cds-types/lint.yml?label=main%20lint)](https://github.com/cap-js/cds-types/actions/workflows/lint.yml?query=branch%3Amain)
+
+
 ## About this Project
 
 Contains type definitions for the [Node.js SDK](https://cap.cloud.sap/docs/node.js/) of the SAP Cloud Application Programming Model (CAP).
