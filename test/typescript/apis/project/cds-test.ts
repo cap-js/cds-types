@@ -17,10 +17,11 @@ test.data.autoReset(true)
 await test.data.delete()
 await test.data.reset()
 
+// should be the exact same type, in the rollup scenario, they are not
+// Probably due to having module augmentation wrapped around cds.d.ts
+// So we just check for equality in some of the properties to get some confidence
 test.cds.ql === cds.ql
 test.cds.ApplicationService === cds.ApplicationService
 test.cds.get === cds.get
-//test.cds === cds // same type
-
 
 const {server, url} = await test
