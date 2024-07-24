@@ -6,7 +6,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "noEmit": true,
-    "allowSyntheticDefaultImports": true
+    "noEmit": true
   }
 }
