@@ -1,2 +1,2 @@
-import type * as facade from './facade'
 export * from './facade'
+export * as default from './facade'
