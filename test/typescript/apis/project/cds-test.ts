@@ -17,6 +17,10 @@ test.data.autoReset(true)
 await test.data.delete()
 await test.data.reset()
 
-test.cds === cds // same type
+test.cds.ql === cds.ql
+test.cds.ApplicationService === cds.ApplicationService
+test.cds.get === cds.get
+//test.cds === cds // same type
+
 
 const {server, url} = await test
