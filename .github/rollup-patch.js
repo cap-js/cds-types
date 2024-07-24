@@ -80,7 +80,7 @@ function replaceImports (src) {
   rollup = rollup
     .replace(`export declare const delete: Service['delete'];`,
              `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
-    .replace(/^(\s*)delete,/m, `$1delete_ as delete,`)
+    .replaceAll(/^(\s*)delete,/gm, `$1delete_ as delete,`)
 
   // augmented namespaces like 'global' are not supported by api-extractor
   // see https://github.com/microsoft/rushstack/issues/1709

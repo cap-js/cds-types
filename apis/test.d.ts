@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios'
 import type chai from 'chai'
 import * as http from 'http'
 import { Service } from './services'
-import type * as cds from './facade'
+import type * as cds from './cds'
 
 type _cds = typeof cds
 
