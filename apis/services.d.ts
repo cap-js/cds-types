@@ -396,7 +396,7 @@ declare class SpawnEventEmitter {
 
 declare namespace types {
   type event = eventName | eventName[]
-  type eventName = string
+  type eventName = { name: string } | string
     | 'CREATE' | 'READ' | 'UPDATE' | 'DELETE'
     | 'NEW' | 'EDIT' | 'PATCH' | 'SAVE'
     | 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'

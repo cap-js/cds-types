@@ -85,6 +85,7 @@ await srv.stream({ SELECT: { from: { ref: ['Foo'] } } })
 srv.stream('data').from('T').where({ ID: 1 }).getReader
 
 await srv.emit('UPDATE', {}, {})
+await srv.emit(Books, {}, {})
 
 // method, path
 await srv.send({ method: 'READ', path: 'Authors' })
