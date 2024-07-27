@@ -1,4 +1,4 @@
-import cds, { TypedRequest } from '@sap/cds'
+import cds, { Service, TypedRequest } from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -12,6 +12,9 @@ cds.connect.to('auth', {impl: ''})
 cds.connect.to('auth', {service: 'BusinessPartnerService'})
 cds.connect.to({kind: 'odata', model:'some/imported/model', service: 'BusinessPartnerService' })
 cds.connect.to({ kind:'sqlite', credentials:{database:'my.db'} })
+cds.connect.to(class CustomService extends Service {}) // cds-typer scenario
+const dbSrv = await cds.connect.to('db')
+dbSrv.deploy() // only valid if it's a DatabaseService
 
 // legacy
 cds.connect('db')
