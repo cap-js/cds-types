@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.7.0 - TBD
 ### Added
 - `Service.emit(...)` can now also be called with custom events
+- `Service.before(...)` and `Service.after(...)` now accept bound and unbound functions as parameter
 - `connect.to (ServiceClass)` as alternative to `'service'` string
 - `connect.to ('db')` returning `cds.DatabaseService`
 

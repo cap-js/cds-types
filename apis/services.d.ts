@@ -236,6 +236,8 @@ export class Service extends QueryAPI {
   // onSucceeded (eve: types.Events, handler: types.EventHandler): this
   // onFailed (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
   // onFailed (eve: types.Events, handler: types.EventHandler): this
+  before<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
+  before<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
   before<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>>): this
   before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<Array<InstanceType<T>>>): this
   before (eve: types.event, entity: types.target, handler: EventHandler): this
@@ -250,6 +252,8 @@ export class Service extends QueryAPI {
   after<T extends Constructable>(event: 'READ' | 'EACH', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
   after<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
   after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<Array<InstanceType<T>>>): this
+  after<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
+  after<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
   after (eve: types.event, entity: types.target, handler: ResultsHandler): this
   after (eve: types.event, handler: ResultsHandler): this
 
