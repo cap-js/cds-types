@@ -232,6 +232,28 @@ srv.before('DELETE', Foos, req => isMany(req))
 srv.after('DELETE', Foo, (data) => { isMany(data); return data })
 srv.after('DELETE', Foos, (data) => isMany(data))
 
+// unbound
+srv.before(action, (req) => {
+  req.data.foo
+  return 42
+})
+
+srv.after(action, (a,b) => {
+  a?.foo.x === b.data.foo.x
+  return 42
+})
+
+// bound
+srv.before(action, 'someservice', (req) => {
+  req.data.foo
+  return 42
+})
+
+srv.after(action, 'someservice', (a,b) => {
+  a?.foo.x === b.data.foo.x
+  return 42
+})
+
 
 srv.before("UPDATE", "TestEntity", async (req) => {
   await SELECT.one.from(req.subject)
