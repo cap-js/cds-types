@@ -12,12 +12,27 @@ export const connect: {
 
   /**
 		 * Connects to a specific datasource.
+		 * @example cds.connect.to ('service')
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
 		 */
   to(datasource: string, options?: cds_connect_options): Promise<Service>,
 
   /**
+	 * Shortcut for 'db' as the primary database returning `cds.DatabaseService`
+	 * @example cds.connect.to ('db')
+	*/
+  to(datasource: 'db', options?: cds_connect_options): Promise<cds.DatabaseService>,
+
+  /**
+	 * Connects to a specific datasource via a Service subclass
+	 * @example cds.connect.to (ServiceClass)
+	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
+	 */
+  to<S extends Service>(datasource: {new(): S}, options?: cds_connect_options): Promise<S>,
+
+  /**
 		 * Connects to a specific datasource via options.
+		 * @example cds.connect.to ({ kind:..., impl:... })
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
 		 */
   to(options: cds_connect_options): Promise<Service>,
