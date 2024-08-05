@@ -5,11 +5,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.7.0 - TBD
+
+## Version 0.6.4 - 2024-08-05
 ### Added
 - `Service.emit(...)` can now also be called with custom events
 - `Service.before(...)` and `Service.after(...)` now accept bound and unbound functions as parameter
 - `connect.to (ServiceClass)` as alternative to `'service'` string
 - `connect.to ('db')` returning `cds.DatabaseService`
+
+### Changed
+- `.before(...)`, `.on(...)`, and `.after(...)` now properly infer inflection when a typer-generated class is passed as second parameter
+
+### Fixed
+- `EACH` event has appropriately been renamed `each` to reflect runtime behaviour
 
 ## Version 0.6.3 - 2024-07-19
 ### Fixed
