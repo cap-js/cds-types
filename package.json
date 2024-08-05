@@ -43,7 +43,7 @@
     "@stylistic/eslint-plugin-js": "^2.1.0",
     "@stylistic/eslint-plugin-ts": "^2.1.0",
     "@types/jest": "^29.5.11",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "axios": "^1.6.2",
     "chai": "^4.3.10",
     "eslint": "^9.2.0",
