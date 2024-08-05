@@ -165,6 +165,11 @@ srv.before('*', async req => {
   req.tenant
   req.target.name
   req.entity
+
+  req.query
+  req.query.elements
+  // req.query.where('x =', 9)
+  (req.query as SELECT<Foo>).SELECT.from.ref
 })
 
 srv.after('*', (results, req) => {
