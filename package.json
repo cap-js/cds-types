@@ -20,6 +20,7 @@
   ],
   "scripts": {
     "test": "jest --silent",
+    "test:integration": "jest --silent --testMatch \"**/test/**/*.integrationtest.js\"",
     "test:rollup": "npm run rollup; npm run rollup:on; npm run test; npm run rollup:off",
     "rollup": "rm -rf dist/ && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
     "rollup:on": "npm pkg set typings=dist/cds-types.d.ts && [ -d 'apis' ] && mv -- apis -apis || true",
@@ -38,7 +39,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
-    "@sap/cds": ">=7.5.0",
+    "@sap/cds": ">=8.0.0",
     "@stylistic/eslint-plugin-js": "^2.1.0",
     "@stylistic/eslint-plugin-ts": "^2.1.0",
     "@types/jest": "^29.5.11",
@@ -49,7 +50,7 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^8.0.0-alpha.10",
+    "typescript-eslint": "^8.0.0-alpha.51",
     "winston": "^3.13.0"
   },
   "jest": {

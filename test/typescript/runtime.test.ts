@@ -195,8 +195,8 @@ describe('runtime tests', () => {
 
     SELECT.from('Books').where({ID:1})
 
-    let ua = new User
-    expect (ua.id).toBe('anonymous')
+    let ua = new User('foo')
+    expect (ua.id).toBe('foo')
     expect(ua.is('any'))
     expect(!ua.is('authenticated-user'))
 

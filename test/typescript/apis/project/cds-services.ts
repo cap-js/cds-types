@@ -1,4 +1,4 @@
-import cds, { TypedRequest } from '@sap/cds'
+import cds, { Service, TypedRequest } from '@sap/cds'
 import { Foo, Foos, action } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -12,6 +12,9 @@ cds.connect.to('auth', {impl: ''})
 cds.connect.to('auth', {service: 'BusinessPartnerService'})
 cds.connect.to({kind: 'odata', model:'some/imported/model', service: 'BusinessPartnerService' })
 cds.connect.to({ kind:'sqlite', credentials:{database:'my.db'} })
+cds.connect.to(class CustomService extends Service {}) // cds-typer scenario
+const dbSrv = await cds.connect.to('db')
+dbSrv.deploy() // only valid if it's a DatabaseService
 
 // legacy
 cds.connect('db')
@@ -85,6 +88,7 @@ await srv.stream({ SELECT: { from: { ref: ['Foo'] } } })
 srv.stream('data').from('T').where({ ID: 1 }).getReader
 
 await srv.emit('UPDATE', {}, {})
+await srv.emit(Books, {}, {})
 
 // method, path
 await srv.send({ method: 'READ', path: 'Authors' })
@@ -227,6 +231,28 @@ srv.before('DELETE', Foo, req => { isMany(req); return req.data })
 srv.before('DELETE', Foos, req => isMany(req))
 srv.after('DELETE', Foo, (data) => { isMany(data); return data })
 srv.after('DELETE', Foos, (data) => isMany(data))
+
+// unbound
+srv.before(action, (req) => {
+  req.data.foo
+  return 42
+})
+
+srv.after(action, (a,b) => {
+  a?.foo.x === b.data.foo.x
+  return 42
+})
+
+// bound
+srv.before(action, 'someservice', (req) => {
+  req.data.foo
+  return 42
+})
+
+srv.after(action, 'someservice', (a,b) => {
+  a?.foo.x === b.data.foo.x
+  return 42
+})
 
 
 srv.before("UPDATE", "TestEntity", async (req) => {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './ql'
 import { ArrayConstructable, Constructable, Unwrap } from './internal/inference'
@@ -237,6 +236,8 @@ export class Service extends QueryAPI {
   // onSucceeded (eve: types.Events, handler: types.EventHandler): this
   // onFailed (eve: types.Events, entity: types.Target, handler: types.EventHandler): this
   // onFailed (eve: types.Events, handler: types.EventHandler): this
+  before<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
+  before<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
   before<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<Unwrap<T>>): this
   before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>>): this
   before (eve: types.event, entity: types.target, handler: EventHandler): this
@@ -252,6 +253,8 @@ export class Service extends QueryAPI {
   after<T extends Constructable>(event: 'READ' | 'each', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
   after<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<Unwrap<T>>): this
   after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
+  after<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
+  after<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
   after (eve: types.event, entity: types.target, handler: ResultsHandler): this
   after (eve: types.event, handler: ResultsHandler): this
 
@@ -317,6 +320,7 @@ interface EventHandler {
 }
 
 interface OnEventHandler {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   (req: Request, next: Function): Promise<any> | any | void
 }
 
@@ -360,6 +364,7 @@ declare namespace CRUDEventHandler {
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
 interface ActionEventHandler<P, R> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R
 }
 
@@ -396,7 +401,7 @@ declare class SpawnEventEmitter {
 
 declare namespace types {
   type event = eventName | eventName[]
-  type eventName = string
+  type eventName = { name: string } | string
     | 'CREATE' | 'READ' | 'UPDATE' | 'DELETE'
     | 'NEW' | 'EDIT' | 'PATCH' | 'SAVE'
     | 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'

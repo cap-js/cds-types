@@ -1,4 +1,4 @@
-import * as models from './models'
+import type * as models from './models'
 
 type Intersect<T extends readonly unknown[]> = T extends [infer Head, ...infer Tail]
   ? Head & Intersect<Tail>

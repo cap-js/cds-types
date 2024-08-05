@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-/* eslint-disable @typescript-eslint/no-var-requires*/
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const { readFile, writeFile } = require('fs/promises')
 
 /** @param {string} src */
 function _getImports (src) {
   const named = []
   const destructured = []
-  for (const [, what, from] of [...src.matchAll(/import (?:\* as )?(.*) from '(.*)'/g)]) {
+  for (const [, what, from] of [...src.matchAll(/import (?:type )?(?:\* as )?(.*) from '(.*)'/g)]) {
     if (what.includes('{')) {
       destructured.push({
         package: from.trim(),
@@ -30,7 +31,7 @@ function _getImports (src) {
  * the file from being global to a module.
  * We therefore have to remove all traditional imports and use
  * type imports instead (see: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#import-types)
- * @param {string} src 
+ * @param {string} src
  */
 function replaceImports (src) {
   const re = id => new RegExp(`\\b${id}\\b(?!\\?|:)`, 'g')  // match whole word, but only if it's a type assertion (x?: T)
@@ -79,7 +80,7 @@ function replaceImports (src) {
   rollup = rollup
     .replace(`export declare const delete: Service['delete'];`,
              `declare const delete_: Service['delete'];\nexport { delete_ as delete };`)
-    .replace(/^(\s*)delete,/m, `$1delete_ as delete,`)
+    .replaceAll(/^(\s*)delete,/gm, `$1delete_ as delete,`)
 
   // augmented namespaces like 'global' are not supported by api-extractor
   // see https://github.com/microsoft/rushstack/issues/1709

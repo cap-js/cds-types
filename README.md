@@ -2,8 +2,17 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/cap-js/cds-types)](https://api.reuse.software/info/github.com/cap-js/cds-types)
 ![Unit Tests passing](https://github.com/cap-js/cds-types/actions/workflows/test.yml/badge.svg)
+[![npmjscom](https://img.shields.io/npm/v/@cap-js/cds-types?color=green&label=npmjs.com)](https://www.npmjs.com/package/@cap-js/cds-types)
+![downloads](https://img.shields.io/npm/dw/@cap-js/cds-types)
+[![deps](https://img.shields.io/librariesio/release/npm/@cap-js/cds-types?label=Dependencies)](https://www.npmjs.com/package/@cap-js/cds-types?activeTab=dependencies)
 
-## About this project
+
+[![main test](https://img.shields.io/github/actions/workflow/status/cap-js/cds-types/test.yml?label=main%20test)](https://github.com/cap-js/cds-types/actions/workflows/test.yml?query=branch%3Amain)
+[![main integration test](https://img.shields.io/github/actions/workflow/status/cap-js/cds-types/integration-test.yml?label=main%20integration-test)](https://github.com/cap-js/cds-types/actions/workflows/integration-test.yml?query=branch%3Amain)
+[![main lint](https://img.shields.io/github/actions/workflow/status/cap-js/cds-types/lint.yml?label=main%20lint)](https://github.com/cap-js/cds-types/actions/workflows/lint.yml?query=branch%3Amain)
+
+
+## About this Project
 
 Contains type definitions for the [Node.js SDK](https://cap.cloud.sap/docs/node.js/) of the SAP Cloud Application Programming Model (CAP).
 
@@ -12,6 +21,9 @@ Contains type definitions for the [Node.js SDK](https://cap.cloud.sap/docs/node.
 Just install package `@sap/cds` into a Javascript or Typescript project, and the types will automatically be available in modern IDEs like VS Code.
 
 Find more information on the APIs in the [Node.js SDK documentation](https://cap.cloud.sap/docs/node.js/).
+
+## Note to Microsoft Windows Users
+If you rename your project after you installed the type definitions on Windows, you have to rerun `npm install` to correctly recreate the symlink `node_modules/@types/sap__cds`.
 
 ## Support, Feedback, Contributing
 
