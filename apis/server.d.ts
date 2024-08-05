@@ -6,7 +6,8 @@ import { Application, RequestHandler } from 'express'
 import { XOR } from './internal/util'
 
 type _cds = typeof cds
-type cds_services = { [name: string]: Service }
+type service_dict = { [name: string]: Service };
+interface cds_services extends service_dict {}
 
 export const connect: {
 
