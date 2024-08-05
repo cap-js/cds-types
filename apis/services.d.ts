@@ -224,8 +224,8 @@ export class Service extends QueryAPI {
   // Provider API
   prepend (fn: ServiceImpl): this
 
-  on<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>>): this
-  on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<Array<InstanceType<T>>>): this
+  on<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<Unwrap<T>>): this
+  on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>>): this
   on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
   on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
   on (eve: types.event, entity: types.target, handler: OnEventHandler): this
@@ -238,20 +238,21 @@ export class Service extends QueryAPI {
   // onFailed (eve: types.Events, handler: types.EventHandler): this
   before<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
   before<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
-  before<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>>): this
-  before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<Array<InstanceType<T>>>): this
+  before<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<Unwrap<T>>): this
+  before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>>): this
   before (eve: types.event, entity: types.target, handler: EventHandler): this
   before (eve: types.event, handler: EventHandler): this
 
   // order relevant:
-  // (2) check if T is arrayable -> use T directly
-  // (3) check if T is scalar -> wrap into array
-  // this streamlines that in _most_ cases, handlers will receive an array.
+  // (2) check if T is arrayable -> unwrap array type
+  // (3) check if T is scalar -> use T directly
+  // this streamlines that in _most_ cases, handlers will receive a single object.
   // _Except_ for after.read handlers (1), which will change its inflection based on T.
-  after<T extends ArrayConstructable>(event: 'READ' | 'EACH', entity: T, handler: CRUDEventHandler.After<Unwrap<T>>): this
-  after<T extends Constructable>(event: 'READ' | 'EACH', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
-  after<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
-  after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<Array<InstanceType<T>>>): this
+  after<T extends ArrayConstructable>(event: 'READ', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
+  after<T extends ArrayConstructable>(event: 'each', entity: T, handler: CRUDEventHandler.After<Unwrap<T>>): this
+  after<T extends Constructable>(event: 'READ' | 'each', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
+  after<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<Unwrap<T>>): this
+  after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
   after<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
   after<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
   after (eve: types.event, entity: types.target, handler: ResultsHandler): this
