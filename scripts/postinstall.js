@@ -3,7 +3,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('node:fs')
-const { join, relative, dirname } = require('node:path')
+const { join, relative, dirname, resolve } = require('node:path')
 
 if (!process.env.INIT_CWD) return
 // TODO: check if were in a local install
@@ -14,7 +14,7 @@ if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir)
 
 // use a relative target, in case the user moves the project
 const target = join(typesDir, 'sap__cds')
-const src = join(nodeModules, '@cap-js/cds-types')
+const src = resolvePkg('@cap-js/cds-types') || join(nodeModules, '@cap-js/cds-types')
 const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
 
 // remove the existing symlink
@@ -30,4 +30,13 @@ try {
 } catch (e) {
     if (e.code !== 'EEXIST') throw e
     // else: symlink exists (the previous unlink hasn't worked), ignore
+}
+
+function resolvePkg(pkg) {
+    try {
+        const pjson = require.resolve(join(pkg, 'package.json'), { paths: [process.env.INIT_CWD] })
+        return resolve(pjson, '..')
+    } catch {
+        return null
+    }
 }
