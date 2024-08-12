@@ -6,16 +6,16 @@ const fs = require('node:fs')
 const { join, relative, dirname, resolve } = require('node:path')
 
 if (!process.env.INIT_CWD) return
-// TODO: check if were in a local install
+
 const nodeModules = join(process.env.INIT_CWD, 'node_modules')
-if (!fs.existsSync(nodeModules)) return
 const typesDir = join(nodeModules, '@types')
-if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir)
+if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir, {recursive: true})
 
 // use a relative target, in case the user moves the project
 const target = join(typesDir, 'sap__cds')
 const src = resolvePkg('@cap-js/cds-types') || join(nodeModules, '@cap-js/cds-types')
 const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
+// console.error(`Creating symlink from ${rel} to ${target}`)
 
 // remove the existing symlink
 try {
