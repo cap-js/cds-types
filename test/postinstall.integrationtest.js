@@ -40,7 +40,7 @@ describe('postinstall', () => {
 
         // after renaming the project folder, the symlink must be recreated on windows
         if (IS_WIN) {
-            await execAsync('npm i', { cwd: newProjectFolder })
+            await execAsync('npm i --foreground-scripts', { cwd: newProjectFolder })
         }
 
         typesPackageJsonFile = path.join(newProjectFolder, 'node_modules/@types/sap__cds/package.json')
@@ -63,8 +63,8 @@ describe('postinstall', () => {
             name: 'project1'
         }, null, 2))
         {
-            const {stdout, stderr} = await execAsync(`npm i -D ${cdsTypesRoot}`, { cwd: project1 })
-            // console.log(stdout, stderr)
+            const {stdout, stderr} = await execAsync(`npm i --foreground-scripts -dd -D ${cdsTypesRoot}`, { cwd: project1 })
+            console.log(stdout, stderr)
         }
         let packageJson = require(path.join(project1, 'node_modules/@types/sap__cds/package.json'))
         expect(packageJson.name).toBe('@cap-js/cds-types')
@@ -75,12 +75,12 @@ describe('postinstall', () => {
         await fs.writeFile(path.join(project2, 'package.json'), JSON.stringify({
             name: 'project2',
             devDependencies: {
-                '@cap-js/cds-types': '*'
+                '@cap-js/cds-types': `file:${cdsTypesRoot}`
             }
         }, null, 2))
         {
-            const {stdout, stderr} = await execAsync(`npm i`, { cwd: project2 })
-            // console.log(stdout, stderr)
+            const {stdout, stderr} = await execAsync(`npm i --foreground-scripts -dd`, { cwd: project2 })
+            console.log(stdout, stderr)
         }
         packageJson = require(path.join(project2, 'node_modules/@types/sap__cds/package.json'))
         expect(packageJson.name).toBe('@cap-js/cds-types')
