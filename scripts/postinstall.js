@@ -9,11 +9,12 @@ if (!process.env.INIT_CWD) return
 
 const nodeModules = join(process.env.INIT_CWD, 'node_modules')
 const typesDir = join(nodeModules, '@types')
+// we may have to create node_modules altogether in case of a mono repo
 if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir, {recursive: true})
 
 // use a relative target, in case the user moves the project
 const target = join(typesDir, 'sap__cds')
-const src = resolvePkg('@cap-js/cds-types') || join(nodeModules, '@cap-js/cds-types')
+const src = resolvePkg('@cap-js/cds-types') ?? join(nodeModules, '@cap-js/cds-types')
 const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
 console.log(`Creating symlink ${target} -> ${rel}`)
 
