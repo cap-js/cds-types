@@ -53,6 +53,7 @@ runs:
 
         # Get the SID of the target user
         $sid = (Get-WmiObject -Class Win32_UserAccount -Filter "Name='$username'").SID
+        echo "SID:$sid"
 
         # Set the USERPROFILE environment variable for the target user
         reg add "HKEY_USERS\%sid%\Environment" /v USERPROFILE /t REG_SZ /d %newHomeDir% /f
