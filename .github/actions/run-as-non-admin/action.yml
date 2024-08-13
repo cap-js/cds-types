@@ -42,6 +42,9 @@ runs:
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
+        # Log in as the new user to create the profile
+        Start-Process -FilePath "cmd.exe" -ArgumentList "/c exit" -Credential $credential -Wait
+
         # Set the home directory for the new user
         $newHomeDir = "C:\Users\$username"
         $userSID = (Get-LocalUser $username).SID.Value
