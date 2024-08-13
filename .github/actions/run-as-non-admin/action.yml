@@ -20,6 +20,13 @@ runs:
   using: composite
 
   steps:
+    - name: Run local PowerShell script
+      shell: pwsh
+      run: ./script.ps1
+      env:
+        OS: ${{ runner.os }}
+        RUN: ${{ inputs.run }}
+
     - name: Prepare env and run cmd as non-admin user
       shell: pwsh
       env:
@@ -43,11 +50,12 @@ runs:
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
         # create temp folder
-        New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force -ErrorAction SilentlyContinue
+        New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force
 
         # make temp folder writable for nonadmin user
         icacls "$newHomeDir" /grant "${username}:(OI)(CI)F" /T
 
+        # using start-process to run command as non admin user requires setting env vars
         $envVars = @{
             HOME = $newHomeDir
             HOMEPATH = "\Users\$username"
@@ -57,7 +65,7 @@ runs:
             USERPROFILE = $newHomeDir
         }
 
-        # call command using non admin user
+        # call command using non admin user credentials
         $process = Start-Process -FilePath "pwsh" `
             -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
             -Credential $credential `
