@@ -34,6 +34,7 @@ runs:
         $username = "nonadminuser"
         # random password fulfilling win requirements
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
+        $newHomeDir = "C:\Users\$username"
 
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
