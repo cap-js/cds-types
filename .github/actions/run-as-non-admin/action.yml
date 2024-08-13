@@ -59,7 +59,7 @@ runs:
             -NoNewWindow `
             -RedirectStandardOutput "output.txt" `
             -RedirectStandardError "error.txt" `
-            -Environment $envVars
+            -Environment $envVars `
 
         Get-Content output.txt
         Get-Content error.txt
