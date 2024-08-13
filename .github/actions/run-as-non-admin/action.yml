@@ -38,17 +38,11 @@ runs:
         # random password fulfilling win requirements
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
 
-        New-LocalUser $username -Password $password
+        $newHomeDir = "C:\Users\$username"
+
+        New-LocalUser $username -Password $password -HomeDirectory $newHomeDir -PasswordNeverExpires:$true
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
-
-        # Log in as the new user to create the profile
-        Start-Process -FilePath "cmd.exe" -ArgumentList "/c exit" -Credential $credential -Wait
-
-        # Set the home directory for the new user
-        $newHomeDir = "C:\Users\$username"
-        $userSID = (Get-LocalUser $username).SID.Value
-        Set-ItemProperty -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ProfileList\$userSID" -Name "ProfileImagePath" -Value $newHomeDir
 
         # Optionally, create the new home directory and set permissions
         New-Item -ItemType Directory -Path $newHomeDir
