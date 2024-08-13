@@ -50,10 +50,13 @@ jobs:
           echo "whoami:$(whoami)"
           echo "home:$HOME"
           echo "userprofile:$USERPROFILE"
+          echo "temp:$TEMP"
 
           dir $HOME
           dir $TMP
           dir $TEMP
+
+          Get-ChildItem Env:
 
     - name: Run integration tests
       if: matrix.os != 'windows-latest'

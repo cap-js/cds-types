@@ -49,8 +49,8 @@ runs:
         $envVars = @{
             HOME = $newHomeDir
             HOMEPATH = "\Users\$username"
-            TEMP = "C:\Users\$username\AppData\Local\Temp"
-            TMP = "C:\Users\$username\AppData\Local\Temp"
+            TEMP = "$newHomeDir\AppData\Local\Temp"
+            TMP =  "$newHomeDir\AppData\Local\Temp"
             USERNAME = $username
             USERPROFILE = $newHomeDir
         }
