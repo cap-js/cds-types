@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "whoami:$(whoami)"
           echo "home:$HOME"
-          echo "userprofile:$USERPROFILE"
+
           npm run test:integration
 
     - name: Run integration tests

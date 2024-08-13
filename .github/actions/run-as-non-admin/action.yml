@@ -43,9 +43,9 @@ runs:
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
         # create temp folder
-        New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force
+        New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force -ErrorAction SilentlyContinue
 
-        # make temp folder writable for all users
+        # make temp folder writable for nonadmin user
         icacls "$newHomeDir" /grant "${username}:(OI)(CI)F" /T
 
         $envVars = @{
