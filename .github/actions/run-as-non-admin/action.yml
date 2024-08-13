@@ -39,6 +39,7 @@ runs:
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
 
         $newHomeDir = "C:\Users\$username"
+        $env:HOME = $newHomeDir
 
         # create non-admin user
         New-LocalUser $username -Password $password -PasswordNeverExpires:$true
