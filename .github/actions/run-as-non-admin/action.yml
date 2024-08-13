@@ -45,6 +45,8 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
+        $command = "`n`$HOME=`"$newHomeDir`"; `$USERPROFILE=`"$newHomeDir`";`n$env:RUN"
+
         # call command using non admin user
         $process = Start-Process -FilePath "pwsh" `
             -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
