@@ -32,28 +32,42 @@ runs:
         if ($env:OS -ne "Windows") { exit 1 }
 
         $username = "nonadminuser"
-        # random password fulfilling win requirements
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
+        $newHomeDir = "C:\Users\$username"
 
-        New-LocalUser $username -Password $password
-        Add-LocalGroupMember -Group "Users" -Member $username
+        New-LocalUser $username -Password $password | Out-Null
+        Add-LocalGroupMember -Group "Users" -Member $username | Out-Null
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
-
-        # make temp folder writable for all users
-        icacls "C:\Users\runneradmin" /grant "Everyone:(OI)(CI)F" /T
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
-        # call command using non admin user
+        # create temp folder
+        New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force
+
+        # make temp folder writable for nonadmin user
+        icacls "$newHomeDir" /grant "${username}:(OI)(CI)F" /T
+
+        # using start-process to run command as non admin user requires setting env vars
+        $envVars = @{
+            HOME = $newHomeDir
+            HOMEPATH = "\Users\$username"
+            TEMP = "$newHomeDir\AppData\Local\Temp"
+            TMP =  "$newHomeDir\AppData\Local\Temp"
+            USERNAME = $username
+            USERPROFILE = $newHomeDir
+        }
+
+        # call command using non admin user credentials
         $process = Start-Process -FilePath "pwsh" `
             -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
             -Credential $credential `
-            -PassThru `
-            -Wait `
+            -Environment $envVars `
             -NoNewWindow `
-            -RedirectStandardOutput "output.txt" `
+            -PassThru `
             -RedirectStandardError "error.txt" `
+            -RedirectStandardOutput "output.txt" `
+            -Wait `
 
         Get-Content output.txt
         Get-Content error.txt
