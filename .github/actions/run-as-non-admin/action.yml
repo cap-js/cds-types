@@ -40,7 +40,7 @@ runs:
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
         # make temp folder writable for all users
-        icacls "C:\Users" /grant "${username}:(OI)(CI)F" /T
+        icacls "C:\Users" /grant "Everyone:(OI)(CI)F"
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
