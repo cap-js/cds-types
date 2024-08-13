@@ -45,7 +45,7 @@ runs:
         # Set the home directory for the new user
         $newHomeDir = "C:\Users\$username"
         $userSID = (Get-LocalUser $username).SID.Value
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$userSID" -Name "ProfileImagePath" -Value $newHomeDir
+        Set-ItemProperty -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ProfileList\$userSID" -Name "ProfileImagePath" -Value $newHomeDir
 
         # Optionally, create the new home directory and set permissions
         New-Item -ItemType Directory -Path $newHomeDir
