@@ -49,7 +49,7 @@ runs:
 
         # Optionally, create the new home directory and set permissions
         New-Item -ItemType Directory -Path $newHomeDir
-        icacls $newHomeDir /grant $username:(OI)(CI)F /T
+        icacls $newHomeDir /grant ${username}:(OI)(CI)F /T
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
