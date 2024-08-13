@@ -51,21 +51,21 @@ runs:
         New-Item -ItemType Directory -Path $newHomeDir
         icacls $newHomeDir /grant "${username}:(OI)(CI)F" /T
 
+        # Get the SID of the target user
+        $sid = (Get-WmiObject -Class Win32_UserAccount -Filter "Name='$username'").SID
+
+        # Set the USERPROFILE environment variable for the target user
+        Set-ItemProperty -Path "HKU:\$sid\Environment" -Name "USERPROFILE" -Value $newHomeDir
+
         # Set the home directory using net user
-        net user $username /homedir:$newHomeDir
+        # net user $username /homedir:$newHomeDir
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
-        # Define the script to run as the non-admin user
-        $script = @"
-        \$env:HOME = '$newHomeDir'
-        \$env:RUN = '$env:RUN'
-        Invoke-Expression \$env:RUN
-        "@
         # call command using non admin user
         $process = Start-Process -FilePath "pwsh" `
-            -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $script `
+            -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
             -Credential $credential `
             -PassThru `
             -Wait `
