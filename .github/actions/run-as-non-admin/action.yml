@@ -32,7 +32,7 @@ runs:
         if ($env:OS -ne "Windows") { exit 1 }
 
         # make temp folder writable for all users
-        icacls $env:TEMP /grant "Everyone:(OI)(CI)F /T"
+        icacls $env:TEMP /grant "Everyone:(OI)(CI)F" /T
 
         $username = "nonadminuser"
         # random password fulfilling win requirements
@@ -47,7 +47,7 @@ runs:
 
         # Optionally, create the new home directory and set permissions
         New-Item -ItemType Directory -Path $newHomeDir
-        icacls $newHomeDir /grant "${username}:(OI)(CI)F /T"
+        icacls $newHomeDir /grant "${username}:(OI)(CI)F" /T
 
         # Set the home directory using net user
         net user $username /homedir:$newHomeDir
