@@ -32,8 +32,8 @@ runs:
         if ($env:OS -ne "Windows") { exit 1 }
 
         # make temp folder writable for all users
-        # icacls $env:TEMP /grant "Everyone:(OI)(CI)F" /T
-        icacls "C:\Users" /grant "Everyone:(OI)(CI)F" /T
+        icacls $env:TEMP /grant "Everyone:(OI)(CI)F" /T
+        # icacls "C:\Users" /grant "Everyone:(OI)(CI)F" /T
 
         $username = "nonadminuser"
         # random password fulfilling win requirements
@@ -57,6 +57,11 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
+        # Define environment variables
+        $envVars = @{
+            "HOME" = $newHomeDir
+        }
+
         # call command using non admin user
         $process = Start-Process -FilePath "pwsh" `
             -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
@@ -66,6 +71,7 @@ runs:
             -NoNewWindow `
             -RedirectStandardOutput "output.txt" `
             -RedirectStandardError "error.txt" `
+            -EnvironmentVariables $envVars `
 
         Get-Content output.txt
         Get-Content error.txt
