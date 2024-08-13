@@ -72,7 +72,6 @@ runs:
             -NoNewWindow `
             -RedirectStandardOutput "output.txt" `
             -RedirectStandardError "error.txt" `
-            -EnvironmentVariables $envVars `
 
         Get-Content output.txt
         Get-Content error.txt
