@@ -49,7 +49,7 @@ runs:
 
         # call command using non admin user
         $process = Start-Process -FilePath "pwsh" `
-            -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
+            -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $command `
             -Credential $credential `
             -PassThru `
             -Wait `
