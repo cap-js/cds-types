@@ -56,8 +56,6 @@ jobs:
           dir $TMP
           dir $TEMP
 
-          Get-ChildItem Env:
-
     - name: Run integration tests
       if: matrix.os != 'windows-latest'
       run: |
