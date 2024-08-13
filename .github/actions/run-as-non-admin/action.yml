@@ -55,7 +55,8 @@ runs:
         $sid = (Get-WmiObject -Class Win32_UserAccount -Filter "Name='$username'").SID
 
         # Set the USERPROFILE environment variable for the target user
-        Set-ItemProperty -Path "HKEY_USERS\$sid\Environment" -Name "USERPROFILE" -Value $newHomeDir
+        reg add "HKEY_USERS\%sid%\Environment" /v USERPROFILE /t REG_SZ /d %newHomeDir% /f
+        # Set-ItemProperty -Path "HKEY_USERS\$sid\Environment" -Name "USERPROFILE" -Value $newHomeDir
 
         # Set the home directory using net user
         # net user $username /homedir:$newHomeDir
