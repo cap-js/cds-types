@@ -55,12 +55,12 @@ runs:
         $process = Start-Process -FilePath "pwsh" `
             -ArgumentList "-NoLogo", "-NonInteractive", "-NoProfile", "-Command", $env:RUN `
             -Credential $credential `
-            -PassThru `
-            -Wait `
-            -NoNewWindow `
-            -RedirectStandardOutput "output.txt" `
-            -RedirectStandardError "error.txt" `
             -Environment $envVars `
+            -NoNewWindow `
+            -PassThru `
+            -RedirectStandardError "error.txt" `
+            -RedirectStandardOutput "output.txt" `
+            -Wait `
 
         Get-Content output.txt
         Get-Content error.txt
