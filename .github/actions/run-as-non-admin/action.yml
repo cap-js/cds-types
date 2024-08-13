@@ -46,6 +46,8 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
+        New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force
+
         $envVars = @{
             HOME = $newHomeDir
             HOMEPATH = "\Users\$username"
