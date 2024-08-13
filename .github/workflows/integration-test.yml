@@ -48,7 +48,8 @@ jobs:
       with:
         run: |
           echo "whoami:$(whoami)"
-          npm run test:integration
+          echo "home:$HOME"
+          echo "userprofile:$USERPROFILE"
 
     - name: Run integration tests
       if: matrix.os != 'windows-latest'
