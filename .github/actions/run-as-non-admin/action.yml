@@ -65,7 +65,7 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
-        $command = "`$env:USERPROFILE=$newHomeDir; $env:RUN"
+        $command = "\n`$env:USERPROFILE=$newHomeDir\n$env:RUN"
         echo "Command:$command"
 
         # call command using non admin user
