@@ -1,2 +1,0 @@
-echo "hallo"
-echo $RUN

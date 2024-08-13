@@ -20,13 +20,6 @@ runs:
   using: composite
 
   steps:
-    - name: Run local PowerShell script
-      shell: pwsh
-      run: ./script.ps1
-      env:
-        OS: ${{ runner.os }}
-        RUN: ${{ inputs.run }}
-
     - name: Prepare env and run cmd as non-admin user
       shell: pwsh
       env:
