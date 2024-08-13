@@ -47,7 +47,7 @@ runs:
 
         # Optionally, create the new home directory and set permissions
         New-Item -ItemType Directory -Path $newHomeDir
-        icacls $newHomeDir /grant ${username}:(OI)(CI)F /T
+        icacls $newHomeDir /grant "${username}:(OI)(CI)F /T"
 
         # Set the home directory using net user
         net user $username /homedir:$newHomeDir
