@@ -40,13 +40,17 @@ runs:
 
         $newHomeDir = "C:\Users\$username"
 
-        New-LocalUser $username -Password $password -HomeDirectory $newHomeDir -PasswordNeverExpires:$true
+        # create non-admin user
+        New-LocalUser $username -Password $password -PasswordNeverExpires:$true
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
         # Optionally, create the new home directory and set permissions
         New-Item -ItemType Directory -Path $newHomeDir
         icacls $newHomeDir /grant ${username}:(OI)(CI)F /T
+
+        # Set the home directory using net user
+        net user $username /homedir:$newHomeDir
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
