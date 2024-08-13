@@ -16,6 +16,7 @@ describe('postinstall', () => {
 
     beforeEach(async () => {
         tempFolder = await fs.mkdtemp(path.join(os.tmpdir(), 'postinstall-'))
+        // console.log(`tempFolder: ${tempFolder}`)
     })
 
     afterEach(async () => {
@@ -39,12 +40,52 @@ describe('postinstall', () => {
 
         // after renaming the project folder, the symlink must be recreated on windows
         if (IS_WIN) {
-            await execAsync('npm i', { cwd: newProjectFolder })
+            await execAsync('npm i --foreground-scripts', { cwd: newProjectFolder })
         }
 
         typesPackageJsonFile = path.join(newProjectFolder, 'node_modules/@types/sap__cds/package.json')
         typesPackageJsonFileContent = await fs.readFile(typesPackageJsonFile, 'utf8')
         packageJson = JSON.parse(typesPackageJsonFileContent)
         expect(packageJson.name).toBe('@cap-js/cds-types')
+    })
+
+    test('create symlink in monorepo', async () => {
+        const rootFolder = path.join(tempFolder, 'monorepo')
+        await fs.mkdir(rootFolder, { recursive: true, force: true })
+        await fs.writeFile(path.join(rootFolder, 'package.json'), JSON.stringify({
+            name: 'monorepo', workspaces: [ 'packages/**' ]
+        }, null, 2))
+
+        // create a first project, add the dependency to cds-types
+        const project1 = path.join(rootFolder, 'packages/project1')
+        await fs.mkdir(project1, { recursive: true, force: true })
+        await fs.writeFile(path.join(project1, 'package.json'), JSON.stringify({
+            name: 'project1'
+        }, null, 2))
+        {
+            // const {stdout, stderr} =
+            await execAsync(`npm i --foreground-scripts -dd -D ${cdsTypesRoot}`, { cwd: project1 })
+            // console.log(stdout, stderr)
+        }
+        let packageJson = require(path.join(project1, 'node_modules/@types/sap__cds/package.json'))
+        expect(packageJson.name).toBe('@cap-js/cds-types')
+
+        // now create a second project with the dependency
+        const project2 = path.join(rootFolder, 'packages/project2')
+        await fs.mkdir(project2, { recursive: true, force: true })
+        await fs.writeFile(path.join(project2, 'package.json'), JSON.stringify({
+            name: 'project2',
+            devDependencies: {
+                '@cap-js/cds-types': `file:${cdsTypesRoot}`
+            }
+        }, null, 2))
+        {
+            // const {stdout, stderr} =
+            await execAsync(`npm i --foreground-scripts -dd`, { cwd: project2 })
+            // console.log(stdout, stderr)
+        }
+        packageJson = require(path.join(project2, 'node_modules/@types/sap__cds/package.json'))
+        expect(packageJson.name).toBe('@cap-js/cds-types')
+
     })
 })
