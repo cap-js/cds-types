@@ -32,7 +32,6 @@ runs:
         if ($env:OS -ne "Windows") { exit 1 }
 
         $username = "nonadminuser"
-        # random password fulfilling win requirements
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
         $newHomeDir = "C:\Users\$username"
 
@@ -43,10 +42,11 @@ runs:
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
 
+        # create temp folder
         New-Item -ItemType Directory -Path "$newHomeDir\AppData\Local\Temp" -Force
 
         # make temp folder writable for all users
-        icacls "C:\Users\$username" /grant "Everyone:(OI)(CI)F" /T
+        icacls "$newHomeDir" /grant "${username}:(OI)(CI)F" /T
 
         $envVars = @{
             HOME = $newHomeDir
