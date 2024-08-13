@@ -32,7 +32,7 @@ runs:
         if ($env:OS -ne "Windows") { exit 1 }
 
         # make temp folder writable for all users
-        icacls $env:TEMP /grant "Everyone:(OI)(CI)F"
+        icacls $env:TEMP /grant "Everyone:(OI)(CI)F /T"
 
         $username = "nonadminuser"
         # random password fulfilling win requirements
@@ -41,6 +41,15 @@ runs:
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
+
+        # Set the home directory for the new user
+        $newHomeDir = "C:\Users\$username"
+        $userSID = (Get-LocalUser $username).SID.Value
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$userSID" -Name "ProfileImagePath" -Value $newHomeDir
+
+        # Optionally, create the new home directory and set permissions
+        New-Item -ItemType Directory -Path $newHomeDir
+        icacls $newHomeDir /grant $username:(OI)(CI)F /T
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f

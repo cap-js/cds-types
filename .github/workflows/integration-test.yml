@@ -49,7 +49,7 @@ jobs:
       with:
         run: |
           echo "whoami:$(whoami)"
-          echo "homedir: $HOME"
+          echo "homedir:$HOME"
           npm run test:integration
 
     - name: Run integration tests
