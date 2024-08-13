@@ -35,12 +35,12 @@ runs:
         # random password fulfilling win requirements
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
 
-        # make temp folder writable for all users
-        icacls "C:\Users" /grant "${username}:(OI)(CI)F" /T
-
         New-LocalUser $username -Password $password
         Add-LocalGroupMember -Group "Users" -Member $username
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
+
+        # make temp folder writable for all users
+        icacls "C:\Users" /grant "${username}:(OI)(CI)F" /T
 
         # remove dev mode so symlink fails if called without junction
         reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /f
