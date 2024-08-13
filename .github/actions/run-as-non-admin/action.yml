@@ -35,8 +35,8 @@ runs:
         $password = ConvertTo-SecureString "abcdEFGH123$%" -AsPlainText -Force
         $newHomeDir = "C:\Users\$username"
 
-        New-LocalUser $username -Password $password
-        Add-LocalGroupMember -Group "Users" -Member $username
+        New-LocalUser $username -Password $password | Out-Null
+        Add-LocalGroupMember -Group "Users" -Member $username | Out-Null
         $credential = New-Object System.Management.Automation.PSCredential ($username, $password)
 
         # remove dev mode so symlink fails if called without junction
