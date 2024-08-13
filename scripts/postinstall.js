@@ -15,7 +15,7 @@ if (!fs.existsSync(typesDir)) fs.mkdirSync(typesDir, {recursive: true})
 const target = join(typesDir, 'sap__cds')
 const src = resolvePkg('@cap-js/cds-types') || join(nodeModules, '@cap-js/cds-types')
 const rel = relative(dirname(target), src) // need dirname or we'd land one level above node_modules (one too many "../")
-console.error(`Creating symlink ${target} -> ${rel}`)
+console.log(`Creating symlink ${target} -> ${rel}`)
 
 // remove the existing symlink
 try {

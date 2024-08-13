@@ -63,8 +63,9 @@ describe('postinstall', () => {
             name: 'project1'
         }, null, 2))
         {
-            const {stdout, stderr} = await execAsync(`npm i --foreground-scripts -dd -D ${cdsTypesRoot}`, { cwd: project1 })
-            console.log(stdout, stderr)
+            // const {stdout, stderr} =
+            await execAsync(`npm i --foreground-scripts -dd -D ${cdsTypesRoot}`, { cwd: project1 })
+            // console.log(stdout, stderr)
         }
         let packageJson = require(path.join(project1, 'node_modules/@types/sap__cds/package.json'))
         expect(packageJson.name).toBe('@cap-js/cds-types')
@@ -79,8 +80,9 @@ describe('postinstall', () => {
             }
         }, null, 2))
         {
-            const {stdout, stderr} = await execAsync(`npm i --foreground-scripts -dd`, { cwd: project2 })
-            console.log(stdout, stderr)
+            // const {stdout, stderr} =
+            await execAsync(`npm i --foreground-scripts -dd`, { cwd: project2 })
+            // console.log(stdout, stderr)
         }
         packageJson = require(path.join(project2, 'node_modules/@types/sap__cds/package.json'))
         expect(packageJson.name).toBe('@cap-js/cds-types')
