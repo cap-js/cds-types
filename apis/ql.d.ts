@@ -21,7 +21,8 @@ import {
   Projection,
   QLExtensions,
   TaggedTemplateQueryPart,
-  Where
+  Where,
+  ByKey
 } from './internal/query'
 import { _TODO } from './internal/util'
 //import { _TODO } from './internal/util'
@@ -87,8 +88,6 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
   from: SELECT_from<T> & TaggedTemplateQueryPart<this>
   & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => this)
-
-  byKey (primaryKey?: PK): this
 
   forShareLock (): this
 
@@ -167,7 +166,6 @@ type SELECT_from<T> =
     projection?: Projection<InstanceType<T>>
   ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface INSERT<T> extends Columns<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
 
@@ -220,15 +218,13 @@ export class UPSERT<T> extends ConstructedQuery<T> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface DELETE<T> extends Where, And {}
+export interface DELETE<T> extends Where, And, ByKey {}
 export class DELETE<T> extends ConstructedQuery<T> {
 
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<StaticAny>>>
     & (<T>(entity: EntityDescription | ArrayConstructable, primaryKey?: PK) => DELETE<T>)
     & ((subject: ref) => DELETE<_TODO>)
-
-  byKey (primaryKey?: PK): this
 
   DELETE: CQN.DELETE['DELETE']
 
@@ -248,7 +244,6 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
 
-  byKey (primaryKey?: PK): this
   // with (block: (e:T)=>void) : this
   // set (block: (e:T)=>void) : this
   set: TaggedTemplateQueryPart<this>

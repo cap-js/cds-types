@@ -50,6 +50,10 @@ export type Awaitable<T, I> = T & Promise<I>
 
 // note to self: don't try to rewrite these intersection types into overloads.
 // It does not work because TaggedTemplateQueryPart will not fit in as regular overload
+export interface ByKey {
+  byKey (primaryKey?: PK): this
+}
+
 export interface Columns<This = undefined> {
   columns: TaggedTemplateQueryPart<This extends undefined ? this : This>
   & (<T>(...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]) => This extends undefined ? this : This)
