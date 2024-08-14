@@ -29,6 +29,8 @@ import { _TODO } from './internal/util'
 
 export type Query = CQN.Query
 
+export { QLExtensions } from './internal/query'
+
 // this just serves as a reminder that we can not get rid of some of the anys at this point
 // as the would refer to the generic type of the surrounding class
 type StaticAny = any
@@ -52,7 +54,7 @@ export type StaticSELECT<T> = typeof SELECT<T>
   & SELECT_from<T> // as it is not directly quantified, ...
   & SELECT_one<T> // ...we should expect both a scalar and a list
 
-declare class QL<T> {
+export declare class QL<T> {
 
   SELECT: StaticSELECT<T>
 

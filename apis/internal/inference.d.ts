@@ -17,7 +17,7 @@ export interface ArrayConstructable<T = any> {
 // concrete singular type.
 // `SingularType<typeof Books>` == `Book`.
 export type SingularInstanceType<T extends ArrayConstructable> = InstanceType<T>[number]
-export type PluralInstanceType<T extends Constructable> = InstanceType<Array<T>>
+export type PluralInstanceType<T extends Constructable> = Array<InstanceType<T>>
 
 // Convenient way of unwrapping the inner type from array-typed values, as well as the value type itself
 // `class MyArray<T> extends Array<T>``
