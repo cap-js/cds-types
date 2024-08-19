@@ -233,7 +233,8 @@ export class DELETE<T> extends ConstructedQuery<T> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface UPDATE<T> extends Where, And {}
+export interface UPDATE<T> extends Where, And, ByKey {}
+
 
 export class UPDATE<T> extends ConstructedQuery<T> {
 
