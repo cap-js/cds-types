@@ -47,10 +47,12 @@ export class ConstructedQuery<T> {
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
 export type StaticSELECT<T> = typeof SELECT<T>
-  & ((...columns: (T extends ArrayConstructable<T> ? keyof SingularInstanceType<T> : keyof T)[]) => SELECT<T>)
-  & ((...columns: string[]) => SELECT<T>)
-  & ((columns: string[]) => SELECT<T>)
-  & (TaggedTemplateQueryPart<SELECT<T>>)
+  //FIXME:remove comments once were sure this is right
+  //& ((...columns: (T extends ArrayConstructable<T> ? keyof SingularInstanceType<T> : keyof T)[]) => SELECT<T>)
+  //& ((...columns: string[]) => SELECT<T>)
+  //& ((columns: string[]) => SELECT<T>)
+  //& (TaggedTemplateQueryPart<SELECT<T>>)
+  & SELECT<T>['columns']
   & SELECT_from<T> // as it is not directly quantified, ...
   & SELECT_one<T> // ...we should expect both a scalar and a list
 
@@ -88,8 +90,9 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
   static from: SELECT_from<StaticAny>
 
-  from: SELECT_from<T> & TaggedTemplateQueryPart<this>
-  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => this)
+  from: SELECT_from<T> 
+    & TaggedTemplateQueryPart<this>
+    & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => this)
 
   forShareLock (): this
 

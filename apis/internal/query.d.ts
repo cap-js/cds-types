@@ -1,7 +1,8 @@
 import type { Definition } from '../csn'
 import type { entity } from '../linked/classes'
 import type { column_expr } from '../cqn'
-import type { ArrayConstructable, SingularInstanceType } from './inference'
+import type { ArrayConstructable, Constructable, PluralInstanceType, SingularInstanceType, Unwrap } from './inference'
+import { ConstructedQuery } from '../ql'
 
 
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
@@ -54,11 +55,23 @@ export interface ByKey {
   byKey (primaryKey?: PK): this
 }
 
+// unwrap the target of a query and extract its keys.
+// Normalise to scalar,
+// or fall back to general strings/column expressions
+type KeyOf<T> = T extends ConstructedQuery<infer U>
+  ? (U extends ArrayConstructable  // Books
+    ? keyof SingularInstanceType<U>
+    : U extends Constructable  // Book
+      ? keyof InstanceType<U>
+      : (string | column_expr))
+  : (string | column_expr)
+
 export interface Columns<This = undefined> {
-  columns: TaggedTemplateQueryPart<This extends undefined ? this : This>
-  & (<T>(...col: (T extends ArrayConstructable ? keyof SingularInstanceType<T> : keyof T)[]) => This extends undefined ? this : This)
+  columns:
+  ((...col: KeyOf<This extends undefined ? this : This>[]) => This extends undefined ? this : This)
   & ((...col: (string | column_expr)[]) => This extends undefined ? this : This)
   & ((col: (string | column_expr)[]) => This extends undefined ? this : This)
+  & TaggedTemplateQueryPart<This extends undefined ? this : This>
 }
 
 export interface Having {
