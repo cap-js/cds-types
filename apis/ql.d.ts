@@ -239,7 +239,8 @@ export interface UPDATE<T> extends Where, And, ByKey {}
 export class UPDATE<T> extends ConstructedQuery<T> {
 
   // cds-typer plural
-  static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<SingularInstanceType<T>>
+  // FIXME: this returned UPDATE<SingularInstanceType<T>> before. should UPDATE<Books>.entity(...) return Book or Books?
+  static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<InstanceType<T>>
 
   static entity (entity: EntityDescription, primaryKey?: PK): UPDATE<StaticAny>
 
