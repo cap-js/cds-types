@@ -1,7 +1,7 @@
 import type { Definition } from '../csn'
 import type { entity } from '../linked/classes'
 import type { column_expr } from '../cqn'
-import type { ArrayConstructable, Constructable, PluralInstanceType, SingularInstanceType, Unwrap } from './inference'
+import type { ArrayConstructable, Constructable, SingularInstanceType } from './inference'
 import { ConstructedQuery } from '../ql'
 
 
