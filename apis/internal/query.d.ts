@@ -58,13 +58,13 @@ export interface ByKey {
 // unwrap the target of a query and extract its keys.
 // Normalise to scalar,
 // or fall back to general strings/column expressions
-type KeyOf<T> = T extends ConstructedQuery<infer U>
+type KeyOf<T, F = string | column_expr> = T extends ConstructedQuery<infer U>
   ? (U extends ArrayConstructable  // Books
     ? keyof SingularInstanceType<U>
     : U extends Constructable  // Book
       ? keyof InstanceType<U>
-      : (string | column_expr))
-  : (string | column_expr)
+      : F)
+  : F
 
 export interface Columns<This = undefined> {
   columns:
@@ -75,9 +75,12 @@ export interface Columns<This = undefined> {
 }
 
 export interface Having {
-  having: TaggedTemplateQueryPart<this>
+	
+  having: 
+  ((predicate: Partial<{[column in KeyOf<this, never>]: any}>) => this) 
   & ((...expr: string[]) => this)
   & ((predicate: object) => this)
+  & TaggedTemplateQueryPart<this>
 }
 
 export interface GroupBy {
@@ -96,9 +99,11 @@ export interface Limit {
 }
 
 export interface Where {
-  where: TaggedTemplateQueryPart<this>
+  where: 
+  ((predicate: Partial<{[column in KeyOf<this, never>]: any}>) => this) 
   & ((predicate: object) => this)
   & ((...expr: any[]) => this)
+  & TaggedTemplateQueryPart<this>
 }
 
 export interface And {
