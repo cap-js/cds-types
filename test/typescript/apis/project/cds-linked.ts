@@ -1,5 +1,4 @@
 import { LinkedCSN } from '../../../../apis/linked';
-import { _ArrayLike } from '../../../../apis/internal/util';
 import cds from '@sap/cds';
 import { csn } from '../../../..';
 import { as } from './dummy';
@@ -87,16 +86,6 @@ new action().kind === 'action_'
 mixin(class {}, class {})
 // @ts-expect-error
 mixin(42)
-
-const arr: _ArrayLike<number> = as<_ArrayLike<number>>()
-// @ts-expect-error
-arr.length
-const v: void = arr.forEach(x => x + 1)
-const s: string[] = arr.map(x => ''+x)
-const xs: number[] = arr.filter(x => x > 0)
-const x: number | undefined = arr.find(x => x > 0)
-const b: boolean = arr.some(x => x > 0)
-for (const n of arr) n + 1
 
 // spot check to make sure linked classes are properly exposed cds.linked.classes...
 cds.linked.classes.entity === entity
