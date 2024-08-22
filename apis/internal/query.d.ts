@@ -1,8 +1,9 @@
 import type { Definition } from '../csn'
 import type { entity } from '../linked/classes'
 import type { column_expr } from '../cqn'
-import type { ArrayConstructable, Constructable, SingularInstanceType } from './inference'
+import type { ArrayConstructable, Constructable, SingularInstanceType, Unwrap } from './inference'
 import { ConstructedQuery } from '../ql'
+import { KVPairs } from './util'
 
 
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
@@ -58,7 +59,7 @@ export interface ByKey {
 // unwrap the target of a query and extract its keys.
 // Normalise to scalar,
 // or fall back to general strings/column expressions
-type KeyOf<T, F = string | column_expr> = T extends ConstructedQuery<infer U>
+type KeyOfTarget<T, F = string | column_expr> = T extends ConstructedQuery<infer U>
   ? (U extends ArrayConstructable  // Books
     ? keyof SingularInstanceType<U>
     : U extends Constructable  // Book
@@ -66,21 +67,73 @@ type KeyOf<T, F = string | column_expr> = T extends ConstructedQuery<infer U>
       : F)
   : F
 
-export interface Columns<This = undefined> {
+  type KeyOfSingular<T> = Unwrap<T> extends T
+    ? keyof T
+    : keyof Unwrap<T>
+
+// as static SELECT borrows the type of Columns directly,
+// we need this second type argument to explicitly specific that "this" 
+// refers to a STATIC<T>, not to a Columns. Or else we could not chain
+// other QL functions to .columns
+export interface Columns<T, This = undefined> {
   columns:
-  ((...col: KeyOf<This extends undefined ? this : This>[]) => This extends undefined ? this : This)
+  ((...col: KeyOfSingular<T>[]) => This extends undefined ? this : This)
   & ((...col: (string | column_expr)[]) => This extends undefined ? this : This)
   & ((col: (string | column_expr)[]) => This extends undefined ? this : This)
   & TaggedTemplateQueryPart<This extends undefined ? this : This>
 }
 
-export interface Having {
-	
-  having: 
-  ((predicate: Partial<{[column in KeyOf<this, never>]: any}>) => this) 
-  & ((...expr: string[]) => this)
-  & ((predicate: object) => this)
-  & TaggedTemplateQueryPart<this>
+type Op = '=' | '<' | '>' | '<=' | '>=' | '!='
+type WS = '' | ' '
+type Expression<E> = `${Exclude<keyof E, symbol>}${WS}${Op}${WS}`
+//type Expressions<E> =E
+
+type Expressions<L,E> = KVPairs<L, Expression<E>, number> extends true 
+  ? T 
+  : E
+
+/*
+const x: Expression<Book> = 'Iss= '
+  class Book {
+  author: string
+  ID: number
+}
+
+declare function fn<T extends readonly unknown[]>(...args: Expressions<Book, T>)
+*/
+
+declare class _HW<const E> {
+  fn: (<const L extends unknown[]>(...expr: Expressions<L, Unwrap<E>>[]) => this)
+}
+
+type HavingWhere<E> = 
+    /**
+   * @example
+   * ```js
+   * SELECT.from(Books).having({ ID: 42 })  // where ID is a valid field of Book
+   * ```
+   */
+  //((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
+    /**
+     * @example
+     * ```js
+     * SELECT.from(Books).having({ ID: 42 })  // where ID is a valid field of Book
+     *
+     */
+    & (<const L extends unknown[]>(...expr: Expressions<L, Unwrap<E>>[]) => this)
+    //& (<const T extends unknown[]>(...expr: Expressions<E, T>) => this)
+    //& (<const T extends unknown[]>(...expr: Expressions<This extends ConstructedQuery<infer E> ? E : never, T>) => This)
+    //& ((...expr: string[]) => This)
+    //& ((predicate: object) => This)
+    //& TaggedTemplateQueryPart<This>
+
+export interface Having<T> {
+  having: HavingWhere<T>
+  magic: _HW<T>['fn']
+}
+
+export interface Where<T> {
+  where: HavingWhere<T>
 }
 
 export interface GroupBy {
@@ -96,14 +149,6 @@ export interface OrderBy {
 export interface Limit {
   limit: TaggedTemplateQueryPart<this>
   & ((rows: number, offset?: number) => this)
-}
-
-export interface Where {
-  where: 
-  ((predicate: Partial<{[column in KeyOf<this, never>]: any}>) => this) 
-  & ((predicate: object) => this)
-  & ((...expr: any[]) => this)
-  & TaggedTemplateQueryPart<this>
 }
 
 export interface And {

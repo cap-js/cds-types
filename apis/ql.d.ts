@@ -25,7 +25,6 @@ import {
   ByKey
 } from './internal/query'
 import { _TODO } from './internal/util'
-//import { _TODO } from './internal/util'
 
 export type Query = CQN.Query
 
@@ -43,15 +42,9 @@ export class ConstructedQuery<T> {
 
 }
 
-
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
 export type StaticSELECT<T> = typeof SELECT<T>
-  //FIXME:remove comments once were sure this is right
-  //& ((...columns: (T extends ArrayConstructable<T> ? keyof SingularInstanceType<T> : keyof T)[]) => SELECT<T>)
-  //& ((...columns: string[]) => SELECT<T>)
-  //& ((columns: string[]) => SELECT<T>)
-  //& (TaggedTemplateQueryPart<SELECT<T>>)
   & SELECT<T>['columns']
   & SELECT_from<T> // as it is not directly quantified, ...
   & SELECT_one<T> // ...we should expect both a scalar and a list
@@ -78,9 +71,9 @@ export declare class QL<T> {
 
 }
 
-export interface SELECT<T> extends Where, And, Having, GroupBy, OrderBy, Limit {
+export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy, Limit {
   // overload specific to SELECT
-  columns: Columns<this>['columns'] & ((projection: Projection<T>) => this)
+  columns: Columns<T, SELECT<T>>['columns'] & ((projection: Projection<T>) => this)
 }
 export class SELECT<T> extends ConstructedQuery<T> {
 
@@ -152,7 +145,7 @@ type SELECT_from<T> =
 &
   (<T extends ArrayConstructable>
   (entityType: T, primaryKey: PK, projection?: Projection<SingularInstanceType<T>>)
-  => Awaitable<SELECT<SingularInstanceType<T>>, InstanceType<SingularInstanceType<T>>>) // when specifying a key, we expect a single element as result
+  => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>) // when specifying a key, we expect a single element as result
 // calling with definition
   & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<T>)
 // calling with concrete list

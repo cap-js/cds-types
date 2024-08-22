@@ -1,3 +1,4 @@
+import { ArrayConstructable } from '../../../../apis/internal/inference'
 import { QLExtensions } from '../../../../apis/ql'
 import { Foo, Foos, attach } from './dummy'
 
@@ -11,18 +12,38 @@ sel = SELECT.from(Foo.drafts)
 sel = SELECT.from(Foos.drafts)
 sel = SELECT.from(Foos.drafts, 42)
 
+let selSingular: SELECT<Foo> = undefined as unknown as SELECT<Foo>
+selSingular.columns('ref')  // auto suggested
+
+let selAny: SELECT<any> = undefined as unknown as SELECT<Foo>
+selAny.columns('asd')  // unclear target, any string is allowed
+
 const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 
-SELECT.from(Foos).columns("x") // x was suggested by code completion
-sel.from(Foos)
-sel.columns("x") // x was suggested by code completion
+ // x was suggested by code completion
+SELECT.from(Foos).columns("x")
+SELECT.from(Foos).columns('x')
+sel.from(Foos).columns('x')
+sel.from(Foo).columns('x')
+sel.columns("x")
+
+// y is not a valid columns for Foo(s),
+// but is allowed anyway since we permit arbitrary strings as well
+SELECT.from(Foos).columns("y")
+SELECT.from(Foos).columns('y')
+sel.from(Foos).columns('y')
+sel.from(Foo).columns('y')
+sel.columns("y")
+
 sel.SELECT.columns?.filter(e => !e) // check if this is array
+
+type Fooo = Foos extends Array<any> ?true :false
 
 sel.from(Foos).where({ ref:42 })  // ref was suggested by code completion
 sel.from(Foos).where({ zef:42 })  // non-keys are allowed too
 
 // ensure ql returns a proper CQN
-const s = SELECT.from(Foos).columns('ID').where('ID =', 42)
+const s = SELECT.from(Foos).columns('x').where('x =', true)
 s.SELECT.from.ref
 s.SELECT.columns?.[0].ref
 s.SELECT.where?.[0].ref

@@ -30,3 +30,15 @@ export type _ArrayLike<T> = Iterable<T> & {
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
  */
 export type IterableMap<T> = { [name: string]: T } & _ArrayLike<T>
+
+// 
+/**
+ * T is a tuple of alternating K, V pairs -> true, else false
+ * Allows for variadic parameter lists with alternating expecing types,
+ * like we have in cql.SELECT.where
+ */
+type KVPairs<T,K,V> = T extends []
+  ? true
+  : T extends [K, V, ...infer T]
+    ? KVPairs<T,K,V>
+    : false
