@@ -143,6 +143,8 @@ srv.before('*', Books, req => {
   if (req.query.SELECT?.columns?.length ?? 0 > 0) {
     console.log("foooooooo")
   }
+
+  req.query.elements['foo'].type
 })
 srv.before('*', async req => {
   req.event
