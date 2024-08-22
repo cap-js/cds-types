@@ -318,7 +318,7 @@ if (myUser instanceof cds.User) {
   myUser.id === 'u2'
 }
 
-cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date() }
+cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date(), model: ctx!.model }
 const tx3 = cds.tx (cds.context)
 const db = await cds.connect.to('db')
 cds.context.features = {foo: true}
