@@ -154,7 +154,7 @@ interface cds_connect_options {
   impl?: string
   service?: string
   kind?: string
-  model?: string
+  model?: string | CSN
   credentials?: object
 }
 
