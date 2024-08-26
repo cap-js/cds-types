@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.6.6 - TBD
 ### Fixed
 - Added missing type for `cds.context.model`
-
+- Added missing type for `req.query.elements`
 
 ## Version 0.6.5 - 2024-08-13
 ### Fixed

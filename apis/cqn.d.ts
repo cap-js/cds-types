@@ -1,8 +1,11 @@
-import { entity } from './csn' // cyclic dependency
+import { Definition, entity } from './csn' // cyclic dependency
 import { UnionToIntersection, UnionsToIntersections } from './internal/inference'
 
 // FIXME: a union type would be more appropriate here
-export type Query = Partial<SELECT & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
+export type Query = { 
+  /** @since 7.4.0 */
+  elements: { [key: string]: Definition },
+} & Partial<SELECT & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
 
 export type SELECT = { SELECT: {
   distinct?: true,
