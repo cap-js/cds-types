@@ -84,7 +84,7 @@ export interface Columns<T, This = undefined> {
 
 type Op = '=' | '<' | '>' | '<=' | '>=' | '!='
 type WS = '' | ' '
-type Expression<E> = `${E}${WS}${Op}${WS}`
+type Expression<E extends string | number | bigint | boolean> = `${E}${WS}${Op}${WS}`
 // TODO: it would be nicer to check for E[x] for the value instead of Primitive, where x is the key
 type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, Primitive> extends true 
   ? L 
@@ -93,7 +93,7 @@ type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, Primiti
     ? L
     : never
 
-type HavingWhere<E> = 
+type HavingWhere<This, E> = 
   /**
    * @param predicate - An object with keys that are valid fields of the target entity and values that are compared to the respective fields.
    * @example
@@ -111,16 +111,16 @@ type HavingWhere<E> =
    * SELECT.from(Books).having(['ID =', 42 ])  // where ID is a valid, numerical field of Book
    *```
    */
-  & (<const L extends unknown[]>(...expr: Expressions<L, UnwrappedInstanceType<E>>) => this)
+  & (<const L extends unknown[]>(...expr: Expressions<L, UnwrappedInstanceType<E>>) => This)
   & ((...expr: string[]) => This)
   & TaggedTemplateQueryPart<This>
 
 export interface Having<T> {
-  having: HavingWhere<T>
+  having: HavingWhere<this, T>
 }
 
 export interface Where<T> {
-  where: HavingWhere<T>
+  where: HavingWhere<this, T>
 }
 
 export interface GroupBy {
