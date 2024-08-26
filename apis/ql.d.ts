@@ -216,7 +216,7 @@ export class UPSERT<T> extends ConstructedQuery<T> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface DELETE<T> extends Where, And, ByKey {}
+export interface DELETE<T> extends Where<T>, And, ByKey {}
 export class DELETE<T> extends ConstructedQuery<T> {
 
   static from:
