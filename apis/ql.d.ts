@@ -22,7 +22,8 @@ import {
   QLExtensions,
   TaggedTemplateQueryPart,
   Where,
-  ByKey
+  ByKey,
+  InUpsert,
 } from './internal/query'
 import { _TODO } from './internal/util'
 
@@ -164,7 +165,7 @@ type SELECT_from<T> =
     projection?: Projection<InstanceType<T>>
   ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
 
-export interface INSERT<T> extends Columns<T> {}
+export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => INSERT<SingularInstanceType<T>>)
@@ -173,25 +174,13 @@ export class INSERT<T> extends ConstructedQuery<T> {
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
 
-  into: (<T extends ArrayConstructable> (entity: T) => this)
-  & TaggedTemplateQueryPart<this>
-  & ((entity: EntityDescription) => this)
-
-  data (block: (e: T) => void): this
-
-  entries (...entries: object[]): this
-
-  values (...val: any[]): this
-
-  rows (...row: any[]): this
-
   as (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface UPSERT<T> extends Columns<T> {}
+export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => UPSERT<SingularInstanceType<T>>)
@@ -200,17 +189,7 @@ export class UPSERT<T> extends ConstructedQuery<T> {
     & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
     & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
 
-  into: (<T extends ArrayConstructable> (entity: T) => this)
-  & TaggedTemplateQueryPart<this>
-  & ((entity: EntityDescription) => this)
 
-  data (block: (e: T) => void): this
-
-  entries (...entries: object[]): this
-
-  values (...val: any[]): this
-
-  rows (...row: any[]): this
   UPSERT: CQN.UPSERT['UPSERT']
 
 }

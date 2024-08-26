@@ -144,6 +144,20 @@ export interface And {
   & ((...expr: any[]) => this)
 }
 
+export interface InUpsert<T> {
+  data (block: (e: T) => void): this
+
+  entries (...entries: object[]): this
+
+  values (...val: any[]): this
+
+  rows (...row: any[]): this
+
+  into: (<T extends ArrayConstructable> (entity: T) => this)
+  & TaggedTemplateQueryPart<this>
+  & ((entity: EntityDescription) => this)
+}
+
 // don't wrap QLExtensions in more QLExtensions (indirection to work around recursive definition)
 export type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T>
 
