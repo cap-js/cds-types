@@ -39,6 +39,6 @@ export type IterableMap<T> = { [name: string]: T } & _ArrayLike<T>
  */
 type KVPairs<T,K,V> = T extends []
   ? true
-  : T extends [K, V, ...infer T]
-    ? KVPairs<T,K,V>
+  : T extends [K, V, ...infer R]
+    ? KVPairs<R,K,V>
     : false

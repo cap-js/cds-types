@@ -1,10 +1,9 @@
 import type { Definition } from '../csn'
 import type { entity } from '../linked/classes'
 import type { column_expr } from '../cqn'
-import type { ArrayConstructable, Constructable, SingularInstanceType, Unwrap } from './inference'
+import type { ArrayConstructable, Constructable, SingularInstanceType, Unwrap, UnwrappedInstanceType } from './inference'
 import { ConstructedQuery } from '../ql'
 import { KVPairs } from './util'
-
 
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
 type Projection<T> = (e: QLExtensions<T extends ArrayConstructable ? SingularInstanceType<T> : T>) => void
@@ -85,51 +84,39 @@ export interface Columns<T, This = undefined> {
 
 type Op = '=' | '<' | '>' | '<=' | '>=' | '!='
 type WS = '' | ' '
-type Expression<E> = `${Exclude<keyof E, symbol>}${WS}${Op}${WS}`
-//type Expressions<E> =E
-
-type Expressions<L,E> = KVPairs<L, Expression<E>, number> extends true 
-  ? T 
-  : E
-
-/*
-const x: Expression<Book> = 'Iss= '
-  class Book {
-  author: string
-  ID: number
-}
-
-declare function fn<T extends readonly unknown[]>(...args: Expressions<Book, T>)
-*/
-
-declare class _HW<const E> {
-  fn: (<const L extends unknown[]>(...expr: Expressions<L, Unwrap<E>>[]) => this)
-}
+type Expression<E> = `${E}${WS}${Op}${WS}`
+// TODO: it would be nicer to check for E[x] for the value instead of Primitive, where x is the key
+type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, Primitive> extends true 
+  ? L 
+  // fallback: allow for any string. Important for when user renamed properties
+  : KVPairs<L, Expression<string>, Primitive> extends true
+    ? L
+    : never
 
 type HavingWhere<E> = 
-    /**
+  /**
+   * @param predicate - An object with keys that are valid fields of the target entity and values that are compared to the respective fields.
    * @example
    * ```js
+   * SELECT.from(Books).where({ ID: 42 })  // where ID is a valid field of Book
    * SELECT.from(Books).having({ ID: 42 })  // where ID is a valid field of Book
    * ```
    */
-  //((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
-    /**
-     * @example
-     * ```js
-     * SELECT.from(Books).having({ ID: 42 })  // where ID is a valid field of Book
-     *
-     */
-    & (<const L extends unknown[]>(...expr: Expressions<L, Unwrap<E>>[]) => this)
-    //& (<const T extends unknown[]>(...expr: Expressions<E, T>) => this)
-    //& (<const T extends unknown[]>(...expr: Expressions<This extends ConstructedQuery<infer E> ? E : never, T>) => This)
-    //& ((...expr: string[]) => This)
-    //& ((predicate: object) => This)
-    //& TaggedTemplateQueryPart<This>
+  ((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
+  /**
+   * @param expr - An array of expressions, where every odd element is a valid field of the target entity and every even element is a value that is compared to the respective field.
+   * @example
+   * ```js
+   * SELECT.from(Books).where(['ID =', 42 ])  // where ID is a valid, numerical field of Book
+   * SELECT.from(Books).having(['ID =', 42 ])  // where ID is a valid, numerical field of Book
+   *```
+   */
+  & (<const L extends unknown[]>(...expr: Expressions<L, UnwrappedInstanceType<E>>) => this)
+  & ((...expr: string[]) => This)
+  & TaggedTemplateQueryPart<This>
 
 export interface Having<T> {
   having: HavingWhere<T>
-  magic: _HW<T>['fn']
 }
 
 export interface Where<T> {

@@ -32,6 +32,9 @@ export type Unwrap<T> = T extends ArrayConstructable
     ? U
     : T
 
+// ...and sometimes Unwrap gives us a class (typeof Book), but we need an instance (Book)
+export type UnwrappedInstanceType<T> = Unwrap<T> extends Constructable ? InstanceType<Unwrap<T>> : Unwrap<T> 
+
 
 /*
  * the following three types are used to convert union types to intersection types.

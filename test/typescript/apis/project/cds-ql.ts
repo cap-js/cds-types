@@ -31,6 +31,7 @@ sel.columns("x")
 // but is allowed anyway since we permit arbitrary strings as well
 SELECT.from(Foos).columns("y")
 SELECT.from(Foos).columns('y')
+SELECT.from(Foos).where('x=', 42)
 sel.from(Foos).columns('y')
 sel.from(Foo).columns('y')
 sel.columns("y")
@@ -43,11 +44,18 @@ sel.from(Foos).where({ ref:42 })  // ref was suggested by code completion
 sel.from(Foos).where({ zef:42 })  // non-keys are allowed too
 
 // ensure ql returns a proper CQN
-const s = SELECT.from(Foos).columns('x').where('x =', true)
+const s = SELECT.from(Foos).columns('x').where('x=', 42)
+SELECT.from(Foo).columns('x').where('x=', 42)
+SELECT.from(Foo).columns('x').where('y=', 42)  // also allowed as per [string, Primitive] signature
+// @ts-expect-error invalid key type
+SELECT.from(Foo).columns('x').where([new Foo()], 42)
+// @ts-expect-error missing operator
+SELECT.from(Foo).columns('x').where('y', 42)
 s.SELECT.from.ref
 s.SELECT.columns?.[0].ref
 s.SELECT.where?.[0].ref
 s.SELECT.where?.[2].val
+SELECT.from(Foo).columns('x').where('x =', 42)
 
 SELECT(Foos) === SELECT.from(Foos)
 
