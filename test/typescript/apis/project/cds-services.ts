@@ -344,11 +344,11 @@ const outboxedService = cds.outboxed(srv)
 await outboxedService.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 await cds.unboxed(outboxedService).send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 
-srv.entities('namespace')
-srv.entities('namespace').map(e => e.keys) // .keys only available on entities
+srv.entities('namespace');
+[...srv.entities('namespace')].map(e => e.keys); // .keys only available on entities
 // @ts-expect-error
-srv.events('namespace').map(e => e.keys)
-srv.events('namespace').map(e => e.elements)
+[...srv.events('namespace')].map(e => e.keys);
+[...srv.events('namespace')].map(e => e.elements)
 
 // @ts-expect-error
 srv.entities('namespace')('and again')
