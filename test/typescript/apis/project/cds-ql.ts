@@ -30,6 +30,14 @@ sel.columns("x")
 // but is allowed anyway since we permit arbitrary strings as well
 SELECT.from(Foos).columns('y')
 SELECT.from(Foos).where('x=', 42)
+SELECT.from(Foos).where('x >', 42, 'y =', '42')
+const predefinedArray = [42]
+SELECT.from(Foos).where('x in', [42])
+SELECT.from(Foos).where('x in', predefinedArray)
+SELECT.from(Foos).where('x in', SELECT.from(Foos))
+// @ts-expect-error - can't just use anything as even parameter
+SELECT.from(Foos).where('x in', Foos)
+SELECT.from(Foos).where('fn(x) = ', 42)
 sel.from(Foos).columns('y')
 sel.from(Foo).columns('y')
 sel.columns("y")

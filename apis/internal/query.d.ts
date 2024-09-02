@@ -82,14 +82,15 @@ export interface Columns<T, This = undefined> {
   & TaggedTemplateQueryPart<This extends undefined ? this : This>
 }
 
-type Op = '=' | '<' | '>' | '<=' | '>=' | '!='
+type Op = '=' | '<' | '>' | '<=' | '>=' | '!=' | 'in' | 'like'
 type WS = '' | ' '
 type Expression<E extends string | number | bigint | boolean> = `${E}${WS}${Op}${WS}`
+type ColumnValue = Primitive | Readonly<Primitive[]> | SELECT<any>  // not entirely sure why Readonly is required here
 // TODO: it would be nicer to check for E[x] for the value instead of Primitive, where x is the key
-type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, Primitive> extends true 
+type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, ColumnValue> extends true 
   ? L 
   // fallback: allow for any string. Important for when user renamed properties
-  : KVPairs<L, Expression<string>, Primitive> extends true
+  : KVPairs<L, Expression<string>, ColumnValue> extends true
     ? L
     : never
 
