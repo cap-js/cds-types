@@ -29,8 +29,8 @@ csnStruct.is_struct
 linkedCsn.exports[0].name
 linkedCsn.exports['foo'].name
 // @ts-expect-error only for entities and services
-linkedCsn.exports('foo').bar
-linkedCsn.exports.map(e => e.kind)
+linkedCsn.exports('foo').bar;
+[...linkedCsn.exports].map(e => e.kind)
 linkedCsn.entities('foo')
 const es: cds.linked.classes.entity[] = linkedCsn.all(x => Boolean(x.name), linkedCsn.entities)
 // @ts-expect-error
@@ -39,15 +39,15 @@ const one: cds.linked.classes.entity | undefined = linkedCsn.find(x => Boolean(x
 for (const each of linkedCsn.each(e => true, linkedCsn.entities)) each.keys
 
 new entity().kind === 'entity'
-new entity().keys.find
-new entity().associations.find(Boolean)
-new entity().compositions.find(Boolean)
-new entity().actions.find(Boolean)
+new entity().keys.find;
+[...new entity().associations].find(Boolean);
+[...new entity().compositions].find(Boolean);
+[...new entity().actions].find(Boolean)
 new entity().texts?.kind === 'entity'
 new entity().drafts?.kind === 'entity'
 new entity().is_entity === true
-new entity().is_struct === true
-new entity().elements.find(x => x.items.kind === 'type')
+new entity().is_struct === true;
+[...new entity().elements].find(x => x.items.kind === 'type')
 new entity().items?.kind
 new entity().name
 // @ts-expect-error
