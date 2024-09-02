@@ -42,6 +42,12 @@ sel.from(Foos).columns('y')
 sel.from(Foo).columns('y')
 sel.columns("y")
 
+SELECT.from(Foos, f => { 
+    f.name,
+    // @ts-expect-error - foobar is not a valid column
+    f.foobar
+})
+
 sel.SELECT.columns?.filter(e => !e) // check if this is array
 
 sel.from(Foos).where({ ref:42 })  // ref was suggested by code completion

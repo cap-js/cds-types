@@ -47,8 +47,8 @@ export class ConstructedQuery<T> {
 // new SELECT(...).(...) == SELECT(...)
 export type StaticSELECT<T> = typeof SELECT<T>
   & SELECT<T>['columns']
-  & SELECT_from<T> // as it is not directly quantified, ...
-  & SELECT_one<T> // ...we should expect both a scalar and a list
+  & SELECT_from // as it is not directly quantified, ...
+  & SELECT_one // ...we should expect both a scalar and a list
 
 export declare class QL<T> {
 
@@ -78,13 +78,13 @@ export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy, L
 }
 export class SELECT<T> extends ConstructedQuery<T> {
 
-  static one: SELECT_one<StaticAny> & { from: SELECT_one<StaticAny> }
+  static one: SELECT_one & { from: SELECT_one }
 
   static distinct: typeof SELECT<StaticAny>
 
-  static from: SELECT_from<StaticAny>
+  static from: SELECT_from
 
-  from: SELECT_from<T> 
+  from: SELECT_from
     & TaggedTemplateQueryPart<this>
     & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => this)
 
@@ -116,8 +116,8 @@ export class SELECT<T> extends ConstructedQuery<T> {
 }
 
 
-type SELECT_one<T> =
-  TaggedTemplateQueryPart<Awaitable<SELECT<T>, InstanceType<_TODO>>>
+type SELECT_one =
+  TaggedTemplateQueryPart<Awaitable<SELECT<_TODO>, InstanceType<_TODO>>>
 &
 // calling with class
   (<T extends ArrayConstructable>
@@ -135,20 +135,20 @@ type SELECT_one<T> =
   & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & ((subject: ref) => SELECT<_TODO>)
 
-type SELECT_from<T> =
+type SELECT_from =
 // tagged template
-  TaggedTemplateQueryPart<Awaitable<SELECT<T>, InstanceType<_TODO>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<_TODO>, InstanceType<_TODO>>>
 &
 // calling with class
-  (<T extends ArrayConstructable>
-  (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<T>, InstanceType<T>>)
+  (<E extends ArrayConstructable>
+  (entityType: E, projection?: Projection<QLExtensions<SingularInstanceType<E>>>)
+  => Awaitable<SELECT<E>, InstanceType<E>>)
 &
-  (<T extends ArrayConstructable>
-  (entityType: T, primaryKey: PK, projection?: Projection<SingularInstanceType<T>>)
-  => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>) // when specifying a key, we expect a single element as result
+  (<E extends ArrayConstructable>
+  (entityType: E, primaryKey: PK, projection?: Projection<SingularInstanceType<E>>)
+  => Awaitable<SELECT<SingularInstanceType<E>>, SingularInstanceType<E>>) // when specifying a key, we expect a single element as result
 // calling with definition
-  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<T>)
+  & (<T>(entity: EntityDescription, primaryKey?: PK, projection?: Projection<T>) => SELECT<T>)
 // calling with concrete list
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
