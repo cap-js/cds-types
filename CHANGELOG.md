@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 - The `@types/sap__cds` link created by the `postinstall` script now also works in monorepo setups where the target `@cap-js/cds-types` might already be preinstalled (often hoisted some levels up).
 
+### Removed
+- Removed array-like methods from model parts (`.map`, `.find`, etc.). To still use them, apply spreading to object in question first.
+
 ## Version 0.6.4 - 2024-08-05
 ### Added
 - `Service.emit(...)` can now also be called with custom events
