@@ -42,6 +42,9 @@ sel.from(Foos).columns('y')
 sel.from(Foo).columns('y')
 sel.columns("y")
 
+SELECT.from(Foos).orderBy('x')  // x auto completed
+SELECT.from(Foos).orderBy('y')  // non-columns also still possible
+
 SELECT.from(Foos, f => { 
     f.name,
     // @ts-expect-error - foobar is not a valid column

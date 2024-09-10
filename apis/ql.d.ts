@@ -72,7 +72,7 @@ export declare class QL<T> {
 
 }
 
-export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy, Limit {
+export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>, Limit {
   // overload specific to SELECT
   columns: Columns<T, SELECT<T>>['columns'] & ((projection: Projection<T>) => this)
 }

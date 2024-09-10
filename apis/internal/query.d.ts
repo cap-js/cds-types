@@ -129,8 +129,9 @@ export interface GroupBy {
   & ((...expr: string[]) => this)
 }
 
-export interface OrderBy {
+export interface OrderBy<T> {
   orderBy: TaggedTemplateQueryPart<this>
+  & ((...col: KeyOfSingular<T>[]) => this)
   & ((...expr: string[]) => this)
 }
 
