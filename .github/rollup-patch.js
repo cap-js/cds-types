@@ -13,7 +13,18 @@ function _getImports (src) {
     if (what.includes('{')) {
       destructured.push({
         package: from.trim(),
-        properties: what.replace('{','').replace('}','').split(',').map(p => p.trim())
+        properties: what
+          .replace('{','')
+          .replace('}','')
+          .split(',')
+          .map(p => {
+            console.log(what, from)
+            const tokens = p.trim().split(' as ')
+            return {
+              property: tokens[0],
+              alias: tokens[1] ?? tokens[0]
+            }
+          })
       })
     } else {
       named.push({
@@ -63,8 +74,8 @@ function replaceImports (src) {
   // v
   // x: import('foo').bar
   for (const { package, properties } of destructured) {
-    for (const prop of properties) {
-      lines = lines.map(l => replace(l, re(prop), `import('${package}').${prop}`))
+    for (const { alias, property } of properties) {
+      lines = lines.map(l => replace(l, re(alias), `import('${package}').${property}`))
     }
   }
   return lines.join('\n')
