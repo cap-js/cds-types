@@ -18,7 +18,6 @@ function _getImports (src) {
           .replace('}','')
           .split(',')
           .map(p => {
-            console.log(what, from)
             const tokens = p.trim().split(' as ')
             return {
               property: tokens[0],
