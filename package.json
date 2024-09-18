@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "test": "jest --silent",
-    "test:integration": "jest --silent --testMatch \"**/test/**/*.integrationtest.js\"",
+    "test:integration": "jest --testMatch \"**/test/**/*.integrationtest.js\"",
     "test:rollup": "npm run rollup; npm run rollup:on; npm run test; npm run rollup:off",
     "rollup": "rm -rf dist/ && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
     "rollup:on": "npm pkg set typings=dist/cds-types.d.ts && [ -d 'apis' ] && mv -- apis -apis || true",
@@ -43,7 +43,7 @@
     "@stylistic/eslint-plugin-js": "^2.1.0",
     "@stylistic/eslint-plugin-ts": "^2.1.0",
     "@types/jest": "^29.5.11",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "axios": "^1.6.2",
     "chai": "^4.3.10",
     "eslint": "^9.2.0",
