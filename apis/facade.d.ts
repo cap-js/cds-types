@@ -29,5 +29,16 @@ export const version: string
 export const home: string
 export const root: string
 
+/**
+ * The parsed effective `cds` CLI command and arguments.
+ * May be undefined if not started from the `cds` CLI.
+ * @see https://cap.cloud.sap/docs/node.js/cds-facade#cds-cli
+ */
+export const cli: {
+  /** Basic command like `serve` */ command?: string,
+  /** Positional arguments */       argv?: string[],
+  /** Named arguments */            opts?: Record<string, any>,
+} | undefined
+
 import { env } from './env'
 export const requires: env.Requires
