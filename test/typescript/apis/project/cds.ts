@@ -7,4 +7,4 @@ cds.requires === cds.env.requires
 
 cds.cli!.command = 'foo'
 cds.cli!.argv = ['']
-cds.cli!.opts = { foo: true }
+cds.cli!.options = { foo: true }

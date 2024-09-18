@@ -37,7 +37,7 @@ export const root: string
 export const cli: {
   /** Basic command like `serve` */ command?: string,
   /** Positional arguments */       argv?: string[],
-  /** Named arguments */            opts?: Record<string, any>,
+  /** Named arguments */            options?: Record<string, any>,
 } | undefined
 
 import { env } from './env'
