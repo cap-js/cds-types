@@ -27,3 +27,10 @@ type KVPairs<T,K,V> = T extends []
   : T extends [K, V, ...infer R]
     ? KVPairs<R,K,V>
     : false
+
+/**
+ * Recursively excludes nullability from all properties of T.
+ */
+export type DeepRequired<T> = { 
+  [K in keyof T]: DeepRequired<T[K]>
+} & Exclude<Required<T>, null>

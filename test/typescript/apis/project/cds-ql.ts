@@ -41,12 +41,13 @@ SELECT.from(Foos).where('fn(x) = ', 42)
 sel.from(Foos).columns('y')
 sel.from(Foo).columns('y')
 sel.columns("y")
+SELECT.from(Foos, f => f.ref(r => r.x))  // ref should be callable without optional chaining (DeepRequired)
 
 SELECT.from(Foos).orderBy('x')  // x auto completed
 SELECT.from(Foos).orderBy('y')  // non-columns also still possible
 
 SELECT.from(Foos, f => { 
-    f.name,
+    f.x,
     // @ts-expect-error - foobar is not a valid column
     f.foobar
 })
