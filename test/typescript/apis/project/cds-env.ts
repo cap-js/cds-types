@@ -35,6 +35,8 @@ env.requires['cds.xt.ExtensibilityService'] = {
     { for: [ '*' ] }
   ],
 }
+env.requires['cds.xt.ModelProviderService'] = { model: '@sap/cds-mtxs/srv/model-provider', _in_sidecar: true, root: '../..' }
+env.requires['cds.xt.DeploymentService'] = { model: '@sap/cds-mtxs/srv/deployment-service' }
 
 env.requires.multitenancy = { kind: 'shared', jobs: { clusterSize:1, workerSize:1, t0:'', foo:'' }}
 env.requires.multitenancy = { kind: 'shared', jobs: { clusterSize:1, workerSize:1, t0:'', foo:'' }}
