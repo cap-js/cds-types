@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - `cds.cli` CLI arguments
 - `cds.requires` types for MTX services.
 
+### Changed
+- Most `cds.requires` entries are now optionals.
+
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
 - The `@types/sap__cds` link created by the `postinstall` script now also works in monorepo setups where the target `@cap-js/cds-types` might already be preinstalled (often hoisted some levels up).
