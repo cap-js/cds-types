@@ -1,7 +1,7 @@
 import type * as fs from 'node:fs'
 
 /**
- * Provides a set of utility functionss
+ * Provides a set of utility functions
  */
 declare const utils: {
 

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 - `cds.app` typed as express.js application
 - `cds.cli` CLI arguments
+- `cds.requires` types for MTX services.
 
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
