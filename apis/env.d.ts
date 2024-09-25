@@ -84,14 +84,13 @@ export namespace env {
     'cds.xt.SaasProvisioningService'?: {
       model: string,
       kind: string,
-      alwaysUpgradeModel: boolean,
+      alwaysUpgradeModel?: boolean,
       [key: string]: any,
     },
 
     'cds.xt.SmsProvisioningService'?: {
       model: string,
       kind: string,
-      dependencies: string[],
       [key: string]: any,
     },
     'cds.xt.ExtensibilityService'?: {
