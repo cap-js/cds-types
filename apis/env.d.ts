@@ -94,15 +94,18 @@ export namespace env {
     },
     'cds.xt.ExtensibilityService'?: {
       model: string,
+      kind?: string,
       [key: string]: any,
     },
     'cds.xt.ModelProviderService'?: {
       model: string,
       root: string,
+      kind?: string,
       [key: string]: any,
     },
     'cds.xt.DeploymentService'?: {
       model: string,
+      kind?: string,
       [key: string]: any,
     },
     [key: string]: any,
