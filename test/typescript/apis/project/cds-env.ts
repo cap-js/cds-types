@@ -27,14 +27,7 @@ env.requires.db.binding!.key = 'cf'
 
 env.requires['cds.xt.SaasProvisioningService'] = { kind: 'saas-registry', model: '@sap/cds-mtxs/srv/cf/saas-provisioning-service' }
 env.requires['cds.xt.SmsProvisioningService'] = { kind: 'subscription-manager', model: '@sap/cds-mtxs/srv/cf/sms-provisioning-service' }
-env.requires['cds.xt.ExtensibilityService'] = {
-  model: '@sap/cds-mtxs/srv/extensibility-service',
-  'namespace-blocklist': ['sap', 'sap.*', 'sap.*.*'],
-  'extension-allowlist': [
-    { for: [ 'CatalogService' ], 'new-entities': 10 },
-    { for: [ '*' ] }
-  ],
-}
+env.requires['cds.xt.ExtensibilityService'] = { model: '@sap/cds-mtxs/srv/extensibility-service' }
 env.requires['cds.xt.ModelProviderService'] = { model: '@sap/cds-mtxs/srv/model-provider', _in_sidecar: true, root: '../..' }
 env.requires['cds.xt.DeploymentService'] = { model: '@sap/cds-mtxs/srv/deployment-service' }
 

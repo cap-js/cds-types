@@ -87,7 +87,6 @@ export namespace env {
       alwaysUpgradeModel?: boolean,
       [key: string]: any,
     },
-
     'cds.xt.SmsProvisioningService'?: {
       model: string,
       kind: string,
@@ -95,8 +94,6 @@ export namespace env {
     },
     'cds.xt.ExtensibilityService'?: {
       model: string,
-      'namespace-blocklist': string[],
-      'extension-allowlist': { for: string[], 'new-entities'?: number }[],
       [key: string]: any,
     },
     'cds.xt.ModelProviderService'?: {
