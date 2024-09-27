@@ -87,4 +87,19 @@ declare const utils: {
 	 * @see https://cap.cloud.sap/docs/node.js/cds-utils#async-rm-path
 	 */
   rm: (...path: string[]) => Promise<ReturnType<typeof fs.promises.rm>>,
+
+  /**
+   * Shortcut for require("fs")
+   */
+  fs: typeof import('node:fs'),
+
+  /**
+   * Shortcut for require("path")
+   */
+  path: typeof import('node:path'),
+
+  /**
+   * Shortcut for require("util").inspect
+   */
+  inspect: typeof import('node:util').inspect,
 }
