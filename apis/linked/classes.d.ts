@@ -79,7 +79,10 @@ declare class Int32 extends Integer { }
 declare class Int64 extends Integer { }
 declare class Float extends number { }
 declare class Double extends Float { }
-declare class Decimal extends Float { }
+declare class Decimal extends Float { 
+  precision?: number
+  scale?: number
+}
 
 declare class date extends scalar { }
 declare class Date extends date { }
