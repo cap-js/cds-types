@@ -47,7 +47,7 @@ new entity().texts?.kind === 'entity'
 new entity().drafts?.kind === 'entity'
 new entity().is_entity === true
 new entity().is_struct === true;
-[...new entity().elements].find(x => x.items.kind === 'type')
+[...new entity().elements].find(x => x.items && x.items.kind === 'type')
 new entity().items?.kind
 new entity().name
 // @ts-expect-error

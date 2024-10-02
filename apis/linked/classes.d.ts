@@ -54,7 +54,7 @@ declare class aspect<K extends kinds = 'aspect'> extends type<K> implements With
   elements: Definitions<type<'type'>>
 }
 declare interface type extends Omit<csn.type, 'items'> {
-  items: type
+  items?: type
   key?: boolean
   notNull?: boolean
   virtual?: boolean
