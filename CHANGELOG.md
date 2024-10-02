@@ -9,7 +9,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 - `cds.app` typed as express.js application
 - `cds.cli` CLI arguments
-- `cds.requires` types for MTX services.
+- `cds.requires` types for MTX services
+- `cds.utils.colors` types
 
 ### Changed
 - Most `cds.requires` entries are now optionals.
