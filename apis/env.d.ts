@@ -13,6 +13,7 @@ export const env: {
     folders: string[],
     [key: string]: any,
   },
+  profiles: string[],
   requires: env.Requires,
   folders: {
     app: string,
