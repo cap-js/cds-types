@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 - Most `cds.requires` entries are now optionals.
+- It is possible to connect with CSN model
 
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
