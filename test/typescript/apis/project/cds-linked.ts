@@ -73,6 +73,9 @@ new scalar().kind === 'scalar_'
 new type().kind === 'type'
 // @ts-expect-error
 new type().kind === 'type_'
+new type().key
+new type().virtual
+new type().notNull
 
 new event().elements
 new event().kind === 'event'
