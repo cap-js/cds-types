@@ -89,6 +89,7 @@ declare const utils: {
   rm: (...path: string[]) => Promise<ReturnType<typeof fs.promises.rm>>,
 
   /**
+   * @since 8.3.0
    * @see https://cap.cloud.sap/docs/node.js/cds-utils#colors
    */
   colors: {
