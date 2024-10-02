@@ -4,9 +4,22 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## Version 0.7.0 - tbd
+
+### Added
+- `cds.app` typed as express.js application
+- `cds.cli` CLI arguments
+- `cds.requires` types for MTX services.
+
+### Changed
+- Most `cds.requires` entries are now optionals.
+
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
 - The `@types/sap__cds` link created by the `postinstall` script now also works in monorepo setups where the target `@cap-js/cds-types` might already be preinstalled (often hoisted some levels up).
+
+### Removed
+- Removed array-like methods from model parts (`.map`, `.find`, etc.). To still use them, apply spreading to object in question first.
 
 ## Version 0.6.4 - 2024-08-05
 ### Added
