@@ -107,6 +107,9 @@ export type EntityElements = {
     virtual?: boolean,
     unique?: boolean,
     notNull?: boolean,
+    precision?: number,
+    scale?: number,
+    length?: number,
   },
 }
 
