@@ -1,5 +1,5 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
-import { Awaitable } from './ql'
+import { Awaitable } from './internal/query'
 import { ArrayConstructable, Constructable, Unwrap } from './internal/inference'
 //import { ModelPart, CSN, LinkedDefinition, LinkedEntity } from './linked'
 import * as linked from './linked'
@@ -7,6 +7,7 @@ import * as csn from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
 import { ReadableStream } from 'node:stream/web'
+import { _TODO } from './internal/util'
 
 type Key = number | string | any
 
@@ -58,7 +59,7 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
   run: {
-    (query: ConstructedQuery | ConstructedQuery[]): Promise<ResultSet | any>,
+    (query: ConstructedQuery<_TODO> | ConstructedQuery<_TODO>[]): Promise<ResultSet | any>,
     (query: Query): Promise<ResultSet | any>,
     (query: string, args?: any[] | object): Promise<ResultSet | any>,
   }
@@ -177,7 +178,7 @@ export class Service extends QueryAPI {
     <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>,
     <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { query: ConstructedQuery, data?: object, headers?: object }): Promise<T>,
+    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
   }

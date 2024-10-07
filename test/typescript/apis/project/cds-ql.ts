@@ -1,3 +1,6 @@
+import { ArrayConstructable } from '../../../../apis/internal/inference'
+import { QLExtensions_ } from '../../../../apis/internal/query'
+import { DeepRequired } from '../../../../apis/internal/util'
 import { QLExtensions } from '../../../../apis/ql'
 import { Foo, Foos, attach } from './dummy'
 
@@ -11,19 +14,64 @@ sel = SELECT.from(Foo.drafts)
 sel = SELECT.from(Foos.drafts)
 sel = SELECT.from(Foos.drafts, 42)
 
+let selSingular: SELECT<Foo> = undefined as unknown as SELECT<Foo>
+selSingular.columns('ref')  // auto suggested
+
+let selAny: SELECT<any> = undefined as unknown as SELECT<Foo>
+selAny.columns('asd')  // unclear target, any string is allowed
+
 const selStatic: SELECT<Foos> | Promise<Foos> = SELECT.from(Foos)
 
-SELECT.from(Foos).columns("x") // x was suggested by code completion
-sel.from(Foos)
-sel.columns("x") // x was suggested by code completion
+ // x was suggested by code completion
+SELECT.from(Foos).columns('x')
+sel.from(Foos).columns('x')
+sel.from(Foo).columns('x')
+sel.columns("x")
+
+// y is not a valid columns for Foo(s),
+// but is allowed anyway since we permit arbitrary strings as well
+SELECT.from(Foos).columns('y')
+SELECT.from(Foos).where('x=', 42)
+SELECT.from(Foos).where('x >', 42, 'y =', '42')
+const predefinedArray = [42]
+SELECT.from(Foos).where('x in', [42])
+SELECT.from(Foos).where('x in', predefinedArray)
+SELECT.from(Foos).where('x in', SELECT.from(Foos))
+// @ts-expect-error - can't just use anything as even parameter
+SELECT.from(Foos).where('x in', Foos)
+SELECT.from(Foos).where('fn(x) = ', 42)
+sel.from(Foos).columns('y')
+sel.from(Foo).columns('y')
+sel.columns("y")
+SELECT.from(Foos, f => f.ref(r => r.x))  // ref should be callable without optional chaining (DeepRequired)
+
+SELECT.from(Foos).orderBy('x')  // x auto completed
+SELECT.from(Foos).orderBy('y')  // non-columns also still possible
+
+SELECT.from(Foos, f => { 
+    f.x,
+    // @ts-expect-error - foobar is not a valid column
+    f.foobar
+})
+
 sel.SELECT.columns?.filter(e => !e) // check if this is array
 
+sel.from(Foos).where({ ref:42 })  // ref was suggested by code completion
+sel.from(Foos).where({ zef:42 })  // non-keys are allowed too
+
 // ensure ql returns a proper CQN
-const s = SELECT.from(Foos).columns('ID').where('ID =', 42)
+const s = SELECT.from(Foos).columns('x').where('x=', 42)
+SELECT.from(Foo).columns('x').where('x=', 42)
+SELECT.from(Foo).columns('x').where('y=', 42)  // also allowed as per [string, Primitive] signature
+// @ts-expect-error invalid key type
+SELECT.from(Foo).columns('x').where([new Foo()], 42)
+// @ts-expect-error missing operator
+SELECT.from(Foo).columns('x').where('y', 42)
 s.SELECT.from.ref
 s.SELECT.columns?.[0].ref
 s.SELECT.where?.[0].ref
 s.SELECT.where?.[2].val
+SELECT.from(Foo).columns('x').where('x =', 42)
 
 SELECT(Foos) === SELECT.from(Foos)
 
@@ -34,7 +82,6 @@ ins.into(Foos)
 ins.into(Foos)
 ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"
-
 INSERT.into("Bla").as(SELECT.from("Foo"))
 
 let upd: UPDATE<Foos>
@@ -100,6 +147,8 @@ SELECT.from(Foos, (f:any) => {
     const number: QLExtensions<number> = f.x
 })
 
+SELECT.columns`a`.from`Foo`;
+
 SELECT.from(Foos).columns(f => {
     const iterator: QLExtensions<Foo> = f
     const number: QLExtensions<number> = f.x
@@ -131,3 +180,18 @@ DELETE.from `${x}` .where `ID=${x}`
 SELECT.from(Foos).forUpdate()
 SELECT.from(Foos).forUpdate({wait: 5})
 SELECT.from(Foos).forShareLock()
+
+INSERT.into('Foos').values(1,2,3)
+INSERT.into('Foos').values([1,2,3])
+// @ts-expect-error
+INSERT.into('Foos').values([[1,2,3]])
+// @ts-expect-error
+INSERT.into('Foos').values([],[])
+
+// @ts-expect-error
+INSERT.into('Foos').rows(1,2,3)
+INSERT.into('Foos').rows([1,2,3])
+INSERT.into('Foos').rows([[1,2,3]])
+INSERT.into('Foos').rows([[1,2,3],[1,2]])
+// @ts-expect-error
+INSERT.into('Foos').values([[1,2,3]])

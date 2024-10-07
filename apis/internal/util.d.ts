@@ -14,4 +14,23 @@ export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<
  * Object structure that exposes both array-like and object-like behaviour.
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#iterable)
  */
+
 export type IterableMap<T> = { [name: string]: T } & Iterable<T>
+
+/**
+ * T is a tuple of alternating K, V pairs -> true, else false
+ * Allows for variadic parameter lists with alternating expecing types,
+ * like we have in cql.SELECT.where
+ */
+type KVPairs<T,K,V> = T extends []
+  ? true
+  : T extends [K, V, ...infer R]
+    ? KVPairs<R,K,V>
+    : false
+
+/**
+ * Recursively excludes nullability from all properties of T.
+ */
+export type DeepRequired<T> = { 
+  [K in keyof T]: DeepRequired<T[K]>
+} & Exclude<Required<T>, null>
