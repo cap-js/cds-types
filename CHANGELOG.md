@@ -4,11 +4,18 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## Version 0.6.6 - TBD
+## Version 0.7.0 - tbd
+
 ### Added
+- `cds.app` typed as express.js application
+- `cds.cli` CLI arguments
+- `cds.requires` types for MTX services
+- `cds.utils.colors` types
 - The CQL methods `.where` and `.having` now suggest property names for certain overloads.
 
 ### Changed
+- Most `cds.requires` entries are now optionals.
+- `cds.connect.to` now also supports using a precompiled model.
 - Properties of entities are no longer optional in projections, eliminating the need to perform optional chaining on them when using nested projections
 
 ## Version 0.6.5 - 2024-08-13

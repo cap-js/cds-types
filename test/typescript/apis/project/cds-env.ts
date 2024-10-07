@@ -25,6 +25,15 @@ env.requires.auth.users!.TEST = {}
 env.requires.db.kind = 'hana'
 env.requires.db.binding!.key = 'cf'
 
+env.requires['cds.xt.SaasProvisioningService'] = { kind: 'saas-registry', model: '@sap/cds-mtxs/srv/cf/saas-provisioning-service' }
+env.requires['cds.xt.SmsProvisioningService'] = { kind: 'subscription-manager', model: '@sap/cds-mtxs/srv/cf/sms-provisioning-service' }
+env.requires['cds.xt.ExtensibilityService'] = { model: '@sap/cds-mtxs/srv/extensibility-service' }
+env.requires['cds.xt.ModelProviderService'] = { model: '@sap/cds-mtxs/srv/model-provider', _in_sidecar: true, root: '../..' }
+env.requires['cds.xt.DeploymentService'] = { model: '@sap/cds-mtxs/srv/deployment-service' }
+
+env.profiles.includes("development")
+env.profiles.length > 2
+
 env.requires.multitenancy = { kind: 'shared', jobs: { clusterSize:1, workerSize:1, t0:'', foo:'' }}
 env.requires.messaging = { kind: '', format: '', foo: '' }
 
