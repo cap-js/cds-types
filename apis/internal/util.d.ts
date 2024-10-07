@@ -1,3 +1,5 @@
+import { QLExtensions_ } from "./query"
+
 /** @internal */
 export type _TODO = any
 

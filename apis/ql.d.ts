@@ -45,7 +45,8 @@ export class ConstructedQuery<T> {
 
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
-export type StaticSELECT<T> = typeof SELECT<T>
+export type StaticSELECT<T> = { columns: SELECT<T>['columns'] }
+  & typeof SELECT<T>
   & SELECT<T>['columns']
   & SELECT_from // as it is not directly quantified, ...
   & SELECT_one // ...we should expect both a scalar and a list
@@ -157,6 +158,15 @@ type SELECT_from =
   // We expect these to be the overloads for scalars since we covered arrays above -> wrap them back in Array
   & (<T extends Constructable>(
     entityType: T,
+    columns: string[]  // could be keyof in the future
+  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  & (<T extends Constructable>(
+    entityType: T,
+    primaryKey: PK,
+    columns: string[]  // could be keyof in the future
+  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  & (<T extends Constructable>(
+    entityType: T,
     projection?: Projection<InstanceType<T>>
   ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
   & (<T extends Constructable>(
@@ -168,33 +178,36 @@ type SELECT_from =
 export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
 
-  static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => INSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, entries?: Entries) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
-    & ((entity: EntityDescription, entries?: object | object[]) => INSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
-    & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
+    & ((entity: EntityDescription, entries?: Entries) => INSERT<StaticAny>)
+    & (<T> (entity: Constructable<T>, entries?: Entries) => INSERT<T>)
+    & (<T> (entity: T, entries?: T | Entries) => INSERT<T>)
 
+  /**
+   * @deprected
+   */
   as (select: SELECT<T>): this
+  from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 
 }
+type Entries<T = any> = {[key:string]: T} | {[key:string]: T} 
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
 
-  static into: (<T extends ArrayConstructable> (entity: T, entries?: object | object[]) => UPSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, entries?: Entries) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
-    & ((entity: EntityDescription, entries?: object | object[]) => UPSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
-    & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
+    & ((entity: EntityDescription, entries?: Entries) => UPSERT<StaticAny>)
+    & (<T> (entity: Constructable<T>, entries?: Entries) => UPSERT<T>)
+    & (<T> (entity: T, entries?: T | Entries) => UPSERT<T>)
 
 
   UPSERT: CQN.UPSERT['UPSERT']
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface DELETE<T> extends Where<T>, And, ByKey {}
 export class DELETE<T> extends ConstructedQuery<T> {
 
@@ -207,7 +220,6 @@ export class DELETE<T> extends ConstructedQuery<T> {
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface UPDATE<T> extends Where<T>, And, ByKey {}
 
 
@@ -219,7 +231,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 
   static entity (entity: EntityDescription, primaryKey?: PK): UPDATE<StaticAny>
 
-  static entity<T> (entity: Constructable<T>, primaryKey?: PK): UPDATE<T>
+  static entity<T extends Constructable> (entity: T, primaryKey?: PK): UPDATE<T>
 
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
 

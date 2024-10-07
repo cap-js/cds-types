@@ -1,4 +1,6 @@
 import { ArrayConstructable } from '../../../../apis/internal/inference'
+import { QLExtensions_ } from '../../../../apis/internal/query'
+import { DeepRequired } from '../../../../apis/internal/util'
 import { QLExtensions } from '../../../../apis/ql'
 import { Foo, Foos, attach } from './dummy'
 
@@ -145,6 +147,8 @@ SELECT.from(Foos, (f:any) => {
     const number: QLExtensions<number> = f.x
 })
 
+SELECT.columns`a`.from`Foo`;
+
 SELECT.from(Foos).columns(f => {
     const iterator: QLExtensions<Foo> = f
     const number: QLExtensions<number> = f.x
@@ -176,3 +180,18 @@ DELETE.from `${x}` .where `ID=${x}`
 SELECT.from(Foos).forUpdate()
 SELECT.from(Foos).forUpdate({wait: 5})
 SELECT.from(Foos).forShareLock()
+
+INSERT.into('Foos').values(1,2,3)
+INSERT.into('Foos').values([1,2,3])
+// @ts-expect-error
+INSERT.into('Foos').values([[1,2,3]])
+// @ts-expect-error
+INSERT.into('Foos').values([],[])
+
+// @ts-expect-error
+INSERT.into('Foos').rows(1,2,3)
+INSERT.into('Foos').rows([1,2,3])
+INSERT.into('Foos').rows([[1,2,3]])
+INSERT.into('Foos').rows([[1,2,3],[1,2]])
+// @ts-expect-error
+INSERT.into('Foos').valrowsues([[1,2,3]])

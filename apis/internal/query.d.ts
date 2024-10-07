@@ -1,6 +1,6 @@
 import type { Definition } from '../csn'
 import type { entity } from '../linked/classes'
-import type { column_expr } from '../cqn'
+import type { column_expr, ref } from '../cqn'
 import type { ArrayConstructable, Constructable, SingularInstanceType, Unwrap, UnwrappedInstanceType } from './inference'
 import { ConstructedQuery } from '../ql'
 import { KVPairs, DeepRequired } from './util'
@@ -8,6 +8,7 @@ import { KVPairs, DeepRequired } from './util'
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
 type Projection<T> = (e: QLExtensions<T extends ArrayConstructable ? SingularInstanceType<T> : T>) => void
 type Primitive = string | number | boolean | Date
+type NonPrimitive<T> = Exclude<T, string | number | boolean | symbol | bigint | null | undefined>
 type EntityDescription = entity | Definition | string // FIXME: Definition not allowed here?, FIXME: { name: string } | ?
 type PK = number | string | object
 // used as a catch-all type for using tagged template strings: SELECT `foo`. from `bar` etc.
@@ -77,6 +78,7 @@ type KeyOfTarget<T, F = string | column_expr> = T extends ConstructedQuery<infer
 export interface Columns<T, This = undefined> {
   columns:
   ((...col: KeyOfSingular<T>[]) => This extends undefined ? this : This)
+  & ((col: KeyOfSingular<T>[]) => This extends undefined ? this : This)
   & ((...col: (string | column_expr)[]) => This extends undefined ? this : This)
   & ((col: (string | column_expr)[]) => This extends undefined ? this : This)
   & TaggedTemplateQueryPart<This extends undefined ? this : This>
@@ -126,7 +128,9 @@ export interface Where<T> {
 
 export interface GroupBy {
   groupBy: TaggedTemplateQueryPart<this>
+  & ((columns: Partial<{[column in KeyOfTarget<this extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => this)
   & ((...expr: string[]) => this)
+  & ((ref: ref) => this)
 }
 
 export interface OrderBy<T> {
@@ -151,9 +155,11 @@ export interface InUpsert<T> {
 
   entries (...entries: object[]): this
 
-  values (...val: any[]): this
+  values (...val: (null | Primitive)[]): this
+  values (val: (null | Primitive)[]): this
 
-  rows (...row: any[]): this
+  rows (...row: (null | Primitive)[][]): this
+  rows (row: (null | Primitive)[][]): this
 
   into: (<T extends ArrayConstructable> (entity: T) => this)
   & TaggedTemplateQueryPart<this>
