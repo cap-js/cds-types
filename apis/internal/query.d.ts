@@ -131,6 +131,7 @@ export interface GroupBy {
   & ((columns: Partial<{[column in KeyOfTarget<this extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => this)
   & ((...expr: string[]) => this)
   & ((ref: ref) => this)
+  // columns currently not being auto-completed due to complexity
 }
 
 export interface OrderBy<T> {

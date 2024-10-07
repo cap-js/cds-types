@@ -174,6 +174,7 @@ type SELECT_from =
     primaryKey: PK,
     projection?: Projection<InstanceType<T>>
   ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  // currently no auto completion of columns, due to complexity
 
 export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
@@ -201,6 +202,7 @@ export class UPSERT<T> extends ConstructedQuery<T> {
     & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
     & ((entity: EntityDescription, entries?: Entries) => UPSERT<StaticAny>)
     & (<T> (entity: Constructable<T>, entries?: Entries) => UPSERT<T>)
+    // currently no easy way to restrict T to non-primitives
     & (<T> (entity: T, entries?: T | Entries) => UPSERT<T>)
 
 
@@ -233,6 +235,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 
   static entity<T extends Constructable> (entity: T, primaryKey?: PK): UPDATE<T>
 
+  // currently no easy way to restrict T from being a primitive type
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
 
   // with (block: (e:T)=>void) : this
