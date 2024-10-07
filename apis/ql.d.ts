@@ -164,7 +164,7 @@ type SELECT_from =
     entityType: T,
     primaryKey: PK,
     columns: string[]  // could be keyof in the future
-  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  ) => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
   & (<T extends Constructable>(
     entityType: T,
     projection?: Projection<InstanceType<T>>
@@ -173,7 +173,7 @@ type SELECT_from =
     entityType: T,
     primaryKey: PK,
     projection?: Projection<InstanceType<T>>
-  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  ) => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
   // currently no auto completion of columns, due to complexity
 
 export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
