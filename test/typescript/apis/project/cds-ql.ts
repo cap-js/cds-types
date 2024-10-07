@@ -194,4 +194,4 @@ INSERT.into('Foos').rows([1,2,3])
 INSERT.into('Foos').rows([[1,2,3]])
 INSERT.into('Foos').rows([[1,2,3],[1,2]])
 // @ts-expect-error
-INSERT.into('Foos').valrowsues([[1,2,3]])
+INSERT.into('Foos').values([[1,2,3]])
