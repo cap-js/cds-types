@@ -1,5 +1,5 @@
 import cds, { Service, TypedRequest } from '@sap/cds'
-import { Foo, Foos, action } from './dummy'
+import { Bars, Bar, Foo, Foos, action } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
@@ -195,6 +195,27 @@ srv.on('error', (err, req) => {
 function isOne(p: TypedRequest<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
 function isMany(p: TypedRequest<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
 
+function isOneOfMany(p: TypedRequest<Foo | Bar> | Foo | Bar | undefined ) { 
+  if(!p) return;
+  if ("data" in p) {
+    if (p.data instanceof Foo) p.data.x.toFixed;
+    else p.data.name.split;
+  } else {
+    if (p instanceof Foo) p.x.toFixed;
+    else p.name.split;
+  }
+}
+function isManyOfMany(p: TypedRequest<Foos | Bars> | Foos | Bars | undefined) { 
+  if(!p) return;
+  if ("data" in p) {
+    if (p.data instanceof Foos) p.data[0].x.toFixed;
+    else p.data[0].name.split;
+  } else {
+    if (p instanceof Foos) p[0].x.toFixed;
+    else p[0].name.split;
+  }
+}
+
 // Typed bound/ unbound actions
 // The handler must return a number to be in line with action's signature (or void)
 srv.on(action, req => req.data.foo.x)
@@ -207,17 +228,33 @@ srv.before('CREATE', Foos, req => isOne(req))
 srv.after('CREATE', Foo, (data) => { isOne(data); return data })
 srv.after('CREATE', Foos, (data) => isOne(data))
 
+srv.on('CREATE', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('CREATE', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('CREATE', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('CREATE', [Foos, Bars], req => { isOneOfMany(req); return req.data })
+srv.after('CREATE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('CREATE', [Foos, Bars], (data) => { isOneOfMany(data); return data })
+
 // Handlers with classes. Singular and plural are to be reflected in what the handler receives
 srv.on('READ', Foo, (req, next) => { isOne(req); return next() })
 srv.on('READ', Foos, (req, next) => { isOne(req); return next() })
 srv.before('READ', Foo, req => { isOne(req); return req.data })
 srv.before('READ', Foos, req => isOne(req))
 srv.after('READ', Foo, (data) => { isOne(data); return data })
-srv.after("each", Foos, (data) => { isOne(data); return data })
 srv.after('READ', Foos, (data) => isMany(data))
 
-srv.after('EACH', Foo, (data) => { isOne(data); return data })
-srv.after('EACH', Foos, (data) => isOne(data))
+srv.after("each", Foos, (data) => { isOne(data); return data })
+srv.after("each", Foo, (data) => { isOne(data); return data })
+
+srv.on('READ', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('READ', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('READ', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('READ', [Foos, Bars], req => isOneOfMany(req))
+srv.after('READ', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('READ', [Foos, Bars], (data) => isManyOfMany(data))
+
+srv.after("each", [Foos, Bars], (data) => { isOneOfMany(data); return data })
+srv.after("each", [Foo, Bar], (data) => { isOneOfMany(data); return data })
 
 srv.on('UPDATE', Foo, (req, next) => { isOne(req); return next() })
 srv.on('UPDATE', Foos, (req, next) => { isOne(req); return next() })
@@ -226,12 +263,26 @@ srv.before('UPDATE', Foos, req => isOne(req))
 srv.after('UPDATE', Foo, (data) => { isOne(data); return data })
 srv.after('UPDATE', Foos, (data) => isOne(data))
 
+srv.on('UPDATE', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('UPDATE', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('UPDATE', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('UPDATE', [Foos, Bars], req => isOneOfMany(req))
+srv.after('UPDATE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('UPDATE', [Foos, Bars], (data) => isOneOfMany(data))
+
 srv.on('DELETE', Foo, (req, next) => { isOne(req); return next() })
 srv.on('DELETE', Foos, (req, next) => { isOne(req); return next() })
 srv.before('DELETE', Foo, req => { isOne(req); return req.data })
 srv.before('DELETE', Foos, req => isOne(req))
 srv.after('DELETE', Foo, (data) => { isOne(data); return data })
 srv.after('DELETE', Foos, (data) => isOne(data))
+
+srv.on('DELETE', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('DELETE', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('DELETE', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('DELETE', [Foos, Bars], req => isOneOfMany(req))
+srv.after('DELETE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('DELETE', [Foos, Bars], (data) => isOneOfMany(data))
 
 // unbound
 srv.before(action, (req) => {

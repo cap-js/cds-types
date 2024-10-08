@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - `cds.requires` types for MTX services
 - `cds.utils.colors` types
 - The CQL methods `.where` and `.having` now suggest property names for certain overloads.
+- `Service.before/on/after(event, target...)` now accept also an array of typer-generated classes in the `target` parameter
 
 ### Changed
 - Most `cds.requires` entries are now optionals.
