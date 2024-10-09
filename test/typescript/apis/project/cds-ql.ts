@@ -55,6 +55,7 @@ SELECT.from(Foos, f => {
 })
 
 sel.SELECT.columns?.filter(e => !e) // check if this is array
+sel.elements
 
 sel.from(Foos).where({ ref:42 })  // ref was suggested by code completion
 sel.from(Foos).where({ zef:42 })  // non-keys are allowed too
