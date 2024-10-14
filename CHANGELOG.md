@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
 - Added missing type for `cds.context.model`
+- Added missing type for `cds.context.model`
+- Added missing type for `req.query.elements`
 
 ### Added
 - `cds.app` typed as express.js application
@@ -21,7 +23,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Most `cds.requires` entries are now optionals.
 - `cds.connect.to` now also supports using a precompiled model.
 - Properties of entities are no longer optional in projections, eliminating the need to perform optional chaining on them when using nested projections
-
 
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
