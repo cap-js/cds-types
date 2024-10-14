@@ -1,199 +1,93 @@
-import { Definition, EntityElements } from './csn'
+import { EntityElements } from './csn'
+//export type { Query } from './cqn'
 import * as CQN from './cqn'
-import { Constructable, ArrayConstructable, SingularType, PluralType } from './internal/inference'
-import * as linked from './linked'
-import { ref, column_expr } from './cqn'
+import { 
+  Constructable,
+  ArrayConstructable,
+  SingularInstanceType,
+  PluralInstanceType
+} from './internal/inference'
+import { ref } from './cqn'
+import {
+  And,
+  Awaitable,
+  Columns,
+  EntityDescription,
+  Having,
+  GroupBy,
+  Limit,
+  OrderBy,
+  PK,
+  Projection,
+  QLExtensions,
+  TaggedTemplateQueryPart,
+  Where,
+  ByKey,
+  InUpsert,
+} from './internal/query'
+import { _TODO } from './internal/util'
 
 export type Query = CQN.Query
 
-export class ConstructedQuery {
+export { QLExtensions } from './internal/query'
 
+// this just serves as a reminder that we can not get rid of some of the anys at this point
+// as the would refer to the generic type of the surrounding class
+type StaticAny = any
+
+export class ConstructedQuery<T> {
+  // branded type to break covariance for the subclasses
+  // that don't make explicit use of the generic. So `UPDATE<Books> !<: UPDATE<number>`
+  declare private _: T
   then (_resolved: (x: any) => any, _rejected: (e: Error) => any): any
 
 }
 
-export type PK = number | string | object
-
-
-type Primitive = string | number | boolean | Date
-
-// don't wrap QLExtensions in more QLExtensions (indirection to work around recursive definition)
-type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<T>
-
-/**
- * Target for any QL operation
- */
-type Target = linked.classes.entity | Definition | string
-
-/**
- * QLExtensions are properties that are attached to entities in CQL contexts.
- * They are passed down to all properties recursively.
-*/
-type QLExtensions_<T> = {
-  [Key in keyof T]: QLExtensions<T[Key]>
-} & {
-
-  /**
-	 * Alias for this attribute.
-	 */
-  as: (alias: string) => void,
-
-  /**
-	 * Accesses any nested attribute based on a [path](https://cap.cloud.sap/cap/docs/java/query-api#path-expressions):
-	 * `X.get('a.b.c.d')`. Note that you will not receive
-	 * proper typing after this call.
-	 * To still have access to typed results, use
-	 * `X.a().b().c().d()` instead.
-	 */
-  get: (path: string) => any,
-
-  // have to exclude undefined from the type, or we'd end up with a distribution of Subqueryable
-  // over T and undefined, which gives us zero code completion within the callable.
-} & Subqueryable<Exclude<T, undefined>>
-
-/**
- * Adds the ability for subqueries to structured properties.
- * The final result of each subquery will be the property itself:
- * `Book.title` == `Subqueryable<Book>.title()`
- */
-type Subqueryable<T> = T extends Primitive	? unknown
-// composition of many/ association to many
-  : T extends readonly unknown[] ? {
-
-    /**
-	 * @example
-	 * ```js
-	 * SELECT.from(Books, b => b.author)
-	 * ```
-	 * means: "select all books and project each book's author"
-	 *
-	 * whereas
-	 * ```js
-	 * SELECT.from(Books, b => b.author(a => a.ID))
-	 * ```
-	 * means: "select all books, subselect each book's author's ID
-	 *
-	 * Note that you do not need to return anything from these subqueries.
-	 */
-    (fn: ((a: QLExtensions<T[number]>) => any) | '*'): T[number],
-  }
-    // composition of one/ association to one
-    : {
-
-      /**
-	 * @example
-	 * ```js
-	 * SELECT.from(Books, b => b.author)
-	 * ```
-	 * means: "select all books and project each book's author"
-	 *
-	 * whereas
-	 * ```js
-	 * SELECT.from(Books, b => b.author(a => a.ID))
-	 * ```
-	 * means: "select all books, subselect each book's author's ID
-	 *
-	 * Note that you do not need to return anything from these subqueries.
-	 */
-      (fn: ((a: QLExtensions<T>) => any) | '*'): T,
-    }
-
-
-// Alias for projections
-// https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
-// export type Projection<T> = (e:T)=>void
-export type Projection<T> = (e: QLExtensions<T extends ArrayConstructable ? SingularType<T> : T>) => void
-// Type for query pieces that can either be chained to build more complex queries or
-// awaited to materialise the result:
-// `Awaitable<SELECT<Book>, Book> = SELECT<Book> & Promise<Book>`
-//
-// While the benefit is probably not immediately obvious as we don't exactly
-// save a lot of typing over explicitly writing `SELECT<Book> & Promise<Book>`,
-// it makes the semantics more explicit. Also sets us up for when TypeScript ever
-// improves their generics to support:
-//
-// `Awaitable<T> = T extends unknown<infer I> ? (T & Promise<I>) : never`
-// (at the time of writing, infering the first generic parameter of ANY type
-// does not seem to be possible.)
-export type Awaitable<T, I> = T & Promise<I>
-
 // all the functionality of an instance of SELECT, but directly callable:
 // new SELECT(...).(...) == SELECT(...)
-export type StaticSELECT<T> = typeof SELECT
-  & ((...columns: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]) => SELECT<T>)
-  & ((...columns: string[]) => SELECT<T>)
-  & ((columns: string[]) => SELECT<T>)
-  & (TaggedTemplateQueryPart<SELECT<T>>)
+export type StaticSELECT<T> = { columns: SELECT<T>['columns'] }
+  & typeof SELECT<T>
+  & SELECT<T>['columns']
   & SELECT_from // as it is not directly quantified, ...
   & SELECT_one // ...we should expect both a scalar and a list
 
-declare class QL<T> {
+export declare class QL<T> {
 
   SELECT: StaticSELECT<T>
 
-  INSERT: typeof INSERT
-  & ((...entries: object[]) => INSERT<any>) & ((entries: object[]) => INSERT<any>)
+  INSERT: typeof INSERT<T>
+  & ((...entries: object[]) => INSERT<T>) & ((entries: object[]) => INSERT<T>)
 
   UPSERT: typeof UPSERT
-  & ((...entries: object[]) => UPSERT<any>) & ((entries: object[]) => UPSERT<any>)
+  & ((...entries: object[]) => UPSERT<T>) & ((entries: object[]) => UPSERT<T>)
 
-  UPDATE: typeof UPDATE
-  & typeof UPDATE.entity
+  UPDATE: typeof UPDATE<T>
+  & typeof UPDATE.entity<_TODO>
 
-  DELETE: typeof DELETE
-  & ((...entries: object[]) => DELETE<any>) & ((entries: object[]) => DELETE<any>)
+  DELETE: typeof DELETE<T>
+  & ((...entries: object[]) => DELETE<T>) & ((entries: object[]) => DELETE<T>)
 
-  CREATE: typeof CREATE
+  CREATE: typeof CREATE<T>
 
-  DROP: typeof DROP
+  DROP: typeof DROP<T>
 
 }
 
-// used as a catch-all type for using tagged template strings: SELECT `foo`. from `bar` etc.
-// the resulting signatures are actually not very strongly typed, but they at least accept template strings
-// when run in strict mode.
-// This signature has to be added to a method as intersection type.
-// Defining overloads with it will override preceding signatures and the other way around.
-type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unknown[]) => T
-
-export class SELECT<T> extends ConstructedQuery {
+export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>, Limit {
+  // overload specific to SELECT
+  columns: Columns<T, SELECT<T>>['columns'] & ((projection: Projection<T>) => this)
+}
+export class SELECT<T> extends ConstructedQuery<T> {
 
   static one: SELECT_one & { from: SELECT_one }
 
-  static distinct: typeof SELECT
+  static distinct: typeof SELECT<StaticAny>
 
   static from: SELECT_from
 
-  from: SELECT_from & TaggedTemplateQueryPart<this>
-  & ((entity: Target, primaryKey?: PK, projection?: Projection<unknown>) => this)
-
-  byKey (primaryKey?: PK): this
-  columns: TaggedTemplateQueryPart<this>
-  & ((projection: Projection<T>) => this)
-  & ((...col: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]) => this)
-  & ((...col: (string | column_expr)[]) => this)
-  & ((col: (string | column_expr)[]) => this)
-
-  where: TaggedTemplateQueryPart<this>
-  & ((predicate: object) => this)
-  & ((...expr: any[]) => this)
-
-  and: TaggedTemplateQueryPart<this>
-  & ((predicate: object) => this)
-  & ((...expr: any[]) => this)
-
-  having: TaggedTemplateQueryPart<this>
-  & ((...expr: string[]) => this)
-  & ((predicate: object) => this)
-
-  groupBy: TaggedTemplateQueryPart<this>
-  & ((...expr: string[]) => this)
-
-  orderBy: TaggedTemplateQueryPart<this>
-  & ((...expr: string[]) => this)
-
-  limit: TaggedTemplateQueryPart<this>
-  & ((rows: number, offset?: number) => this)
+  from: SELECT_from
+    & TaggedTemplateQueryPart<this>
+    & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => this)
 
   forShareLock (): this
 
@@ -224,146 +118,126 @@ export class SELECT<T> extends ConstructedQuery {
 
 
 type SELECT_one =
-  TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<_TODO>, InstanceType<_TODO>>>
 &
 // calling with class
-  (<T extends ArrayConstructable<any>>
-  (entityType: T, projection?: Projection<QLExtensions<SingularType<T>>>)
-  => Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
+  (<T extends ArrayConstructable>
+  (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
+  => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
 &
-  (<T extends ArrayConstructable<any>>
-  (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularType<T>>>)
-  => Awaitable<SELECT<SingularType<T>>, SingularType<T>>)
+  (<T extends ArrayConstructable>
+  (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
+  => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
 
-  & ((entity: Target, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
+  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<_TODO>)
   & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
-  & ((subject: ref) => SELECT<any>)
+  & ((subject: ref) => SELECT<_TODO>)
 
 type SELECT_from =
 // tagged template
-  TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<_TODO>, InstanceType<_TODO>>>
 &
 // calling with class
-  (<T extends ArrayConstructable<any>>
-  (entityType: T, projection?: Projection<QLExtensions<SingularType<T>>>)
-  => Awaitable<SELECT<T>, InstanceType<T>>)
+  (<E extends ArrayConstructable>
+  (entityType: E, projection?: Projection<QLExtensions<SingularInstanceType<E>>>)
+  => Awaitable<SELECT<E>, InstanceType<E>>)
 &
-  (<T extends ArrayConstructable<any>>
-  (entityType: T, primaryKey: PK, projection?: Projection<SingularType<T>>)
-  => Awaitable<SELECT<SingularType<T>>, InstanceType<SingularType<T>>>) // when specifying a key, we expect a single element as result
+  (<E extends ArrayConstructable>
+  (entityType: E, primaryKey: PK, projection?: Projection<SingularInstanceType<E>>)
+  => Awaitable<SELECT<SingularInstanceType<E>>, SingularInstanceType<E>>) // when specifying a key, we expect a single element as result
 // calling with definition
-  & ((entity: Target, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<any>)
+  & (<T>(entity: EntityDescription, primaryKey?: PK, projection?: Projection<T>) => SELECT<T>)
 // calling with concrete list
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
-  & ((subject: ref) => SELECT<any>)
+  & ((subject: ref) => SELECT<_TODO>)
   // put these overloads at the very end, as they would also match the above
   // We expect these to be the overloads for scalars since we covered arrays above -> wrap them back in Array
-  & (<T extends Constructable<any>>(
+  & (<T extends Constructable>(
+    entityType: T,
+    columns: string[]  // could be keyof in the future
+  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  & (<T extends Constructable>(
+    entityType: T,
+    primaryKey: PK,
+    columns: string[]  // could be keyof in the future
+  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  & (<T extends Constructable>(
     entityType: T,
     projection?: Projection<InstanceType<T>>
-  ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>)
-  & (<T extends Constructable<any>>(
+  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  & (<T extends Constructable>(
     entityType: T,
     primaryKey: PK,
     projection?: Projection<InstanceType<T>>
-  ) => Awaitable<SELECT<PluralType<T>>, PluralType<T>>)
+  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  // currently no auto completion of columns, due to complexity
 
+export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
+export class INSERT<T> extends ConstructedQuery<T> {
 
-export class INSERT<T> extends ConstructedQuery {
-
-  static into: (<T extends ArrayConstructable<any>> (entity: T, entries?: object | object[]) => INSERT<SingularType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, entries?: Entries) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
-    & ((entity: Target, entries?: object | object[]) => INSERT<any>)
-    & (<T> (entity: Constructable<T>, entries?: object | object[]) => INSERT<T>)
-    & (<T> (entity: T, entries?: T | object | object[]) => INSERT<T>)
+    & ((entity: EntityDescription, entries?: Entries) => INSERT<StaticAny>)
+    & (<T> (entity: Constructable<T>, entries?: Entries) => INSERT<T>)
+    & (<T> (entity: T, entries?: T | Entries) => INSERT<T>)
 
-  into: (<T extends ArrayConstructable> (entity: T) => this)
-  & TaggedTemplateQueryPart<this>
-  & ((entity: Target) => this)
-
-  data (block: (e: T) => void): this
-
-  entries (...entries: object[]): this
-
-  columns (...col: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]): this
-
-  columns (...col: string[]): this
-
-  values (...val: any[]): this
-
-  rows (...row: any[]): this
-
+  /**
+   * @deprected
+   */
   as (select: SELECT<T>): this
+  from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 
 }
+type Entries<T = any> = {[key:string]: T} | {[key:string]: T} 
+
+export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
+export class UPSERT<T> extends ConstructedQuery<T> {
+
+  static into: (<T extends ArrayConstructable> (entity: T, entries?: Entries) => UPSERT<SingularInstanceType<T>>)
+    & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
+    & ((entity: EntityDescription, entries?: Entries) => UPSERT<StaticAny>)
+    & (<T> (entity: Constructable<T>, entries?: Entries) => UPSERT<T>)
+    // currently no easy way to restrict T to non-primitives
+    & (<T> (entity: T, entries?: T | Entries) => UPSERT<T>)
 
 
-export class UPSERT<T> extends ConstructedQuery {
-
-  static into: (<T extends ArrayConstructable<any>> (entity: T, entries?: object | object[]) => UPSERT<SingularType<T>>)
-    & (TaggedTemplateQueryPart<UPSERT<unknown>>)
-    & ((entity: Target, entries?: object | object[]) => UPSERT<any>)
-    & (<T> (entity: Constructable<T>, entries?: object | object[]) => UPSERT<T>)
-    & (<T> (entity: T, entries?: T | object | object[]) => UPSERT<T>)
-
-  into: (<T extends ArrayConstructable> (entity: T) => this)
-  & TaggedTemplateQueryPart<this>
-  & ((entity: Target) => this)
-
-  data (block: (e: T) => void): this
-
-  entries (...entries: object[]): this
-
-  columns (...col: (T extends ArrayConstructable<any> ? keyof SingularType<T> : keyof T)[]): this
-
-  columns (...col: string[]): this
-
-  values (...val: any[]): this
-
-  rows (...row: any[]): this
   UPSERT: CQN.UPSERT['UPSERT']
 
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export class DELETE<T> extends ConstructedQuery {
+export interface DELETE<T> extends Where<T>, And, ByKey {}
+export class DELETE<T> extends ConstructedQuery<T> {
 
   static from:
-    TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<any>>>
-    & ((entity: Target | ArrayConstructable, primaryKey?: PK) => DELETE<any>)
-    & ((subject: ref) => DELETE<any>)
+    TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<StaticAny>>>
+    & (<T>(entity: EntityDescription | ArrayConstructable, primaryKey?: PK) => DELETE<T>)
+    & ((subject: ref) => DELETE<_TODO>)
 
-  byKey (primaryKey?: PK): this
-
-  where (predicate: object): this
-
-  where (...expr: any[]): this
-
-  and (predicate: object): this
-
-  and (...expr: any[]): this
   DELETE: CQN.DELETE['DELETE']
 
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export class UPDATE<T> extends ConstructedQuery {
+export interface UPDATE<T> extends Where<T>, And, ByKey {}
+
+
+export class UPDATE<T> extends ConstructedQuery<T> {
 
   // cds-typer plural
-  static entity<T extends ArrayConstructable<any>> (entity: T, primaryKey?: PK): UPDATE<SingularType<T>>
+  // FIXME: this returned UPDATE<SingularInstanceType<T>> before. should UPDATE<Books>.entity(...) return Book or Books?
+  static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<InstanceType<T>>
 
-  static entity (entity: Target, primaryKey?: PK): UPDATE<any>
+  static entity (entity: EntityDescription, primaryKey?: PK): UPDATE<StaticAny>
 
-  static entity<T> (entity: Constructable<T>, primaryKey?: PK): UPDATE<T>
+  static entity<T extends Constructable> (entity: T, primaryKey?: PK): UPDATE<T>
 
+  // currently no easy way to restrict T from being a primitive type
   static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
 
-  byKey (primaryKey?: PK): this
   // with (block: (e:T)=>void) : this
   // set (block: (e:T)=>void) : this
   set: TaggedTemplateQueryPart<this>
@@ -372,30 +246,21 @@ export class UPDATE<T> extends ConstructedQuery {
   with: TaggedTemplateQueryPart<this>
     & ((data: object) => this)
 
-  where (predicate: object): this
-
-  where (...expr: any[]): this
-
-  and (predicate: object): this
-
-  and (...expr: any[]): this
   UPDATE: CQN.UPDATE['UPDATE']
 
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export class CREATE<T> extends ConstructedQuery {
+export class CREATE<T> extends ConstructedQuery<T> {
 
-  static entity (entity: Target): CREATE<any>
+  static entity (entity: EntityDescription): CREATE<EntityDescription>
 
   CREATE: CQN.CREATE['CREATE']
 
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export class DROP<T> extends ConstructedQuery {
+export class DROP<T> extends ConstructedQuery<T> {
 
-  static entity (entity: Target): DROP<any>
+  static entity (entity: EntityDescription): DROP<EntityDescription>
 
   DROP: CQN.DROP['DROP']
 

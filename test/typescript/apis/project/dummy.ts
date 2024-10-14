@@ -12,6 +12,13 @@ export class Foo {
 
 export class Foos extends Array<Foo> { static readonly drafts: typeof Foo }
 
+export class Bar {
+  static readonly drafts: typeof Bar
+  name: string = "bar"
+}
+
+export class Bars extends Array<Bar> { static readonly drafts: typeof Foo }
+
 
 // for bound/ unbound actions
 export const action = ((foo: Foo) => 42) as Action

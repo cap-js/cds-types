@@ -154,7 +154,7 @@ interface cds_connect_options {
   impl?: string
   service?: string
   kind?: string
-  model?: string
+  model?: string | CSN
   credentials?: object
 }
 
@@ -163,3 +163,10 @@ type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 export const middlewares: {
   add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middleswares }>, { before: Middleswares }>) => void,
 }
+
+/**
+ * The {@link https://expressjs.com/en/4x/api.html#app| express.js application} constructed by the server implementation.
+ *
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-server#cds-app)
+ */
+export const app: Application
