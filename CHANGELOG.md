@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.7.0 - tbd
 
+### Fixed
+- Added missing type for `cds.context.model`
+
 ### Added
 - `cds.app` typed as express.js application
 - `cds.cli` CLI arguments
@@ -18,6 +21,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Most `cds.requires` entries are now optionals.
 - `cds.connect.to` now also supports using a precompiled model.
 - Properties of entities are no longer optional in projections, eliminating the need to perform optional chaining on them when using nested projections
+
 
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
