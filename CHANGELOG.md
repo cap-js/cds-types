@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.7.0 - tbd
 
+### Fixed
+- Added missing type for `cds.context.model`
+- Added missing type for `cds.context.model`
+- Added missing type for `req.query.elements`
+
 ### Added
 - `cds.app` typed as express.js application
 - `cds.cli` CLI arguments

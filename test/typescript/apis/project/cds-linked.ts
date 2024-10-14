@@ -104,3 +104,5 @@ cds.linked.classes.Association === cds.linked.classes.event
 
 // but make sure we can still call .linked(CSN)
 const ln: LinkedCSN = cds.linked({})
+
+const ln2: LinkedCSN | undefined = cds.context?.model

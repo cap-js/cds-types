@@ -82,9 +82,9 @@ await srv.run([query, query])
 await srv.run('SELECT * from Authors where name like ?', ['%Poe%'])
 await srv.run('SELECT * from Authors where name like :name', { name: '%Poe%' })
 
-srv.foreach({ SELECT: { from: { ref: ['Foo'] } } }, () => {})
+srv.foreach({ SELECT: { from: { ref: ['Foo'] } }, elements: {} }, () => {})
 
-await srv.stream({ SELECT: { from: { ref: ['Foo'] } } })
+await srv.stream({ SELECT: { from: { ref: ['Foo'] } }, elements: {} })
 srv.stream('data').from('T').where({ ID: 1 }).getReader
 
 await srv.emit('UPDATE', {}, {})
@@ -143,6 +143,8 @@ srv.before('*', Books, req => {
   if (req.query.SELECT?.columns?.length ?? 0 > 0) {
     console.log("foooooooo")
   }
+
+  req.query.elements['foo'].type
 })
 srv.before('*', async req => {
   req.event
@@ -367,7 +369,7 @@ if (myUser instanceof cds.User) {
   myUser.id === 'u2'
 }
 
-cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date() }
+cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date(), model: ctx!.model }
 const tx3 = cds.tx (cds.context)
 const db = await cds.connect.to('db')
 cds.context.features = {foo: true}
