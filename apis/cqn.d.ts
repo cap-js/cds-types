@@ -80,7 +80,7 @@ type ordering_term = expr & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
 export type expr = ref | val | xpr | function_call | SELECT
 
 /** @private */
-type ref = { ref: (name & { id?: string, where?: expr, args?: expr[] })[] }
+type ref = { ref: (name & { id?: string, where?: _xpr, args?: expr[] })[] }
 
 /** @private */
 type val = { val: any }
