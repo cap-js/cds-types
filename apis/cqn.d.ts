@@ -83,7 +83,7 @@ export type expr = ref | val | xpr | function_call | SELECT
 type ref = { ref: _segment[] }
 
 /** @private */
-type _segment = name & {
+type _segment = name | {
   id?: string,
   where?: _xpr,
   args?: _named,
