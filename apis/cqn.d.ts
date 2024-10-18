@@ -80,7 +80,21 @@ type ordering_term = expr & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
 export type expr = ref | val | xpr | function_call | SELECT
 
 /** @private */
-type ref = { ref: (name & { id?: string, where?: _xpr, args?: expr[] })[] }
+type ref = { ref: _segment[] }
+
+/** @private */
+type _segment = name & {
+  id?: string,
+  where?: _xpr,
+  args?: _named,
+  groupBy: expr[],
+  having: _xpr,
+  orderBy: ordering_term[],
+  limit: { rows: expr, offset: expr },
+}
+
+/** @private */
+type _named = { [key: name]: expr }
 
 /** @private */
 type val = { val: any }
