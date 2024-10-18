@@ -6,12 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.7.0 - tbd
 
+### Fixed
+- Added missing type for `cds.context.model`
+- Added missing type for `cds.context.model`
+- Added missing type for `req.query.elements`
+
 ### Added
 - `cds.app` typed as express.js application
 - `cds.cli` CLI arguments
 - `cds.requires` types for MTX services
 - `cds.utils.colors` types
 - The CQL methods `.where` and `.having` now suggest property names for certain overloads.
+- `Service.before/on/after(event, target...)` now accept also an array of typer-generated classes in the `target` parameter
 
 ### Changed
 - Most `cds.requires` entries are now optionals.

@@ -1,4 +1,4 @@
-import { Definition } from './linked'
+import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
@@ -24,6 +24,8 @@ export class EventContext {
   timestamp: Date
 
   features?: { [key: string]: boolean }
+
+  model: LinkedCSN
 
 }
 
