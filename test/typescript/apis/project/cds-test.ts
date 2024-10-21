@@ -25,3 +25,7 @@ test.cds.ApplicationService === cds.ApplicationService
 test.cds.get === cds.get
 
 const {server, url} = await test
+
+GET `/processor/$metadata`
+GET ('/processor/$metadata')
+GET ('/processor/$metadata', { auth: { username: 'alice', password: '' } })
