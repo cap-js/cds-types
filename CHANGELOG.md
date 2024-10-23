@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Added missing type for `cds.context.model`
 - Added missing type for `cds.context.model`
 - Added missing type for `req.query.elements`
+- Made constructors for query parts (`SELECT`, `UPDATE`, `DELETE`, ...) private, as they should only be accessed statically
 
 ### Added
 - `cds.app` typed as express.js application
