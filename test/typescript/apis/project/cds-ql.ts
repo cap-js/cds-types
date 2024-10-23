@@ -131,6 +131,25 @@ selectMany = await SELECT.from(Foos, (f: Foo) => f.x)
 selectMany = await SELECT.from(Foos).alias('Bars')
 await SELECT.from(Foos, f => attach(f.ref)('*'))
 
+// Localized queries
+// explicitly select one
+selectOne = await SELECT.one.localized(Foos)
+selectOne = await SELECT.one.localized(Foos, 42)
+
+// implicitly select one by specifying a key
+selectOne = await SELECT.from.localized(Foos, 42)
+selectOne = await SELECT.from.localized(Foos, 42, (f) => f.x)
+selectOne = await SELECT.localized.from(Foos, 42)
+selectOne = await SELECT.localized.from(Foos, 42, (f) => f.x)
+selectOne = await SELECT.localized(Foos, 42)
+selectOne = await SELECT.localized(Foos, 42, (f) => f.x)
+
+selectMany = await SELECT.from.localized(Foos)
+selectMany = await SELECT.from.localized(Foos).columns('x')
+selectMany = await SELECT.localized.from(Foos)
+selectMany = await SELECT.localized(Foos)
+selectMany = await SELECT.localized(Foos).columns('x')
+
 // projections (with Plural type, which should make the parameter a Singular)
 SELECT.from(Foos, f => {
     const iterator: QLExtensions<Foo> = f

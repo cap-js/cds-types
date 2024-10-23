@@ -80,11 +80,13 @@ export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>
 export class SELECT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static one: SELECT_one & { from: SELECT_one }
-
+  static one: SELECT_one & { from: SELECT_one } & { localized: SELECT_one }
+  
   static distinct: typeof SELECT<StaticAny>
+  
+  static from: SELECT_from & { localized: SELECT_from }
 
-  static from: SELECT_from
+  static localized: SELECT_from & { from: SELECT_from }
 
   from: SELECT_from
     & TaggedTemplateQueryPart<this>
