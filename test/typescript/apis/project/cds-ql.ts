@@ -13,6 +13,8 @@ new UPSERT;
 new DELETE;
 // @ts-expect-error
 new CREATE; 
+// @ts-expect-error
+new DROP;
 
 // unwrapped plural types
 let sel: SELECT<Foos>
