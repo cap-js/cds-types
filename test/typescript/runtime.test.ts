@@ -81,7 +81,7 @@ describe('runtime tests', () => {
     let foo = cds.extend({foo:1}).with({bar:2},{car:3})
     foo.foo
     foo.bar
-    
+
     // FIXME: broke after 0.6.3 in CI, but works locally, renable asap
     //cds.model = cds.linked({})
     {
@@ -159,8 +159,6 @@ describe('runtime tests', () => {
         test,
         log,
         debug,
-        lazify,
-        lazified,
         // clone,
         exit,
 
