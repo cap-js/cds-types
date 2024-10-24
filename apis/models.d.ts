@@ -219,7 +219,7 @@ export const compile: {
   for: {
     odata (model: csn.CSN, o?: _options): csn.CSN,
     sql (model: csn.CSN, o?: _options): csn.CSN,
-    nodejs (mode: csn.CSN, o?: _options): csn.CSN
+    nodejs (mode: csn.CSN, o?: _options): csn.CSN,
   },
   to: {
     parsed: {
