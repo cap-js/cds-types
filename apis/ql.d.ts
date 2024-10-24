@@ -78,12 +78,15 @@ export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>
   columns: Columns<T, SELECT<T>>['columns'] & ((projection: Projection<T>) => this)
 }
 export class SELECT<T> extends ConstructedQuery<T> {
+  private constructor();
 
-  static one: SELECT_one & { from: SELECT_one }
-
+  static one: SELECT_one & { from: SELECT_one } & { localized: SELECT_one }
+  
   static distinct: typeof SELECT<StaticAny>
+  
+  static from: SELECT_from & { localized: SELECT_from }
 
-  static from: SELECT_from
+  static localized: SELECT_from & { from: SELECT_from }
 
   from: SELECT_from
     & TaggedTemplateQueryPart<this>
@@ -164,7 +167,7 @@ type SELECT_from =
     entityType: T,
     primaryKey: PK,
     columns: string[]  // could be keyof in the future
-  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  ) => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
   & (<T extends Constructable>(
     entityType: T,
     projection?: Projection<InstanceType<T>>
@@ -173,11 +176,12 @@ type SELECT_from =
     entityType: T,
     primaryKey: PK,
     projection?: Projection<InstanceType<T>>
-  ) => Awaitable<SELECT<PluralInstanceType<T>>, PluralInstanceType<T>>)
+  ) => Awaitable<SELECT<InstanceType<T>>, InstanceType<T>>)
   // currently no auto completion of columns, due to complexity
 
 export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
+  private constructor();
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: Entries) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
@@ -197,6 +201,7 @@ type Entries<T = any> = {[key:string]: T} | {[key:string]: T}
 
 export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
+  private constructor();
 
   static into: (<T extends ArrayConstructable> (entity: T, entries?: Entries) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
@@ -212,6 +217,7 @@ export class UPSERT<T> extends ConstructedQuery<T> {
 
 export interface DELETE<T> extends Where<T>, And, ByKey {}
 export class DELETE<T> extends ConstructedQuery<T> {
+  private constructor();
 
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<StaticAny>>>
@@ -223,9 +229,8 @@ export class DELETE<T> extends ConstructedQuery<T> {
 }
 
 export interface UPDATE<T> extends Where<T>, And, ByKey {}
-
-
 export class UPDATE<T> extends ConstructedQuery<T> {
+  private constructor();
 
   // cds-typer plural
   // FIXME: this returned UPDATE<SingularInstanceType<T>> before. should UPDATE<Books>.entity(...) return Book or Books?
@@ -251,6 +256,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 }
 
 export class CREATE<T> extends ConstructedQuery<T> {
+  private constructor();
 
   static entity (entity: EntityDescription): CREATE<EntityDescription>
 
@@ -259,7 +265,8 @@ export class CREATE<T> extends ConstructedQuery<T> {
 }
 
 export class DROP<T> extends ConstructedQuery<T> {
-
+  private constructor();
+  
   static entity (entity: EntityDescription): DROP<EntityDescription>
 
   DROP: CQN.DROP['DROP']
