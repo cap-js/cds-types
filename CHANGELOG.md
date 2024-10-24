@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## Version 0.7.0 - tbd
+## Version 0.8.0 - tbd
+
+## Version 0.7.0 - 24-10-24
 
 ### Fixed
 - Added missing type for `cds.context.model`
