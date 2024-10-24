@@ -4,9 +4,35 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## Version 0.7.0 - tbd
+
+### Fixed
+- Added missing type for `cds.context.model`
+- Added missing type for `cds.context.model`
+- Added missing type for `req.query.elements`
+- Made constructors for query parts (`SELECT`, `UPDATE`, `DELETE`, ...) private, as they should only be accessed statically
+- `SELECT` returns a single instance now when specifying a primary key
+
+### Added
+- `cds.app` typed as express.js application
+- `cds.cli` CLI arguments
+- `cds.requires` types for MTX services
+- `cds.utils.colors` types
+- The CQL methods `.where` and `.having` now suggest property names for certain overloads.
+- `Service.before/on/after(event, target...)` now accept also an array of typer-generated classes in the `target` parameter
+- `localized` variants to `SELECT`
+
+### Changed
+- Most `cds.requires` entries are now optionals.
+- `cds.connect.to` now also supports using a precompiled model.
+- Properties of entities are no longer optional in projections, eliminating the need to perform optional chaining on them when using nested projections
+
 ## Version 0.6.5 - 2024-08-13
 ### Fixed
 - The `@types/sap__cds` link created by the `postinstall` script now also works in monorepo setups where the target `@cap-js/cds-types` might already be preinstalled (often hoisted some levels up).
+
+### Removed
+- Removed array-like methods from model parts (`.map`, `.find`, etc.). To still use them, apply spreading to object in question first.
 
 ## Version 0.6.4 - 2024-08-05
 ### Added

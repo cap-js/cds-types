@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios'
+import { AxiosInstance, AxiosResponse } from 'axios'
 import type chai from 'chai'
 import * as http from 'http'
 import { Service } from './services'
@@ -6,20 +6,22 @@ import type * as cds from './cds'
 
 type _cds = typeof cds
 
+type TaggedTemplateRequest = (strings: TemplateStringsArray, ...params: unknown[]) => Promise<AxiosResponse>
+
 declare class Axios {
 
   get axios (): AxiosInstance
-  get: AxiosInstance['get'];
+  get: AxiosInstance['get'] & TaggedTemplateRequest
 
-  put: AxiosInstance['put']
+  put: AxiosInstance['put'] & TaggedTemplateRequest
 
-  post: AxiosInstance['post']
+  post: AxiosInstance['post'] & TaggedTemplateRequest
 
-  patch: AxiosInstance['patch']
+  patch: AxiosInstance['patch'] & TaggedTemplateRequest
 
-  delete: AxiosInstance['delete']
+  delete: AxiosInstance['delete'] & TaggedTemplateRequest
 
-  options: AxiosInstance['options']
+  options: AxiosInstance['options'] & TaggedTemplateRequest
 
   get GET (): Axios['get']
 

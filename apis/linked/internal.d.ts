@@ -14,5 +14,7 @@
 import type { scalar } from './classes'
 
 declare class number_ extends scalar { }
-declare class string_ extends scalar { }
+declare class string_ extends scalar { 
+  length?: number
+}
 declare class boolean_ extends scalar { }
