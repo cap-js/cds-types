@@ -19,12 +19,10 @@ new DROP;
 // unwrapped plural types
 let sel: SELECT<Foos>
 sel = SELECT(Foo)
-sel = SELECT(Foo, 42)
 sel = SELECT(Foo.drafts)
 sel = SELECT(Foos.drafts)
 sel = SELECT.from(Foo.drafts)
 sel = SELECT.from(Foos.drafts)
-sel = SELECT.from(Foos.drafts, 42)
 
 let selSingular: SELECT<Foo> = undefined as unknown as SELECT<Foo>
 selSingular.columns('ref')  // auto suggested
@@ -116,6 +114,30 @@ DELETE([Foo, Foos])
 
 let selectOne: Foo
 let selectMany: Foos
+
+// SINGULAR TESTS
+selectOne = await SELECT.from(Foos.drafts, 42) // .drafts of plural still singular
+selectOne = await SELECT.from(Foo.drafts, 42)
+selectOne = await SELECT(Foo, 42)
+// explicitly select one
+selectOne = await SELECT.one.from(Foo)
+selectOne = await SELECT.one.from(Foo, 42)
+selectOne = await SELECT.one.from(Foo, 42)
+selectOne = await SELECT.one.from(Foo, 42, f => f.x)
+selectOne = await SELECT.one.from(Foo, f => f.x)
+selectOne = await SELECT.one.from(Foo).alias('Bars')
+// implicitly select one by specifying a key
+selectOne = await SELECT.from(Foo, 42)
+selectOne = await SELECT.from(Foo, 42, ["x"])
+selectOne = await SELECT.from(Foo, 42, (f: Foo) => f.x)
+
+selectMany = await SELECT.from(Foo)
+selectMany = await SELECT.from(Foo, (f: Foo) => f.x)
+selectMany = await SELECT.from(Foo).alias('Bars')
+await SELECT.from(Foo, f => attach(f.ref)('*'))
+
+// PLURAL TESTS
+selectOne = await SELECT(Foos, 42)
 // explicitly select one
 selectOne = await SELECT.one.from(Foos)
 selectOne = await SELECT.one.from(Foos, 42)
@@ -123,6 +145,7 @@ selectOne = await SELECT.one.from(Foos, 42, f => f.x)
 selectOne = await SELECT.one.from(Foos, f => f.x)
 selectOne = await SELECT.one.from(Foos).alias('Bars')
 // implicitly select one by specifying a key
+selectOne = await SELECT.from(Foos, 42)
 selectOne = await SELECT.from(Foos, 42)
 selectOne = await SELECT.from(Foos, 42, (f: Foo) => f.x)
 
