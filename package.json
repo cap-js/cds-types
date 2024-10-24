@@ -29,7 +29,8 @@
     "lint:fix": "npx eslint . --fix",
     "setup": "npm i && npm i file:. --no-save --force",
     "prerelease:ci-fix": "node .github/prerelease-fix.js",
-    "postinstall": "node ./scripts/postinstall.js"
+    "postinstall": "node ./scripts/postinstall.js",
+    "dependencies": "node ./scripts/postinstall.js"
   },
   "peerDependencies": {
     "@sap/cds": "^8.0.0"
