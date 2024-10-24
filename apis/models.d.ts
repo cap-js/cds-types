@@ -202,12 +202,6 @@ export namespace linked {
 export function reflect (model: csn.CSN): ln.LinkedCSN
 
 /**
- * Minifies a given CSN model by removing all unused1 types and aspects, as well all entities tagged with `@cds.persistence.skip:'if-unused'`
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-compile#cds-minify)
- */
-export function minify (model: csn.CSN): csn.CSN
-
-/**
 * Provides a set of methods to parse a given model, query or expression.
 * You can also use `cds.compile(csn).to('<output>')` as a fluent variant.
 */
@@ -219,7 +213,7 @@ export const compile: {
   for: {
     odata (model: csn.CSN, o?: _options): csn.CSN,
     sql (model: csn.CSN, o?: _options): csn.CSN,
-    nodejs (mode: csn.CSN, o?: _options): csn.CSN,
+    nodejs (model: csn.CSN, o?: _options): linked.LinkedCSN,
   },
   to: {
     parsed: {
