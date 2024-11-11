@@ -75,7 +75,7 @@ export type column_expr = UnionToIntersection<expr> & { as?: name, cast?: any, e
 export type predicate = UnionsToIntersections<_xpr>
 
 /** @private */
-type ordering_term = expr & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
+type ordering_term = UnionToIntersection<expr> & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
 
 export type expr = ref | val | xpr | function_call | SELECT
 

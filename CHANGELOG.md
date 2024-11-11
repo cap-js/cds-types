@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.8.0 - tbd
 
+### Fixed
+- Added missing type for `cds.test.log`
+- Added missing `.ref` in CQN queries
+
 ## Version 0.7.0 - 24-10-24
 
 ### Fixed
