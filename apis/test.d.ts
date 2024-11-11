@@ -111,4 +111,6 @@ declare const test: {
   (command: string, ...args: string[]): Test,
 
   in (dirname: string): Test,
+
+  log: Test['log'],
 }
