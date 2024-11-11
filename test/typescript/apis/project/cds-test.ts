@@ -24,6 +24,10 @@ test.cds.ql === cds.ql
 test.cds.ApplicationService === cds.ApplicationService
 test.cds.get === cds.get
 
+cds.test.log().clear()
+cds.test.log().output.charAt(1)
+cds.test.log().release()
+
 const {server, url} = await test
 
 GET `/processor/$metadata`
