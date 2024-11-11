@@ -208,12 +208,36 @@ SELECT.from(Foos).columns(f => {
     const number: QLExtensions<number> = f.x
 })
 
-SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn'])
-SELECT.from(Foos).columns('entityIDColumn', 'parentIDColumn')
-SELECT.from(Foos).columns([{ ref: ['entityIDColumn'] }])
-SELECT.from(Foos).columns({ ref: ['entityIDColumn'] })
+// @ts-expect-error invalid key of result line
+SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r[0].some)
+SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r[0].ref)
+// @ts-expect-error invalid key of result line
+SELECT.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r[0].some)
+SELECT.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r[0].ref)
+// @ts-expect-error invalid key of result line
+SELECT.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r[0].some)
+SELECT.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r[0].ref)
+// @ts-expect-error invalid key of result line
+SELECT.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r[0].some)
+SELECT.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r[0].ref)
+
 SELECT.from `Books` .columns ( 'title', {ref:['author','name'],as:'author'} )
 SELECT.from `Books` .columns (['title', {ref:['author','name'],as:'author'} ])
+
+// @ts-expect-error invalid key of result
+SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r.some)
+SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r.ref)
+// @ts-expect-error invalid key of result
+SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r.some)
+SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r.ref)
+// @ts-expect-error invalid key of result
+SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r.some)
+SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r.ref)
+// @ts-expect-error invalid key of result
+SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r.some)
+SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r.ref)
+
+INSERT.into(Foos).values([1,2,3])
 
 // tagged template strings
 // literal
