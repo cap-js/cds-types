@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 - Added missing type for `Request.before('commit', …)`
 - Added missing types for `Request.on('succeeded' | 'failed' | 'done', …)`
+- Added missing type for `cds.test.log`
+- Added missing `.ref` in CQN queries
 
 ## Version 0.7.0 - 24-10-24
 

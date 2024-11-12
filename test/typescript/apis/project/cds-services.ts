@@ -31,6 +31,15 @@ srv.operations('namespace')
 
 await srv.init()
 
+srv.before("READ", "", async req => {
+  req
+    ?.query
+    ?.SELECT
+    ?.orderBy
+    ?.[0]
+    ?.ref  // should be there from expr
+})
+
 cds.serve('SomeService')
 cds.serve('SomeService', {})
 cds.serve('SomeService', { service: '*' })
