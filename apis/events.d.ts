@@ -40,6 +40,10 @@ export class Event extends EventContext {
 
   headers: any
 
+  before(phase: 'commit', handler: () => void)
+
+  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void)
+
 }
 
 /**

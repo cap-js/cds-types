@@ -295,6 +295,18 @@ srv.before('DELETE', [Foos, Bars], req => isOneOfMany(req))
 srv.after('DELETE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
 srv.after('DELETE', [Foos, Bars], (data) => isOneOfMany(data))
 
+srv.on('READ', Foo, req => {
+  req.before('commit', ()=>{})
+  // @ts-expect-error
+  req.before('anything else', ()=>{})
+  req.on('done', ()=>{})
+  req.on('failed', ()=>{})
+  req.on('succeeded', ()=>{})
+  // @ts-expect-error
+  req.on('anything else', ()=>{})
+})
+
+
 // unbound
 srv.before(action, (req) => {
   req.data.foo

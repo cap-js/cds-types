@@ -7,13 +7,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## Version 0.8.0 - tbd
 
 ### Fixed
+- Added missing type for `Request.before('commit', …)`
+- Added missing types for `Request.on('succeeded' | 'failed' | 'done', …)`
 - Added missing type for `cds.test.log`
 - Added missing `.ref` in CQN queries
 
 ## Version 0.7.0 - 24-10-24
 
 ### Fixed
-- Added missing type for `cds.context.model`
 - Added missing type for `cds.context.model`
 - Added missing type for `req.query.elements`
 - Made constructors for query parts (`SELECT`, `UPDATE`, `DELETE`, ...) private, as they should only be accessed statically
