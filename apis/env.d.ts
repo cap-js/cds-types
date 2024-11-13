@@ -13,6 +13,7 @@ export const env: {
     folders: string[],
     [key: string]: any,
   },
+  profiles: string[],
   requires: env.Requires,
   folders: {
     app: string,
@@ -64,21 +65,48 @@ export namespace env {
       binding?: Binding,
       [key: string]: any,
     },
-    multitenancy: boolean | { kind: string, jobs: {
+    multitenancy?: boolean | { kind: string, jobs: {
       clusterSize: number,
       workerSize: number,
       t0: string,
       [key: string]: any,
     },},
-    toggles: boolean,
-    extensibility: boolean | {
+    toggles?: boolean,
+    extensibility?: boolean | {
       model: string[],
       tenantCheckInterval: number,
       [key: string]: any,
     },
-    messaging: {
+    messaging?: {
       kind: 'file-based-messaging' | 'redis-messaging' | 'local-messaging' | 'enterprise-messaging' | 'enterprise-messaging-shared' | string,
       format: 'cloudevents' | string,
+      [key: string]: any,
+    },
+    'cds.xt.SaasProvisioningService'?: {
+      model: string,
+      kind: string,
+      alwaysUpgradeModel?: boolean,
+      [key: string]: any,
+    },
+    'cds.xt.SmsProvisioningService'?: {
+      model: string,
+      kind: string,
+      [key: string]: any,
+    },
+    'cds.xt.ExtensibilityService'?: {
+      model: string,
+      kind?: string,
+      [key: string]: any,
+    },
+    'cds.xt.ModelProviderService'?: {
+      model: string,
+      root: string,
+      kind?: string,
+      [key: string]: any,
+    },
+    'cds.xt.DeploymentService'?: {
+      model: string,
+      kind?: string,
       [key: string]: any,
     },
     [key: string]: any,

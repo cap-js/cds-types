@@ -62,6 +62,7 @@ export const serve: (service: string, options?: {
   [key: string]: any,
 }) => Promise<cds_services> & cds_serve_fluent
 
+
 /**
 	 * Emitted whenever a model is loaded using cds.load().
 	 */
@@ -155,7 +156,7 @@ interface cds_connect_options {
   impl?: string
   service?: string
   kind?: string
-  model?: string
+  model?: string | CSN
   credentials?: object
 }
 

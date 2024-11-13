@@ -57,7 +57,7 @@ export type Extension = {
 
 export type Element = type & struct & Association
 
-export type kinds = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'service' | 'context' | 'elements'
+export type kinds = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'function' | 'service' | 'context' | 'elements' | 'element'
 
 export interface any_ {
   kind?: kinds
@@ -66,7 +66,12 @@ export interface context extends any_ { }
 export interface service extends any_ { }
 
 export interface type extends any_ {
-  type?: FQN
+  type?: 'cds.Boolean' |
+         'cds.UUID' | 'cds.String' | 'cds.LargeString' | 'cds.Binary' | 'cds.LargeBinary' | 'cds.Vector' |
+         'cds.Integer' | 'cds.UInt8' | 'cds.Int16' | 'cds.Int32' | 'cds.Int64' | 'cds.Float' | 'cds.Double' | 'cds.Decimal' |
+         'cds.Date' | 'cds.Time' | 'cds.DateTime' | 'cds.Timestamp' |
+         'cds.Association' | 'cds.Composition' |
+         FQN & Record<never,never> // allow any other CDS type as well (e.g. 'User')
   items?: type
 }
 
@@ -102,11 +107,13 @@ export type EntityElements = {
     virtual?: boolean,
     unique?: boolean,
     notNull?: boolean,
+    precision?: number,
+    scale?: number,
+    length?: number,
   },
 }
 
 export interface Association extends type {
-  type: 'cds.Association' | 'cds.Composition'
   target: FQN
 
   /**

@@ -1,4 +1,4 @@
-import { Definition } from './linked'
+import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
@@ -25,6 +25,8 @@ export class EventContext {
 
   features?: { [key: string]: boolean }
 
+  model: LinkedCSN
+
 }
 
 /**
@@ -37,6 +39,10 @@ export class Event extends EventContext {
   data: any
 
   headers: any
+
+  before(phase: 'commit', handler: () => void)
+
+  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void)
 
 }
 
