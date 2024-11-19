@@ -7,6 +7,7 @@ import { XOR } from './internal/util'
 
 type _cds = typeof cds
 type service_dict = { [name: string]: Service };
+// interface instead of type so users can insert their actual Services via module augmentation
 interface cds_services extends service_dict {}
 
 export const connect: {
