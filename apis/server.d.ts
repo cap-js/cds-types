@@ -6,7 +6,10 @@ import { Application, RequestHandler } from 'express'
 import { XOR } from './internal/util'
 
 type _cds = typeof cds
-type cds_services = { [name: string]: Service }
+// interface instead of type so users can insert their actual Services via module augmentation
+interface cds_services {
+  [name: string]: Service
+}
 
 export const connect: {
 
