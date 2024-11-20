@@ -19,10 +19,10 @@ export type SELECT = { SELECT: {
   having?: predicate,
   orderBy?: ordering_term[],
   limit?: { rows: val, offset: val },
-  forUpdate: { wait: number },
-  forShareLock: { wait: number },
-  search: predicate,
-  count: boolean,
+  forUpdate?: { wait: number },
+  forShareLock?: { wait: number },
+  search?: predicate,
+  count?: boolean,
 }, }
 
 export type INSERT = { INSERT: {
