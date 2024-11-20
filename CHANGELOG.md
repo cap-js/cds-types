@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Added missing types for `Request.on('succeeded' | 'failed' | 'done', …)`
 - Added missing type for `cds.test.log`
 - Added missing `.ref` in CQN queries
+- Added missing `.forUpdate`, `.forShareLock`, and `.search` in `cqn.SELECT`
 
 ## Version 0.7.0 - 24-10-24
 
