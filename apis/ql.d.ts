@@ -77,7 +77,11 @@ export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>
   // overload specific to SELECT
   columns: Columns<T, this>['columns'] & ((projection: Projection<T>) => this)
 }
-export class SELECT<T> extends ConstructedQuery<T> {
+
+// Q(uantity) is used to retain information about whether we are selecting one or many elements
+// That way, we can do SELECT.one(...).from(Books) without the plural parameter causing a plural result,
+// as SELECT.one will pass on SELECT_one as Q
+export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
   private constructor();
 
   static one: SELECT_one & { from: SELECT_one } & { localized: SELECT_one }
@@ -88,7 +92,7 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
   static localized: SELECT_from & { from: SELECT_from }
 
-  from: SELECT_from
+  from: Q  // SELECT_from | SELECT_one
     & TaggedTemplateQueryPart<this>
     & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => this)
 
@@ -121,22 +125,22 @@ export class SELECT<T> extends ConstructedQuery<T> {
 
 
 type SELECT_one =
-  TaggedTemplateQueryPart<Awaitable<SELECT<_TODO>, InstanceType<_TODO>>>
+  TaggedTemplateQueryPart<Awaitable<SELECT<_TODO, SELECT_one>, InstanceType<_TODO>>>
 &
 // calling with class
   (<T extends ArrayConstructable>
   (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
+  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T>>)
 &
   (<T extends ArrayConstructable>
   (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<SingularInstanceType<T>>, SingularInstanceType<T>>)
+  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T>>)
 
-  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<_TODO>)
-  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
-  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
-  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
-  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<_TODO, SELECT_one>)
+  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
+  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
+  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
+  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
   & ((subject: ref) => SELECT<_TODO>)
 
 type SELECT_from =

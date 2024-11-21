@@ -126,6 +126,9 @@ selectOne = await SELECT.one.from(Foo, 42)
 selectOne = await SELECT.one.from(Foo, 42, f => f.x)
 selectOne = await SELECT.one.from(Foo, f => f.x)
 selectOne = await SELECT.one.from(Foo).alias('Bars')
+selectOne = await SELECT.one('').from(Foo)
+selectOne = await SELECT.one``.from(Foo)
+
 // implicitly select one by specifying a key
 selectOne = await SELECT.from(Foo, 42)
 selectOne = await SELECT.from(Foo, 42, ["x"])
@@ -144,6 +147,8 @@ selectOne = await SELECT.one.from(Foos, 42)
 selectOne = await SELECT.one.from(Foos, 42, f => f.x)
 selectOne = await SELECT.one.from(Foos, f => f.x)
 selectOne = await SELECT.one.from(Foos).alias('Bars')
+selectOne = await SELECT.one('').from(Foos)
+selectOne = await SELECT.one``.from(Foos)
 // implicitly select one by specifying a key
 selectOne = await SELECT.from(Foos, 42)
 selectOne = await SELECT.from(Foos, 42)
