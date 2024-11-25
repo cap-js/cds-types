@@ -196,6 +196,12 @@ export namespace linked {
 }
 
 /**
+ * Minifies a given CSN model by removing all unused1 types and aspects, as well all entities tagged with `@cds.persistence.skip:'if-unused'`
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-compile#cds-minify)
+ */
+export function minify (model: csn.CSN): csn.CSN
+
+/**
  * Turns the given plain CSN model into a reflected model
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
  */
