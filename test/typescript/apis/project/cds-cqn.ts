@@ -1,4 +1,5 @@
 import cds from '@sap/cds'
+import { testType } from './dummy'
 
 // we just access expected properties without doing anything with them to see if they are present
 // as expected. To apease the linter, we assign them to a variable.
@@ -24,6 +25,10 @@ res = sqn.SELECT.groupBy
 res = sqn.SELECT.orderBy
 res = sqn.SELECT.limit
 res = sqn.SELECT.mixin
+res = sqn.SELECT.forShareLock?.wait
+res = sqn.SELECT.forUpdate?.wait
+res = sqn.SELECT.search?.at(0)
+testType<boolean | undefined>(sqn.SELECT.count)
 
 // Runtime only...
 let q = SELECT.from('Foo')

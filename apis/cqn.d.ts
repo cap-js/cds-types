@@ -15,10 +15,14 @@ export type SELECT = { SELECT: {
   columns?: column_expr[],
   excluding?: string[],
   where?: predicate,
-  having?: predicate,
   groupBy?: expr[],
+  having?: predicate,
   orderBy?: ordering_term[],
   limit?: { rows: val, offset: val },
+  forUpdate?: { wait: number },
+  forShareLock?: { wait: number },
+  search?: predicate,
+  count?: boolean,
 }, }
 
 export type INSERT = { INSERT: {

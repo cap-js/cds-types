@@ -35,3 +35,6 @@ export const attach = <T>(x?: T): T => x as T
 
 // wrapper to get rid of all the "undefined as unknown as Foo"
 export const as = <T>() => undefined as unknown as T
+
+// test utility to replace "const x: T = foo()" with "testType<T>(foo())"
+export const testType = <T>(x: T) => {}
