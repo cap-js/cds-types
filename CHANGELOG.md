@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Added missing type for `cds.test.log`
 - Added missing `.ref` in CQN queries
 - Added missing `.forUpdate`, `.forShareLock`, and `.search` in `cqn.SELECT`
+- Calling `SELECT.one('...').from(Plural)` now properly returns a single instance
+
 
 ## Version 0.7.0 - 24-10-24
 
