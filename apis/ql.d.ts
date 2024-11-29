@@ -62,7 +62,7 @@ export declare class QL<T> {
   & ((...entries: object[]) => UPSERT<T>) & ((entries: object[]) => UPSERT<T>)
 
   UPDATE: typeof UPDATE<T>
-  & typeof UPDATE.entity<_TODO>
+  & typeof UPDATE.entity
 
   DELETE: typeof DELETE<T>
   & ((...entries: object[]) => DELETE<T>) & ((entries: object[]) => DELETE<T>)
@@ -231,29 +231,32 @@ export class DELETE<T> extends ConstructedQuery<T> {
   DELETE: CQN.DELETE['DELETE']
 
 }
+// operator for qbe expression
+type QbeOp = '=' | '-=' | '+=' | '*=' | '/=' | '%='
 
 export interface UPDATE<T> extends Where<T>, And, ByKey {}
 export class UPDATE<T> extends ConstructedQuery<T> {
   private constructor();
 
   // cds-typer plural
-  // FIXME: this returned UPDATE<SingularInstanceType<T>> before. should UPDATE<Books>.entity(...) return Book or Books?
-  static entity<T extends ArrayConstructable> (entity: T, primaryKey?: PK): UPDATE<InstanceType<T>>
-
-  static entity (entity: EntityDescription, primaryKey?: PK): UPDATE<StaticAny>
-
-  static entity<T extends Constructable> (entity: T, primaryKey?: PK): UPDATE<T>
-
-  // currently no easy way to restrict T from being a primitive type
-  static entity<T> (entity: T, primaryKey?: PK): UPDATE<T>
+  static entity: (TaggedTemplateQueryPart<UPDATE<StaticAny>>)
+   // FIXME: this returned UPDATE<SingularInstanceType<T>> before. should UPDATE<Books>.entity(...) return Book or Books?
+    & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
+    & (<T extends Constructable> (entity: T, primaryKey?: PK) => UPDATE<InstanceType<T>>)
+    & ((entity: EntityDescription, primaryKey?: PK) => UPDATE<StaticAny>)
+    & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
   // with (block: (e:T)=>void) : this
   // set (block: (e:T)=>void) : this
-  set: TaggedTemplateQueryPart<this>
-  & ((data: object) => this);
 
+  // simple value   > title: 'Some Title'
+  // qbe expression > stock: { '-=': quantity }  
+  // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
+  set: TaggedTemplateQueryPart<this>
+    & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: any} | CQN.xpr}) => this)
+    
   with: TaggedTemplateQueryPart<this>
-    & ((data: object) => this)
+    & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: any} | CQN.xpr}) => this)
 
   UPDATE: CQN.UPDATE['UPDATE']
 
