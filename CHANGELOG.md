@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.9.0 - tbd
 
+### Fixed
+- Added missing type inference for `.entries` of `UPSERT` and `INSERT`
+
 ## Version 0.8.0 - 24-11-26
 
 ### Fixed
