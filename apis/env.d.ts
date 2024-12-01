@@ -16,7 +16,7 @@ export const env: {
   profiles: string[],
   log: {
     user: boolean,
-    levels: Record<string, 'info' | 'warn' | 'error' | 'debug' | 'trace'>,
+    levels: Record<string, 'silent' | 'info' | 'warn' | 'error' | 'debug' | 'trace' | 'silly' | 'verbose'>,
     als_custom_fields: Record<string, number>,
     cls_custom_fields: string[],
   },
