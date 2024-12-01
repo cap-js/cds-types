@@ -9,6 +9,11 @@ env.folders.foo = ''
 env.build = ''
 env.hana = ''
 
+env.log.levels['cli'] === 'debug'
+env.log.cls_custom_fields.length
+env.log.als_custom_fields['query'] === 0
+Object.keys(env.log.als_custom_fields)
+
 env.requires.auth.kind = ''
 env.requires.auth.credentials!.url = ''
 env.requires.auth.credentials!.clientid = ''
