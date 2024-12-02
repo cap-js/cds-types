@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.9.0 - tbd
+- Adds missing properties for `log` in `cds.env`
 
 ### Fixed
 
