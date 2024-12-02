@@ -240,14 +240,11 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 
   // cds-typer plural
   static entity: (TaggedTemplateQueryPart<UPDATE<StaticAny>>)
-   // FIXME: this returned UPDATE<SingularInstanceType<T>> before. should UPDATE<Books>.entity(...) return Book or Books?
+    // UPDATE<SingularInstanceType<T>> is used here so type inference in set/with has the property keys of the singular type
     & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
     & (<T extends Constructable> (entity: T, primaryKey?: PK) => UPDATE<InstanceType<T>>)
     & ((entity: EntityDescription, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
-
-  // with (block: (e:T)=>void) : this
-  // set (block: (e:T)=>void) : this
 
   // simple value   > title: 'Some Title'
   // qbe expression > stock: { '-=': quantity }  
@@ -255,8 +252,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
   set: TaggedTemplateQueryPart<this>
     & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: any} | CQN.xpr}) => this)
     
-  with: TaggedTemplateQueryPart<this>
-    & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: any} | CQN.xpr}) => this)
+  with: typeof this.set
 
   UPDATE: CQN.UPDATE['UPDATE']
 
