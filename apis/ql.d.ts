@@ -238,7 +238,6 @@ export interface UPDATE<T> extends Where<T>, And, ByKey {}
 export class UPDATE<T> extends ConstructedQuery<T> {
   private constructor();
 
-  // cds-typer plural
   static entity: (TaggedTemplateQueryPart<UPDATE<StaticAny>>)
     // UPDATE<SingularInstanceType<T>> is used here so type inference in set/with has the property keys of the singular type
     & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
@@ -246,17 +245,22 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     & ((entity: EntityDescription, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
-  // simple value   > title: 'Some Title'
-  // qbe expression > stock: { '-=': quantity }  
-  // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
-  set: TaggedTemplateQueryPart<this>
-    & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: any} | CQN.xpr}) => this)
-    
-  with: typeof this.set
-
+  set: UpdateSet<this, T>
+  with: UpdateSet<this, T>
+  
   UPDATE: CQN.UPDATE['UPDATE']
 
 }
+
+/**
+ * Represents updatable block that can be passed to either `.set` or `.with`
+ * of an `UPDATE` query
+ */
+type UpdateSet<This, T> = TaggedTemplateQueryPart<This>
+  // simple value   > title: 'Some Title'
+  // qbe expression > stock: { '-=': quantity }  
+  // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
+  & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: T[P]} | CQN.xpr}) => This)
 
 export class CREATE<T> extends ConstructedQuery<T> {
   private constructor();
