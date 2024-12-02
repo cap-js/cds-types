@@ -3,7 +3,7 @@ import type { entity } from '../linked/classes'
 import type { column_expr, ref } from '../cqn'
 import type { ArrayConstructable, Constructable, SingularInstanceType, Unwrap, UnwrappedInstanceType } from './inference'
 import { ConstructedQuery } from '../ql'
-import { KVPairs, DeepRequired } from './util'
+import { KVPairs } from './util'
 
 // https://cap.cloud.sap/docs/node.js/cds-ql?q=projection#projection-functions
 type Projection<T> = (e: QLExtensions<T extends ArrayConstructable ? SingularInstanceType<T> : T>) => void
@@ -169,7 +169,7 @@ export interface InUpsert<T> {
 }
 
 // don't wrap QLExtensions in more QLExtensions (indirection to work around recursive definition)
-export type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<DeepRequired<T>>
+export type QLExtensions<T> = T extends QLExtensions_<any> ? T : QLExtensions_<Required<T>>
 
 /**
  * QLExtensions are properties that are attached to entities in CQL contexts.

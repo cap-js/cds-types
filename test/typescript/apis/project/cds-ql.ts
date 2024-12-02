@@ -96,11 +96,11 @@ ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"
 INSERT.into("Bla").as(SELECT.from("Foo"))
 
-let upd: UPDATE<Foos>
+let upd: UPDATE<Foo>
 upd = UPDATE(Foo, 42)
-upd.set({})
+upd.set({x:4})
 upd = UPDATE.entity(Foos)
-upd.set({})
+upd.set({x:1})
 upd.UPDATE.entity === "foo"
 
 let ups:UPSERT<Foo>
@@ -215,6 +215,11 @@ SELECT.from(Foos).columns(f => {
     const number: QLExtensions<number> = f.x
 })
 
+// deep projection nesting
+SELECT.from(Foos, f => f.ref(r => r.ref(r => r.ref(r => {
+    const x: number = r.x
+}))))
+
 // @ts-expect-error invalid key of result line
 SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r[0].some)
 SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r[0].ref)
@@ -319,3 +324,30 @@ UPSERT.into({} as Definition, { x : 4, "other": 5 }, { a : 4})
 UPSERT.into({} as Definition, [{ x : 4, "other": 5 }])
 
 UPSERT.into({} as linked.classes.entity, { "a": 4 })
+
+// UPDATE: checks with typed classes
+UPDATE(Foo, 42).set({ x: 4}).where({ x: 44 })
+UPDATE(Foos, 42).set({ x: 4}).where({ x: 44 })
+// @ts-expect-error - invalid property of Foo
+UPDATE(Foos, 4).set({ aa: 4 });
+// @ts-expect-error - invalid property type of Foo.x
+UPDATE(Foo).where({ x: 4 }).set({ x: 'asdf', ref: { x: 4 }})
+UPDATE(Foos).where({ x: 4 }).set({ x: 4, ref: { x: 4 }})
+UPDATE.entity(Foos).set({ x: 4});
+
+UPDATE.entity(Foos).set({
+  x: {'+=': 4 },
+  ref: { x: 5 },
+  y: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] }
+});
+
+// @ts-expect-error - invalid operator of qbe expression
+UPDATE(Foo).with({x: {'--': 4}})
+
+// @ts-expect-error - invalid property name of xpr
+UPDATE(Foos).with({x: {xpr: [{funcs: ""}]}})
+
+// untyped, no syntax errors
+UPDATE.entity("Foos").set({ test: {xp: "4"} });
+UPDATE.entity({} as linked.classes.entity).set({ asdf: 434 });
+UPDATE`Foos`.set`x = 4`.where`x > 10`
