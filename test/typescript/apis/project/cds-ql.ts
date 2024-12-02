@@ -1,4 +1,5 @@
 import { QLExtensions } from '../../../../apis/ql'
+import { linked } from '../../../../apis/models';
 import { Foo, Foos, attach } from './dummy'
 
 // @ts-expect-error - only supposed to be used statically, constructors private
@@ -94,11 +95,11 @@ ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"
 INSERT.into("Bla").as(SELECT.from("Foo"))
 
-let upd: UPDATE<Foos>
+let upd: UPDATE<Foo>
 upd = UPDATE(Foo, 42)
-upd.set({})
+upd.set({x:4})
 upd = UPDATE.entity(Foos)
-upd.set({})
+upd.set({x:1})
 upd.UPDATE.entity === "foo"
 
 let ups:UPSERT<Foo>
@@ -283,3 +284,30 @@ INSERT.into('Foos').rows([[1,2,3]])
 INSERT.into('Foos').rows([[1,2,3],[1,2]])
 // @ts-expect-error
 INSERT.into('Foos').values([[1,2,3]])
+
+// UPDATE: checks with typed classes
+UPDATE(Foo, 42).set({ x: 4}).where({ x: 44 })
+UPDATE(Foos, 42).set({ x: 4}).where({ x: 44 })
+// @ts-expect-error - invalid property of Foo
+UPDATE(Foos, 4).set({ aa: 4 });
+// @ts-expect-error - invalid property type of Foo.x
+UPDATE(Foo).where({ x: 4 }).set({ x: 'asdf', ref: { x: 4 }})
+UPDATE(Foos).where({ x: 4 }).set({ x: 4, ref: { x: 4 }})
+UPDATE.entity(Foos).set({ x: 4});
+
+UPDATE.entity(Foos).set({
+  x: {'+=': 4 },
+  ref: { x: 5 },
+  y: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] }
+});
+
+// @ts-expect-error - invalid operator of qbe expression
+UPDATE(Foo).with({x: {'--': 4}})
+
+// @ts-expect-error - invalid property name of xpr
+UPDATE(Foos).with({x: {xpr: [{funcs: ""}]}})
+
+// untyped, no syntax errors
+UPDATE.entity("Foos").set({ test: {xp: "4"} });
+UPDATE.entity({} as linked.classes.entity).set({ asdf: 434 });
+UPDATE`Foos`.set`x = 4`.where`x > 10`

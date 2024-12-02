@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - Use `Required` instead of `DeepRequired` in projection function to avoid complexity errors from TypeScript
 
+### Fixed
+- Added missing type inference for `.set`/`.with` of `UPDATE`
+
 ## Version 0.8.0 - 24-11-26
 
 ### Fixed

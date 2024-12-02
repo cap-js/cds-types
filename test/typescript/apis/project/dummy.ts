@@ -6,6 +6,7 @@
 export class Foo {
     static readonly drafts: typeof Foo
     x: number = 42
+    y?: string
     ref?: Foo
     refs?: Foo[]
   }
