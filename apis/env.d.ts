@@ -1,3 +1,5 @@
+import { levels } from './log'
+
 /**
  * Access to the configuration for Node.js runtime and tools.
  * The object is the effective result of configuration merged from various sources,
@@ -14,6 +16,12 @@ export const env: {
     [key: string]: any,
   },
   profiles: string[],
+  log: {
+    user: boolean,
+    levels: Record<string, Lowercase<keyof typeof levels>>,
+    als_custom_fields: Record<string, number>,
+    cls_custom_fields: string[],
+  },
   requires: env.Requires,
   folders: {
     app: string,

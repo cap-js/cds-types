@@ -214,6 +214,11 @@ SELECT.from(Foos).columns(f => {
     const number: QLExtensions<number> = f.x
 })
 
+// deep projection nesting
+SELECT.from(Foos, f => f.ref(r => r.ref(r => r.ref(r => {
+    const x: number = r.x
+}))))
+
 // @ts-expect-error invalid key of result line
 SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r[0].some)
 SELECT.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r[0].ref)
