@@ -351,6 +351,9 @@ type CdsFunction = {
   __returns: any,
 }
 
+// extracts all properties of type CdsFunction from T
+type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : never }[keyof T]>
+
 type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
