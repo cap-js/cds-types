@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.9.0 - tbd
 ### Added
-- Adds missing properties for `log` in `cds.env`
+- Added missing properties for `log` in `cds.env`
+- Added overload for `service.read` to be called with a `ref`
 
 ### Fixed
 
