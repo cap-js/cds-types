@@ -1,4 +1,4 @@
-import cds, { Service, TypedRequest } from '@sap/cds'
+import cds, { Service, Request } from '@sap/cds'
 import { Bars, Bar, Foo, Foos, action } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -203,10 +203,10 @@ srv.on('error', (err, req) => {
 })
 
 
-function isOne(p: TypedRequest<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
-function isMany(p: TypedRequest<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
+function isOne(p: Request<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
+function isMany(p: Request<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
 
-function isOneOfMany(p: TypedRequest<Foo | Bar> | Foo | Bar | undefined ) { 
+function isOneOfMany(p: Request<Foo | Bar> | Foo | Bar | undefined ) { 
   if(!p) return;
   if ("data" in p) {
     if (p.data instanceof Foo) p.data.x.toFixed;
@@ -216,7 +216,7 @@ function isOneOfMany(p: TypedRequest<Foo | Bar> | Foo | Bar | undefined ) {
     else p.name.split;
   }
 }
-function isManyOfMany(p: TypedRequest<Foos | Bars> | Foos | Bars | undefined) { 
+function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) { 
   if(!p) return;
   if ("data" in p) {
     if (p.data instanceof Foos) p.data[0].x.toFixed;
