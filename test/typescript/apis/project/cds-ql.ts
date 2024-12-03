@@ -1,3 +1,4 @@
+import { Definition } from '../../../../apis/csn';
 import { QLExtensions } from '../../../../apis/ql'
 import { linked } from '../../../../apis/models';
 import { Foo, Foos, attach } from './dummy'
@@ -88,7 +89,7 @@ SELECT(Foos) === SELECT.from(Foos)
 
 INSERT.into(Foos).columns("x") // x was suggested by code completion
 let ins: INSERT<Foo>
-ins = INSERT.into(Foos, {})
+ins = INSERT.into(Foos, { x: 4 })
 ins.into(Foos)
 ins.into(Foos)
 ins.columns("x") // x was suggested by code completion
@@ -284,6 +285,45 @@ INSERT.into('Foos').rows([[1,2,3]])
 INSERT.into('Foos').rows([[1,2,3],[1,2]])
 // @ts-expect-error
 INSERT.into('Foos').values([[1,2,3]])
+
+// Type checks with typed INSERT
+// @ts-expect-error - invalid property of Foo
+INSERT.into(Foos).entries({ a: "" })
+// @ts-expect-error - invalid property of Foo
+INSERT.into(Foos).entries([{ a: "" }])
+INSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
+INSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
+// @ts-expect-error - invalid type for property x of Foo
+INSERT.into(Foo).entries({ x: "4" })
+INSERT.into(Foo, { x: 4, ref: { x: 2 }})
+INSERT.into(Foo, [{ x: 4 }])
+
+INSERT.into("Foo", [{ x: "4" }])
+INSERT.into("Foo", { x: "4" }, { "ref": "4" })
+
+INSERT.into({} as Definition, { x : 4, "other": 5 }, { a : 4})
+INSERT.into({} as Definition, [{ x : 4, "other": 5 }, { a : 4}])
+INSERT.into({} as linked.classes.entity, { "a": 4 })
+
+// Type checks with typed UPSERTs
+// @ts-expect-error - invalid property of Foo
+UPSERT.into(Foos).entries({ a: "" })
+// @ts-expect-error - invalid property of Foo
+UPSERT.into(Foos).entries([{ a: "" }])
+UPSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
+UPSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
+// @ts-expect-error - invalid type for property x of Foo
+UPSERT.into(Foo).entries({ x: "4" })
+UPSERT.into(Foo, { x: 4, ref: { x: 2 }})
+UPSERT.into(Foo, [{ x: 4 }])
+
+UPSERT.into("Foo", [{ x: "4" }])
+UPSERT.into("Foo", { x: "4" }, { "ref": "4" })
+
+UPSERT.into({} as Definition, { x : 4, "other": 5 }, { a : 4})
+UPSERT.into({} as Definition, [{ x : 4, "other": 5 }])
+
+UPSERT.into({} as linked.classes.entity, { "a": 4 })
 
 // UPDATE: checks with typed classes
 UPDATE(Foo, 42).set({ x: 4}).where({ x: 44 })

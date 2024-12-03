@@ -85,7 +85,7 @@ const up: UPSERT<Foos> = await srv.upsert(Foos)
 const d: DELETE<Foos> = await srv.delete(Foos)
 
 // queries
-const query = INSERT.into({}, { ID: 111, name: 'Mark Twain' })
+const query = INSERT.into("Authors", { ID: 111, name: 'Mark Twain' })
 await srv.run(query)
 await srv.run([query, query])
 await srv.run('SELECT * from Authors where name like ?', ['%Poe%'])

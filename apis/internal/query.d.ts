@@ -154,7 +154,8 @@ export interface And {
 export interface InUpsert<T> {
   data (block: (e: T) => void): this
 
-  entries (...entries: object[]): this
+  entries (...entries: T[]): this
+  entries (entries: T[]): this
 
   values (...val: (null | Primitive)[]): this
   values (val: (null | Primitive)[]): this

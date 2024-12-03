@@ -5,14 +5,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## Version 0.9.0 - tbd
+### Added
 - Adds missing properties for `log` in `cds.env`
 
 ### Fixed
 
 - Use `Required` instead of `DeepRequired` in projection function to avoid complexity errors from TypeScript
-
-### Fixed
 - Added missing type inference for `.set`/`.with` of `UPDATE`
+- Added missing type inference for `.entries` of `UPSERT` and `INSERT`
 
 ## Version 0.8.0 - 24-11-26
 
