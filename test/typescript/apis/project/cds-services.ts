@@ -59,6 +59,8 @@ await srv.delete(Books)
 await srv.delete(Books, 'ID')
 await srv.delete(Books).where({ id: 123 })
 await srv.upsert({}).into(Books)
+await srv.read({} as unknown as cds.ref)
+await srv.read({} as unknown as cds.ref, 42)
 
 await cds.read(Books, 'ID')
 await cds.create(Books)
@@ -69,6 +71,8 @@ await cds.update(Books, 'ID')
 await cds.delete(Books)
 await cds.delete(Books, 'ID')
 await cds.delete(Books).where({ id: 123 })
+await cds.read({} as unknown as cds.ref)
+await cds.read({} as unknown as cds.ref, 42)
 // GAP: has to be added in runtime, then types, then re-enable this test
 // await cds.upsert({}).into(Books)
 
