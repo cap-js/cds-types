@@ -191,6 +191,15 @@ srv.after('UPDATE', Books, (results, req) => {
   results[0]
 })
 
+srv.on("action1", req => {
+  UPDATE(req.subject).with({ x: "a" })
+  UPDATE(req.subject).with({ x: { "=": 4 } })
+  UPDATE(req.subject).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
+  UPDATE(req.target).with({ x: 4 })
+  UPDATE(req.target).with({ x: { "=": 4 } })
+  UPDATE(req.target).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
+})
+
 srv.on('CREATE', (req, next) => {
   req.data
   next()
