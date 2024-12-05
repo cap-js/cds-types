@@ -59,6 +59,8 @@ await srv.delete(Books)
 await srv.delete(Books, 'ID')
 await srv.delete(Books).where({ id: 123 })
 await srv.upsert({}).into(Books)
+await srv.read({} as unknown as cds.ref)
+await srv.read({} as unknown as cds.ref, 42)
 
 await cds.read(Books, 'ID')
 await cds.create(Books)
@@ -69,6 +71,8 @@ await cds.update(Books, 'ID')
 await cds.delete(Books)
 await cds.delete(Books, 'ID')
 await cds.delete(Books).where({ id: 123 })
+await cds.read({} as unknown as cds.ref)
+await cds.read({} as unknown as cds.ref, 42)
 // GAP: has to be added in runtime, then types, then re-enable this test
 // await cds.upsert({}).into(Books)
 
@@ -185,6 +189,15 @@ srv.after('*', (results, req) => {
 srv.after('UPDATE', Books, (results, req) => {
   req.data
   results[0]
+})
+
+srv.on("action1", req => {
+  UPDATE(req.subject).with({ x: "a" })
+  UPDATE(req.subject).with({ x: { "=": 4 } })
+  UPDATE(req.subject).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
+  UPDATE(req.target).with({ x: 4 })
+  UPDATE(req.target).with({ x: { "=": 4 } })
+  UPDATE(req.target).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
 })
 
 srv.on('CREATE', (req, next) => {

@@ -7,6 +7,7 @@ import {
   SingularInstanceType,
   PluralInstanceType
 } from './internal/inference'
+import { Definition } from './linked'
 import { ref } from './cqn'
 import {
   And,
@@ -244,7 +245,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     // UPDATE<SingularInstanceType<T>> is used here so type inference in set/with has the property keys of the singular type
     & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
     & (<T extends Constructable> (entity: T, primaryKey?: PK) => UPDATE<InstanceType<T>>)
-    & ((entity: EntityDescription, primaryKey?: PK) => UPDATE<StaticAny>)
+    & ((entity: EntityDescription | ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
   set: UpdateSet<this, T>

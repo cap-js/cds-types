@@ -8,6 +8,7 @@ import { EventContext } from './events'
 import { Request } from './events'
 import { ReadableStream } from 'node:stream/web'
 import { _TODO } from './internal/util'
+import { ref } from './cqn'
 
 type Key = number | string | any
 
@@ -21,6 +22,7 @@ export class QueryAPI {
   read: {
     <T extends ArrayConstructable>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>,
     <T>(entity: linked.Definition | string, key?: Key): SELECT<T>,
+    (entity: ref, key?: Key): SELECT<unknown>,
   }
 
   /**
