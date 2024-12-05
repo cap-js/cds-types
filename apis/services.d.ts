@@ -353,13 +353,11 @@ type CdsFunction = {
   __returns: any,
 }
 
-type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
-
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
 declare namespace CRUDEventHandler {
-  type Before<P, R = P | void | Error> = (req: TypedRequest<P>) => Promise<R> | R
-  type On<P, R = P | void | Error> = (req: TypedRequest<P>, next: (...args: any[]) => Promise<R> | R) => Promise<R> | R
-  type After<P, R = P | void | Error> = (data: undefined | P, req: TypedRequest<P>) => Promise<R> | R
+  type Before<P, R = P | void | Error> = (req: Request<P>) => Promise<R> | R
+  type On<P, R = P | void | Error> = (req: Request<P>, next: (...args: any[]) => Promise<R> | R) => Promise<R> | R
+  type After<P, R = P | void | Error> = (data: undefined | P, req: Request<P>) => Promise<R> | R
 }
 
 // Handlers for actions try to infer the passed .data property

@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Added missing properties for `log` in `cds.env`
 - Added overload for `service.read` to be called with a `ref`
 
+### Removed
+- [breaking] Removed type `TypedRequest<T>` and replaced it with just `Request<T>`
+
 ### Fixed
 
 - Use `Required` instead of `DeepRequired` in projection function to avoid complexity errors from TypeScript
