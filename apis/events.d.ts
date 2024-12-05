@@ -49,7 +49,7 @@ export class Event<T = unknown> extends EventContext {
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
-export class Request<T = unknown> extends Event<T> {
+export class Request<T = any> extends Event<T> {
 
   params: (string | object)[]
 
