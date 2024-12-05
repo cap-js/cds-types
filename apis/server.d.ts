@@ -5,6 +5,8 @@ import type * as cds from './cds'
 import { Application, RequestHandler } from 'express'
 import { XOR } from './internal/util'
 
+
+
 type _cds = typeof cds
 // interface instead of type so users can insert their actual Services via module augmentation
 interface cds_services {
@@ -27,6 +29,13 @@ export const connect: {
   to(datasource: 'db', options?: cds_connect_options): Promise<cds.DatabaseService>,
 
   /**
+	 * Connects to a specific datasource via options.
+	 * @example cds.connect.to ({ kind:..., impl:... })
+	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
+	 */
+  to(options: cds_connect_options): Promise<Service>,
+
+  /**
 	 * Connects to a specific datasource via a Service subclass
 	 * @example cds.connect.to (ServiceClass)
 	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
@@ -34,11 +43,11 @@ export const connect: {
   to<S extends Service>(datasource: {new(): S}, options?: cds_connect_options): Promise<S>,
 
   /**
-		 * Connects to a specific datasource via options.
-		 * @example cds.connect.to ({ kind:..., impl:... })
-		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
-		 */
-  to(options: cds_connect_options): Promise<Service>,
+	 * Connects to a specific datasource via a Service subclass
+	 * @example cds.connect.to (ServiceClass)
+	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
+	 */
+  to<S>(datasource: S, options?: cds_connect_options): Promise<cds.CdsFunctions<S> & Service>,
 
   /**
 		 * Connects the primary datasource.
