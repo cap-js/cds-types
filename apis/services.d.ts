@@ -353,6 +353,32 @@ type CdsFunction = {
   __returns: any,
 }
 
+/**
+ * Types herein can be used to type handler functions that are not declared in line:
+ * @example
+ * ```ts
+ * import { myAction } from '#cds-models/myService'
+ * 
+ * function onMyFunction (req: HandlerFunction.parameters.req<typeof myAction>): HandlerFunction.returns<typeof myAction> {
+ *   ...
+ * }
+ * 
+ * srv.on(myAction, onMyFunction)
+ * ```
+ */
+declare namespace HandlerFunction {
+  namespace parameters {
+    /**
+     * @beta helper
+     */
+    type req<F extends CdsFunction> = TypedRequest<F['__parameters']>
+  }
+  /**
+   * @beta helper
+   */
+  type returns<F extends CdsFunction> = Extract<F['__returns'], Promise<any>>
+}
+
 type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
