@@ -239,16 +239,16 @@ SELECT.from `Books` .columns (['title', {ref:['author','name'],as:'author'} ])
 
 // @ts-expect-error invalid key of result
 SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r?.some)
-SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r.ref)
+SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r?.ref)
 // @ts-expect-error invalid key of result
 SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r?.some)
-SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r.ref)
+SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r?.ref)
 // @ts-expect-error invalid key of result
 SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r?.some)
-SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r.ref)
+SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r?.ref)
 // @ts-expect-error invalid key of result
 SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.some)
-SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r.ref)
+SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.ref)
 
 INSERT.into(Foos).values([1,2,3])
 
