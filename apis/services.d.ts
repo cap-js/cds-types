@@ -347,6 +347,9 @@ type OneOrMany<T> = T | T[]
 // parameters and return type, as their names are not accessible from
 // function signatures to the type system.
 // This meta information is required in .on action handlers.
+/**
+ * @beta helper
+ */
 type CdsFunction = {
   (...args: any[]): any,
   __parameters: object,
@@ -376,7 +379,7 @@ declare namespace HandlerFunction {
   /**
    * @beta helper
    */
-  type returns<F extends CdsFunction> = Extract<F['__returns'], Promise<any>>
+  type returns<F extends CdsFunction> = F['__returns'] | Promise<F['__returns']>
 }
 
 type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
