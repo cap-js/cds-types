@@ -3,7 +3,6 @@ import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
-import { action } from '../../../../apis/linked/classes'
 
 // connect
 let srv = await cds.connect.to('service')
