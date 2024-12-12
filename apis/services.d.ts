@@ -382,8 +382,6 @@ declare namespace HandlerFunction {
   type returns<F extends CdsFunction> = F['__returns'] | Promise<F['__returns']>
 }
 
-type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
-
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
 declare namespace CRUDEventHandler {
   type Before<P, R = P | void | Error> = (req: Request<P>) => Promise<R> | R
