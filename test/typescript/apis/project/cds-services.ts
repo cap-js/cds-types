@@ -1,4 +1,4 @@
-import cds, { Service, Request } from '@sap/cds'
+import cds, { Service, Request, HandlerFunction } from '@sap/cds'
 import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
