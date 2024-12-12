@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Use `Required` instead of `DeepRequired` in projection function to avoid complexity errors from TypeScript
 - Added missing type inference for `.set`/`.with` of `UPDATE`
 - Added missing type inference for `.entries` of `UPSERT` and `INSERT`
+- Variants of `SELECT.one(T)` will now return `T | null`, instead of `T`
 
 ## Version 0.8.0 - 24-11-26
 
