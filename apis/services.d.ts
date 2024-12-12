@@ -374,7 +374,7 @@ declare namespace HandlerFunction {
     /**
      * @beta helper
      */
-    type req<F extends CdsFunction> = TypedRequest<F['__parameters']>
+    type req<F extends CdsFunction> = Request<F['__parameters']>
   }
   /**
    * @beta helper
