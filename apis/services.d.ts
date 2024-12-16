@@ -379,7 +379,7 @@ declare namespace HandlerFunction {
   /**
    * @beta helper
    */
-  type returns<F extends CdsFunction> = F['__returns'] | Promise<F['__returns']>
+  type returns<F extends CdsFunction> = F['__returns']
 }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
