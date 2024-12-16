@@ -362,24 +362,20 @@ type CdsFunction = {
  * ```ts
  * import { myAction } from '#cds-models/myService'
  * 
- * function onMyFunction (req: HandlerFunction.parameters.req<typeof myAction>): HandlerFunction.returns<typeof myAction> {
+ * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
  *   ...
  * }
  * 
  * srv.on(myAction, onMyFunction)
  * ```
  */
-declare namespace HandlerFunction {
-  namespace parameters {
-    /**
-     * @beta helper
-     */
-    type req<F extends CdsFunction> = Request<F['__parameters']>
-  }
-  /**
-   * @beta helper
-   */
-  type returns<F extends CdsFunction> = F['__returns']
+export type HandlerFunction<F extends CdsFunction> = {
+  parameters: {
+    /** @beta helper */
+    req: Request<F['__parameters']>,
+  },
+  /** @beta helper */
+  returns: F['__returns'],
 }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after

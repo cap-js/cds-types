@@ -440,11 +440,11 @@ srv.entities('namespace');
 // @ts-expect-error
 srv.entities('namespace')('and again')
 
-
+type ActionType = HandlerFunction<typeof action>
 srv.on(action, externalActionHandler)
-function externalActionHandler(req: HandlerFunction.parameters.req<typeof action>): HandlerFunction.returns<typeof action> {
+function externalActionHandler(req: ActionType['parameters']['req']): ActionType['returns'] {
   testType<Foo>(req.data.foo)
   return 42
 }
 
-testType<Promise<number> | number>(externalActionHandler(as<HandlerFunction.parameters.req<typeof action>>()))
+testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
