@@ -1,13 +1,16 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
-The format is based on [Keep a Changelog](http://keepachangelog.com/).
+This project adheres to [Semantic Versioning](https://semver.org/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## Version 0.9.0 - tbd
 ### Added
 - Added missing properties for `log` in `cds.env`
 - Added overload for `service.read` to be called with a `ref`
+
+### Changed
+- removed dependency to `@types/express: ^4.17.21` in favour of a peerDependency to `@types/express: >=4`
 
 ### Removed
 - [breaking] Removed type `TypedRequest<T>` and replaced it with just `Request<T>`
