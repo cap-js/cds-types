@@ -5,7 +5,12 @@ updates:
   directory: /
   versioning-strategy: increase-if-necessary
   schedule:
-    interval: daily
+    interval: weekly
+  groups:
+    production-dependencies:
+      dependency-type: "production"
+    development-dependencies:
+      dependency-type: "development"
   ignore:
     - dependency-name: "chai"
         # chai 5 doesn't work atm w/ cds.test
