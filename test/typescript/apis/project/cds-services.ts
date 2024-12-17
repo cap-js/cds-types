@@ -1,5 +1,5 @@
-import cds, { Service, Request } from '@sap/cds'
-import { Bars, Bar, Foo, Foos, action } from './dummy'
+import cds, { Service, Request, HandlerFunction } from '@sap/cds'
+import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
@@ -439,3 +439,12 @@ srv.entities('namespace');
 
 // @ts-expect-error
 srv.entities('namespace')('and again')
+
+type ActionType = HandlerFunction<typeof action>
+srv.on(action, externalActionHandler)
+function externalActionHandler(req: ActionType['parameters']['req']): ActionType['returns'] {
+  testType<Foo>(req.data.foo)
+  return 42
+}
+
+testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
