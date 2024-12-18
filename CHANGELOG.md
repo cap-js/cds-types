@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Added missing properties for `log` in `cds.env`
 - Added overload for `service.read` to be called with a `ref`
+- Added types for anonymous, privileged, and default user
 
 ### Changed
 - removed dependency to `@types/express: ^4.17.21` in favour of a peerDependency to `@types/express: >=4`
