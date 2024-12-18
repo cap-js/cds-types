@@ -22,9 +22,24 @@ user.tenant
 user.locale
 
 user.is('someRole')
+
 const privileged = new cds.User.Privileged()
 privileged.is()
 privileged.id === 'privileged'
+const readyToUsePrivileged = cds.User.privileged
+readyToUsePrivileged.is()
+readyToUsePrivileged.id === 'privileged'
+
+const anonymous = new cds.User.Anonymous()
+anonymous.is()
+anonymous.id === 'anonymous'
+const readyToUseAnonymous = cds.User.anonymous
+readyToUseAnonymous.is()
+readyToUseAnonymous.id === 'anonymous'
+
+const readyToUseDefault = cds.User.default
+readyToUseDefault.id === 'anonymous' // since the default default is cds.User.anonymous
+
 new (class extends User {
   is(): boolean {
     return true
