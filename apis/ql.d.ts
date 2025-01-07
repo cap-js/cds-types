@@ -131,17 +131,17 @@ type SELECT_one =
 // calling with class
   (<T extends ArrayConstructable>
   (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T>>)
+  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T> | null>)
 &
   (<T extends ArrayConstructable>
   (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T>>)
+  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T> | null>)
 
   & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<_TODO, SELECT_one>)
-  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
-  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
-  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
-  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T>)
+  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
+  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
+  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
+  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
   & ((subject: ref) => SELECT<_TODO>)
 
 type SELECT_from =
@@ -155,7 +155,7 @@ type SELECT_from =
 &
   (<E extends ArrayConstructable>
   (entityType: E, primaryKey: PK, projection?: Projection<SingularInstanceType<E>>)
-  => Awaitable<SELECT<SingularInstanceType<E>>, SingularInstanceType<E>>) // when specifying a key, we expect a single element as result
+  => Awaitable<SELECT<SingularInstanceType<E>>, SingularInstanceType<E> | null>) // when specifying a key, we expect a single element as result
 // calling with definition
   & (<T>(entity: EntityDescription, primaryKey?: PK, projection?: Projection<T>) => SELECT<T>)
 // calling with concrete list

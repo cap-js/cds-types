@@ -114,7 +114,7 @@ DELETE(Foo)
 DELETE(Foo, Foos)
 DELETE([Foo, Foos])
 
-let selectOne: Foo
+let selectOne: Foo | null
 let selectMany: Foos
 
 // SINGULAR TESTS
@@ -125,6 +125,7 @@ selectOne = await SELECT(Foo, 42)
 selectOne = await SELECT.one.from(Foo)
 selectOne = await SELECT.one.from(Foo, 42)
 selectOne = await SELECT.one.from(Foo, 42)
+const xx = await SELECT.one(Foo, 42)
 selectOne = await SELECT.one.from(Foo, 42, f => f.x)
 selectOne = await SELECT.one.from(Foo, f => f.x)
 selectOne = await SELECT.one.from(Foo).alias('Bars')
@@ -237,17 +238,17 @@ SELECT.from `Books` .columns ( 'title', {ref:['author','name'],as:'author'} )
 SELECT.from `Books` .columns (['title', {ref:['author','name'],as:'author'} ])
 
 // @ts-expect-error invalid key of result
-SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r.some)
-SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r.ref)
+SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r?.some)
+SELECT.one.from(Foos).columns(['entityIDColumn', 'parentIDColumn']).then(r => r?.ref)
 // @ts-expect-error invalid key of result
-SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r.some)
-SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r.ref)
+SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r?.some)
+SELECT.one.from(Foos).columns('entityIDColumn', 'parentIDColumn').then(r => r?.ref)
 // @ts-expect-error invalid key of result
-SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r.some)
-SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r.ref)
+SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r?.some)
+SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r?.ref)
 // @ts-expect-error invalid key of result
-SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r.some)
-SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r.ref)
+SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.some)
+SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.ref)
 
 INSERT.into(Foos).values([1,2,3])
 

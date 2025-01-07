@@ -137,9 +137,28 @@ export class User {
 
   roles: Array<string> | Record<string, string>
 
+  static Anonymous: typeof Anonymous
+
+  static anonymous: Anonymous
+
   static Privileged: typeof Privileged
 
+  static privileged: Privileged
+
+  static default: User
+
   is (role: string): boolean
+
+}
+
+/**
+ * Subclass representing unauthenticated users.
+ */
+declare class Anonymous extends User {
+
+  constructor ()
+
+  is (): boolean
 
 }
 

@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added missing properties for `log` in `cds.env`
 - Added overload for `service.read` to be called with a `ref`
 - Added `HandlerFunction.parameters.req` and `HandlerFunction.returns` to type handler functions that are not declared as lambdas more conveniently
+- Added types for anonymous, privileged, and default user
+
+### Changed
+- removed dependency to `@types/express: ^4.17.21` in favour of a peerDependency to `@types/express: >=4`
 
 ### Removed
 - [breaking] Removed type `TypedRequest<T>` and replaced it with just `Request<T>`
@@ -18,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Use `Required` instead of `DeepRequired` in projection function to avoid complexity errors from TypeScript
 - Added missing type inference for `.set`/`.with` of `UPDATE`
 - Added missing type inference for `.entries` of `UPSERT` and `INSERT`
+- Variants of `SELECT.one(T)` will now return `T | null`, instead of `T`
 
 ## Version 0.8.0 - 24-11-26
 
