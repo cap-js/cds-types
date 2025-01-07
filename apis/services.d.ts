@@ -347,10 +347,35 @@ type OneOrMany<T> = T | T[]
 // parameters and return type, as their names are not accessible from
 // function signatures to the type system.
 // This meta information is required in .on action handlers.
+/**
+ * @beta helper
+ */
 type CdsFunction = {
   (...args: any[]): any,
   __parameters: object,
   __returns: any,
+}
+
+/**
+ * Types herein can be used to type handler functions that are not declared in line:
+ * @example
+ * ```ts
+ * import { myAction } from '#cds-models/myService'
+ * 
+ * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
+ *   ...
+ * }
+ * 
+ * srv.on(myAction, onMyFunction)
+ * ```
+ */
+export type HandlerFunction<F extends CdsFunction> = {
+  parameters: {
+    /** @beta helper */
+    req: Request<F['__parameters']>,
+  },
+  /** @beta helper */
+  returns: F['__returns'],
 }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after

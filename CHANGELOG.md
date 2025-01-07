@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Added missing properties for `log` in `cds.env`
 - Added overload for `service.read` to be called with a `ref`
+- Added `HandlerFunction.parameters.req` and `HandlerFunction.returns` to type handler functions that are not declared as lambdas more conveniently
 - Added types for anonymous, privileged, and default user
 
 ### Changed
