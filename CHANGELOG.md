@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Removed
 - [breaking] Removed type `TypedRequest<T>` and replaced it with just `Request<T>`
+- Removed deprecated `cds.Float` CSN property type
 
 ### Fixed
 
