@@ -79,7 +79,7 @@ export function on (event: 'connect', listener: (srv: Service) => void): _cds
 
 
 /**
-	 * Emitted at the very beginning of the bootsrapping process, when the
+	 * Emitted at the very beginning of the bootstrapping process, when the
 	 * express application has been constructed but no middlewares or routes
 	 * added yet.
 	 */
@@ -162,10 +162,10 @@ interface cds_connect_options {
   credentials?: object
 }
 
-type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
+type Middlewares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
-  add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middleswares }>, { before: Middleswares }>) => void,
+  add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middlewares }>, { before: Middlewares }>) => void,
 }
 
 /**
