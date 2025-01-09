@@ -68,7 +68,7 @@ export interface service extends any_ { }
 export interface type extends any_ {
   type?: 'cds.Boolean' |
          'cds.UUID' | 'cds.String' | 'cds.LargeString' | 'cds.Binary' | 'cds.LargeBinary' | 'cds.Vector' |
-         'cds.Integer' | 'cds.UInt8' | 'cds.Int16' | 'cds.Int32' | 'cds.Int64' | 'cds.Float' | 'cds.Double' | 'cds.Decimal' |
+         'cds.Integer' | 'cds.UInt8' | 'cds.Int16' | 'cds.Int32' | 'cds.Int64' | 'cds.Double' | 'cds.Decimal' |
          'cds.Date' | 'cds.Time' | 'cds.DateTime' | 'cds.Timestamp' |
          'cds.Association' | 'cds.Composition' |
          FQN & Record<never,never> // allow any other CDS type as well (e.g. 'User')
