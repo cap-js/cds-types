@@ -40,6 +40,8 @@ export const connect: {
 		 */
   to(options: cds_connect_options): Promise<Service>,
 
+  to<S>(datasource: S, options?: cds_connect_options): Promise<cds.CdsFunctions<S> & Service>,
+
   /**
 		 * Connects the primary datasource.
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect)
