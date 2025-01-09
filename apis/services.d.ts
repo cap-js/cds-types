@@ -165,7 +165,7 @@ export class Service extends QueryAPI {
 
   /**
    * Constructs and emits an asynchronous event.
-   * @see [capire docs](https://cap.cloud.sap/docs/core-services#srv-emit-event)
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-emit-event)
    */
   emit: {
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
