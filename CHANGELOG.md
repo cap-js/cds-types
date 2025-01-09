@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added missing type inference for `.set`/`.with` of `UPDATE`
 - Added missing type inference for `.entries` of `UPSERT` and `INSERT`
 - Variants of `SELECT.one(T)` will now return `T | null`, instead of `T`
+- Documentation link to `srv.emit`
 
 ## Version 0.8.0 - 24-11-26
 
