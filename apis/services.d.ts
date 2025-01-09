@@ -356,6 +356,12 @@ type CdsFunction = {
   __returns: any,
 }
 
+// extracts all CdsFunction properties from T
+/**
+ * @beta helper
+ */
+type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : never }[keyof T]>
+
 /**
  * Types herein can be used to type handler functions that are not declared in line:
  * @example
