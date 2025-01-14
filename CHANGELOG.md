@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
-## Version 0.9.0 - tbd
+## Version 0.10.0 - tbd
+
+## Version 0.9.0 - 25-01-13
 ### Added
 - Added missing properties for `log` in `cds.env`
 - Added overload for `service.read` to be called with a `ref`
