@@ -33,9 +33,6 @@ jobs:
     - name: Run Unit Tests
       run: |
         npm ci
-        npm install file:. --no-save --force
-        npm run prerelease:ci-fix
-        npm run rollup && npm run rollup:on
         npm run test
 
     - name: get-version
