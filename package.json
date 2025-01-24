@@ -19,8 +19,8 @@
     "README.md"
   ],
   "scripts": {
-    "test:common": "npm install file:. --no-save --force && npm run prerelease:ci-fix",
-    "test": "npm run test:common && npm run test:rollup-off && npm run test:rollup-on",
+    "test:setup": "npm install file:. --no-save --force && npm run prerelease:ci-fix",
+    "test": "npm run test:setup && npm run test:rollup-on",
     "test:rollup-on": "npm run rollup && npm run rollup:on && jest --silent",
     "test:rollup-off": "npm run rollup:off && jest --silent",
     "test:integration": "jest --testMatch \"**/test/**/*.integrationtest.js\"",
