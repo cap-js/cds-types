@@ -29,5 +29,5 @@ jobs:
       run: |
         npm ci
         npm run test:setup
-        npm run test:rollup-on
         npm run test:rollup-off
+        npm run test:rollup-on
