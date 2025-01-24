@@ -1,4 +1,4 @@
-name: Linting1
+name: Linting
 
 on:
   pull_request:
@@ -8,6 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint2:
+  cap-org-lint:
     uses: cap-js/.github/.github/workflows/lint.yml@main
     secrets: inherit
