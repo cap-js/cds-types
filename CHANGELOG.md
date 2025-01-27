@@ -5,9 +5,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
-
 ### Added
 ### Changed
+- `CHANGELOG.md` and `LICENSE` files are no longer part of the npm package.
+
 ### Deprecated
 ### Removed
 ### Fixed

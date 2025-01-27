@@ -10,12 +10,11 @@
     "Node.js"
   ],
   "author": "SAP SE (https://www.sap.com)",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "Apache-2.0",
   "typings": "apis/cds.d.ts",
   "files": [
     "dist/",
     "scripts/",
-    "LICENSE",
     "README.md"
   ],
   "scripts": {
@@ -41,8 +40,8 @@
   "devDependencies": {
     "@eslint/js": "^9.2.0",
     "@sap/cds": ">=8.0.0",
-    "@stylistic/eslint-plugin-js": "^2.1.0",
-    "@stylistic/eslint-plugin-ts": "^2.1.0",
+    "@stylistic/eslint-plugin-js": "^3.0.0",
+    "@stylistic/eslint-plugin-ts": "^3.0.0",
     "@types/jest": "^29.5.11",
     "@types/node": "^22",
     "axios": "^1.6.2",
