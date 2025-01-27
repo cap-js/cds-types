@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## Version 0.10.0 - tbd
+### Changed
+- `CHANGELOG.md` and `LICENSE` files are no longer part of the npm package.
 
 ## Version 0.9.0 - 25-01-13
 ### Added
