@@ -1,0 +1,27 @@
+
+name: Prepare Next Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: Increment version
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  pull-requests: write
+
+
+jobs:
+  prepare-next-version:
+    uses: cap-js/.github/.github/workflows/prepare-next-version.yml@main
+    secrets: inherit
+    with:
+      increment: ${{ github.event.inputs.increment }}

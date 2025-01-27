@@ -32,15 +32,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.version }}
 
+    # running test:setup inside run-as-non-admin causes problems with creating OS links
+    # -> run it outside of run-as-non-admin
     - run: |
         npm i -g npm
         npm ci
-        npm install file:. --no-save --force
-        npm run prerelease:ci-fix
+        npm run test:setup
         npm run rollup:off
 
     - name: Run integration test with non-admin user on windows
