@@ -8,6 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  cap-org-lint:
+  lint:
     uses: cap-js/.github/.github/workflows/lint.yml@main
     secrets: inherit
