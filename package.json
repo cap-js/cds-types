@@ -10,12 +10,11 @@
     "Node.js"
   ],
   "author": "SAP SE (https://www.sap.com)",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "Apache-2.0",
   "typings": "apis/cds.d.ts",
   "files": [
     "dist/",
     "scripts/",
-    "LICENSE",
     "README.md"
   ],
   "scripts": {
