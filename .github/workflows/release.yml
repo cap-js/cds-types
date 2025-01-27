@@ -14,6 +14,14 @@ on:
         required: false
         default: false
         type: boolean
+      tag:
+        description: The tag to use during publish, values are latest, next
+        required: false
+        default: latest
+        type: choice
+        options:
+          - latest
+          - next
 
 permissions:
   contents: write
@@ -25,3 +33,4 @@ jobs:
     secrets: inherit
     with:
       dry-run: ${{ github.event.inputs.dry-run || false }}
+      tag: ${{ github.event.inputs.tag || 'latest'}}
