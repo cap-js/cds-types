@@ -106,11 +106,10 @@ declare class struct<K extends kinds = 'elements' | 'type'> extends type<K> impl
 }
 
 /**
- * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect#cds-entity)
  * @since 8.6.0
  */
 declare interface Map extends csn.Map {}
-declare class Map extends Omit<struct, 'items'> {}
+declare class Map {}
 
 // clashes with services.context when exported from facade
 declare interface context_ extends csn.context {}
