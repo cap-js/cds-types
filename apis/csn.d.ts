@@ -70,7 +70,7 @@ export interface type extends any_ {
          'cds.UUID' | 'cds.String' | 'cds.LargeString' | 'cds.Binary' | 'cds.LargeBinary' | 'cds.Vector' |
          'cds.Integer' | 'cds.UInt8' | 'cds.Int16' | 'cds.Int32' | 'cds.Int64' | 'cds.Double' | 'cds.Decimal' |
          'cds.Date' | 'cds.Time' | 'cds.DateTime' | 'cds.Timestamp' |
-         'cds.Association' | 'cds.Composition' |
+         'cds.Association' | 'cds.Composition' | 'cds.Map' |
          FQN & Record<never,never> // allow any other CDS type as well (e.g. 'User')
   items?: type
 }
@@ -83,6 +83,10 @@ export interface struct extends type {
   */
   includes?: FQN[]
   elements: { [name: string]: Element }
+}
+
+export interface Map extends Omit<struct, 'includes' | 'items'> {
+  elements: Record<string,never>
 }
 
 export interface entity extends Omit<struct, 'elements'> {
