@@ -105,6 +105,12 @@ declare class struct<K extends kinds = 'elements' | 'type'> extends type<K> impl
   elements: Definitions<type<'type'>>
 }
 
+/**
+ * @since 8.6.0
+ */
+declare interface Map extends csn.Map {}
+declare class Map {}
+
 // clashes with services.context when exported from facade
 declare interface context_ extends csn.context {}
 declare class context_ extends any_ { }
