@@ -145,7 +145,7 @@ export interface Limit {
   & ((rows: number, offset?: number) => this)
 }
 
-export interface Hints<T> {
+export interface Hints {
   hints: ((...hints: string[]) => this)
   & ((hints: string[]) => this)
 }
