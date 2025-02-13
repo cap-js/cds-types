@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 ### Added
+- Added types for `SELECT.hints()` of `cds.ql` API
+
 ### Changed
 - `CHANGELOG.md` and `LICENSE` files are no longer part of the npm package.
 
