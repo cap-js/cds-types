@@ -145,6 +145,11 @@ export interface Limit {
   & ((rows: number, offset?: number) => this)
 }
 
+export interface Hints<T> {
+  hints: ((...hints: string[]) => this)
+  & ((hints: string[]) => this)
+}
+
 export interface And {
   and: TaggedTemplateQueryPart<this>
   & ((predicate: object) => this)

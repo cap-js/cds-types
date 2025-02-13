@@ -15,6 +15,7 @@ import {
   Columns,
   EntityDescription,
   Having,
+  Hints,
   GroupBy,
   Limit,
   OrderBy,
@@ -74,7 +75,7 @@ export declare class QL<T> {
 
 }
 
-export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>, Limit {
+export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>, Limit, Hints<T> {
   // overload specific to SELECT
   columns: Columns<T, this>['columns'] & ((projection: Projection<T>) => this)
 }
