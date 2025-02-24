@@ -6,8 +6,8 @@ const util = require('node:util')
 
 const execAsync = util.promisify(cp.exec)
 const IS_WIN = os.platform() === 'win32'
-import { test, describe, beforeEach, afterEach } from 'node:test';
-import assert from 'node:assert';
+const { test, describe, beforeEach, afterEach } = require('node:test')
+const assert = require('node:assert')
 
 describe('Postinstall Script Tests', () => {
     // Set timeout 40s for Windows
