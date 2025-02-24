@@ -1,5 +1,19 @@
 import cds from '@sap/cds'
-import * as winston from "winston"
+
+// mock winston
+const winston = {
+    format: {
+        prettyPrint: () => { return [] }
+    },
+    transports: {
+        Console: class {}
+    },
+    config: {
+        npm: {
+            levels: []
+        }
+    }
+}
 
 cds.log('foo').debug('message')
 cds.log('foo', 1)
