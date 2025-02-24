@@ -18,7 +18,7 @@
     "README.md"
   ],
   "scripts": {
-    "test:integration": "npm run --test test/typescript/postinstall.integrationtest.js",
+    "test:integration": "node --test './test/postinstall.integrationtest.js'",
     "test:runtime": "npm run test:runtime:post-mortem; rm -rf test/typescript/_out",
     "test:runtime:tsc": "npx tsc test/typescript/runtime.test.ts --outDir test/typescript/_out --target ES2020 --module commonjs --esModuleInterop",
     "test:runtime:post-mortem": "npm run test:runtime:tsc && node --test './test/typescript/_out/runtime.test.js'",
