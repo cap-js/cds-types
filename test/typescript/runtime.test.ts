@@ -24,20 +24,20 @@ import {
   service,
 
 } from '@sap/cds';
-
+import { test, describe } from 'node:test';
 
 describe('runtime tests', () => {
 
   let {Test} = cds.test
-  let test = new Test
-  let log = test.log()
+  let testInstance = new Test
+  let log = testInstance.log()
 
-  it('cds.test', () => {
-    expect(test.test).toBe(test)
-    expect(typeof test.run).toBe('function')
-    expect(typeof test.in).toBe('function')
-    expect(typeof test.log).toBe('function')
-    expect(typeof test.data.reset).toBe('function')
+  test('should test cds.test functionality', () => {
+    expect(testInstance.test).toBe(testInstance)
+    expect(typeof testInstance.run).toBe('function')
+    expect(typeof testInstance.in).toBe('function')
+    expect(typeof testInstance.log).toBe('function')
+    expect(typeof testInstance.data.reset).toBe('function')
     console.log('foo')
     expect(log.output).toBe('foo\n') // only works in jest/mocha (which trigger beforeAll)
     console.log('bar')
@@ -47,7 +47,7 @@ describe('runtime tests', () => {
     expect(log.output).toBe('')
   })
 
-  it('misc', () => {
+  test('should test miscellaneous functionality', () => {
 
     if (global.false) {
       let q1 : Query
