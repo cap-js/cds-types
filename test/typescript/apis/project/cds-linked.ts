@@ -3,7 +3,7 @@ import cds from '@sap/cds';
 import { csn } from '../../../..';
 import { as } from './dummy';
 
-const { action, aspect, entity, event, mixin, scalar, struct, type, Decimal, String } = cds.linked.classes
+const { action, aspect, entity, event, mixin, scalar, struct, type, Decimal, String, Map } = cds.linked.classes
 
 // is exported from top level
 as<LinkedCSN>() === as<cds.linked.LinkedCSN>()
@@ -90,6 +90,12 @@ new Decimal().precision
 new Decimal().scale
 
 new String().length
+
+const never: never = new Map().elements.xyz
+new Map().elements
+// @ts-expect-error
+new Map().items
+
 
 mixin(class {}, class {})
 // @ts-expect-error

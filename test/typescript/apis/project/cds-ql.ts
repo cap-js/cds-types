@@ -60,6 +60,10 @@ SELECT.from(Foos, f => f.ref(r => r.x))  // ref should be callable without optio
 SELECT.from(Foos).orderBy('x')  // x auto completed
 SELECT.from(Foos).orderBy('y')  // non-columns also still possible
 
+SELECT.from(Foos).hints('x')
+SELECT.from(Foos).hints('x', 'y')
+SELECT.from(Foos).hints(['x', 'y'])
+
 SELECT.from(Foos, f => { 
     f.x,
     // @ts-expect-error - foobar is not a valid column

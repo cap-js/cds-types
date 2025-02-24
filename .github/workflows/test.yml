@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: test-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,6 +20,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.version }}
@@ -27,10 +28,6 @@ jobs:
     - name: Run Unit Tests
       run: |
         npm ci
-        npm install file:. --no-save --force
-        npm run prerelease:ci-fix
-        npm run rollup:off
-        npm run test
-
-        npm run rollup && npm run rollup:on
-        npm run test
+        npm run test:setup
+        npm run test:rollup-off
+        npm run test:rollup-on
