@@ -185,11 +185,12 @@ describe('runtime tests', () => {
 
     cds.env.requires.db = { kind: 'sqlite' }
     // let { Books } = cds.entities
-
-    expect (Service && cds.Service).toBe(Service)
-    expect (Request && cds.Request).toBe(Request)
-    expect (Event && cds.Event).toBe(Event)
-    expect (User && cds.User).toBe(User)
+    // classes are functions. .toBe therefore incorrectly tries to invoke the argument
+    // -> working around that by wrapping the class in an actual function to invoke
+    expect (Service && cds.Service).toBe(()=>Service)
+    expect (Request && cds.Request).toBe(()=>Request)
+    expect (Event && cds.Event).toBe(()=>Event)
+    expect (User && cds.User).toBe(()=>User)
     expect (cds.linked)
 
     class MyService extends cds.ApplicationService {}
