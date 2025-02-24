@@ -52,10 +52,5 @@
     "typescript": "^5.4.5",
     "typescript-eslint": "^8.0.0-alpha.51",
     "chai": "^4.3.10"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    }
   }
 }
