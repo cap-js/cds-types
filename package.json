@@ -18,7 +18,9 @@
     "README.md"
   ],
   "scripts": {
-    "test:runtime": "npx tsc test/typescript/runtime.test.ts --target ES2020 --module commonjs --esModuleInterop && node --test './test/typescript/runtime.test.js'; rm test/typescript/runtime.test.js",
+    "test:runtime": "npm run test:runtime:post-mortem; rm -rf test/typescript/_out",
+    "test:runtime:tsc": "npx tsc test/typescript/runtime.test.ts --outDir test/typescript/_out --target ES2020 --module commonjs --esModuleInterop",
+    "test:runtime:post-mortem": "npm run test:runtime:tsc && node --test './test/typescript/_out/runtime.test.js'",
     "test:api-calls": "node --test './test/typescript/apis/cds-api-calls.test.js'",
     "test:typings": "node --test './test/typescript/cds-typings.test.js'",
     "test:all": "npm run test:runtime && npm run test:api-calls && npm run test:typings",

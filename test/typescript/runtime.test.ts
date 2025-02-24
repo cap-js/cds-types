@@ -188,10 +188,10 @@ describe('CDS Runtime Tests', () => {
     // let { Books } = cds.entities
     // classes are functions. .toBe therefore incorrectly tries to invoke the argument
     // -> working around that by wrapping the class in an actual function to invoke
-    assert.strictEqual(Service && cds.Service, ()=>Service)
-    assert.strictEqual(Request && cds.Request, ()=>Request)
-    assert.strictEqual(Event && cds.Event, ()=>Event)
-    assert.strictEqual(User && cds.User, ()=>User)
+    assert.strictEqual(Service && cds.Service, Service)
+    assert.strictEqual(Request && cds.Request, Request)
+    assert.strictEqual(Event && cds.Event, Event)
+    assert.strictEqual(User && cds.User, User)
     assert(cds.linked)
 
     class MyService extends cds.ApplicationService {}
@@ -203,7 +203,7 @@ describe('CDS Runtime Tests', () => {
     let ua = new User('foo')
     assert.strictEqual(ua.id, 'foo')
     assert(ua.is('any'))
-    assert(!ua.is('authenticated-user'))
+    assert(ua.is('authenticated-user'))
 
     let u2 = new cds.User('me')
     assert.strictEqual(u2.id, 'me')
