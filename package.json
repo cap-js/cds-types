@@ -18,6 +18,7 @@
     "README.md"
   ],
   "scripts": {
+    "test:integration": "npm run --test test/typescript/postinstall.integrationtest.js",
     "test:runtime": "npm run test:runtime:post-mortem; rm -rf test/typescript/_out",
     "test:runtime:tsc": "npx tsc test/typescript/runtime.test.ts --outDir test/typescript/_out --target ES2020 --module commonjs --esModuleInterop",
     "test:runtime:post-mortem": "npm run test:runtime:tsc && node --test './test/typescript/_out/runtime.test.js'",
@@ -28,7 +29,6 @@
     "test": "npm run test:setup && npm run test:rollup-on",
     "test:rollup-on": "npm run rollup && npm run rollup:on && npm run test:all --silent",
     "test:rollup-off": "npm run rollup:off && npm run test:all --silent",
-    "test:integration": "jest --testMatch \"**/test/**/*.integrationtest.js\"",
     "rollup": "rm -rf dist/ && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
     "rollup:on": "npm pkg set typings=dist/cds-types.d.ts && [ -d 'apis' ] && mv -- apis -apis || true",
     "rollup:off": "npm pkg set typings=apis/cds.d.ts  && [ -d '-apis' ] && mv -- -apis apis || true",

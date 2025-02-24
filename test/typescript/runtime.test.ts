@@ -33,7 +33,7 @@ describe('CDS Runtime Tests', () => {
   let testInstance = new Test
   let log = testInstance.log()
 
-  test('CDS Test Functionality', () => {
+  test('should verify CDS test functionality', () => {
     assert.strictEqual(testInstance.test, testInstance)
     assert.strictEqual(typeof testInstance.run, 'function')
     assert.strictEqual(typeof testInstance.in, 'function')
@@ -48,7 +48,7 @@ describe('CDS Runtime Tests', () => {
     assert.strictEqual(log.output, '')
   })
 
-  test('Miscellaneous Functionality', () => {
+  test('should test miscellaneous functionality', () => {
 
     if (global.false) {
       let q1 : Query
