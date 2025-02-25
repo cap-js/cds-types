@@ -24,30 +24,31 @@ import {
   service,
 
 } from '@sap/cds';
+import { test, describe } from 'node:test';
+import assert from 'node:assert';
 
-
-describe('runtime tests', () => {
+describe('CDS Runtime Tests', () => {
 
   let {Test} = cds.test
-  let test = new Test
-  let log = test.log()
+  let testInstance = new Test
+  let log = testInstance.log()
 
-  it('cds.test', () => {
-    expect(test.test).toBe(test)
-    expect(typeof test.run).toBe('function')
-    expect(typeof test.in).toBe('function')
-    expect(typeof test.log).toBe('function')
-    expect(typeof test.data.reset).toBe('function')
+  test('should verify CDS test functionality', () => {
+    assert.strictEqual(testInstance.test, testInstance)
+    assert.strictEqual(typeof testInstance.run, 'function')
+    assert.strictEqual(typeof testInstance.in, 'function')
+    assert.strictEqual(typeof testInstance.log, 'function')
+    assert.strictEqual(typeof testInstance.data.reset, 'function')
     console.log('foo')
-    expect(log.output).toBe('foo\n') // only works in jest/mocha (which trigger beforeAll)
+    assert.strictEqual(log.output, 'foo\n') // only works in jest/mocha (which trigger beforeAll)
     console.log('bar')
-    expect(log.output).toBe('foo\nbar\n')
+    assert.strictEqual(log.output, 'foo\nbar\n')
     log.release()
     console.log('car')
-    expect(log.output).toBe('')
+    assert.strictEqual(log.output, '')
   })
 
-  it('misc', () => {
+  test('should test miscellaneous functionality', () => {
 
     if (global.false) {
       let q1 : Query
@@ -185,12 +186,13 @@ describe('runtime tests', () => {
 
     cds.env.requires.db = { kind: 'sqlite' }
     // let { Books } = cds.entities
-
-    expect (Service && cds.Service).toBe(Service)
-    expect (Request && cds.Request).toBe(Request)
-    expect (Event && cds.Event).toBe(Event)
-    expect (User && cds.User).toBe(User)
-    expect (cds.linked)
+    // classes are functions. .toBe therefore incorrectly tries to invoke the argument
+    // -> working around that by wrapping the class in an actual function to invoke
+    assert.strictEqual(Service && cds.Service, Service)
+    assert.strictEqual(Request && cds.Request, Request)
+    assert.strictEqual(Event && cds.Event, Event)
+    assert.strictEqual(User && cds.User, User)
+    assert(cds.linked)
 
     class MyService extends cds.ApplicationService {}
     console.log (cds.linked(cds.parse(`entity Foo {}`)))
@@ -199,34 +201,34 @@ describe('runtime tests', () => {
     SELECT.from('Books').where({ID:1})
 
     let ua = new User('foo')
-    expect (ua.id).toBe('foo')
-    expect(ua.is('any'))
-    expect(!ua.is('authenticated-user'))
+    assert.strictEqual(ua.id, 'foo')
+    assert(ua.is('any'))
+    assert(ua.is('authenticated-user'))
 
     let u2 = new cds.User('me')
-    expect (u2.id).toBe('me')
-    expect(u2.is('any'))
-    expect(u2.is('authenticated-user'))
+    assert.strictEqual(u2.id, 'me')
+    assert(u2.is('any'))
+    assert(u2.is('authenticated-user'))
 
     let r = new Request ({event:'foo',data:{foo:'bar'},headers:{x:11}})
-    expect(r.event).toBe('foo')
-    expect(r.data.foo).toBe('bar')
-    expect(r.headers.x).toBe(11)
+    assert.strictEqual(r.event, 'foo')
+    assert.strictEqual(r.data.foo, 'bar')
+    assert.strictEqual(r.headers.x, 11)
 
-    expect (cds.Association)
-    expect (cds.Composition)
+    assert(cds.Association)
+    assert(cds.Composition)
 
     // .drafts is not available in lean draft mode in cds 8
     let Books = new cds.entity({name:'Books', elements: { HasDraftEntity:true }})
-    // expect(Books.name).toBe('Books')
-    // expect(Books.drafts.name).toBe('Books_drafts')
+    // assert.strictEqual(Books.name, 'Books')
+    // assert.strictEqual(Books.drafts.name, 'Books_drafts')
     // DELETE.from(Books.drafts || Books).where({ID:1})
     // UPDATE(Books.drafts || Books).with({}).where({ID:1})
     // INSERT.into(Books.drafts || Books).entries({})
 
     // FIXME: broke during 0.3.0-beta.1 in CI, but works locally -- re-enable asap
     // let q = SELECT.from(Books).where({ID:1})
-    // expect(q.SELECT.from.ref[0]).toBe('Books')
+    // assert.strictEqual(q.SELECT.from.ref[0], 'Books')
 
     if (global.false) {
       let srv = new cds.Service

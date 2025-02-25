@@ -1,6 +1,7 @@
 node_modules/
 gen/
 out/
+_out/
 
 # API extractor
 
