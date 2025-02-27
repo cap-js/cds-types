@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Added support for new builtin type `cds.Map`
 - Added types for `SELECT.hints()` of `cds.ql` API
+- Added types for `req.req` and `req.res` in `cds.Request`
 
 ### Changed
 - `CHANGELOG.md` and `LICENSE` files are no longer part of the npm package.
