@@ -343,7 +343,9 @@ srv.on('READ', Foo, req => {
 
 // unbound
 srv.before(action, (req) => {
-  req.req === req.http?.req
+  req.req
+  req.res
+
   req.data.foo
   return 42
 })
@@ -355,6 +357,9 @@ srv.after(action, (a,b) => {
 
 // bound
 srv.before(action, 'someservice', (req) => {
+  req.req
+  req.res
+
   req.data.foo
   return 42
 })
