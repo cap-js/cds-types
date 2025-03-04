@@ -165,7 +165,7 @@ export class Service extends QueryAPI {
 
   /**
    * Constructs and emits an asynchronous event.
-   * @see [capire docs](https://cap.cloud.sap/docs/core-services#srv-emit-event)
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-emit-event)
    */
   emit: {
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
@@ -347,10 +347,41 @@ type OneOrMany<T> = T | T[]
 // parameters and return type, as their names are not accessible from
 // function signatures to the type system.
 // This meta information is required in .on action handlers.
+/**
+ * @beta helper
+ */
 type CdsFunction = {
   (...args: any[]): any,
   __parameters: object,
   __returns: any,
+}
+
+// extracts all CdsFunction properties from T
+/**
+ * @beta helper
+ */
+type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : never }[keyof T]>
+
+/**
+ * Types herein can be used to type handler functions that are not declared in line:
+ * @example
+ * ```ts
+ * import { myAction } from '#cds-models/myService'
+ * 
+ * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
+ *   ...
+ * }
+ * 
+ * srv.on(myAction, onMyFunction)
+ * ```
+ */
+export type HandlerFunction<F extends CdsFunction> = {
+  parameters: {
+    /** @beta helper */
+    req: Request<F['__parameters']>,
+  },
+  /** @beta helper */
+  returns: F['__returns'],
 }
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
