@@ -152,9 +152,6 @@ SELECT.from(Foo.drafts)
 
 // provider
 srv.before('*', Books, req => {
-  req.req
-  req.res
-
   req.data
   if (req.query.SELECT?.columns?.length ?? 0 > 0) {
     console.log("foooooooo")
@@ -189,24 +186,15 @@ srv.before('*', async req => {
 })
 
 srv.after('*', (results, req) => {
-  req.req
-  req.res
-
   req.data
   results[0]
 })
 srv.after('UPDATE', Books, (results, req) => {
-  req.req
-  req.res
-
   req.data
   results[0]
 })
 
 srv.on("action1", req => {
-  req.req
-  req.res
-
   UPDATE(req.subject).with({ x: "a" })
   UPDATE(req.subject).with({ x: { "=": 4 } })
   UPDATE(req.subject).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
@@ -216,16 +204,10 @@ srv.on("action1", req => {
 })
 
 srv.on('CREATE', (req, next) => {
-  req.req
-  req.res
-
   req.data
   next()
 })
 srv.on('CREATE', Books, (req, next) => {
-  req.req
-  req.res
-
   req.data
   next()
 })
@@ -343,9 +325,6 @@ srv.on('READ', Foo, req => {
 
 // unbound
 srv.before(action, (req) => {
-  req.req
-  req.res
-
   req.data.foo
   return 42
 })
@@ -357,9 +336,6 @@ srv.after(action, (a,b) => {
 
 // bound
 srv.before(action, 'someservice', (req) => {
-  req.req
-  req.res
-
   req.data.foo
   return 42
 })
