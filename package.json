@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0",
-    "@sap/cds": ">=8.0.0",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
     "axios": "^1.6.2",
