@@ -28,6 +28,7 @@ import {
   InUpsert,
 } from './internal/query'
 import { _TODO } from './internal/util'
+import { Service } from './services'
 
 export type Query = CQN.Query
 
@@ -42,7 +43,7 @@ export class ConstructedQuery<T> {
   // that don't make explicit use of the generic. So `UPDATE<Books> !<: UPDATE<number>`
   declare private _: T
   then (_resolved: (x: any) => any, _rejected: (e: Error) => any): any
-
+  bind (service: Service): this
 }
 
 // all the functionality of an instance of SELECT, but directly callable:
