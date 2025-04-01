@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added support for new builtin type `cds.Map`
 - Added types for `SELECT.hints()` of `cds.ql` API
 - Added types for `.bind(Service)` to all queries.
+- Added types for `i18n` module
 
 ### Changed
 - `CHANGELOG.md` and `LICENSE` files are no longer part of the npm package.
