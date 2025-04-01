@@ -18,7 +18,7 @@ declare class I18nBundle {
 
 declare interface I18nFacade {
   Bundle: typeof I18nBundle
-  Facade: typeof I18nFacade
+  Facade: I18nFacade
   Files: typeof I18nFiles
   get file(): string
   get folders(): string[]
