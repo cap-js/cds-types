@@ -8,7 +8,7 @@ testType<string | undefined>(i18n.labels.at("foo"));
 i18n.labels.at("foo", "bar");
 i18n.labels.at("foo", "bar", [123, "baz"]);
 i18n.labels.at("foo", [123, "baz"]);
-i18n.labels.file = "";
+const str: string = i18n.file;
 // @ts-expect-error
 i18n.labels.defaults = {
   foo: "bar",
