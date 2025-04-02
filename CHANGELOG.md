@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.10.0] - 2025-04-01
 ### Added
 - Added support for new builtin type `cds.Map`
 - Added types for `SELECT.hints()` of `cds.ql` API
