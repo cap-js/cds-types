@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Added `cds.linked.LinkedDefinition` as alias for `cds.linked.classes.any_`
+- Added `doc?: string` to `cds.linked.classes.any_`
+
 ### Changed
 ### Deprecated
 ### Removed
