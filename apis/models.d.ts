@@ -148,6 +148,9 @@ type __Composition = LinkedClasses.Composition
 export namespace linked {
   export type LinkedDefinitions = IterableMap<ln.classes.any_>
   export type LinkedCSN = ln.LinkedCSN
+  // synthetic class that is prominently featured in capire,
+  // but described as "accessible through cds.linked.classes.any"
+  export type LinkedDefinition = ln.classes.any_
 
   export namespace classes {
     export type type = __type
