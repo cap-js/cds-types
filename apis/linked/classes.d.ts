@@ -21,7 +21,6 @@ import * as csn from '../csn'
 import type { IterableMap } from '../internal/util'
 import type { number_, string_, boolean_ } from './internal'
 import { kinds } from '../csn'
-import { classes } from '../linked'
 
 /**
  * @alpha
