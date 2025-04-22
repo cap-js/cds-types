@@ -209,6 +209,8 @@ type Subqueryable<T> = T extends Primitive ? unknown
 	 * Note that you do not need to return anything from these subqueries.
 	 */
     (fn: ((a: QLExtensions<T[number]>) => any) | '*'): T[number],
+    // infix filters, like b.author`[city='Paris']`('*')
+    (predicate: TemplateStringsArray): Subqueryable<T>,
   }
     // composition of one/ association to one
     : {
@@ -229,4 +231,6 @@ type Subqueryable<T> = T extends Primitive ? unknown
 	 * Note that you do not need to return anything from these subqueries.
 	 */
       (fn: ((a: QLExtensions<T>) => any) | '*'): T,
+      // infix filters, like b.author`[city='Paris']`('*')
+      (predicate: TemplateStringsArray): Subqueryable<T>,
     }
