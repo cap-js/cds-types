@@ -27,11 +27,11 @@ export type SELECT = { SELECT: {
 
 export type INSERT = { INSERT: {
   into: ref | name,
-  entries: data[],
+  entries: data[] | SELECT,
   columns: string[],
   values: primitive[],
   rows: primitive[][],
-  as: SELECT,
+  from: SELECT,
 }, }
 
 export type UPSERT = { UPSERT: {
@@ -55,7 +55,7 @@ export type DELETE = { DELETE: {
 
 export type CREATE = { CREATE: {
   entity: entity | name,
-  as: SELECT,
+  from: SELECT,
 }, }
 
 export type DROP = { DROP: {
