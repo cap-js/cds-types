@@ -55,7 +55,7 @@ export type DELETE = { DELETE: {
 
 export type CREATE = { CREATE: {
   entity: entity | name,
-  from: SELECT,
+  as: SELECT,
 }, }
 
 export type DROP = { DROP: {
