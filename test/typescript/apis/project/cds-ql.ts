@@ -99,7 +99,7 @@ ins.into(Foos)
 ins.into(Foos)
 ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"
-INSERT.into("Bla").as(SELECT.from("Foo"))
+INSERT.into("Bla").from(SELECT.from("Foo"))
 
 let upd: UPDATE<Foo>
 upd = UPDATE(Foo, 42)
