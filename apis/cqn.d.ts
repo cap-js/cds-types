@@ -27,7 +27,7 @@ export type SELECT = { SELECT: {
 
 export type INSERT = { INSERT: {
   into: ref | name,
-  entries: data[] | SELECT,
+  entries: data[],
   columns: string[],
   values: primitive[],
   rows: primitive[][],
