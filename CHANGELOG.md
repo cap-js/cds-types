@@ -12,8 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added `doc?: string` to `cds.linked.classes.any_`
 
 ### Changed
+- Renamed `CQN` property `INSERT.as` to `INSERT.from`
+
 ### Deprecated
 ### Removed
+- Deprecated `INSERT.from` method of `cds.ql` API
+
 ### Fixed
 ### Security
 
