@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added `doc?: string` to `cds.linked.classes.any_`
 
 ### Changed
+- [breaking] Corrected the way the default export is generated. This also gets rid of the export `default_2` that was mistakenly exposed before.
+
 ### Deprecated
 ### Removed
 ### Fixed
