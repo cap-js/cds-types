@@ -1,6 +1,6 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
 import { Awaitable } from './internal/query'
-import { ArrayConstructable, Constructable, Unwrap } from './internal/inference'
+import { ArrayConstructable, Constructable, SingularInstanceType, Unwrap } from './internal/inference'
 //import { ModelPart, CSN, LinkedDefinition, LinkedEntity } from './linked'
 import * as linked from './linked'
 import * as csn from './csn'
@@ -101,6 +101,10 @@ export class QueryAPI {
 
 }
 
+type PropertiesOf<T> = {
+  [K in keyof T]?: T[K];
+};
+
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -168,6 +172,14 @@ export class Service extends QueryAPI {
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-emit-event)
    */
   emit: {
+    // we can only give very little guidance as to code completion here.
+    // Users will receive suggestions/ code completion for the property names of P.
+    // But they will see no complaints for when they pass a non-existing property or use the wrong type for it.
+    // That is because classes still fulfill {name:string}, so they can be used for the overload where event of type types.event,
+    // which allows for any object as data.
+    <P extends Constructable, R>(event: P, data: PropertiesOf<InstanceType<P>>, headers?: object): Promise<R>,
+    <P extends ArrayConstructable, R>(event: P, data: PropertiesOf<SingularInstanceType<P>>, headers?: object): Promise<R>,
+    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
     <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
   }

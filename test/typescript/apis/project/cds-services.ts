@@ -448,3 +448,10 @@ function externalActionHandler(req: ActionType['parameters']['req']): ActionType
 }
 
 testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
+
+
+const msg = await cds.connect.to('CatalogService');
+// no negative tests, see comment in types for emit
+msg.emit(Foo, { x: 11 })
+msg.emit(Foos, { x: 11, bar: '22' })
+msg.emit(Foos, { x: 11 })
