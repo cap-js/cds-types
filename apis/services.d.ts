@@ -277,7 +277,15 @@ export class Service extends QueryAPI {
 
 }
 
-export class ApplicationService extends Service {}
+export class ApplicationService extends Service {
+  new<T extends Constructable>(draft: T, data: {[K in keyof InstanceType<T>]?: InstanceType<T>[K]}): Promise<unknown>
+  new<T extends Constructable>(draft: T): {
+    for(keys: Key[]): Promise<unknown>,
+  }
+  discard(draft: Constructable, keys: Key[]): Promise<unknown>
+  edit(draft: Constructable, keys: Key[]): Promise<unknown>
+  save(draft: Constructable, keys: Key[]): Promise<unknown>
+}
 export class MessagingService extends Service {}
 export class RemoteService extends Service {}
 export class DatabaseService extends Service {
