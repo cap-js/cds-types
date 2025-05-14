@@ -10,8 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Syntactically allow infix filters in `SELECT` clauses through tagged templates. These filters are not semantically checked for validity
 - Added `cds.linked.LinkedDefinition` as alias for `cds.linked.classes.any_`
 - Added `doc?: string` to `cds.linked.classes.any_`
+- Add overload for `Service.emit` to offer improved type support when using an event type emitted by cds-typer.
 
 ### Changed
+- [breaking] Corrected the way the default export is generated. This also gets rid of the export `default_2` that was mistakenly exposed before.
 - Renamed `CQN` property `INSERT.as` to `INSERT.from`
 
 ### Deprecated

@@ -388,11 +388,11 @@ cds.on('bootstrap', (app): void => {
 
 // cds.context.http
 if (cds.context?.http) {
-  const { req , res } = cds.context.http
+  const { req , res } = cds.context!.http
   if (!req.headers.authentication)
     res.status(403).send('Please login')
   if (!req.is('application/json')) res.send(415)
-  req.headers['x-correlation-id'] = cds.context.id
+  req.headers['x-correlation-id'] = cds.context!.id
 }
 const req3 = cds.context?.http?.req
 
@@ -406,7 +406,7 @@ if (myUser instanceof cds.User) {
 cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date(), model: ctx!.model }
 const tx3 = cds.tx (cds.context)
 const db = await cds.connect.to('db')
-cds.context.features = {foo: true}
+cds.context!.features = {foo: true}
 
 cds.tx({tenant: 'myTenant'}, async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
   await tx.run('').then(() => {}, () => {})
@@ -448,3 +448,10 @@ function externalActionHandler(req: ActionType['parameters']['req']): ActionType
 }
 
 testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
+
+
+const msg = await cds.connect.to('CatalogService');
+// no negative tests, see comment in types for emit
+msg.emit(Foo, { x: 11 })
+msg.emit(Foos, { x: 11, bar: '22' })
+msg.emit(Foos, { x: 11 })
