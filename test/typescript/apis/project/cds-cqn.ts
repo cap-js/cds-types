@@ -43,7 +43,7 @@ res = iqn.INSERT.columns
 res = iqn.INSERT.values
 res = iqn.INSERT.rows
 res = iqn.INSERT.entries
-res = iqn.INSERT.as.SELECT
+res = iqn.INSERT.from.SELECT
 
 const uqn: cds.UPDATE = undefined as unknown as cds.UPDATE
 res = uqn.UPDATE.data['foo']
