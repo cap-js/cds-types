@@ -170,7 +170,11 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
-  req.reject(1, 'msg', 'target', [])
+  const thing: number | undefined = 42 as number | undefined
+  if(thing === undefined)
+    req.reject(1, 'msg', 'target', [])
+  thing.toExponential()
+
   req.error({ code: 'code', status: 404, message: 'message', args: [3,4] })
 
   req.id
