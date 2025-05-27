@@ -1,4 +1,4 @@
-import cds, { Service, Request, HandlerFunction } from '@sap/cds'
+import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
 import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -461,3 +461,12 @@ const msg = await cds.connect.to('CatalogService');
 msg.emit(Foo, { x: 11 })
 msg.emit(Foos, { x: 11, bar: '22' })
 msg.emit(Foos, { x: 11 })
+
+const asrv = srv as ApplicationService
+await asrv.new(Foo.drafts, {x: 42})
+// @ts-expect-error y not a valid property
+await asrv.new(Foo.drafts, {y: 42})
+await asrv.discard(Foo.drafts, [1,2])
+await asrv.edit(Foo, [1,2])
+await asrv.new(Foo.drafts).for([1,2])
+await asrv.save(Foo.drafts, [1,2])
