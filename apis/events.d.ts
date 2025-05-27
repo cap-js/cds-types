@@ -79,7 +79,7 @@ export class Request<T = any> extends Event<T> {
 
   error (code: number, message: string, target?: string, args?: any[]): Error
 
-  reject (code: number, message: string, target?: string, args?: any[]): Error
+  reject (code: number, message: string, target?: string, args?: any[]): never
 
   notify (code: number, message: string, args?: any[]): Error
 
@@ -89,7 +89,7 @@ export class Request<T = any> extends Event<T> {
 
   error (code: number, message: string, args?: any[]): Error
 
-  reject (code: number, message: string, args?: any[]): Error
+  reject (code: number, message: string, args?: any[]): never
 
   notify (message: string, target?: string, args?: any[]): Error
 
@@ -99,7 +99,7 @@ export class Request<T = any> extends Event<T> {
 
   error (message: string, target?: string, args?: any[]): Error
 
-  reject (message: string, target?: string, args?: any[]): Error
+  reject (message: string, target?: string, args?: any[]): never
 
   notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
 
@@ -109,7 +109,7 @@ export class Request<T = any> extends Event<T> {
 
   error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
 
-  reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+  reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): never
 
 }
 
