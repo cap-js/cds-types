@@ -171,8 +171,9 @@ srv.before('*', async req => {
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
   const thing: number | undefined = 42 as number | undefined
-  if(thing === undefined)
-    req.reject(1, 'msg', 'target', [])
+  // @ts-expect-error  possibly undefined - goes away after req.reject
+  thing.toExponential()
+  if(!thing) req.reject(1, 'msg', 'target', [])
   thing.toExponential()
 
   req.error({ code: 'code', status: 404, message: 'message', args: [3,4] })
@@ -459,3 +460,10 @@ const msg = await cds.connect.to('CatalogService');
 msg.emit(Foo, { x: 11 })
 msg.emit(Foos, { x: 11, bar: '22' })
 msg.emit(Foos, { x: 11 })
+
+const anything: undefined | number = 42 as undefined | number
+if (!anything) {
+    new Request({event: ''}).reject(2,'')  
+}
+// @ts-expect-error - ts SHOULD infer anything to not be undefined. But for some reason, having a _method_ of :never behaves differently than just a function
+anything.toExponential()  // anything now known to not be undefined
