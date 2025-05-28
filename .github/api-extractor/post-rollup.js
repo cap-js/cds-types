@@ -80,7 +80,10 @@ function replaceImports (src) {
   return lines.join('\n')
 }
 
-;(async () => {
+/**
+ * @param {Awaited<ReturnType<import('./pre-rollup').pre>>} [preResults]
+ */
+async function post (preResults) {
   const rollupFile = './dist/cds-types.d.ts'
   let rollup = (await readFile(rollupFile)).toString()
 
@@ -104,8 +107,16 @@ function replaceImports (src) {
   // put all exports into an augmented module declaration. Remove all "declare" modifiers
   // as they will now already be in an ambient context
   rollup = rollup.replaceAll('declare ','')
+  rollup = 'export * from "@sap/cds-dk";\n' + rollup  // add cds-dk back in we had to remove in pre()
   rollup = `declare module '@sap/cds' {\n${rollup}\n}`
 
   await writeFile(rollupFile, rollup)
 
-})()
+  if (preResults) {
+    for (const { file, originalContent } of preResults.changesToRevert) {
+      await writeFile(file, originalContent)
+    }
+  }
+}
+
+module.exports = { post }
