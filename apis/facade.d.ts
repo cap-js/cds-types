@@ -45,3 +45,6 @@ export const cli: {
 
 import { env } from './env'
 export const requires: env.Requires
+
+// these only contribute types if the user has cds-dk installed
+export * from '@sap/cds-dk'
