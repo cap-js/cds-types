@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Add overload for `Service.emit` to offer improved type support when using an event type emitted by cds-typer.
 
 ### Changed
+- [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`
 - [breaking] Corrected the way the default export is generated. This also gets rid of the export `default_2` that was mistakenly exposed before.
 - `Request.reject(…)` now returns `never` instead of `Error`, as its implementation always throws.
 
