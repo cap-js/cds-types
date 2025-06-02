@@ -170,7 +170,13 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
-  req.reject(1, 'msg', 'target', [])
+  const thing: number | undefined = 42 as number | undefined
+  // @ts-expect-error  possibly undefined - goes away after req.reject
+  thing.toExponential()
+  if(!thing) req.reject(1, 'msg', 'target', [])
+  // @ts-expect-error - ts SHOULD infer anything to not be undefined. But for some reason, having a _method_ of :never behaves differently than just a function
+  thing.toExponential()
+
   req.error({ code: 'code', status: 404, message: 'message', args: [3,4] })
 
   req.id
