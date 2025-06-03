@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added `cds.linked.LinkedDefinition` as alias for `cds.linked.classes.any_`
 - Added `doc?: string` to `cds.linked.classes.any_`
 - Add overload for `Service.emit` to offer improved type support when using an event type emitted by cds-typer.
+- Optional parameter 'options' in `req.reply`. The object can contain, for example, mimetype and/or filename.
 
 ### Changed
 - [breaking] Corrected the way the default export is generated. This also gets rid of the export `default_2` that was mistakenly exposed before.
