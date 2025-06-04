@@ -69,7 +69,9 @@ export class Request<T = any> extends Event<T> {
 
   subject: ref
 
-  reply (results: any, /** @beta */ options?: object): void
+  reply (results: any): void
+  /** @beta */
+  reply (results: any, options: object): void
 
   notify (code: number, message: string, target?: string, args?: any[]): Error
 
