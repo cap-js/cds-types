@@ -1,12 +1,14 @@
 import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
-import { Awaitable } from './ql'
-import { ArrayConstructable, Constructable, Unwrap } from './internal/inference'
+import { Awaitable } from './internal/query'
+import { ArrayConstructable, Constructable, SingularInstanceType, Unwrap } from './internal/inference'
 //import { ModelPart, CSN, LinkedDefinition, LinkedEntity } from './linked'
 import * as linked from './linked'
 import * as csn from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
 import { ReadableStream } from 'node:stream/web'
+import { _TODO } from './internal/util'
+import { ref } from './cqn'
 
 type Key = number | string | any
 
@@ -20,6 +22,7 @@ export class QueryAPI {
   read: {
     <T extends ArrayConstructable>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>,
     <T>(entity: linked.Definition | string, key?: Key): SELECT<T>,
+    (entity: ref, key?: Key): SELECT<unknown>,
   }
 
   /**
@@ -58,7 +61,7 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
   run: {
-    (query: ConstructedQuery | ConstructedQuery[]): Promise<ResultSet | any>,
+    (query: ConstructedQuery<_TODO> | ConstructedQuery<_TODO>[]): Promise<ResultSet | any>,
     (query: Query): Promise<ResultSet | any>,
     (query: string, args?: any[] | object): Promise<ResultSet | any>,
   }
@@ -97,6 +100,10 @@ export class QueryAPI {
   }
 
 }
+
+type PropertiesOf<T> = {
+  [K in keyof T]?: T[K];
+};
 
 /**
  * Class cds.Service
@@ -162,9 +169,17 @@ export class Service extends QueryAPI {
 
   /**
    * Constructs and emits an asynchronous event.
-   * @see [capire docs](https://cap.cloud.sap/docs/core-services#srv-emit-event)
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-emit-event)
    */
   emit: {
+    // we can only give very little guidance as to code completion here.
+    // Users will receive suggestions/ code completion for the property names of P.
+    // But they will see no complaints for when they pass a non-existing property or use the wrong type for it.
+    // That is because classes still fulfill {name:string}, so they can be used for the overload where event of type types.event,
+    // which allows for any object as data.
+    <P extends Constructable, R>(event: P, data: PropertiesOf<InstanceType<P>>, headers?: object): Promise<R>,
+    <P extends ArrayConstructable, R>(event: P, data: PropertiesOf<SingularInstanceType<P>>, headers?: object): Promise<R>,
+    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
     <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
   }
@@ -177,7 +192,7 @@ export class Service extends QueryAPI {
     <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>,
     <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { query: ConstructedQuery, data?: object, headers?: object }): Promise<T>,
+    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
   }
@@ -224,8 +239,8 @@ export class Service extends QueryAPI {
   // Provider API
   prepend (fn: ServiceImpl): this
 
-  on<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<Unwrap<T>>): this
-  on<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.On<InstanceType<T>>): this
+  on<T extends ArrayConstructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.On<Unwrap<T>>): this
+  on<T extends Constructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.On<InstanceType<T>>): this
   on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
   on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
   on (eve: types.event, entity: types.target, handler: OnEventHandler): this
@@ -238,8 +253,8 @@ export class Service extends QueryAPI {
   // onFailed (eve: types.Events, handler: types.EventHandler): this
   before<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
   before<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.Before<F['__parameters'], void | Error | F['__returns']>): this
-  before<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<Unwrap<T>>): this
-  before<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.Before<InstanceType<T>>): this
+  before<T extends ArrayConstructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.Before<Unwrap<T>>): this
+  before<T extends Constructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.Before<InstanceType<T>>): this
   before (eve: types.event, entity: types.target, handler: EventHandler): this
   before (eve: types.event, handler: EventHandler): this
 
@@ -248,11 +263,11 @@ export class Service extends QueryAPI {
   // (3) check if T is scalar -> use T directly
   // this streamlines that in _most_ cases, handlers will receive a single object.
   // _Except_ for after.read handlers (1), which will change its inflection based on T.
-  after<T extends ArrayConstructable>(event: 'READ', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
-  after<T extends ArrayConstructable>(event: 'each', entity: T, handler: CRUDEventHandler.After<Unwrap<T>>): this
-  after<T extends Constructable>(event: 'READ' | 'each', entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
-  after<T extends ArrayConstructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<Unwrap<T>>): this
-  after<T extends Constructable>(eve: types.event, entity: T, handler: CRUDEventHandler.After<InstanceType<T>>): this
+  after<T extends ArrayConstructable>(event: 'READ', entity: T | T[], handler: CRUDEventHandler.After<InstanceType<T>>): this
+  after<T extends ArrayConstructable>(event: 'each', entity: T | T[], handler: CRUDEventHandler.After<Unwrap<T>>): this
+  after<T extends Constructable>(event: 'READ' | 'each', entity: T | T[], handler: CRUDEventHandler.After<InstanceType<T>>): this
+  after<T extends ArrayConstructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.After<Unwrap<T>>): this
+  after<T extends Constructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.After<InstanceType<T>>): this
   after<F extends CdsFunction>(boundAction: F, service: string, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
   after<F extends CdsFunction>(unboundAction: F, handler: CRUDEventHandler.After<F['__parameters'], void | Error | F['__returns']>): this
   after (eve: types.event, entity: types.target, handler: ResultsHandler): this
@@ -262,7 +277,15 @@ export class Service extends QueryAPI {
 
 }
 
-export class ApplicationService extends Service {}
+export class ApplicationService extends Service {
+  new<T extends Constructable>(draft: T, data: {[K in keyof InstanceType<T>]?: InstanceType<T>[K]}): Promise<unknown>
+  new<T extends Constructable>(draft: T): {
+    for(keys: Key[]): Promise<unknown>,
+  }
+  discard(draft: Constructable, keys: Key[]): Promise<unknown>
+  edit(draft: Constructable, keys: Key[]): Promise<unknown>
+  save(draft: Constructable, keys: Key[]): Promise<unknown>
+}
 export class MessagingService extends Service {}
 export class RemoteService extends Service {}
 export class DatabaseService extends Service {
@@ -344,19 +367,48 @@ type OneOrMany<T> = T | T[]
 // parameters and return type, as their names are not accessible from
 // function signatures to the type system.
 // This meta information is required in .on action handlers.
+/**
+ * @beta helper
+ */
 type CdsFunction = {
   (...args: any[]): any,
   __parameters: object,
   __returns: any,
 }
 
-type TypedRequest<T> = Omit<Request, 'data'> & { data: T }
+// extracts all CdsFunction properties from T
+/**
+ * @beta helper
+ */
+type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : never }[keyof T]>
+
+/**
+ * Types herein can be used to type handler functions that are not declared in line:
+ * @example
+ * ```ts
+ * import { myAction } from '#cds-models/myService'
+ * 
+ * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
+ *   ...
+ * }
+ * 
+ * srv.on(myAction, onMyFunction)
+ * ```
+ */
+export type HandlerFunction<F extends CdsFunction> = {
+  parameters: {
+    /** @beta helper */
+    req: Request<F['__parameters']>,
+  },
+  /** @beta helper */
+  returns: F['__returns'],
+}
 
 // https://cap.cloud.sap/docs/node.js/core-services#srv-on-before-after
 declare namespace CRUDEventHandler {
-  type Before<P, R = P | void | Error> = (req: TypedRequest<P>) => Promise<R> | R
-  type On<P, R = P | void | Error> = (req: TypedRequest<P>, next: (...args: any[]) => Promise<R> | R) => Promise<R> | R
-  type After<P, R = P | void | Error> = (data: undefined | P, req: TypedRequest<P>) => Promise<R> | R
+  type Before<P, R = P | void | Error> = (req: Request<P>) => Promise<R> | R
+  type On<P, R = P | void | Error> = (req: Request<P>, next: (...args: any[]) => Promise<R> | R) => Promise<R> | R
+  type After<P, R = P | void | Error> = (data: undefined | P, req: Request<P>) => Promise<R> | R
 }
 
 // Handlers for actions try to infer the passed .data property

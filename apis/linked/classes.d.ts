@@ -54,7 +54,10 @@ declare class aspect<K extends kinds = 'aspect'> extends type<K> implements With
   elements: Definitions<type<'type'>>
 }
 declare interface type extends Omit<csn.type, 'items'> {
-  items: type
+  items?: type
+  key?: boolean
+  notNull?: boolean
+  virtual?: boolean
 }
 declare class type<K extends kinds = 'type'> extends any_<K> { }
 
@@ -79,7 +82,10 @@ declare class Int32 extends Integer { }
 declare class Int64 extends Integer { }
 declare class Float extends number { }
 declare class Double extends Float { }
-declare class Decimal extends Float { }
+declare class Decimal extends Float { 
+  precision?: number
+  scale?: number
+}
 
 declare class date extends scalar { }
 declare class Date extends date { }
@@ -98,6 +104,12 @@ declare class struct<K extends kinds = 'elements' | 'type'> extends type<K> impl
 
   elements: Definitions<type<'type'>>
 }
+
+/**
+ * @since 8.6.0
+ */
+declare interface Map extends csn.Map {}
+declare class Map {}
 
 // clashes with services.context when exported from facade
 declare interface context_ extends csn.context {}

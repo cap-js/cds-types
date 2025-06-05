@@ -6,11 +6,19 @@
 export class Foo {
     static readonly drafts: typeof Foo
     x: number = 42
+    y?: string
     ref?: Foo
     refs?: Foo[]
   }
 
 export class Foos extends Array<Foo> { static readonly drafts: typeof Foo }
+
+export class Bar {
+  static readonly drafts: typeof Bar
+  name: string = "bar"
+}
+
+export class Bars extends Array<Bar> { static readonly drafts: typeof Foo }
 
 
 // for bound/ unbound actions
@@ -28,3 +36,6 @@ export const attach = <T>(x?: T): T => x as T
 
 // wrapper to get rid of all the "undefined as unknown as Foo"
 export const as = <T>() => undefined as unknown as T
+
+// test utility to replace "const x: T = foo()" with "testType<T>(foo())"
+export const testType = <T>(x: T) => {}

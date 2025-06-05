@@ -1,4 +1,4 @@
-import { Definition } from './linked'
+import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
@@ -25,25 +25,31 @@ export class EventContext {
 
   features?: { [key: string]: boolean }
 
+  model: LinkedCSN
+
 }
 
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
-export class Event extends EventContext {
+export class Event<T = unknown> extends EventContext {
 
   event: string
 
-  data: any
+  data: T
 
   headers: any
+
+  before(phase: 'commit', handler: () => void)
+
+  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void)
 
 }
 
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
-export class Request extends Event {
+export class Request<T = any> extends Event<T> {
 
   params: (string | object)[]
 
@@ -73,7 +79,7 @@ export class Request extends Event {
 
   error (code: number, message: string, target?: string, args?: any[]): Error
 
-  reject (code: number, message: string, target?: string, args?: any[]): Error
+  reject (code: number, message: string, target?: string, args?: any[]): never
 
   notify (code: number, message: string, args?: any[]): Error
 
@@ -83,7 +89,7 @@ export class Request extends Event {
 
   error (code: number, message: string, args?: any[]): Error
 
-  reject (code: number, message: string, args?: any[]): Error
+  reject (code: number, message: string, args?: any[]): never
 
   notify (message: string, target?: string, args?: any[]): Error
 
@@ -93,7 +99,7 @@ export class Request extends Event {
 
   error (message: string, target?: string, args?: any[]): Error
 
-  reject (message: string, target?: string, args?: any[]): Error
+  reject (message: string, target?: string, args?: any[]): never
 
   notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
 
@@ -103,7 +109,7 @@ export class Request extends Event {
 
   error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
 
-  reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+  reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): never
 
 }
 
@@ -131,9 +137,28 @@ export class User {
 
   roles: Array<string> | Record<string, string>
 
+  static Anonymous: typeof Anonymous
+
+  static anonymous: Anonymous
+
   static Privileged: typeof Privileged
 
+  static privileged: Privileged
+
+  static default: User
+
   is (role: string): boolean
+
+}
+
+/**
+ * Subclass representing unauthenticated users.
+ */
+declare class Anonymous extends User {
+
+  constructor ()
+
+  is (): boolean
 
 }
 

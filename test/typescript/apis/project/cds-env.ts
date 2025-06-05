@@ -9,6 +9,11 @@ env.folders.foo = ''
 env.build = ''
 env.hana = ''
 
+env.log.levels['cli'] === 'debug'
+env.log.cls_custom_fields.length
+env.log.als_custom_fields['query'] === 0
+Object.keys(env.log.als_custom_fields)
+
 env.requires.auth.kind = ''
 env.requires.auth.credentials!.url = ''
 env.requires.auth.credentials!.clientid = ''
@@ -30,6 +35,9 @@ env.requires['cds.xt.SmsProvisioningService'] = { kind: 'subscription-manager', 
 env.requires['cds.xt.ExtensibilityService'] = { model: '@sap/cds-mtxs/srv/extensibility-service' }
 env.requires['cds.xt.ModelProviderService'] = { model: '@sap/cds-mtxs/srv/model-provider', _in_sidecar: true, root: '../..' }
 env.requires['cds.xt.DeploymentService'] = { model: '@sap/cds-mtxs/srv/deployment-service' }
+
+env.profiles.includes("development")
+env.profiles.length > 2
 
 env.requires.multitenancy = { kind: 'shared', jobs: { clusterSize:1, workerSize:1, t0:'', foo:'' }}
 env.requires.messaging = { kind: '', format: '', foo: '' }

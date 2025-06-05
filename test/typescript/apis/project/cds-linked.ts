@@ -3,7 +3,7 @@ import cds from '@sap/cds';
 import { csn } from '../../../..';
 import { as } from './dummy';
 
-const { action, aspect, entity, event, mixin, scalar, struct, type } = cds.linked.classes
+const { action, aspect, entity, event, mixin, scalar, struct, type, Decimal, String, Map } = cds.linked.classes
 
 // is exported from top level
 as<LinkedCSN>() === as<cds.linked.LinkedCSN>()
@@ -47,7 +47,7 @@ new entity().texts?.kind === 'entity'
 new entity().drafts?.kind === 'entity'
 new entity().is_entity === true
 new entity().is_struct === true;
-[...new entity().elements].find(x => x.items.kind === 'type')
+[...new entity().elements].find(x => x.items && x.items.kind === 'type')
 new entity().items?.kind
 new entity().name
 // @ts-expect-error
@@ -73,6 +73,9 @@ new scalar().kind === 'scalar_'
 new type().kind === 'type'
 // @ts-expect-error
 new type().kind === 'type_'
+new type().key
+new type().virtual
+new type().notNull
 
 new event().elements
 new event().kind === 'event'
@@ -82,6 +85,17 @@ new event().kind === 'event_'
 new action().kind === 'action'
 // @ts-expect-error
 new action().kind === 'action_'
+
+new Decimal().precision
+new Decimal().scale
+
+new String().length
+
+const never: never = new Map().elements.xyz
+new Map().elements
+// @ts-expect-error
+new Map().items
+
 
 mixin(class {}, class {})
 // @ts-expect-error
@@ -104,3 +118,10 @@ cds.linked.classes.Association === cds.linked.classes.event
 
 // but make sure we can still call .linked(CSN)
 const ln: LinkedCSN = cds.linked({})
+
+const ln2: LinkedCSN | undefined = cds.context?.model
+
+cds.minify({})
+
+// cds.linked.classes.any compatible with its alias cds.linked.LinkedDefinition
+;((_: cds.linked.LinkedDefinition)=>{})(cds.linked({}).definitions[0])

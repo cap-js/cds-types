@@ -1,5 +1,5 @@
-import cds, { Service, TypedRequest } from '@sap/cds'
-import { Foo, Foos, action } from './dummy'
+import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
+import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
@@ -31,6 +31,15 @@ srv.operations('namespace')
 
 await srv.init()
 
+srv.before("READ", "", async req => {
+  req
+    ?.query
+    ?.SELECT
+    ?.orderBy
+    ?.[0]
+    ?.ref  // should be there from expr
+})
+
 cds.serve('SomeService')
 cds.serve('SomeService', {})
 cds.serve('SomeService', { service: '*' })
@@ -50,6 +59,8 @@ await srv.delete(Books)
 await srv.delete(Books, 'ID')
 await srv.delete(Books).where({ id: 123 })
 await srv.upsert({}).into(Books)
+await srv.read({} as unknown as cds.ref)
+await srv.read({} as unknown as cds.ref, 42)
 
 await cds.read(Books, 'ID')
 await cds.create(Books)
@@ -60,6 +71,8 @@ await cds.update(Books, 'ID')
 await cds.delete(Books)
 await cds.delete(Books, 'ID')
 await cds.delete(Books).where({ id: 123 })
+await cds.read({} as unknown as cds.ref)
+await cds.read({} as unknown as cds.ref, 42)
 // GAP: has to be added in runtime, then types, then re-enable this test
 // await cds.upsert({}).into(Books)
 
@@ -76,15 +89,15 @@ const up: UPSERT<Foos> = await srv.upsert(Foos)
 const d: DELETE<Foos> = await srv.delete(Foos)
 
 // queries
-const query = INSERT.into({}, { ID: 111, name: 'Mark Twain' })
+const query = INSERT.into("Authors", { ID: 111, name: 'Mark Twain' })
 await srv.run(query)
 await srv.run([query, query])
 await srv.run('SELECT * from Authors where name like ?', ['%Poe%'])
 await srv.run('SELECT * from Authors where name like :name', { name: '%Poe%' })
 
-srv.foreach({ SELECT: { from: { ref: ['Foo'] } } }, () => {})
+srv.foreach({ SELECT: { from: { ref: ['Foo'] } }, elements: {} }, () => {})
 
-await srv.stream({ SELECT: { from: { ref: ['Foo'] } } })
+await srv.stream({ SELECT: { from: { ref: ['Foo'] } }, elements: {} })
 srv.stream('data').from('T').where({ ID: 1 }).getReader
 
 await srv.emit('UPDATE', {}, {})
@@ -143,6 +156,8 @@ srv.before('*', Books, req => {
   if (req.query.SELECT?.columns?.length ?? 0 > 0) {
     console.log("foooooooo")
   }
+
+  req.query.elements['foo'].type
 })
 srv.before('*', async req => {
   req.event
@@ -155,7 +170,13 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
-  req.reject(1, 'msg', 'target', [])
+  const thing: number | undefined = 42 as number | undefined
+  // @ts-expect-error  possibly undefined - goes away after req.reject
+  thing.toExponential()
+  if(!thing) req.reject(1, 'msg', 'target', [])
+  // @ts-expect-error - ts SHOULD infer anything to not be undefined. But for some reason, having a _method_ of :never behaves differently than just a function
+  thing.toExponential()
+
   req.error({ code: 'code', status: 404, message: 'message', args: [3,4] })
 
   req.id
@@ -176,6 +197,15 @@ srv.after('UPDATE', Books, (results, req) => {
   results[0]
 })
 
+srv.on("action1", req => {
+  UPDATE(req.subject).with({ x: "a" })
+  UPDATE(req.subject).with({ x: { "=": 4 } })
+  UPDATE(req.subject).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
+  UPDATE(req.target).with({ x: 4 })
+  UPDATE(req.target).with({ x: { "=": 4 } })
+  UPDATE(req.target).with({ x: { xpr: [{ ref: ["asdf"] }, "||", "asdf"] } })
+})
+
 srv.on('CREATE', (req, next) => {
   req.data
   next()
@@ -192,8 +222,29 @@ srv.on('error', (err, req) => {
 })
 
 
-function isOne(p: TypedRequest<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
-function isMany(p: TypedRequest<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
+function isOne(p: Request<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
+function isMany(p: Request<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
+
+function isOneOfMany(p: Request<Foo | Bar> | Foo | Bar | undefined ) { 
+  if(!p) return;
+  if ("data" in p) {
+    if (p.data instanceof Foo) p.data.x.toFixed;
+    else p.data.name.split;
+  } else {
+    if (p instanceof Foo) p.x.toFixed;
+    else p.name.split;
+  }
+}
+function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) { 
+  if(!p) return;
+  if ("data" in p) {
+    if (p.data instanceof Foos) p.data[0].x.toFixed;
+    else p.data[0].name.split;
+  } else {
+    if (p instanceof Foos) p[0].x.toFixed;
+    else p[0].name.split;
+  }
+}
 
 // Typed bound/ unbound actions
 // The handler must return a number to be in line with action's signature (or void)
@@ -207,17 +258,33 @@ srv.before('CREATE', Foos, req => isOne(req))
 srv.after('CREATE', Foo, (data) => { isOne(data); return data })
 srv.after('CREATE', Foos, (data) => isOne(data))
 
+srv.on('CREATE', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('CREATE', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('CREATE', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('CREATE', [Foos, Bars], req => { isOneOfMany(req); return req.data })
+srv.after('CREATE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('CREATE', [Foos, Bars], (data) => { isOneOfMany(data); return data })
+
 // Handlers with classes. Singular and plural are to be reflected in what the handler receives
 srv.on('READ', Foo, (req, next) => { isOne(req); return next() })
 srv.on('READ', Foos, (req, next) => { isOne(req); return next() })
 srv.before('READ', Foo, req => { isOne(req); return req.data })
 srv.before('READ', Foos, req => isOne(req))
 srv.after('READ', Foo, (data) => { isOne(data); return data })
-srv.after("each", Foos, (data) => { isOne(data); return data })
 srv.after('READ', Foos, (data) => isMany(data))
 
-srv.after('EACH', Foo, (data) => { isOne(data); return data })
-srv.after('EACH', Foos, (data) => isOne(data))
+srv.after("each", Foos, (data) => { isOne(data); return data })
+srv.after("each", Foo, (data) => { isOne(data); return data })
+
+srv.on('READ', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('READ', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('READ', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('READ', [Foos, Bars], req => isOneOfMany(req))
+srv.after('READ', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('READ', [Foos, Bars], (data) => isManyOfMany(data))
+
+srv.after("each", [Foos, Bars], (data) => { isOneOfMany(data); return data })
+srv.after("each", [Foo, Bar], (data) => { isOneOfMany(data); return data })
 
 srv.on('UPDATE', Foo, (req, next) => { isOne(req); return next() })
 srv.on('UPDATE', Foos, (req, next) => { isOne(req); return next() })
@@ -226,12 +293,38 @@ srv.before('UPDATE', Foos, req => isOne(req))
 srv.after('UPDATE', Foo, (data) => { isOne(data); return data })
 srv.after('UPDATE', Foos, (data) => isOne(data))
 
+srv.on('UPDATE', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('UPDATE', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('UPDATE', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('UPDATE', [Foos, Bars], req => isOneOfMany(req))
+srv.after('UPDATE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('UPDATE', [Foos, Bars], (data) => isOneOfMany(data))
+
 srv.on('DELETE', Foo, (req, next) => { isOne(req); return next() })
 srv.on('DELETE', Foos, (req, next) => { isOne(req); return next() })
 srv.before('DELETE', Foo, req => { isOne(req); return req.data })
 srv.before('DELETE', Foos, req => isOne(req))
 srv.after('DELETE', Foo, (data) => { isOne(data); return data })
 srv.after('DELETE', Foos, (data) => isOne(data))
+
+srv.on('DELETE', [Foo, Bar], (req, next) => { isOneOfMany(req); return next() })
+srv.on('DELETE', [Foos, Bars], (req, next) => { isOneOfMany(req); return next() })
+srv.before('DELETE', [Foo, Bar], req => { isOneOfMany(req); return req.data })
+srv.before('DELETE', [Foos, Bars], req => isOneOfMany(req))
+srv.after('DELETE', [Foo, Bar], (data) => { isOneOfMany(data); return data })
+srv.after('DELETE', [Foos, Bars], (data) => isOneOfMany(data))
+
+srv.on('READ', Foo, req => {
+  req.before('commit', ()=>{})
+  // @ts-expect-error
+  req.before('anything else', ()=>{})
+  req.on('done', ()=>{})
+  req.on('failed', ()=>{})
+  req.on('succeeded', ()=>{})
+  // @ts-expect-error
+  req.on('anything else', ()=>{})
+})
+
 
 // unbound
 srv.before(action, (req) => {
@@ -301,11 +394,11 @@ cds.on('bootstrap', (app): void => {
 
 // cds.context.http
 if (cds.context?.http) {
-  const { req , res } = cds.context.http
+  const { req , res } = cds.context!.http
   if (!req.headers.authentication)
     res.status(403).send('Please login')
   if (!req.is('application/json')) res.send(415)
-  req.headers['x-correlation-id'] = cds.context.id
+  req.headers['x-correlation-id'] = cds.context!.id
 }
 const req3 = cds.context?.http?.req
 
@@ -316,10 +409,10 @@ if (myUser instanceof cds.User) {
   myUser.id === 'u2'
 }
 
-cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date() }
+cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date(), model: ctx!.model }
 const tx3 = cds.tx (cds.context)
 const db = await cds.connect.to('db')
-cds.context.features = {foo: true}
+cds.context!.features = {foo: true}
 
 cds.tx({tenant: 'myTenant'}, async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
   await tx.run('').then(() => {}, () => {})
@@ -352,3 +445,28 @@ srv.entities('namespace');
 
 // @ts-expect-error
 srv.entities('namespace')('and again')
+
+type ActionType = HandlerFunction<typeof action>
+srv.on(action, externalActionHandler)
+function externalActionHandler(req: ActionType['parameters']['req']): ActionType['returns'] {
+  testType<Foo>(req.data.foo)
+  return 42
+}
+
+testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
+
+
+const msg = await cds.connect.to('CatalogService');
+// no negative tests, see comment in types for emit
+msg.emit(Foo, { x: 11 })
+msg.emit(Foos, { x: 11, bar: '22' })
+msg.emit(Foos, { x: 11 })
+
+const asrv = srv as ApplicationService
+await asrv.new(Foo.drafts, {x: 42})
+// @ts-expect-error y not a valid property
+await asrv.new(Foo.drafts, {y: 42})
+await asrv.discard(Foo.drafts, [1,2])
+await asrv.edit(Foo, [1,2])
+await asrv.new(Foo.drafts).for([1,2])
+await asrv.save(Foo.drafts, [1,2])

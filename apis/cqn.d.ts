@@ -1,8 +1,11 @@
-import { entity } from './csn' // cyclic dependency
+import { Definition, entity } from './csn' // cyclic dependency
 import { UnionToIntersection, UnionsToIntersections } from './internal/inference'
 
 // FIXME: a union type would be more appropriate here
-export type Query = Partial<SELECT & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
+export type Query = { 
+  /** @since 7.4.0 */
+  elements: { [key: string]: Definition },
+} & Partial<SELECT & INSERT & UPDATE & DELETE & CREATE & DROP & UPSERT>
 
 export type SELECT = { SELECT: {
   distinct?: true,
@@ -12,10 +15,14 @@ export type SELECT = { SELECT: {
   columns?: column_expr[],
   excluding?: string[],
   where?: predicate,
-  having?: predicate,
   groupBy?: expr[],
+  having?: predicate,
   orderBy?: ordering_term[],
   limit?: { rows: val, offset: val },
+  forUpdate?: { wait: number },
+  forShareLock?: { wait: number },
+  search?: predicate,
+  count?: boolean,
 }, }
 
 export type INSERT = { INSERT: {
@@ -72,12 +79,26 @@ export type column_expr = UnionToIntersection<expr> & { as?: name, cast?: any, e
 export type predicate = UnionsToIntersections<_xpr>
 
 /** @private */
-type ordering_term = expr & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
+type ordering_term = UnionToIntersection<expr> & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
 
 export type expr = ref | val | xpr | function_call | SELECT
 
 /** @private */
-type ref = { ref: (name & { id?: string, where?: expr, args?: expr[] })[] }
+type ref = { ref: _segment[] }
+
+/** @private */
+type _segment = name | {
+  id?: string,
+  where?: _xpr,
+  args?: _named,
+  groupBy: expr[],
+  having: _xpr,
+  orderBy: ordering_term[],
+  limit: { rows: expr, offset: expr },
+}
+
+/** @private */
+type _named = { [key: name]: expr }
 
 /** @private */
 type val = { val: any }

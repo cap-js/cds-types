@@ -148,6 +148,9 @@ type __Composition = LinkedClasses.Composition
 export namespace linked {
   export type LinkedDefinitions = IterableMap<ln.classes.any_>
   export type LinkedCSN = ln.LinkedCSN
+  // synthetic class that is prominently featured in capire,
+  // but described as "accessible through cds.linked.classes.any"
+  export type LinkedDefinition = ln.classes.any_
 
   export namespace classes {
     export type type = __type
@@ -196,6 +199,12 @@ export namespace linked {
 }
 
 /**
+ * Minifies a given CSN model by removing all unused1 types and aspects, as well all entities tagged with `@cds.persistence.skip:'if-unused'`
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-compile#cds-minify)
+ */
+export function minify (model: csn.CSN): csn.CSN
+
+/**
  * Turns the given plain CSN model into a reflected model
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-reflect)
  */
@@ -213,6 +222,7 @@ export const compile: {
   for: {
     odata (model: csn.CSN, o?: _options): csn.CSN,
     sql (model: csn.CSN, o?: _options): csn.CSN,
+    nodejs (model: csn.CSN, o?: _options): linked.LinkedCSN,
   },
   to: {
     parsed: {

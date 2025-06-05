@@ -6,29 +6,41 @@ import { Application, RequestHandler } from 'express'
 import { XOR } from './internal/util'
 
 type _cds = typeof cds
-type cds_services = { [name: string]: Service }
+// interface instead of type so users can insert their actual Services via module augmentation
+interface cds_services {
+  [name: string]: Service
+}
 
 export const connect: {
 
   /**
 		 * Connects to a specific datasource.
-		 * @example cds.connect.to ('service')
+		 * @example await cds.connect.to ('service')
 		 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
 		 */
   to(datasource: string, options?: cds_connect_options): Promise<Service>,
 
   /**
 	 * Shortcut for 'db' as the primary database returning `cds.DatabaseService`
-	 * @example cds.connect.to ('db')
+	 * @example await cds.connect.to ('db')
 	*/
   to(datasource: 'db', options?: cds_connect_options): Promise<cds.DatabaseService>,
 
   /**
 	 * Connects to a specific datasource via a Service subclass
-	 * @example cds.connect.to (ServiceClass)
+	 * @example await cds.connect.to (ServiceClass)
 	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
 	 */
   to<S extends Service>(datasource: {new(): S}, options?: cds_connect_options): Promise<S>,
+
+  /**
+	 * Connects to a specific datasource via a Service class from cds-typer
+	 * @example
+	 *   import ServiceClass from '#cds-models/SomeService'
+	 *   await cds.connect.to (ServiceClass)
+	 * @see [capire](https://cap.cloud.sap/docs/node.js/cds-connect#cds-connect-to)
+	 */
+  to<S>(datasource: S, options?: cds_connect_options): Promise<cds.CdsFunctions<S> & Service>,
 
   /**
 		 * Connects to a specific datasource via options.
@@ -61,6 +73,7 @@ export const serve: (service: string, options?: {
   [key: string]: any,
 }) => Promise<cds_services> & cds_serve_fluent
 
+
 /**
 	 * Emitted whenever a model is loaded using cds.load().
 	 */
@@ -75,7 +88,7 @@ export function on (event: 'connect', listener: (srv: Service) => void): _cds
 
 
 /**
-	 * Emitted at the very beginning of the bootsrapping process, when the
+	 * Emitted at the very beginning of the bootstrapping process, when the
 	 * express application has been constructed but no middlewares or routes
 	 * added yet.
 	 */
@@ -154,14 +167,14 @@ interface cds_connect_options {
   impl?: string
   service?: string
   kind?: string
-  model?: string
+  model?: string | CSN
   credentials?: object
 }
 
-type Middleswares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
+type Middlewares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
-  add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middleswares }>, { before: Middleswares }>) => void,
+  add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middlewares }>, { before: Middlewares }>) => void,
 }
 
 /**
