@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added types for `util.path`, `util.fs`, and `util.inspect`.
 
 ### Changed
+- [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`
 - [breaking] Corrected the way the default export is generated. This also gets rid of the export `default_2` that was mistakenly exposed before.
 - `Request.reject(…)` now returns `never` instead of `Error`, as its implementation always throws.
 
