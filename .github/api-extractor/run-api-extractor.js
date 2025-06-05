@@ -35,6 +35,6 @@ if (extractorResult.succeeded) {
 
 ;(async () => {
   const preResults = await pre()
-  const exitCode = await runApiExtractor()
+  await runApiExtractor()
   await post(preResults)
 })()
