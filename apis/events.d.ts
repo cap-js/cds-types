@@ -71,7 +71,7 @@ export class Request<T = any> extends Event<T> {
 
   reply (results: any): void
   /** @beta */
-  reply (results: any, options: { mimetype?: string; filename?: string; [key: string]: any }): void
+  reply (results: any, options: { mimetype?: string, filename?: string, [key: string]: any }): void
 
   notify (code: number, message: string, target?: string, args?: any[]): Error
 
