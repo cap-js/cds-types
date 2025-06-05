@@ -31,7 +31,7 @@ export type INSERT = { INSERT: {
   columns: string[],
   values: primitive[],
   rows: primitive[][],
-  as: SELECT,
+  from: SELECT,
 }, }
 
 export type UPSERT = { UPSERT: {

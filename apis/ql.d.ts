@@ -187,10 +187,6 @@ export class INSERT<T> extends ConstructedQuery<T> {
     & (<T> (entity: Constructable<T>, ...entries: T[]) => INSERT<T>)
     & (<T> (entity: Constructable<T>, entries?: T[]) => INSERT<T>)
 
-  /**
-   * @deprected
-   */
-  as (select: SELECT<T>): this
   from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 
