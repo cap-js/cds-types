@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Added type export for types from cds-dk. These types are only available if `@sap/cds-dk` is also present in the project.
 ### Changed
 ### Deprecated
 ### Removed
