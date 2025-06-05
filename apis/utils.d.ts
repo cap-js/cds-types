@@ -1,4 +1,6 @@
 import type * as fs from 'node:fs'
+import type * as nodePath from 'node:path'
+import type * as nodeUtil from 'node:util'
 
 /**
  * Provides a set of utility functions
@@ -88,6 +90,21 @@ declare const utils: {
 	 */
   rm: (...path: string[]) => Promise<ReturnType<typeof fs.promises.rm>>,
 
+  /**
+   * Shortcut for require("fs")
+   */
+  fs: typeof fs,
+
+  /**
+   * Shortcut for require("path")
+   */
+  path: typeof nodePath,
+
+  /**
+   * Shortcut for require("util").inspect
+   */
+  inspect: typeof nodeUtil.inspect,
+                                                
   /**
    * @since 8.3.0
    * @see https://cap.cloud.sap/docs/node.js/cds-utils#colors

@@ -106,17 +106,6 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
   alias (as: string): this
   elements: EntityElements
 
-
-  // Not yet public
-  // fullJoin (other: string, as: string) : this
-  // leftJoin (other: string, as: string) : this
-  // 	rightJoin (other: string, as: string) : this
-  // 	innerJoin (other: string, as: string) : this
-  // 	join (other: string, as: string, kind?: string) : this
-  // on : TaggedTemplateQueryPart<this>
-  //   & ((...expr : string[]) => this)
-  //   & ((predicate:object) => this)
-
   SELECT: CQN.SELECT['SELECT'] & {
     forUpdate?: { wait: number },
     forShareLock?: { wait: number },
