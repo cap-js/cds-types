@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Added type export for types from cds-dk. These types are only available if `@sap/cds-dk` is also present in the project.
 ### Changed
+- [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`. This means starting with this version, `cds-types` is supposed to be used alongside `@sap/cds@9`!
 ### Deprecated
 ### Removed
 ### Fixed
@@ -25,7 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added types for `util.path`, `util.fs`, and `util.inspect`.
 
 ### Changed
-- [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`
 - [breaking] Corrected the way the default export is generated. This also gets rid of the export `default_2` that was mistakenly exposed before.
 - Renamed `CQN` property `INSERT.as` to `INSERT.from`
 - `Request.reject(…)` now returns `never` instead of `Error`, as its implementation always throws.
