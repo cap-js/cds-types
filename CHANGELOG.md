@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Optional parameter 'options' in `req.reply`. The object can contain, for example, mimetype and/or filename.
 ### Changed
 - [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`. This means starting with this version, `cds-types` is supposed to be used alongside `@sap/cds@9`!
+- `req.params` always returns an array of objects
 ### Deprecated
 ### Removed
 ### Fixed
