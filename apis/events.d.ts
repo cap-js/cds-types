@@ -51,7 +51,7 @@ export class Event<T = unknown> extends EventContext {
  */
 export class Request<T = any> extends Event<T> {
 
-  params: (string | object)[]
+  params: Record<string, any>[]
 
   method: string
 
