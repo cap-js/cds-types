@@ -96,27 +96,24 @@ export function on (event: 'bootstrap', listener: (app: Application) => void): _
 export function once (event: 'bootstrap', listener: (app: Application) => void): _cds
 
 /**
- 	 * Emitted before the model is compiled for usage in Node.js or Java runtime
+ 	 * Emitted before the model is compiled for usage in Node.js or Java runtime.
+      	 * @beta
  	 */
-@beta
 export function on (event: 'compile.for.runtime', listener: (model: CSN) => void): _cds
-@beta
 export function once (event: 'compile.for.runtime', listener: (model: CSN) => void): _cds
 
 /**
- 	 * Emitted before database-specific artifacts, i.e. SQL DDL scripts, are generated from the model
+ 	 * Emitted before database-specific artifacts, i.e. SQL DDL scripts, are generated from the model.
+   	 * @beta
  	 */
-@beta
 export function on (event: 'compile.to.dbx', listener: (model: CSN) => void): _cds
-@beta
 export function once (event: 'compile.to.dbx', listener: (model: CSN) => void): _cds
 
 /**
- 	 * Emitted immediately before the model is compiled to edmx
+ 	 * Emitted immediately before the model is compiled to edmx.
+      	 * @beta
  	 */
-@beta
 export function on (event: 'compile.to.edmx', listener: (model: CSN) => void): _cds
-@beta
 export function once (event: 'compile.to.edmx', listener: (model: CSN) => void): _cds
 
 /**
