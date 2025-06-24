@@ -28,6 +28,7 @@ import {
   InUpsert,
 } from './internal/query'
 import { _TODO } from './internal/util'
+import { Service } from './services'
 
 export type Query = CQN.Query
 
@@ -42,7 +43,7 @@ export class ConstructedQuery<T> {
   // that don't make explicit use of the generic. So `UPDATE<Books> !<: UPDATE<number>`
   declare private _: T
   then (_resolved: (x: any) => any, _rejected: (e: Error) => any): any
-
+  bind (service: Service): this
 }
 
 // all the functionality of an instance of SELECT, but directly callable:
@@ -104,17 +105,6 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
 
   alias (as: string): this
   elements: EntityElements
-
-
-  // Not yet public
-  // fullJoin (other: string, as: string) : this
-  // leftJoin (other: string, as: string) : this
-  // 	rightJoin (other: string, as: string) : this
-  // 	innerJoin (other: string, as: string) : this
-  // 	join (other: string, as: string, kind?: string) : this
-  // on : TaggedTemplateQueryPart<this>
-  //   & ((...expr : string[]) => this)
-  //   & ((predicate:object) => this)
 
   SELECT: CQN.SELECT['SELECT'] & {
     forUpdate?: { wait: number },
@@ -197,10 +187,6 @@ export class INSERT<T> extends ConstructedQuery<T> {
     & (<T> (entity: Constructable<T>, ...entries: T[]) => INSERT<T>)
     & (<T> (entity: Constructable<T>, entries?: T[]) => INSERT<T>)
 
-  /**
-   * @deprected
-   */
-  as (select: SELECT<T>): this
   from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 

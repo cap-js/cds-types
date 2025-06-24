@@ -61,6 +61,11 @@ export type kinds = 'aspect' | 'entity' | 'type' | 'event' | 'action' | 'functio
 
 export interface any_ {
   kind?: kinds
+  /**
+   * only available when compiled with docs:true
+   * @see [capire docs](https://cap.cloud.sap/docs/cds/cdl#comments)
+   */
+  doc?: string
 }
 export interface context extends any_ { }
 export interface service extends any_ { }

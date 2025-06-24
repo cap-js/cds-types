@@ -2,6 +2,7 @@ import { Definition } from '../../../../apis/csn';
 import { QLExtensions } from '../../../../apis/ql'
 import { linked } from '../../../../apis/models';
 import { Foo, Foos, attach } from './dummy'
+import { connect } from '../../../../apis/server';
 
 // @ts-expect-error - only supposed to be used statically, constructors private
 new SELECT;
@@ -98,7 +99,7 @@ ins.into(Foos)
 ins.into(Foos)
 ins.columns("x") // x was suggested by code completion
 ins.INSERT.into === "foo"
-INSERT.into("Bla").as(SELECT.from("Foo"))
+INSERT.into("Bla").from(SELECT.from("Foo"))
 
 let upd: UPDATE<Foo>
 upd = UPDATE(Foo, 42)
@@ -356,3 +357,13 @@ UPDATE(Foos).with({x: {xpr: [{funcs: ""}]}})
 UPDATE.entity("Foos").set({ test: {xp: "4"} });
 UPDATE.entity({} as linked.classes.entity).set({ asdf: 434 });
 UPDATE`Foos`.set`x = 4`.where`x > 10`
+
+const dummyServer = await connect.to('service')
+
+const boundSelect: SELECT<any> = SELECT.from(Foo).bind(dummyServer)
+const boundUpdate: UPDATE<any> = UPDATE.entity("Foos").bind(dummyServer)
+const boundDelete: DELETE<any> = DELETE.from("Foos").bind(dummyServer)
+
+// infix filters for both 1:1 and 1:n associations
+SELECT.from(Foo, f => f`[foo='Bar']`(b => b.x))
+SELECT.from(Foo, f => f.refs`[foo='Bar']`(b => b.x))

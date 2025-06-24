@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.9.0",
+  "version": "0.11.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -29,7 +29,7 @@
     "test": "npm run test:setup && npm run test:rollup-on",
     "test:rollup-on": "npm run rollup && npm run rollup:on && npm run test:all --silent",
     "test:rollup-off": "npm run rollup:off && npm run test:all --silent",
-    "rollup": "rm -rf dist/ && mkdir -p etc/ && npx -y @microsoft/api-extractor run --local --verbose && .github/rollup-patch.js",
+    "rollup": "rm -rf dist/ && mkdir -p etc/ && .github/api-extractor/run-api-extractor.js",
     "rollup:on": "npm pkg set typings=dist/cds-types.d.ts && [ -d 'apis' ] && mv -- apis -apis || true",
     "rollup:off": "npm pkg set typings=apis/cds.d.ts  && [ -d '-apis' ] && mv -- -apis apis || true",
     "lint": "npx eslint .",
@@ -40,17 +40,18 @@
     "dependencies": "node ./scripts/postinstall.js"
   },
   "peerDependencies": {
-    "@sap/cds": "^8.0.0",
+    "@sap/cds": ">=9.0.0",
+    "@sap/cds-dk": "^9",
     "@types/express": ">=4"
   },
   "devDependencies": {
-    "@sap/cds": ">=8.0.0",
+    "@cap-js/cds-test": "^0",
+    "@microsoft/api-extractor": "^7.52.8",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
     "axios": "^1.6.2",
     "eslint": "^9.2.0",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^8.0.0-alpha.51",
-    "chai": "^4.3.10"
+    "typescript-eslint": "^8.0.0-alpha.51"
   }
 }

@@ -1,4 +1,4 @@
-import cds, { Service, Request, HandlerFunction } from '@sap/cds'
+import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
 import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -173,7 +173,13 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
-  req.reject(1, 'msg', 'target', [])
+  const thing: number | undefined = 42 as number | undefined
+  // @ts-expect-error  possibly undefined - goes away after req.reject
+  thing.toExponential()
+  if(!thing) req.reject(1, 'msg', 'target', [])
+  // @ts-expect-error - ts SHOULD infer anything to not be undefined. But for some reason, having a _method_ of :never behaves differently than just a function
+  thing.toExponential()
+
   req.error({ code: 'code', status: 404, message: 'message', args: [3,4] })
 
   req.id
@@ -391,11 +397,11 @@ cds.on('bootstrap', (app): void => {
 
 // cds.context.http
 if (cds.context?.http) {
-  const { req , res } = cds.context.http
+  const { req , res } = cds.context!.http
   if (!req.headers.authentication)
     res.status(403).send('Please login')
   if (!req.is('application/json')) res.send(415)
-  req.headers['x-correlation-id'] = cds.context.id
+  req.headers['x-correlation-id'] = cds.context!.id
 }
 const req3 = cds.context?.http?.req
 
@@ -409,7 +415,7 @@ if (myUser instanceof cds.User) {
 cds.context = { tenant:'t1', user: new cds.User('u2'), locale: 'en_GB', id: 'aaaa', timestamp: new Date(), model: ctx!.model }
 const tx3 = cds.tx (cds.context)
 const db = await cds.connect.to('db')
-cds.context.features = {foo: true}
+cds.context!.features = {foo: true}
 
 cds.tx({tenant: 'myTenant'}, async (tx) => { // tx has to be infered from the type defintion to be a Transaction type
   await tx.run('').then(() => {}, () => {})
@@ -451,3 +457,19 @@ function externalActionHandler(req: ActionType['parameters']['req']): ActionType
 }
 
 testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
+
+
+const msg = await cds.connect.to('CatalogService');
+// no negative tests, see comment in types for emit
+msg.emit(Foo, { x: 11 })
+msg.emit(Foos, { x: 11, bar: '22' })
+msg.emit(Foos, { x: 11 })
+
+const asrv = srv as ApplicationService
+await asrv.new(Foo.drafts, {x: 42})
+// @ts-expect-error y not a valid property
+await asrv.new(Foo.drafts, {y: 42})
+await asrv.discard(Foo.drafts, [1,2])
+await asrv.edit(Foo, [1,2])
+await asrv.new(Foo.drafts).for([1,2])
+await asrv.save(Foo.drafts, [1,2])

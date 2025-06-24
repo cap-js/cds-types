@@ -122,3 +122,6 @@ const ln: LinkedCSN = cds.linked({})
 const ln2: LinkedCSN | undefined = cds.context?.model
 
 cds.minify({})
+
+// cds.linked.classes.any compatible with its alias cds.linked.LinkedDefinition
+;((_: cds.linked.LinkedDefinition)=>{})(cds.linked({}).definitions[0])
