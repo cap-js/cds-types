@@ -3,6 +3,10 @@ gen/
 out/
 _out/
 
+# IDE files
+
+.idea/
+
 # API extractor
 
 dist/

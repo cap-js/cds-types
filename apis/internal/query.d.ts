@@ -96,6 +96,14 @@ type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, ColumnV
     ? L
     : never
 
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object
+    ? T[K] extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : DeepPartial<T[K]>
+    : T[K];
+}
+
 type HavingWhere<This, E> = 
   /**
    * @param predicate - An object with keys that are valid fields of the target entity and values that are compared to the respective fields.
@@ -159,8 +167,8 @@ export interface And {
 export interface InUpsert<T> {
   data (block: (e: T) => void): this
 
-  entries (...entries: T[]): this
-  entries (entries: T[]): this
+  entries (...entries: DeepPartial<T>[]): this
+  entries (entries: DeepPartial<T>[]): this
 
   values (...val: (null | Primitive)[]): this
   values (val: (null | Primitive)[]): this
