@@ -1,6 +1,7 @@
 import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
+import { IsAny } from './internal/util'
 import * as express from 'express'
 
 
@@ -46,6 +47,7 @@ export class Event<T = unknown> extends EventContext {
 
 }
 
+
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
@@ -67,7 +69,7 @@ export class Request<T = any> extends Event<T> {
 
   query: Query
 
-  subject: ref
+  subject: IsAny<T> extends true ? ref : T
 
   reply (results: any): void
   /** @beta */

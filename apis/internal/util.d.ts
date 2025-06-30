@@ -34,3 +34,12 @@ type KVPairs<T,K,V> = T extends []
 export type DeepRequired<T> = { 
   [K in keyof T]: DeepRequired<T[K]>
 } & Exclude<Required<T>, null>
+
+
+/**
+ * - `IsAny<any>` -> `true`:  `1 & any` is `any`, so `0 extends any` is `true`.
+ * - `IsAny<anything but any>` -> `false`:
+ * `1 & T` is never `any`, so `0 extends (1 & T)` is `false`.
+ * @internal
+ */
+export type IsAny<T> = 0 extends (1 & T) ? true : false;
