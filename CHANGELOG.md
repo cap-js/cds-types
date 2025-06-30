@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 ### Changed
+- `req.subject` now receives stronger typing than just the `ref` type if possible.
 ### Deprecated
 ### Removed
 ### Fixed
