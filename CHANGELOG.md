@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Support deep partial `INSERT` / `UPDATE`
+- Add `.byKey(…)` to `SELECT`
 ### Changed
 ### Deprecated
 ### Removed

@@ -44,6 +44,8 @@ sel.columns("x")
 // y is not a valid columns for Foo(s),
 // but is allowed anyway since we permit arbitrary strings as well
 SELECT.from(Foos).columns('y')
+SELECT.from(Foos).byKey(42)
+SELECT.from(Foos).byKey({ x: 42 })
 SELECT.from(Foos).where('x=', 42)
 SELECT.from(Foos).where('x >', 42, 'y =', '42')
 const predefinedArray = [42]
@@ -299,6 +301,13 @@ INSERT.into(Foos).entries({ a: "" })
 INSERT.into(Foos).entries([{ a: "" }])
 INSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
 INSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
+// allow inserting deep partial entries
+INSERT.into(Foo).entries({ ref:{}, refs: [{}] })
+INSERT.into(Foo).entries({ ref:{}, refs: [{ x: 1, y: '' }] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+INSERT.into(Foo).entries({ ref:{}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+INSERT.into(Foo).entries({ ref:{}, refs: [{ x: 1, a: '' }] })
 // @ts-expect-error - invalid type for property x of Foo
 INSERT.into(Foo).entries({ x: "4" })
 INSERT.into(Foo, { x: 4, ref: { x: 2 }})
