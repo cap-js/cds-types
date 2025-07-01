@@ -279,7 +279,7 @@ type UpdateSet<This, T> = TaggedTemplateQueryPart<This>
   // simple value   > title: 'Some Title'
   // qbe expression > stock: { '-=': quantity }
   // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
-  & ((data: {[P in keyof T]?: DeepPartial<T[P]> | {[op in QbeOp]?: DeepPartial<T[P]>} | CQN.xpr}) => This)
+  & ((data: {[P in keyof T]?: T[P] | DeepPartial<T[P]> | {[op in QbeOp]?: DeepPartial<T[P]>} | CQN.xpr}) => This)
 
 export class CREATE<T> extends ConstructedQuery<T> {
   private constructor();
