@@ -96,13 +96,17 @@ type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, ColumnV
     ? L
     : never
 
-type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends object
-    ? T[K] extends Array<infer U>
+/**
+ * @beta helper 
+ */
+type DeepPartial<T> = T extends object
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  ? T extends Function
+    ? T
+    : T extends Array<infer U>
       ? Array<DeepPartial<U>>
-      : DeepPartial<T[K]>
-    : T[K];
-}
+      : { [K in keyof T]?: DeepPartial<T[K]> }
+  : T
 
 type HavingWhere<This, E> = 
   /**
