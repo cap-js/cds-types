@@ -208,13 +208,13 @@ export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static into: (<T extends ArrayConstructable> (entity: T, ...entries: SingularInstanceType<T>[]) => INSERT<SingularInstanceType<T>>)
-    & (<T extends ArrayConstructable> (entity: T, entries?: SingularInstanceType<T>[]) => INSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, ...entries: DeepPartial<SingularInstanceType<T>>[]) => INSERT<SingularInstanceType<T>>)
+    & (<T extends ArrayConstructable> (entity: T, entries?: DeepPartial<SingularInstanceType<T>>[]) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
     & ((entity: EntityDescription, ...entries: Entries[]) => INSERT<StaticAny>)
     & ((entity: EntityDescription, entries?: Entries) => INSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, ...entries: T[]) => INSERT<T>)
-    & (<T> (entity: Constructable<T>, entries?: T[]) => INSERT<T>)
+    & (<T> (entity: Constructable<T>, ...entries: DeepPartial<T>[]) => INSERT<T>)
+    & (<T> (entity: Constructable<T>, entries?: DeepPartial<T>[]) => INSERT<T>)
 
   from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
@@ -226,13 +226,13 @@ export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static into: (<T extends ArrayConstructable> (entity: T, ...entries: SingularInstanceType<T>[]) => UPSERT<SingularInstanceType<T>>)
-    & (<T extends ArrayConstructable> (entity: T, entries?: SingularInstanceType<T>[]) => UPSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, ...entries: DeepPartial<SingularInstanceType<T>>[]) => UPSERT<SingularInstanceType<T>>)
+    & (<T extends ArrayConstructable> (entity: T, entries?: DeepPartial<SingularInstanceType<T>>[]) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
     & ((entity: EntityDescription, ...entries: Entries[]) => UPSERT<StaticAny>)
     & ((entity: EntityDescription, entries?: Entries) => UPSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, ...entries: T[]) => UPSERT<T>)
-    & (<T> (entity: Constructable<T>, entries?: T[]) => UPSERT<T>)
+    & (<T> (entity: Constructable<T>, ...entries: DeepPartial<T>[]) => UPSERT<T>)
+    & (<T> (entity: Constructable<T>, entries?: DeepPartial<T>[]) => UPSERT<T>)
 
   UPSERT: CQN.UPSERT['UPSERT']
 

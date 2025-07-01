@@ -6,8 +6,9 @@
 export class Foo {
     static readonly drafts: typeof Foo
     x: number = 42
-    y?: string
-    ref?: Foo
+    y: string | null = null
+    ref_x: number | null = null
+    ref?: Foo | null
     refs?: Foo[]
   }
 
