@@ -8,7 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 ### Changed
-- Types for `@sap/cds-dk` are now also available from the default export, if the package is intalled.
 ### Deprecated
 ### Removed
 ### Fixed

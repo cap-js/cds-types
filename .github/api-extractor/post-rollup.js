@@ -104,13 +104,10 @@ async function post (preResults) {
     rollup += filterFile
   }
 
-  rollup = rollup
-  // remove all "declare" modifiers as they will now already be in an ambient context
-    .replaceAll('declare ','')
-  // put cds-dk into the cds-namespace as well, to be included in the default export
-    .replaceAll(/^namespace cds {$/gm, 'namespace cds { export * from "@sap/cds-dk";') 
+  // put all exports into an augmented module declaration. Remove all "declare" modifiers
+  // as they will now already be in an ambient context
+  rollup = rollup.replaceAll('declare ','')
   rollup = 'export * from "@sap/cds-dk";\n' + rollup  // add cds-dk back in we had to remove in pre()
-  // put all exports into an augmented module declaration.
   rollup = `declare module '@sap/cds' {\n${rollup}\n}`
 
   await writeFile(rollupFile, rollup)
