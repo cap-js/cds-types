@@ -7,10 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+- The peer dependency to `@sap/cds-dk` is now optional, but needs to be installed explicitly in application projects.
 ### Security
 
 ## [0.12.0] - 2025-06-05
@@ -18,7 +20,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Added type export for types from cds-dk. These types are only available if `@sap/cds-dk` is also present in the project.
 - Optional parameter 'options' in `req.reply`. The object can contain, for example, mimetype and/or filename.
-- Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
 ### Changed
 - [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`. This means starting with this version, `cds-types` is supposed to be used alongside `@sap/cds@9`!
 - `req.params` always returns an array of objects
