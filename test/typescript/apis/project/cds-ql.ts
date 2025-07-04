@@ -335,8 +335,21 @@ UPSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
 UPSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
 // @ts-expect-error - invalid type for property x of Foo
 UPSERT.into(Foo).entries({ x: "4" })
+UPSERT.into(Foo).entries({ ref:{}, refs: [{}] })
+UPSERT.into(Foo).entries({ ref:{}, refs: [{ x: 1, y: '' }] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPSERT.into(Foo).entries({ ref:{}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPSERT.into(Foo).entries({ ref:{}, refs: [{ x: 1, a: '' }] })
+
 UPSERT.into(Foo, { x: 4, ref: { x: 2 }})
 UPSERT.into(Foo, [{ x: 4 }])
+UPSERT.into(Foo, { ref:{}, refs: [{ ref: { x: 1 } }] })
+UPSERT.into(Foos, { ref:{ refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPSERT.into(Foo, { ref:{}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPSERT.into(Foos, { ref:{}, refs: [{ x: 1, a: '' }] })
 
 UPSERT.into("Foo", [{ x: "4" }])
 UPSERT.into("Foo", { x: "4" }, { "ref": "4" })
