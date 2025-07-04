@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.13.0] - 2025-07-04
+
+### Added
 - Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
 ### Changed
 ### Deprecated
