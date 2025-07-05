@@ -241,8 +241,8 @@ export class Service extends QueryAPI {
 
   on<T extends ArrayConstructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.On<Unwrap<T>>): this
   on<T extends Constructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.On<InstanceType<T>>): this
-  on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
-  on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
+  on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__self'], F['__parameters'], void | Error | F['__returns']>): this
+  on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__self'], F['__parameters'], void | Error | F['__returns']>): this
   on (eve: types.event, entity: types.target, handler: OnEventHandler): this
   on (eve: types.event, handler: OnEventHandler): this
   on (eve: 'error', handler: OnErrorHandler): this
@@ -374,6 +374,7 @@ type CdsFunction = {
   (...args: any[]): any,
   __parameters: object,
   __returns: any,
+  __self?: any,  // the entity the function is bound to, in case of bound functions
 }
 
 // extracts all CdsFunction properties from T
@@ -415,9 +416,9 @@ declare namespace CRUDEventHandler {
 // as strictly as possible and therefore have to remove
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
-interface ActionEventHandler<P, R> {
+interface ActionEventHandler<S, P, R> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R
+  (req: Omit<Request, 'data'> & { data: P, subject: S }, next: Function): Promise<R> | R
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.
