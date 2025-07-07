@@ -14,6 +14,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Fixed
 ### Security
 
+## [0.13.0] - 2025-07-04
+
+### Added
+- Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- The peer dependency to `@sap/cds-dk` is now optional, but needs to be installed explicitly in application projects.
+### Security
+
 ## [0.12.0] - 2025-06-05
 
 ### Added
