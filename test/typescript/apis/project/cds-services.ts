@@ -1,5 +1,5 @@
 import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
-import { Bars, Bar, Foo, Foos, action, as, testType } from './dummy'
+import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
@@ -248,8 +248,13 @@ function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) {
 
 // Typed bound/ unbound actions
 // The handler must return a number to be in line with action's signature (or void)
-srv.on(action, req => req.data.foo.x)
-srv.on(action, 'FooService', req => req.data.foo.x)
+srv.on(unboundAction, req => req.data.foo.x)
+srv.on(unboundAction, 'FooService', req => req.data.foo.x)
+
+srv.on(boundAction, req => {
+  testType<Foo>(req.subject)
+  req.subject.x
+})
 
 srv.on('CREATE', Foo, (req, next) => { isOne(req); return next() })
 srv.on('CREATE', Foos, (req, next) => { isOne(req); return next() })
@@ -327,23 +332,23 @@ srv.on('READ', Foo, req => {
 
 
 // unbound
-srv.before(action, (req) => {
+srv.before(unboundAction, (req) => {
   req.data.foo
   return 42
 })
 
-srv.after(action, (a,b) => {
+srv.after(unboundAction, (a,b) => {
   a?.foo.x === b.data.foo.x
   return 42
 })
 
 // bound
-srv.before(action, 'someservice', (req) => {
+srv.before(unboundAction, 'someservice', (req) => {
   req.data.foo
   return 42
 })
 
-srv.after(action, 'someservice', (a,b) => {
+srv.after(unboundAction, 'someservice', (a,b) => {
   a?.foo.x === b.data.foo.x
   return 42
 })
@@ -446,14 +451,14 @@ srv.entities('namespace');
 // @ts-expect-error
 srv.entities('namespace')('and again')
 
-type ActionType = HandlerFunction<typeof action>
-srv.on(action, externalActionHandler)
+type ActionType = HandlerFunction<typeof unboundAction>
+srv.on(unboundAction, externalActionHandler)
 function externalActionHandler(req: ActionType['parameters']['req']): ActionType['returns'] {
   testType<Foo>(req.data.foo)
   return 42
 }
 
-testType<number>(externalActionHandler(as<HandlerFunction<typeof action>['parameters']['req']>()))
+testType<number>(externalActionHandler(as<HandlerFunction<typeof unboundAction>['parameters']['req']>()))
 
 
 const msg = await cds.connect.to('CatalogService');
