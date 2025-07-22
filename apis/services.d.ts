@@ -212,7 +212,7 @@ export class Service extends QueryAPI {
    * Triggers task processing.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-processing)
    */
-  flush: {}
+  flush<T = any>(): Promise<T>
 
   /**
    * Constructs and sends a GET request.
