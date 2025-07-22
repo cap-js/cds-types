@@ -131,7 +131,8 @@ await srv.send('unboundAction', { book: 251, quantity: 1 })
 
 // schedule + flush
 await srv.schedule({}).after(1000 /* ms */)
-await srv.schedule({}).every(1000 /* ms */)
+await srv.schedule({}).every(3000 /* ms */)
+await srv.flush()
 
 // TX
 let tx = cds.tx({})
