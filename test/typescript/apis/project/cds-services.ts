@@ -129,6 +129,10 @@ await srv.send('READ', 'Books')
 await srv.send('boundAction', 'Books', { book: 251, quantity: 1 })
 await srv.send('unboundAction', { book: 251, quantity: 1 })
 
+// schedule + flush
+await srv.schedule({}).after(1000 /* ms */)
+await srv.schedule({}).every(1000 /* ms */)
+
 // TX
 let tx = cds.tx({})
 tx = cds.transaction({})

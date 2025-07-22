@@ -198,6 +198,15 @@ export class Service extends QueryAPI {
   }
 
   /**
+   * Constructs and schedules a request for asynchronous processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
+   */
+  schedule: {
+    // TODO: same as .send() -> copy & paste?
+  }
+  // TODO: how add fluent APIs .after() and .every()?
+
+  /**
    * Constructs and sends a GET request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#rest-style-api)
    */
@@ -507,5 +516,8 @@ export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
 
+export const queued: (service: Service) => Service
+export const unqueued: (service: Service) => Service
+// TODO: mark deprecated
 export const outboxed: (service: Service) => Service
 export const unboxed: (service: Service) => Service
