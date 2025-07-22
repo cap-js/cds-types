@@ -199,7 +199,7 @@ export class Service extends QueryAPI {
 
   /**
    * Constructs and schedules a request for asynchronous processing.
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
    */
   schedule: {
     // TODO: same as .send() -> copy & paste?
