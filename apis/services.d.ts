@@ -197,8 +197,8 @@ export class Service extends QueryAPI {
     <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
   }
 
-  // TODO: mark as alpha
   /**
+   * @alpha
    * Constructs and schedules a request for asynchronous processing.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
    */
@@ -207,8 +207,8 @@ export class Service extends QueryAPI {
   }
   // TODO: how add fluent APIs .after() and .every()?
 
-  // TODO: mark as alpha
   /**
+   * @alpha
    * Triggers task processing.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-processing)
    */
