@@ -181,7 +181,6 @@ export class Service extends QueryAPI {
     <P extends ArrayConstructable, R>(event: P, data: PropertiesOf<SingularInstanceType<P>>, headers?: object): Promise<R>,
     <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
   }
 
   /**
