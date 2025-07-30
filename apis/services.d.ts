@@ -526,6 +526,12 @@ export const db: DatabaseService
 
 export const queued: (service: Service) => Service
 export const unqueued: (service: Service) => Service
-// TODO: mark deprecated
+
+/*
+ * @deprecated use {@link queued} instead
+ */
 export const outboxed: (service: Service) => Service
+/*
+ * @deprecated use {@link unqueued} instead
+ */
 export const unboxed: (service: Service) => Service
