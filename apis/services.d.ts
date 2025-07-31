@@ -105,6 +105,11 @@ type PropertiesOf<T> = {
   [K in keyof T]?: T[K];
 };
 
+type Scheduled<T> = Promise<T> & {
+  after: (t: number | string, u?: string) => Scheduled<T>,
+  every: (t: number | string, u?: string) => Scheduled<T>,
+}
+
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -195,6 +200,27 @@ export class Service extends QueryAPI {
     <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
     <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
   }
+
+  /**
+   * @alpha
+   * Constructs and schedules a request for asynchronous processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
+   */
+  schedule: {
+    <T = any>(event: types.event, path: string, data?: object, headers?: object): Scheduled<T>,
+    <T = any>(event: types.event, data?: object, headers?: object): Scheduled<T>,
+    <T = any>(details: { event: types.event, data?: object, headers?: object }): Scheduled<T>,
+    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Scheduled<T>,
+    <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Scheduled<T>,
+    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Scheduled<T>,
+  }
+
+  /**
+   * @alpha
+   * Triggers task processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-processing)
+   */
+  flush(): Promise<void>
 
   /**
    * Constructs and sends a GET request.
@@ -506,5 +532,14 @@ export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
 
+export const queued: (service: Service) => Service
+export const unqueued: (service: Service) => Service
+
+/*
+ * @deprecated use {@link queued} instead
+ */
 export const outboxed: (service: Service) => Service
+/*
+ * @deprecated use {@link unqueued} instead
+ */
 export const unboxed: (service: Service) => Service
