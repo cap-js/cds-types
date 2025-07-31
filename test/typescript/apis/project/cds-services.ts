@@ -130,8 +130,10 @@ await srv.send('boundAction', 'Books', { book: 251, quantity: 1 })
 await srv.send('unboundAction', { book: 251, quantity: 1 })
 
 // schedule + flush
-await srv.schedule({}).after(1000 /* ms */)
-await srv.schedule({}).every(3000 /* ms */)
+await srv.schedule({ method: 'READ', path: 'Authors' }).after(1000 /* ms */)
+await srv.schedule({ query, headers: {} }).every(2, 's')
+await srv.schedule({ event: 'READ' }).after('1h')
+await srv.schedule('CREATE', 'Books', {}, {}).every('3d')
 await srv.flush()
 
 // TX
