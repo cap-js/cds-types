@@ -105,6 +105,11 @@ type PropertiesOf<T> = {
   [K in keyof T]?: T[K];
 };
 
+type Scheduled<T> = Promise<T> & {
+  after: (t: number | string, u?: string) => Scheduled,
+  every: (t: number | string, u?: string) => Scheduled,
+}
+
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -202,9 +207,13 @@ export class Service extends QueryAPI {
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
    */
   schedule: {
-    // TODO: same as .send() -> copy & paste?
+    <T = any>(event: types.event, path: string, data?: object, headers?: object): Scheduled<T>,
+    <T = any>(event: types.event, data?: object, headers?: object): Scheduled<T>,
+    <T = any>(details: { event: types.event, data?: object, headers?: object }): Scheduled<T>,
+    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Scheduled<T>,
+    <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Scheduled<T>,
+    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Scheduled<T>,
   }
-  // TODO: how add fluent APIs .after() and .every()?
 
   /**
    * @alpha
