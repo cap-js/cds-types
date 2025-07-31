@@ -106,8 +106,8 @@ type PropertiesOf<T> = {
 };
 
 type Scheduled<T> = Promise<T> & {
-  after: (t: number | string, u?: string) => Scheduled,
-  every: (t: number | string, u?: string) => Scheduled,
+  after: (t: number | string, u?: string) => Scheduled<T>,
+  every: (t: number | string, u?: string) => Scheduled<T>,
 }
 
 /**
