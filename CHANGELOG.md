@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+- `req.subject` now points to the bound entity type when implementing handlers for bound actions.
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.13.0] - 2025-07-04
+
+### Added
 - Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
 ### Changed
 ### Deprecated
