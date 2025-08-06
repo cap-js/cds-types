@@ -105,9 +105,18 @@ type PropertiesOf<T> = {
   [K in keyof T]?: T[K];
 };
 
-type Scheduled<T> = Promise<T> & {
-  after: (t: number | string, u?: string) => Scheduled<T>,
-  every: (t: number | string, u?: string) => Scheduled<T>,
+type Send<AddOn = {}> = {
+  <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T> & AddOn,
+  <T = any>(event: types.event, data?: object, headers?: object): Promise<T> & AddOn,
+  <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T> & AddOn,
+}
+
+type FluentScheduling = {
+  after: <T = any>(t: number | string, u?: string) => Promise<T> & FluentScheduling,
+  every: <T = any>(t: number | string, u?: string) => Promise<T> & FluentScheduling,
 }
 
 /**
@@ -192,28 +201,14 @@ export class Service extends QueryAPI {
    * Constructs and sends a synchronous request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
    */
-  send: {
-    <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>,
-    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
-    <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
-  }
+  send: Send
 
   /**
    * @alpha
    * Constructs and schedules a request for asynchronous processing.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
    */
-  schedule: {
-    <T = any>(event: types.event, path: string, data?: object, headers?: object): Scheduled<T>,
-    <T = any>(event: types.event, data?: object, headers?: object): Scheduled<T>,
-    <T = any>(details: { event: types.event, data?: object, headers?: object }): Scheduled<T>,
-    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Scheduled<T>,
-    <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Scheduled<T>,
-    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Scheduled<T>,
-  }
+  schedule: Send<FluentScheduling>
 
   /**
    * @alpha
