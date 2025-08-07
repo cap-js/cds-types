@@ -1,5 +1,5 @@
 import { Definition, entity } from './csn' // cyclic dependency
-import { UnionToIntersection, UnionsToIntersections } from './internal/inference'
+import { UnionToIntersection } from './internal/inference'
 
 // FIXME: a union type would be more appropriate here
 export type Query = { 
