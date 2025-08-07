@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Deprecated
 ### Removed
 ### Fixed
+- `cqn.SELECT.where` now accepts mixed `ref`s, `val`s, and `string`s, as described in the documentation.
 ### Security
 
 ## [0.13.0] - 2025-07-04
