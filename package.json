@@ -51,8 +51,9 @@
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0",
-    "@sap/cds-dk": "^9",
+    "@cap-js/db-service": "^2.3.0",
     "@microsoft/api-extractor": "^7.52.8",
+    "@sap/cds-dk": "^9",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
     "axios": "^1.6.2",
