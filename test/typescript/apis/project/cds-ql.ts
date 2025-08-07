@@ -1,8 +1,12 @@
+import cds from '@sap/cds';
 import { Definition } from '../../../../apis/csn';
 import { QLExtensions } from '../../../../apis/ql'
 import { linked } from '../../../../apis/models';
-import { Foo, Foos, attach } from './dummy'
+import { Foo, Foos, attach, testType } from './dummy'
 import { connect } from '../../../../apis/server';
+import { expr, ref, val } from '../../../../apis/cqn';
+import * as assert from 'node:assert/strict';
+
 
 // @ts-expect-error - only supposed to be used statically, constructors private
 new SELECT;
@@ -86,8 +90,11 @@ SELECT.from(Foo).columns('x').where([new Foo()], 42)
 SELECT.from(Foo).columns('x').where('y', 42)
 s.SELECT.from.ref
 s.SELECT.columns?.[0].ref
-s.SELECT.where?.[0].ref
-s.SELECT.where?.[2].val
+const [r, _, v] = s.SELECT.where ?? []
+const isRef = (r: expr | string): r is ref => typeof r === 'object' && 'ref' in r
+const isVal = (v: expr | string): v is val => typeof v === 'object' && 'val' in v
+assert.ok(isRef(r))
+assert.ok(isVal(v))
 SELECT.from(Foo).columns('x').where('x =', 42)
 
 SELECT(Foos) === SELECT.from(Foos)
