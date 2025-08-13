@@ -105,6 +105,7 @@ type PropertiesOf<T> = {
   [K in keyof T]?: T[K];
 };
 
+// pulled out from service.send to be reused as part of service.schedule, with extra capabilities
 type Send<AddOn = {}> = {
   <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T> & AddOn,
   <T = any>(event: types.event, data?: object, headers?: object): Promise<T> & AddOn,
@@ -114,6 +115,7 @@ type Send<AddOn = {}> = {
   <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T> & AddOn,
 }
 
+// after() and every() can be called at most once per fluent string!
 type FluentScheduling<O extends keyof FluentScheduling = never> = {
   after: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'after'>, O | 'after'>,
   every: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'every'>, O | 'every'>,
