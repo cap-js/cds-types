@@ -105,6 +105,22 @@ type PropertiesOf<T> = {
   [K in keyof T]?: T[K];
 };
 
+// pulled out from service.send to be reused as part of service.schedule, with extra capabilities
+type Send<AddOn = {}> = {
+  <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T> & AddOn,
+  <T = any>(event: types.event, data?: object, headers?: object): Promise<T> & AddOn,
+  <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T> & AddOn,
+}
+
+// after() and every() can be called at most once per fluent string!
+type FluentScheduling<O extends keyof FluentScheduling = never> = {
+  after: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'after'>, O | 'after'>,
+  every: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'every'>, O | 'every'>,
+}
+
 /**
  * Class cds.Service
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
@@ -187,14 +203,21 @@ export class Service extends QueryAPI {
    * Constructs and sends a synchronous request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
    */
-  send: {
-    <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>,
-    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
-    <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
-  }
+  send: Send
+
+  /**
+   * @alpha
+   * Constructs and schedules a request for asynchronous processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
+   */
+  schedule: Send<FluentScheduling>
+
+  /**
+   * @alpha
+   * Triggers task processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-processing)
+   */
+  flush(): Promise<void>
 
   /**
    * Constructs and sends a GET request.
@@ -387,11 +410,11 @@ type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : 
  * @example
  * ```ts
  * import { myAction } from '#cds-models/myService'
- * 
+ *
  * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
  *   ...
  * }
- * 
+ *
  * srv.on(myAction, onMyFunction)
  * ```
  */
@@ -506,5 +529,14 @@ export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
 
+export const queued: (service: Service) => Service
+export const unqueued: (service: Service) => Service
+
+/*
+ * @deprecated use {@link queued} instead
+ */
 export const outboxed: (service: Service) => Service
+/*
+ * @deprecated use {@link unqueued} instead
+ */
 export const unboxed: (service: Service) => Service

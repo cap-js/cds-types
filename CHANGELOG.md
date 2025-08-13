@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Types for alpha task scheduling API
 ### Changed
 - `req.subject` now points to the bound entity type when implementing handlers for bound actions.
 ### Deprecated
