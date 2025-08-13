@@ -114,9 +114,9 @@ type Send<AddOn = {}> = {
   <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T> & AddOn,
 }
 
-type FluentScheduling = {
-  after: <T = any>(t: number | string, u?: string) => Promise<T> & FluentScheduling,
-  every: <T = any>(t: number | string, u?: string) => Promise<T> & FluentScheduling,
+type FluentScheduling<O extends keyof FluentScheduling = never> = {
+  after: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'after'>, O | 'after'>,
+  every: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'every'>, O | 'every'>,
 }
 
 /**
@@ -408,11 +408,11 @@ type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : 
  * @example
  * ```ts
  * import { myAction } from '#cds-models/myService'
- * 
+ *
  * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
  *   ...
  * }
- * 
+ *
  * srv.on(myAction, onMyFunction)
  * ```
  */

@@ -134,7 +134,18 @@ await srv.schedule({ method: 'READ', path: 'Authors' }).after(1000 /* ms */)
 await srv.schedule({ query, headers: {} }).every(2, 's')
 await srv.schedule({ event: 'READ' }).after('1h')
 await srv.schedule('CREATE', 'Books', {}, {}).every('3d')
+await srv.schedule('CREATE', 'Books', {}, {}).every('3d').after('1h')
 await srv.flush()
+const badSchedule = srv.schedule({ method: 'READ', path: 'Authors' })
+// @ts-expect-error - after() and every() should be called at most once
+badSchedule.after(42).after(42)
+// @ts-expect-error
+badSchedule.every(42).every(42)
+// @ts-expect-error
+badSchedule.every(42).after(42).every(42)
+// @ts-expect-error
+badSchedule.after(42).every(42).after(42)
+
 
 // TX
 let tx = cds.tx({})
@@ -232,7 +243,7 @@ srv.on('error', (err, req) => {
 function isOne(p: Request<Foo> | Foo | undefined ) { if(!p) return; p instanceof Foo ? p.x.toFixed : p.data.x.toFixed}
 function isMany(p: Request<Foos> | Foos | undefined) { if(!p) return; p instanceof Foos ? p[0].x.toFixed : p.data[0].x.toFixed}
 
-function isOneOfMany(p: Request<Foo | Bar> | Foo | Bar | undefined ) { 
+function isOneOfMany(p: Request<Foo | Bar> | Foo | Bar | undefined ) {
   if(!p) return;
   if ("data" in p) {
     if (p.data instanceof Foo) p.data.x.toFixed;
@@ -242,7 +253,7 @@ function isOneOfMany(p: Request<Foo | Bar> | Foo | Bar | undefined ) {
     else p.name.split;
   }
 }
-function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) { 
+function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) {
   if(!p) return;
   if ("data" in p) {
     if (p.data instanceof Foos) p.data[0].x.toFixed;
