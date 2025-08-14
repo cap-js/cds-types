@@ -178,6 +178,9 @@ srv.before('*', Books, req => {
   req.query.elements['foo'].type
 })
 srv.before('*', async req => {
+  req.req
+  req.res
+
   req.event
   req.data
   req.headers
