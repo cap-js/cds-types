@@ -5,7 +5,7 @@ permissions:
 
 on:
   pull_request:
-    types: [edited, opened, synchronize] # relevant triggers for title change, file modifications
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
