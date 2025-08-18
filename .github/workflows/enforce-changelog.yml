@@ -1,10 +1,11 @@
 name: Enforce Changelog
 
+permissions:
+  contents: read
+
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
-    paths:
-      - '**/*.d.ts'
+    types: [edited, opened, synchronize] # relevant triggers for title change, file modifications
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
@@ -12,6 +13,8 @@ concurrency:
 
 
 jobs:
-  enforce-changelog:
-    uses: cap-js/.github/.github/workflows/enforce-changelog.yml@main
-    secrets: inherit
+  check-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check changelog
+        uses: cap-js/.github/.github/actions/check-changelog@main
