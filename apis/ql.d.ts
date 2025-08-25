@@ -1,3 +1,4 @@
+import { Readable, Writable } from 'node:stream'
 import { EntityElements } from './csn'
 //export type { Query } from './cqn'
 import * as CQN from './cqn'
