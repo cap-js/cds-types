@@ -6,6 +6,7 @@ import { Foo, Foos, attach, testType } from './dummy'
 import { connect } from '../../../../apis/server';
 import { expr, ref, val } from '../../../../apis/cqn';
 import * as assert from 'node:assert/strict';
+import { Readable } from 'node:stream';
 
 
 // @ts-expect-error - only supposed to be used statically, constructors private
@@ -261,6 +262,18 @@ SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r?.ref)
 // @ts-expect-error invalid key of result
 SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.some)
 SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.ref)
+
+// SELECT.pipeline()
+await SELECT.from(Foos).pipeline(cds.context!.http!.res)
+const readable = await SELECT.from(Foos).pipeline()
+readable.pipe
+
+// SELECT.foreach()
+await SELECT.from(Foos).foreach(foo => { testType<number>(foo.x)  }) // double check typeof x
+
+// async iterator
+for await (const foo of SELECT.from(Foos)) { foo.x }
+
 
 INSERT.into(Foos).values([1,2,3])
 
