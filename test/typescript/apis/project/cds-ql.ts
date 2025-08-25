@@ -272,7 +272,7 @@ readable.pipe
 await SELECT.from(Foos).foreach(foo => { testType<number>(foo.x)  }) // double check typeof x
 
 // async iterator
-for await (const foo of SELECT.from(Foos)) { foo.x }
+for await (const foo of SELECT.from(Foos)) { testType<number>(foo.x) } // double check typeof x
 
 
 INSERT.into(Foos).values([1,2,3])

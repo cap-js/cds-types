@@ -87,6 +87,7 @@ export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>
 // as SELECT.one will pass on SELECT_one as Q
 export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
   private constructor();
+  [Symbol.asyncIterator](): AsyncIterableIterator<SingularInstanceType<T>>
 
   static one: SELECT_one & { from: SELECT_one } & { localized: SELECT_one }
   
