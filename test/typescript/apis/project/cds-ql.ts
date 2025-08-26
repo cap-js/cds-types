@@ -274,8 +274,8 @@ await SELECT.from(Foo).foreach(foo => { testType<number>(foo.x)  })
 
 
 // async iterator
-for await (const foo of SELECT.from(Foos)) { testType<number>(foo.x) } // double check typeof x
-
+for await (const foo of SELECT.from(Foos)) { testType<number>(foo.x) }
+for await (const foo of SELECT.from(Foo)) { testType<number>(foo.x) }
 
 INSERT.into(Foos).values([1,2,3])
 
