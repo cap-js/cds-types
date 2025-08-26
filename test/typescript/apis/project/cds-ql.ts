@@ -20,7 +20,7 @@ new UPSERT;
 // @ts-expect-error
 new DELETE;
 // @ts-expect-error
-new CREATE; 
+new CREATE;
 // @ts-expect-error
 new DROP;
 
@@ -70,7 +70,7 @@ SELECT.from(Foos).hints('x')
 SELECT.from(Foos).hints('x', 'y')
 SELECT.from(Foos).hints(['x', 'y'])
 
-SELECT.from(Foos, f => { 
+SELECT.from(Foos, f => {
     f.x,
     // @ts-expect-error - foobar is not a valid column
     f.foobar
@@ -266,10 +266,12 @@ SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.ref)
 // SELECT.pipeline()
 await SELECT.from(Foos).pipeline(cds.context!.http!.res)
 const readable = await SELECT.from(Foos).pipeline()
-readable.pipe
+testType<boolean>(readable.readable)
 
 // SELECT.foreach()
-await SELECT.from(Foos).foreach(foo => { testType<number>(foo.x)  }) // double check typeof x
+await SELECT.from(Foos).foreach(foo => { testType<number>(foo.x)  })
+await SELECT.from(Foo).foreach(foo => { testType<number>(foo.x)  })
+
 
 // async iterator
 for await (const foo of SELECT.from(Foos)) { testType<number>(foo.x) } // double check typeof x

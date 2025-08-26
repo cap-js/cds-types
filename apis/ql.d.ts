@@ -2,11 +2,12 @@ import { Readable, Writable } from 'node:stream'
 import { EntityElements } from './csn'
 //export type { Query } from './cqn'
 import * as CQN from './cqn'
-import { 
+import {
   Constructable,
   ArrayConstructable,
   SingularInstanceType,
-  PluralInstanceType
+  PluralInstanceType,
+  Unwrap
 } from './internal/inference'
 import { Definition } from './linked'
 import { ref } from './cqn'
@@ -90,9 +91,9 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
   [Symbol.asyncIterator]<T extends ArrayConstructable>(): AsyncIterableIterator<SingularInstanceType<T>>
 
   static one: SELECT_one & { from: SELECT_one } & { localized: SELECT_one }
-  
+
   static distinct: typeof SELECT<StaticAny>
-  
+
   static from: SELECT_from & { localized: SELECT_from }
 
   static localized: SELECT_from & { from: SELECT_from }
@@ -119,7 +120,7 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
    * If a parameter is given, the raw data stream is piped into it.
    *
    * If no parameter is given, the raw data stream is returned.
-   * @param stream the writable stream to pipe the raw data into 
+   * @param stream the writable stream to pipe the raw data into
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#pipeline)
    * @since 9.3.0
    */
@@ -140,9 +141,8 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#foreach)
    * @since 9.3.0
    */
-  foreach<T extends ArrayConstructable>(cb: (element: SingularInstanceType<T>) => void ): Promise<void>
+  foreach: (cb: (element: Unwrap<T>) => void) => Promise<void>
 }
-
 
 type SELECT_one =
   TaggedTemplateQueryPart<Awaitable<SELECT<_TODO, SELECT_one>, InstanceType<_TODO>>>
@@ -219,7 +219,7 @@ export class INSERT<T> extends ConstructedQuery<T> {
   INSERT: CQN.INSERT['INSERT']
 
 }
-type Entries<T = any> = {[key:string]: T} | {[key:string]: T} 
+type Entries<T = any> = {[key:string]: T} | {[key:string]: T}
 
 export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
@@ -265,7 +265,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
 
   set: UpdateSet<this, T>
   with: UpdateSet<this, T>
-  
+
   UPDATE: CQN.UPDATE['UPDATE']
 
 }
@@ -276,7 +276,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
  */
 type UpdateSet<This, T> = TaggedTemplateQueryPart<This>
   // simple value   > title: 'Some Title'
-  // qbe expression > stock: { '-=': quantity }  
+  // qbe expression > stock: { '-=': quantity }
   // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
   & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: T[P]} | CQN.xpr}) => This)
 
@@ -291,7 +291,7 @@ export class CREATE<T> extends ConstructedQuery<T> {
 
 export class DROP<T> extends ConstructedQuery<T> {
   private constructor();
-  
+
   static entity (entity: EntityDescription): DROP<EntityDescription>
 
   DROP: CQN.DROP['DROP']
