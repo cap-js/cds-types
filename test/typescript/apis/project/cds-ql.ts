@@ -49,8 +49,6 @@ sel.columns("x")
 // y is not a valid columns for Foo(s),
 // but is allowed anyway since we permit arbitrary strings as well
 SELECT.from(Foos).columns('y')
-SELECT.from(Foos).byKey(42)
-SELECT.from(Foos).byKey({ x: 42 })
 SELECT.from(Foos).where('x=', 42)
 SELECT.from(Foos).where('x >', 42, 'y =', '42')
 const predefinedArray = [42]
