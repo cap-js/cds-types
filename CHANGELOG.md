@@ -7,11 +7,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Types for alpha task scheduling API
+- Types for `SELECT.pipeline()` and `SELECT.foreach()`
+- Support deep partial `INSERT` / `UPDATE`
+### Changed
+- `req.subject` now points to the bound entity type when implementing handlers for bound actions.
+### Deprecated
+### Removed
+### Fixed
+- `cqn.SELECT.where` now accepts mixed `ref`s, `val`s, and `string`s, as described in the documentation.
+### Security
+
+## [0.13.0] - 2025-07-04
+
+### Added
+- Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
 ### Changed
 - Types for `@sap/cds-dk` are now also available from the default export, if the package is intalled.
 ### Deprecated
 ### Removed
 ### Fixed
+- The peer dependency to `@sap/cds-dk` is now optional, but needs to be installed explicitly in application projects.
 ### Security
 
 ## [0.12.0] - 2025-06-05

@@ -1,8 +1,13 @@
+import cds from '@sap/cds';
 import { Definition } from '../../../../apis/csn';
 import { QLExtensions } from '../../../../apis/ql'
 import { linked } from '../../../../apis/models';
-import { Foo, Foos, attach } from './dummy'
+import { Foo, Foos, attach, testType } from './dummy'
 import { connect } from '../../../../apis/server';
+import { expr, ref, val } from '../../../../apis/cqn';
+import * as assert from 'node:assert/strict';
+import { Readable } from 'node:stream';
+
 
 // @ts-expect-error - only supposed to be used statically, constructors private
 new SELECT;
@@ -15,7 +20,7 @@ new UPSERT;
 // @ts-expect-error
 new DELETE;
 // @ts-expect-error
-new CREATE; 
+new CREATE;
 // @ts-expect-error
 new DROP;
 
@@ -65,7 +70,7 @@ SELECT.from(Foos).hints('x')
 SELECT.from(Foos).hints('x', 'y')
 SELECT.from(Foos).hints(['x', 'y'])
 
-SELECT.from(Foos, f => { 
+SELECT.from(Foos, f => {
     f.x,
     // @ts-expect-error - foobar is not a valid column
     f.foobar
@@ -86,8 +91,11 @@ SELECT.from(Foo).columns('x').where([new Foo()], 42)
 SELECT.from(Foo).columns('x').where('y', 42)
 s.SELECT.from.ref
 s.SELECT.columns?.[0].ref
-s.SELECT.where?.[0].ref
-s.SELECT.where?.[2].val
+const [r, _, v] = s.SELECT.where ?? []
+const isRef = (r: expr | string): r is ref => typeof r === 'object' && 'ref' in r
+const isVal = (v: expr | string): v is val => typeof v === 'object' && 'val' in v
+assert.ok(isRef(r))
+assert.ok(isVal(v))
 SELECT.from(Foo).columns('x').where('x =', 42)
 
 SELECT(Foos) === SELECT.from(Foos)
@@ -255,6 +263,20 @@ SELECT.one.from(Foos).columns([{ ref: ['entityIDColumn'] }]).then(r => r?.ref)
 SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.some)
 SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.ref)
 
+// SELECT.pipeline()
+await SELECT.from(Foos).pipeline(cds.context!.http!.res)
+const readable = await SELECT.from(Foos).pipeline()
+testType<boolean>(readable.readable)
+
+// SELECT.foreach()
+await SELECT.from(Foos).foreach(foo => { testType<number>(foo.x)  })
+await SELECT.from(Foo).foreach(foo => { testType<number>(foo.x)  })
+
+
+// async iterator
+for await (const foo of SELECT.from(Foos)) { testType<number>(foo.x) }
+for await (const foo of SELECT.from(Foo)) { testType<number>(foo.x) }
+
 INSERT.into(Foos).values([1,2,3])
 
 // tagged template strings
@@ -299,10 +321,25 @@ INSERT.into(Foos).entries({ a: "" })
 INSERT.into(Foos).entries([{ a: "" }])
 INSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
 INSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
+INSERT.into(Foo).entries({ ref: {}, refs: [{}] })
+INSERT.into(Foo).entries({ ref: { refs: [{}] }, refs: [{ ref: {} }] })
+INSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: '' }] })
+INSERT.into(Foos).entries({ ref: { refs: [{ x: 1, y: '' }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+INSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+INSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, a: '' }] })
 // @ts-expect-error - invalid type for property x of Foo
 INSERT.into(Foo).entries({ x: "4" })
+
 INSERT.into(Foo, { x: 4, ref: { x: 2 }})
 INSERT.into(Foo, [{ x: 4 }])
+INSERT.into(Foo, { ref: {}, refs: [{ ref: { x: 1 } }] })
+INSERT.into(Foos, { ref: { refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+INSERT.into(Foo, { ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+INSERT.into(Foos, { ref: {}, refs: [{ x: 1, a: '' }] })
 
 INSERT.into("Foo", [{ x: "4" }])
 INSERT.into("Foo", { x: "4" }, { "ref": "4" })
@@ -320,8 +357,23 @@ UPSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
 UPSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
 // @ts-expect-error - invalid type for property x of Foo
 UPSERT.into(Foo).entries({ x: "4" })
+UPSERT.into(Foo).entries({ ref: {}, refs: [{}] })
+UPSERT.into(Foo).entries({ ref: { refs: [{}] }, refs: [{ ref: {} }] })
+UPSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: '' }] })
+UPSERT.into(Foos).entries({ ref: { refs: [{ x: 1, y: '' }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, a: '' }] })
+
 UPSERT.into(Foo, { x: 4, ref: { x: 2 }})
 UPSERT.into(Foo, [{ x: 4 }])
+UPSERT.into(Foo, { ref: {}, refs: [{ ref: { x: 1 } }] })
+UPSERT.into(Foos, { ref: { refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPSERT.into(Foo, { ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPSERT.into(Foos, { ref: {}, refs: [{ x: 1, a: '' }] })
 
 UPSERT.into("Foo", [{ x: "4" }])
 UPSERT.into("Foo", { x: "4" }, { "ref": "4" })
@@ -340,6 +392,22 @@ UPDATE(Foos, 4).set({ aa: 4 });
 UPDATE(Foo).where({ x: 4 }).set({ x: 'asdf', ref: { x: 4 }})
 UPDATE(Foos).where({ x: 4 }).set({ x: 4, ref: { x: 4 }})
 UPDATE.entity(Foos).set({ x: 4});
+
+UPDATE(Foo, 42).set({ ref: {}, refs: [{}] })
+UPDATE(Foo, 42).set({ ref: { refs: [{}] }, refs: [{ ref: {} }] })
+UPDATE(Foo).where({ x: 42 }).with({ ref: {}, refs: [{ x: 1, y: '' }] })
+UPDATE(Foos).where({ x: 42 }).with({ ref: { refs: [{ x: 1, y: '' }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPDATE(Foo).set({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPDATE(Foo).set({ ref: {}, refs: [{ x: 1, a: '' }] })
+
+UPDATE.entity(Foo).set({ ref: {}, refs: [{ ref: { x: 1 } }] })
+UPDATE.entity(Foos).set({ ref: { refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPDATE(Foo, 42).set({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPDATE(Foos, 42).set({ ref: {}, refs: [{ x: 1, a: '' }] })
 
 UPDATE.entity(Foos).set({
   x: {'+=': 4 },

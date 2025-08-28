@@ -6,8 +6,9 @@
 export class Foo {
     static readonly drafts: typeof Foo
     x: number = 42
-    y?: string
-    ref?: Foo
+    y: string | null = null
+    ref_x: number | null = null
+    ref?: Foo | null
     refs?: Foo[]
   }
 
@@ -22,11 +23,18 @@ export class Bars extends Array<Bar> { static readonly drafts: typeof Foo }
 
 
 // for bound/ unbound actions
-export const action = ((foo: Foo) => 42) as Action
-export type Action = {
+export const unboundAction = ((foo: Foo) => 42) as UnboundAction
+export type UnboundAction = {
   (foo: Foo): number,
   __parameters: {foo: Foo},
   __returns: number
+}
+export const boundAction = ((foo: Foo) => 42) as BoundAction
+export type BoundAction = {
+  (foo: Foo): number,
+  __parameters: {foo: Foo},
+  __returns: number,
+  __self: Foo
 }
 
 // little 'trust me, type system!' helper to make T|undefined into T.
