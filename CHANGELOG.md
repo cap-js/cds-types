@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Support deep partial `INSERT` / `UPDATE`
 ### Changed
 - `req.subject` now points to the bound entity type when implementing handlers for bound actions.
+- `service.dispatch` now also supports passing request objects, or arrays thereof.
 ### Deprecated
 ### Removed
 ### Fixed

@@ -253,7 +253,7 @@ export class Service extends QueryAPI {
   }
 
   // The central method to dispatch events
-  dispatch (msg: types.event): Promise<any>
+  dispatch (msg: types.event | Request | types.event[] | Request[]): Promise<any>
 
   // FIXME: not yet documented, will come in future version
   // disconnect (tenant?: string): Promise<void>
