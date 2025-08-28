@@ -96,6 +96,18 @@ type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, ColumnV
     ? L
     : never
 
+/**
+ * @beta helper 
+ */
+type DeepPartial<T> = T extends object
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  ? T extends Function
+    ? T
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : { [K in keyof T]?: DeepPartial<T[K]> }
+  : T
+
 type HavingWhere<This, E> = 
   /**
    * @param predicate - An object with keys that are valid fields of the target entity and values that are compared to the respective fields.
@@ -159,8 +171,8 @@ export interface And {
 export interface InUpsert<T> {
   data (block: (e: T) => void): this
 
-  entries (...entries: T[]): this
-  entries (entries: T[]): this
+  entries (...entries: DeepPartial<T>[]): this
+  entries (entries: DeepPartial<T>[]): this
 
   values (...val: (null | Primitive)[]): this
   values (val: (null | Primitive)[]): this
