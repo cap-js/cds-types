@@ -493,3 +493,10 @@ await asrv.discard(Foo.drafts, [1,2])
 await asrv.edit(Foo, [1,2])
 await asrv.new(Foo.drafts).for([1,2])
 await asrv.save(Foo.drafts, [1,2])
+
+asrv.on('', (req) => {
+  asrv.dispatch(req)
+  asrv.dispatch([req])
+})
+asrv.dispatch('foo')
+asrv.dispatch(['foo', 'bar'])
