@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.14.0] - 2025-08-28
+
+### Added
 - Types for alpha task scheduling API
 - Types for `SELECT.pipeline()` and `SELECT.foreach()`
 - Support deep partial `INSERT` / `UPDATE`
