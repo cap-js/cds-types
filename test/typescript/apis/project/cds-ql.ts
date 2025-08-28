@@ -321,10 +321,25 @@ INSERT.into(Foos).entries({ a: "" })
 INSERT.into(Foos).entries([{ a: "" }])
 INSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
 INSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
+INSERT.into(Foo).entries({ ref: {}, refs: [{}] })
+INSERT.into(Foo).entries({ ref: { refs: [{}] }, refs: [{ ref: {} }] })
+INSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: '' }] })
+INSERT.into(Foos).entries({ ref: { refs: [{ x: 1, y: '' }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+INSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+INSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, a: '' }] })
 // @ts-expect-error - invalid type for property x of Foo
 INSERT.into(Foo).entries({ x: "4" })
+
 INSERT.into(Foo, { x: 4, ref: { x: 2 }})
 INSERT.into(Foo, [{ x: 4 }])
+INSERT.into(Foo, { ref: {}, refs: [{ ref: { x: 1 } }] })
+INSERT.into(Foos, { ref: { refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+INSERT.into(Foo, { ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+INSERT.into(Foos, { ref: {}, refs: [{ x: 1, a: '' }] })
 
 INSERT.into("Foo", [{ x: "4" }])
 INSERT.into("Foo", { x: "4" }, { "ref": "4" })
@@ -342,8 +357,23 @@ UPSERT.into(Foos).entries({ x: 4, ref: { x: 4 }, refs: [] })
 UPSERT.into(Foo).entries({ x: 4 }, { x: 1 }, { x: 4, ref: { x: 1 } })
 // @ts-expect-error - invalid type for property x of Foo
 UPSERT.into(Foo).entries({ x: "4" })
+UPSERT.into(Foo).entries({ ref: {}, refs: [{}] })
+UPSERT.into(Foo).entries({ ref: { refs: [{}] }, refs: [{ ref: {} }] })
+UPSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: '' }] })
+UPSERT.into(Foos).entries({ ref: { refs: [{ x: 1, y: '' }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPSERT.into(Foo).entries({ ref: {}, refs: [{ x: 1, a: '' }] })
+
 UPSERT.into(Foo, { x: 4, ref: { x: 2 }})
 UPSERT.into(Foo, [{ x: 4 }])
+UPSERT.into(Foo, { ref: {}, refs: [{ ref: { x: 1 } }] })
+UPSERT.into(Foos, { ref: { refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPSERT.into(Foo, { ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPSERT.into(Foos, { ref: {}, refs: [{ x: 1, a: '' }] })
 
 UPSERT.into("Foo", [{ x: "4" }])
 UPSERT.into("Foo", { x: "4" }, { "ref": "4" })
@@ -362,6 +392,22 @@ UPDATE(Foos, 4).set({ aa: 4 });
 UPDATE(Foo).where({ x: 4 }).set({ x: 'asdf', ref: { x: 4 }})
 UPDATE(Foos).where({ x: 4 }).set({ x: 4, ref: { x: 4 }})
 UPDATE.entity(Foos).set({ x: 4});
+
+UPDATE(Foo, 42).set({ ref: {}, refs: [{}] })
+UPDATE(Foo, 42).set({ ref: { refs: [{}] }, refs: [{ ref: {} }] })
+UPDATE(Foo).where({ x: 42 }).with({ ref: {}, refs: [{ x: 1, y: '' }] })
+UPDATE(Foos).where({ x: 42 }).with({ ref: { refs: [{ x: 1, y: '' }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPDATE(Foo).set({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPDATE(Foo).set({ ref: {}, refs: [{ x: 1, a: '' }] })
+
+UPDATE.entity(Foo).set({ ref: {}, refs: [{ ref: { x: 1 } }] })
+UPDATE.entity(Foos).set({ ref: { refs: [{ x: 1 }] }, refs: [{}] })
+// @ts-expect-error - invalid type for property 'y' in 'refs'
+UPDATE(Foo, 42).set({ ref: {}, refs: [{ x: 1, y: 4 }] })
+// @ts-expect-error - non-existing property 'a' in 'refs'
+UPDATE(Foos, 42).set({ ref: {}, refs: [{ x: 1, a: '' }] })
 
 UPDATE.entity(Foos).set({
   x: {'+=': 4 },

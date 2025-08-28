@@ -28,6 +28,7 @@ import {
   Where,
   ByKey,
   InUpsert,
+  DeepPartial,
 } from './internal/query'
 import { _TODO } from './internal/util'
 import { Service } from './services'
@@ -207,13 +208,13 @@ export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static into: (<T extends ArrayConstructable> (entity: T, ...entries: SingularInstanceType<T>[]) => INSERT<SingularInstanceType<T>>)
-    & (<T extends ArrayConstructable> (entity: T, entries?: SingularInstanceType<T>[]) => INSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, ...entries: DeepPartial<SingularInstanceType<T>>[]) => INSERT<SingularInstanceType<T>>)
+    & (<T extends ArrayConstructable> (entity: T, entries?: DeepPartial<SingularInstanceType<T>>[]) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
     & ((entity: EntityDescription, ...entries: Entries[]) => INSERT<StaticAny>)
     & ((entity: EntityDescription, entries?: Entries) => INSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, ...entries: T[]) => INSERT<T>)
-    & (<T> (entity: Constructable<T>, entries?: T[]) => INSERT<T>)
+    & (<T> (entity: Constructable<T>, ...entries: DeepPartial<T>[]) => INSERT<T>)
+    & (<T> (entity: Constructable<T>, entries?: DeepPartial<T>[]) => INSERT<T>)
 
   from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
@@ -225,13 +226,13 @@ export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static into: (<T extends ArrayConstructable> (entity: T, ...entries: SingularInstanceType<T>[]) => UPSERT<SingularInstanceType<T>>)
-    & (<T extends ArrayConstructable> (entity: T, entries?: SingularInstanceType<T>[]) => UPSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, ...entries: DeepPartial<SingularInstanceType<T>>[]) => UPSERT<SingularInstanceType<T>>)
+    & (<T extends ArrayConstructable> (entity: T, entries?: DeepPartial<SingularInstanceType<T>>[]) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
     & ((entity: EntityDescription, ...entries: Entries[]) => UPSERT<StaticAny>)
     & ((entity: EntityDescription, entries?: Entries) => UPSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, ...entries: T[]) => UPSERT<T>)
-    & (<T> (entity: Constructable<T>, entries?: T[]) => UPSERT<T>)
+    & (<T> (entity: Constructable<T>, ...entries: DeepPartial<T>[]) => UPSERT<T>)
+    & (<T> (entity: Constructable<T>, entries?: DeepPartial<T>[]) => UPSERT<T>)
 
   UPSERT: CQN.UPSERT['UPSERT']
 
@@ -252,7 +253,11 @@ export class DELETE<T> extends ConstructedQuery<T> {
 // operator for qbe expression
 type QbeOp = '=' | '-=' | '+=' | '*=' | '/=' | '%='
 
-export interface UPDATE<T> extends Where<T>, And, ByKey {}
+export interface UPDATE<T> extends Where<T>, And, ByKey {
+  set: UpdateSet<this, T>
+  with: UpdateSet<this, T>
+}
+
 export class UPDATE<T> extends ConstructedQuery<T> {
   private constructor();
 
@@ -263,11 +268,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     & ((entity: EntityDescription | ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
-  set: UpdateSet<this, T>
-  with: UpdateSet<this, T>
-
   UPDATE: CQN.UPDATE['UPDATE']
-
 }
 
 /**
@@ -278,7 +279,7 @@ type UpdateSet<This, T> = TaggedTemplateQueryPart<This>
   // simple value   > title: 'Some Title'
   // qbe expression > stock: { '-=': quantity }
   // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
-  & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: T[P]} | CQN.xpr}) => This)
+  & ((data: {[P in keyof T]?: T[P] | DeepPartial<T[P]> | {[op in QbeOp]?: DeepPartial<T[P]>} | CQN.xpr}) => This)
 
 export class CREATE<T> extends ConstructedQuery<T> {
   private constructor();
