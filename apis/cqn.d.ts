@@ -104,7 +104,7 @@ type _named = { [key: name]: expr }
 type val = { val: any }
 
 /** @private */
-type list = { list: any }
+type list = { list: any[] }
 
 /** @private */
 type xpr = { xpr: _xpr }
