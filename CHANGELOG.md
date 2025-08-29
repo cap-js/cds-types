@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Allow array-like params in CQN.expr via `{ list: [...] }` syntax
 ### Changed
 ### Deprecated
 ### Removed
