@@ -5,7 +5,8 @@ permissions:
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled, ready_for_review, review_requested, review_request_removed, auto_merge_enabled, auto_merge_disabled]
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
