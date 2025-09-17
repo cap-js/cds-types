@@ -68,3 +68,9 @@ sqn.SELECT.where = [
     "=",
     { val: 'a' }
 ]
+
+sqn.SELECT.where = [
+    { ref: ["a"] },
+    "in",
+    { list: [ "a", "b", "c" ] }
+]
