@@ -159,6 +159,11 @@ export const service: service
    */
 export function exit (): void
 
+/**
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-facade#cds-error)
+ */
+export function error (code?: number, message: string | object, details?: object, caller?: function): Error
+
 
 export type service = {
 
