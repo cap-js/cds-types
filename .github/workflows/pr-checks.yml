@@ -23,4 +23,4 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - name: Check PR title
-         uses: cap-js/.github/.github/actions/check-pr-title@feat/addPRTitleCheck
+         uses: cap-js/.github/.github/actions/check-pr-title@main
