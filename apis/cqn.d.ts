@@ -81,7 +81,7 @@ export type predicate = _xpr  // not an intersection on purpose!
 /** @private */
 type ordering_term = UnionToIntersection<expr> & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
 
-export type expr = ref | val | xpr | function_call | SELECT
+export type expr = ref | val | list | xpr | function_call | SELECT
 
 /** @private */
 type ref = { ref: _segment[] }
@@ -102,6 +102,9 @@ type _named = { [key: name]: expr }
 
 /** @private */
 type val = { val: any }
+
+/** @private */
+type list = { list: any[] }
 
 /** @private */
 type xpr = { xpr: _xpr }
