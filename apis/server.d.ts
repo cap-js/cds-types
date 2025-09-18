@@ -162,7 +162,10 @@ export function exit (): void
 /**
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-facade#cds-error)
  */
-export function error (code?: number, message: string | object, details?: object, caller?: function): Error
+export function error (code: number, message: string, details?: {stack?: unknown}, caller?: Function): Error
+export function error (message: string, details?: {code: number, stack?: unknown}, caller?: Function): Error
+export function error (details: {code: number, message: string}, caller?: Function): Error
+export function error (string: TemplateStringsArray, ...args: any[]): Error
 
 
 export type service = {
