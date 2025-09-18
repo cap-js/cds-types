@@ -46,6 +46,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Added type export for types from cds-dk. These types are only available if `@sap/cds-dk` is also present in the project.
 - Optional parameter 'options' in `req.reply`. The object can contain, for example, mimetype and/or filename.
+- Added types for `req.req` and `req.res` in `cds.Request`
 ### Changed
 - [breaking] Bump dependency to `@sap/cds` to `>=9.0.0`. This means starting with this version, `cds-types` is supposed to be used alongside `@sap/cds@9`!
 - `req.params` always returns an array of objects

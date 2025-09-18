@@ -51,6 +51,10 @@ export class Event<T = unknown> extends EventContext {
  */
 export class Request<T = any> extends Event<T> {
 
+  req: express.Request
+
+  res: express.Response
+
   params: Record<string, any>[]
 
   method: string
