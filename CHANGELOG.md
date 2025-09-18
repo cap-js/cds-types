@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Allow array-like params in CQN.expr via `{ list: [...] }` syntax
+- Types for `cds.error()`
 ### Changed
 ### Deprecated
 ### Removed
