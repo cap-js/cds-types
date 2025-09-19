@@ -6,6 +6,7 @@ import {
   Service,
   EventContext,
   Request,
+  PostRequest,
   Event,
   // User, >> already imported above
 
@@ -210,10 +211,12 @@ describe('CDS Runtime Tests', () => {
     assert(u2.is('any'))
     assert(u2.is('authenticated-user'))
 
-    let r = new Request ({event:'foo',data:{foo:'bar'},headers:{x:11}})
+    let r: PostRequest<{foo:string}, {baz:string}> = new Request ({event:'foo',data:{foo:'bar'},headers:{x:11}})
+    r.params = [{baz:'quux'}];
     assert.strictEqual(r.event, 'foo')
     assert.strictEqual(r.data.foo, 'bar')
     assert.strictEqual(r.headers.x, 11)
+    assert.strictEqual(r.params[0].baz, 'quux')
 
     assert(cds.Association)
     assert(cds.Composition)
