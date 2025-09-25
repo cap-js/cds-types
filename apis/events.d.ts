@@ -50,12 +50,11 @@ export class Event<T = unknown> extends EventContext {
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
 export class Request<
-  T = any,
-  P extends Record<string, any> = Record<string, any>,
-  PRest extends Record<string, any>[] = Record<string, any>[]
-> extends Event<T> {
+  D = any,
+  P extends Record<string, any>[] = Record<string, any>[]
+> extends Event<D> {
 
-  params: [P, ...PRest]
+  params: P
 
   method: string
 
@@ -119,19 +118,12 @@ export class Request<
 
 }
 
-export type GetRequest<
-  T extends Record<string, any> = Record<string, any>,
-  TRest extends Record<string, any>[] = Record<string, any>[]
-> = Omit<Request, 'data' | 'params'> & {
-  params: [T, ...TRest],
-  data: Record<never, never>,
-}
+export type GetRequest<P extends Record<string, any>[]> = Request<Record<never, never>, P>;
 
 export type PostRequest<
-  T = any,
-  P extends Record<string, any> = Record<string, any>,
-  PRest extends Record<string, any>[] = Record<string, any>[]
-> = Request<T, P, PRest>;
+  D = any,
+  P extends Record<string, any> = Record<string, any>
+> = Request<D, P>;
 
 /**
  * Represents the user in a given context.
