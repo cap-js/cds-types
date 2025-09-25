@@ -118,11 +118,13 @@ export class Request<
 
 }
 
-export type GetRequest<P extends Record<string, any>[]> = Request<Record<never, never>, P>;
+export type GetRequest<
+  P extends Record<string, any>[]
+> = Request<Record<never, never>, P>;
 
 export type PostRequest<
   D = any,
-  P extends Record<string, any> = Record<string, any>
+  P extends Record<string, any>[] = Record<string, any>[]
 > = Request<D, P>;
 
 /**
