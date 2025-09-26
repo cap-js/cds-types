@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.15.0] - 2025-09-26
+
+### Added
 - Allow array-like params in CQN.expr via `{ list: [...] }` syntax
 - Types for `cds.error()`
 - `GetRequest` and `PostRequest` types
