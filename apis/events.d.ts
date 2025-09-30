@@ -106,15 +106,20 @@ export class Request<
 
   reject (message: string, target?: string, args?: any[]): never
 
-  notify (message: { status?: number | string, message: string, target?: string, args?: any[] }): Error
+  notify (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  notify (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  info (message: { status?: number | string, message: string, target?: string, args?: any[] }): Error
+  info (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  info (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  warn (message: { status?: number | string, message: string, target?: string, args?: any[] }): Error
+  warn (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  warn (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  error (message: { status?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+  error (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  error (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  reject (message: { status?: number | string, message: string, target?: string, args?: any[], status?: number }): never
+  reject (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): never
+  reject (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): never
 
 }
 
