@@ -78,29 +78,19 @@ export class Request<
 
   // positional args
   notify (message: string, target?: string, args?: any[]): Error
-  notify (code: string, target?: string, args?: any[]): Error
   notify (status: number, message?: string, target?: string, args?: any[]): Error
-  notify (status: number, code?: string, target?: string, args?: any[]): Error
 
   info (message: string, target?: string, args?: any[]): Error
-  info (code: string, target?: string, args?: any[]): Error
   info (status: number, message?: string, target?: string, args?: any[]): Error
-  info (status: number, code?: string, target?: string, args?: any[]): Error
 
   warn (message: string, target?: string, args?: any[]): Error
-  warn (code: string, target?: string, args?: any[]): Error
   warn (status: number, message?: string, target?: string, args?: any[]): Error
-  warn (status: number, code?: string, target?: string, args?: any[]): Error
 
   error (message: string, target?: string, args?: any[]): Error
-  error (code: string, target?: string, args?: any[]): Error
   error (status: number, message?: string, target?: string, args?: any[]): Error
-  error (status: number, code?: string, target?: string, args?: any[]): Error
 
   reject (message: string, target?: string, args?: any[]): never
-  reject (code: string, target?: string, args?: any[]): never
   reject (status: number, message?: string, target?: string, args?: any[]): never
-  reject (status: number, code?: string, target?: string, args?: any[]): never
 
   // single object arg
   notify (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
