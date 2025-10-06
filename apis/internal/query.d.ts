@@ -18,11 +18,35 @@ type PK = number | string | object
 // Defining overloads with it will override preceding signatures and the other way around.
 type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unknown[]) => T
 
+
 // Helper type to express nested predicates, like .where({title: 'foo', or { price: { '>': 42 } }})
-type PredicateMap<T> = { [k in keyof Partial<T>]:
-    T[k]
-    | Partial<{ [op in Op]: T[k] }>
-} & { or?: PredicateMap<T>, and?: PredicateMap<T> }
+// wrapped helper to avoid having to apply UnwrappedInstanceType to every occurrence of T.
+// We can only offer this type for manual typing. Adding it as overload to .where() does not work,
+// as we also have catch-all signatures that would overlap with it and allow any properties of all types,
+// defeating the purpose of this type.
+/** @internal */
+type _PredicateMap<T> = {
+  [k in keyof Partial<T>]: (T[k] | Partial<{ [op in Op]: T[k] }>)
+}
+& { or?: PredicateMap<T>, and?: PredicateMap<T> }
+// disallow non-existing properties
+& { [key: string]: never }
+
+/**
+ * @example
+ * ```js
+ * const predicate: PredicateMap<Books> = {
+ *   title: 'foo',
+ *   or: {
+ *     price: { '>': 42 }
+ *   }
+ * }
+ * const result = await SELECT.from(Books).where(predicate)
+ * ```
+ * Note that you _have to_ explicitly type the predicate variable with `PredicateMap<T>`,
+ * as we can not offer this type as overload to `.where()` or `.having()`.
+ */
+type PredicateMap<T> = _PredicateMap<UnwrappedInstanceType<T>>
 
 type QueryArtefact = {
 
@@ -124,15 +148,8 @@ type HavingWhere<This, E> =
    * ```
    */
   ((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
-  /**
-   * @param predicate - An object with keys that are valid fields of the target entity and values that are compared to the respective fields.
-   * @example
-   * ```js
-   * SELECT.from(Books).where({ title: 'foo', or: { price: { '>': 42 } } })  // where title and price are valid fields of Book
-   * SELECT.from(Books).having({ title: 'foo', or: { price: { '>': 42 } } })  // where title and price are valid fields of Book
-   * ```
-   */
-  & ((predicated: PredicateMap<E>) => This)
+  & ((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
+
   /**
    * @param expr - An array of expressions, where every odd element is a valid field of the target entity and every even element is a value that is compared to the respective field.
    * @example
