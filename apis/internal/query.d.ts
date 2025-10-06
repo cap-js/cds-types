@@ -148,7 +148,6 @@ type HavingWhere<This, E> =
    * ```
    */
   ((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
-  & ((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
 
   /**
    * @param expr - An array of expressions, where every odd element is a valid field of the target entity and every even element is a value that is compared to the respective field.
