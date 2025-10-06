@@ -1,6 +1,6 @@
 import type { Definition } from '../csn'
 import type { entity } from '../linked/classes'
-import type { column_expr, predicate, ref } from '../cqn'
+import type { column_expr, ref } from '../cqn'
 import type { ArrayConstructable, Constructable, SingularInstanceType, Unwrap, UnwrappedInstanceType } from './inference'
 import { ConstructedQuery } from '../ql'
 import { KVPairs } from './util'
