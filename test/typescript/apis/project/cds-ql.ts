@@ -435,3 +435,18 @@ const boundDelete: DELETE<any> = DELETE.from("Foos").bind(dummyServer)
 // infix filters for both 1:1 and 1:n associations
 SELECT.from(Foo, f => f`[foo='Bar']`(b => b.x))
 SELECT.from(Foo, f => f.refs`[foo='Bar']`(b => b.x))
+
+// where with nested predicates
+SELECT.from(Foos).where({
+    x: 42,
+    or: {
+        x: { '>=': 42 },
+        and: {
+            // @ts-expect-error -- wrong type
+            x: 'asd'
+        }
+    },
+    // @ts-expect-error
+    not_there: 42
+
+})
