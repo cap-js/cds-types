@@ -160,6 +160,8 @@ declare class entity extends struct<'entity'> {
   texts?: entity
 
   drafts?: entity
+
+  isDraft?: boolean
 }
 
 /**
