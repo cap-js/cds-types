@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Exposing field `isDraft` in `cds.linked.classes.entity`
 ### Changed
 ### Deprecated
 ### Removed
