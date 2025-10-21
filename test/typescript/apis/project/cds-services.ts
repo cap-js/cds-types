@@ -188,6 +188,10 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
+  req.messages.at(0)?.message
+  req.messages.at(0)?.numericSeverity
+  req.errors.at(0)?.stack
+  req.errors.at(0)?.message
   const thing: number | undefined = 42 as number | undefined
   // @ts-expect-error  possibly undefined - goes away after req.reject
   thing.toExponential()
