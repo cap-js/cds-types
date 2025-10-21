@@ -59,6 +59,8 @@ export class Request<
 
   errors: {message: string, stack: string}[]
 
+  results: D[]
+
   params: P
 
   method: string
