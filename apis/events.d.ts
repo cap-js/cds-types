@@ -2,6 +2,7 @@ import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
+import { levels } from './log'
 
 
 /**
@@ -53,6 +54,18 @@ export class Request<
   D = any,
   P extends Record<string, any>[] = Record<string, any>[]
 > extends Event<D> {
+
+  messages: {message: string, numericSeverity: levels}[]
+
+  errors: {
+    code?: number,
+    message: string,
+    stack: string,
+    target?: string,
+    args?: unknown[],
+  }[]
+
+  results: D[]
 
   params: P
 
