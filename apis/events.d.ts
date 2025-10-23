@@ -57,7 +57,13 @@ export class Request<
 
   messages: {message: string, numericSeverity: levels}[]
 
-  errors: {message: string, stack: string}[]
+  errors: {
+    code?: number,
+    message: string,
+    stack: string,
+    target?: string,
+    args?: unknown[],
+  }[]
 
   results: D[]
 
