@@ -24,6 +24,9 @@ cds.connect({kind: 'odata', model:'some/imported/model', service: 'BusinessPartn
 // basic properties
 srv.name.length
 srv.entities[0] = Books // same type
+srv.events[0] = ???
+srv.types[0] = ???
+srv.actions[0] = ???
 
 // TODO: function usage was never official, is now deprecated, and will be removed with cds^10
 srv.entities('namespace')
