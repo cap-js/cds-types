@@ -24,9 +24,13 @@ cds.connect({kind: 'odata', model:'some/imported/model', service: 'BusinessPartn
 // basic properties
 srv.name.length
 srv.entities[0] = Books // same type
+
+// TODO: function usage was never official, is now deprecated, and will be removed with cds^10
+srv.entities('namespace')
 srv.events('namespace')
 srv.types('namespace')
-srv.operations('namespace')
+srv.operations('namespace') //> should be .actions()
+srv.actions('namespace')
 
 await srv.init()
 
@@ -467,6 +471,14 @@ srv.entities('namespace');
 
 // @ts-expect-error
 srv.entities('namespace')('and again')
+
+// TODO: function usage was never official, is now deprecated, and will be removed with cds^10
+// @ts-expect-deprecated -> is there such a thing? :D
+srv.entities('namespace')
+srv.events('namespace')
+srv.types('namespace')
+srv.operations('namespace') //> should be .actions()
+srv.actions('namespace')
 
 type ActionType = HandlerFunction<typeof unboundAction>
 srv.on(unboundAction, externalActionHandler)
