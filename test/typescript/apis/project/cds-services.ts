@@ -24,7 +24,6 @@ cds.connect({kind: 'odata', model:'some/imported/model', service: 'BusinessPartn
 // basic properties
 srv.name.length
 srv.entities[0] = Books // same type
-srv.entities('namespace')
 srv.events('namespace')
 srv.types('namespace')
 srv.operations('namespace')
