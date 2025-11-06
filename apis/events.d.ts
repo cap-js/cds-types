@@ -88,6 +88,7 @@ export class Request<
 
   error (message: string, target?: string, args?: any[]): Error
   error (status: number, message?: string, target?: string, args?: any[]): Error
+  error (status: number, target?: string, args?: any[]): Error
 
   reject (message: string, target?: string, args?: any[]): never
   reject (status: number, message?: string, target?: string, args?: any[]): never
