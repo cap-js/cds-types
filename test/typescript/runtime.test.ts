@@ -221,6 +221,11 @@ describe('CDS Runtime Tests', () => {
     assert(cds.Association)
     assert(cds.Composition)
 
+    // @ts-expect-error - first parameter must have a property 'baz'
+    r.params = [{corge:42}]
+    // @ts-expect-error - params must have at least one element
+    r.params = []
+
     // .drafts is not available in lean draft mode in cds 8
     let Books = new cds.entity({name:'Books', elements: { HasDraftEntity:true }})
     // assert.strictEqual(Books.name, 'Books')
