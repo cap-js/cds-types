@@ -162,9 +162,9 @@ export function exit (): void
 /**
  * @see [capire](https://cap.cloud.sap/docs/node.js/cds-facade#cds-error)
  */
-export function error (code: number, message: string, details?: {stack?: unknown}, caller?: (...args: any[]) => unknown): Error
-export function error (message: string, details?: {code: number, stack?: unknown}, caller?: (...args: any[]) => unknown): Error
-export function error (details: {code: number, message: string}, caller?: (...args: any[]) => unknown): Error
+export function error (status: number, message: string, details?: {stack?: unknown}, caller?: (...args: any[]) => unknown): Error
+export function error (message: string, details?: {status: number, stack?: unknown}, caller?: (...args: any[]) => unknown): Error
+export function error (details: {status: number, message: string}, caller?: (...args: any[]) => unknown): Error
 export function error (string: TemplateStringsArray, ...args: any[]): Error
 
 
