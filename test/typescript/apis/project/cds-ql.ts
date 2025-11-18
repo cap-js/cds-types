@@ -265,7 +265,9 @@ SELECT.one.from(Foos).columns({ ref: ['entityIDColumn'] }).then(r => r?.ref)
 
 // SELECT.pipeline()
 await SELECT.from(Foos).pipeline(cds.context!.http!.res)
-const readable = await SELECT.from(Foos).pipeline()
+
+// SELECT.stream()
+const readable = await SELECT.from(Foos).stream()
 testType<boolean>(readable.readable)
 
 // SELECT.foreach()

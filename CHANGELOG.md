@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Types for `SELECT.stream()`
 ### Changed
 ### Deprecated
 ### Removed
