@@ -152,17 +152,17 @@ type SELECT_one =
 // calling with class
   (<T extends ArrayConstructable>
   (entityType: T, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T> | null>)
+  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T> | null | undefined>)
 &
   (<T extends ArrayConstructable>
   (entityType: T, primaryKey: PK, projection?: Projection<QLExtensions<SingularInstanceType<T>>>)
-  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T> | null>)
+  => Awaitable<SELECT<SingularInstanceType<T>, SELECT_one>, SingularInstanceType<T> | null | undefined>)
 
   & ((entity: EntityDescription, primaryKey?: PK, projection?: Projection<unknown>) => SELECT<_TODO, SELECT_one>)
-  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
-  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
-  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
-  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null>)
+  & (<T> (entity: T[], projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
+  & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
+  & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
+  & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & ((subject: ref) => SELECT<_TODO>)
 
 type SELECT_from =
