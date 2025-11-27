@@ -190,7 +190,7 @@ srv.before('*', async req => {
 
   req.info(1, 'msg', 'target', ['key1', 'key2'])
   req.error(1, 'msg', 'target', [1,2])
-  req.error(1, 'msg', [])
+  req.error(1, 'target', [])
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
