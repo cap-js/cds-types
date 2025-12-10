@@ -24,17 +24,6 @@ cds.connect({kind: 'odata', model:'some/imported/model', service: 'BusinessPartn
 // basic properties
 srv.name.length
 srv.entities[0] = Books // same type
-// srv.events[0] = ???
-// srv.types[0] = ???
-// srv.operations[0] = ???
-// srv.actions[0] = ???
-
-// TODO: function usage was never official, is now deprecated, and will be removed with cds^10
-srv.entities('namespace')
-srv.events('namespace')
-srv.types('namespace')
-srv.operations('namespace')
-srv.actions('namespace')
 
 await srv.init()
 
@@ -460,29 +449,21 @@ await cds.db.run ( SELECT.from(Books) )
 await cds.tx (async (tx) => {
   await tx.run(SELECT(1).from(Books,201).forUpdate())
 })
-cds.db.entities('draftModelAuth')
+cds.entities('draftModelAuth')
 
 //tests outbox
 const outboxedService = cds.outboxed(srv)
 await outboxedService.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 await cds.unboxed(outboxedService).send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 
-srv.entities('namespace');
-[...srv.entities('namespace')].map(e => e.keys); // .keys only available on entities
+srv.entities;
+[...srv.entities].map(e => e.keys); // .keys only available on entities
 // @ts-expect-error
-[...srv.events('namespace')].map(e => e.keys);
-[...srv.events('namespace')].map(e => e.elements)
+[...srv.events].map(e => e.keys);
+[...srv.events].map(e => e.elements)
 
 // @ts-expect-error
-srv.entities('namespace')('and again')
-
-// TODO: function usage was never official, is now deprecated, and will be removed with cds^10
-// @ts-expect-deprecated -> is there such a thing? :D
-srv.entities('namespace')
-srv.events('namespace')
-srv.types('namespace')
-srv.operations('namespace')
-srv.actions('namespace')
+cds.entities('namespace')('and again')
 
 type ActionType = HandlerFunction<typeof unboundAction>
 srv.on(unboundAction, externalActionHandler)
