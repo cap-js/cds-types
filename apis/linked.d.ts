@@ -2,8 +2,9 @@ import * as csn from './csn'
 import { IterableMap } from './internal/util'
 import { Definitions, any_, entity, service_ } from './linked/classes'
 
-// TODO: the function usage for services is not documented and will be removed with cds^10
-export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
+// TODO: how mark the function usage as deprecated?
+export type ModelPart<T extends any_> = IterableMap<T>
+export type ModelPartFn<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
 type Visitor = (def: any_, name: string, parent: any_, defs: Definitions) => void
 type Filter = string | (<T extends any_ = any_>(def: T) => boolean)
 
@@ -84,7 +85,7 @@ export interface LinkedCSN extends Omit<csn.CSN, 'definitions'> {
 	 */
   exports: IterableMap<any_>
   definitions: IterableMap<any_>
-  entities: ModelPart<entity>
+  entities: ModelPartFn<entity>
   services: ModelPart<service_>
 
 }
