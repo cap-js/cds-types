@@ -14,8 +14,6 @@ type Key = number | string | any
 
 export class QueryAPI {
 
-  entities: linked.LinkedCSN['entities']
-
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
