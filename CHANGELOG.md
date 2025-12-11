@@ -8,10 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Added `Request.messages`, `Request.errors` and `Request.results`
+- Types for `SELECT.stream()`
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+- Types for `req.error()` et al.
+- Types for `cds.error()`
 ### Security
 
 ## [0.15.0] - 2025-09-26

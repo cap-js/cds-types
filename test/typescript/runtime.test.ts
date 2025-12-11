@@ -213,10 +213,6 @@ describe('CDS Runtime Tests', () => {
 
     let r: PostRequest<{foo:string}, [{baz:string}, ...any[]]> = new Request ({event:'foo',data:{foo:'bar'},headers:{x:11}})
     r.params = [{baz:'quux'}];
-    // @ts-expect-error - first parameter must have a property 'baz'
-    r.params = [{corge:42}]
-    // @ts-expect-error - params must have at least one element
-    r.params = []
     assert.strictEqual(r.event, 'foo')
     assert.strictEqual(r.data.foo, 'bar')
     assert.strictEqual(r.headers.x, 11)
@@ -224,6 +220,11 @@ describe('CDS Runtime Tests', () => {
 
     assert(cds.Association)
     assert(cds.Composition)
+
+    // @ts-expect-error - first parameter must have a property 'baz'
+    r.params = [{corge:42}]
+    // @ts-expect-error - params must have at least one element
+    r.params = []
 
     // .drafts is not available in lean draft mode in cds 8
     let Books = new cds.entity({name:'Books', elements: { HasDraftEntity:true }})
