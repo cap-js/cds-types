@@ -14,8 +14,6 @@ type Key = number | string | any
 
 export class QueryAPI {
 
-  entities: linked.LinkedCSN['entities']
-
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
@@ -171,10 +169,17 @@ export class Service extends QueryAPI {
   types: linked.ModelPart<linked.classes.type>
 
   /**
+   * @deprecated use {@link actions} instead
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
   operations: linked.ModelPart<linked.classes.action>
+
+  /**
+   * Provides access to the actions and functions, exposed by a service
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
+   */
+  actions: linked.ModelPart<linked.classes.action>
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -513,7 +518,6 @@ export const tx: {
   (context?: object): Transaction,
   (context: object, fn: (tx: Transaction) => object): Promise<any>,
 }
-export const entities: Service['entities']
 export const run: Service['run']
 export const foreach: Service['foreach']
 export const stream: Service['stream']
@@ -528,6 +532,8 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
+
+export const entities: linked.LinkedCSN['entities']
 
 export const queued: (service: Service) => Service
 export const unqueued: (service: Service) => Service

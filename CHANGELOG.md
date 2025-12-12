@@ -8,8 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Types for `SELECT.stream()`
+- `service.actions`
 ### Changed
 ### Deprecated
+- `service.operations`
+- Undocumented `service.entities()`, `service.events()`, `service.types()`, and `service.operations()`
 ### Removed
 ### Fixed
 - Types for `req.error()` et al.
