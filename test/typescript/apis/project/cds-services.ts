@@ -184,6 +184,11 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
+  req.messages.at(0)?.message
+  req.messages.at(0)?.numericSeverity
+  req.results.at(0)
+  req.errors.at(0)?.stack
+  req.errors.at(0)?.message
   const thing: number | undefined = 42 as number | undefined
   // @ts-expect-error  possibly undefined - goes away after req.reject
   thing.toExponential()
@@ -209,6 +214,11 @@ srv.after('*', (results, req) => {
 srv.after('UPDATE', Books, (results, req) => {
   req.data
   results[0]
+  req.results.at(0)  // any, as Books is from cds.entities
+})
+srv.after('UPDATE', Foos, (results, req) => {
+  req.data
+  req.results.at(0)?.ref  // Foo, as Foos is a cds-typer dummy
 })
 
 srv.on("action1", req => {
