@@ -462,6 +462,13 @@ srv.entities;
 [...srv.events].map(e => e.keys);
 [...srv.events].map(e => e.elements)
 
+// @ts-expect-deprecation
+srv.entities('namespace');
+srv.events('namespace');
+srv.types('namespace');
+srv.operations('namespace');
+srv.actions('namespace');
+
 // @ts-expect-error
 cds.entities('namespace')('and again')
 

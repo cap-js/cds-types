@@ -2,7 +2,10 @@ import * as csn from './csn'
 import { IterableMap } from './internal/util'
 import { Definitions, any_, entity, service_ } from './linked/classes'
 
-export type ModelPart<T extends any_> = IterableMap<T>
+export type ModelPart<T extends any_> = IterableMap<T> & {
+  /** @deprecated undocumented variant that will be removed in cds^10 */
+  (namespace: string): IterableMap<T>,
+}
 export type ModelPartFn<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
 
 type Visitor = (def: any_, name: string, parent: any_, defs: Definitions) => void
