@@ -24,10 +24,6 @@ cds.connect({kind: 'odata', model:'some/imported/model', service: 'BusinessPartn
 // basic properties
 srv.name.length
 srv.entities[0] = Books // same type
-srv.entities('namespace')
-srv.events('namespace')
-srv.types('namespace')
-srv.operations('namespace')
 
 await srv.init()
 
@@ -188,6 +184,11 @@ srv.before('*', async req => {
   req.error(1, 'msg')
   req.notify(1, 'msg', 'target', ['key', 2])
   req.warn(1, 'msg', 'target', [])
+  req.messages.at(0)?.message
+  req.messages.at(0)?.numericSeverity
+  req.results.at(0)
+  req.errors.at(0)?.stack
+  req.errors.at(0)?.message
   const thing: number | undefined = 42 as number | undefined
   // @ts-expect-error  possibly undefined - goes away after req.reject
   thing.toExponential()
@@ -213,6 +214,11 @@ srv.after('*', (results, req) => {
 srv.after('UPDATE', Books, (results, req) => {
   req.data
   results[0]
+  req.results.at(0)  // any, as Books is from cds.entities
+})
+srv.after('UPDATE', Foos, (results, req) => {
+  req.data
+  req.results.at(0)?.ref  // Foo, as Foos is a cds-typer dummy
 })
 
 srv.on("action1", req => {
@@ -453,21 +459,28 @@ await cds.db.run ( SELECT.from(Books) )
 await cds.tx (async (tx) => {
   await tx.run(SELECT(1).from(Books,201).forUpdate())
 })
-cds.db.entities('draftModelAuth')
+cds.entities('draftModelAuth')
 
 //tests outbox
 const outboxedService = cds.outboxed(srv)
 await outboxedService.send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 await cds.unboxed(outboxedService).send({ event: 'feeEstimation', entity: networkGroups, data: {name:'Volta'}})
 
-srv.entities('namespace');
-[...srv.entities('namespace')].map(e => e.keys); // .keys only available on entities
+srv.entities;
+[...srv.entities].map(e => e.keys); // .keys only available on entities
 // @ts-expect-error
-[...srv.events('namespace')].map(e => e.keys);
-[...srv.events('namespace')].map(e => e.elements)
+[...srv.events].map(e => e.keys);
+[...srv.events].map(e => e.elements)
+
+// @ts-expect-deprecation
+srv.entities('namespace');
+srv.events('namespace');
+srv.types('namespace');
+srv.operations('namespace');
+srv.actions('namespace');
 
 // @ts-expect-error
-srv.entities('namespace')('and again')
+cds.entities('namespace')('and again')
 
 type ActionType = HandlerFunction<typeof unboundAction>
 srv.on(unboundAction, externalActionHandler)
