@@ -12,8 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Changed
 ### Deprecated
 - `service.operations`
-### Removed
 - Undocumented `service.entities()`, `service.events()`, `service.types()`, and `service.operations()`
+### Removed
 ### Fixed
 - Types for `req.error()` et al.
 - Types for `cds.error()`
