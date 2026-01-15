@@ -412,6 +412,12 @@ type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : 
 
 /**
  * @beta helper
+ * Extracts the parameter type of a CdsFunction F.
+ * @example
+ * ```ts
+ * import { myAction } from '#cds-models/myService'
+ * function myHandlerFunction (req: Request<CdsFunctionParameters<typeof myAction>>) { ... }
+ * ```
  */
 type CdsFunctionParameters<F extends CdsFunction> = F['__parameters']
 
