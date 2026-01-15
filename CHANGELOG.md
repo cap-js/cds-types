@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Added `Request.messages`, `Request.errors` and `Request.results`
 - Types for `SELECT.stream()`
 - `service.actions`
+- Added `cds.CdsFunctionParameters` to extract parameter list type of a bound action
 ### Changed
 ### Deprecated
 - `service.operations`
