@@ -37,6 +37,10 @@ export type BoundAction = {
   __self: Foo
 }
 
+export class DummyService {
+  declare static readonly boundAction: typeof boundAction;
+}
+
 // little 'trust me, type system!' helper to make T|undefined into T.
 // useful for tricking the type system into accepting uninitialised properties
 // from classes (e.g. Foo.x) in definitely attached parameters.

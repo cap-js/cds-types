@@ -1,5 +1,5 @@
 import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
-import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType } from './dummy'
+import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType, DummyService } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
@@ -513,3 +513,8 @@ asrv.on('', (req) => {
 })
 asrv.dispatch('foo')
 asrv.dispatch(['foo', 'bar'])
+
+
+function myElsewhereHandler (req: cds.Request<cds.CdsFunctionParameters<typeof DummyService['boundAction']>>) {
+  req.data.foo
+}
