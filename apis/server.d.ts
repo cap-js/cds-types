@@ -204,6 +204,8 @@ type Middlewares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
   add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middlewares }>, { before: Middlewares }>) => void,
+  before: [RequestHandler],
+  after: [RequestHandler],
 }
 
 /**
