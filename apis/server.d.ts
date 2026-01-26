@@ -96,7 +96,7 @@ export function on (event: 'bootstrap', listener: (app: Application) => void): _
 export function once (event: 'bootstrap', listener: (app: Application) => void): _cds
 
 /**
- 	 * Emitted before the model is compiled for usage in Node.js or Java runtime.
+ 	 * Emitted  the model is compiled for usage in Node.js or Java runtime.
       	 * @beta
  	 */
 export function on (event: 'compile.for.runtime', listener: (model: CSN) => void): _cds
@@ -205,7 +205,6 @@ type Middlewares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 export const middlewares: {
   add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middlewares }>, { before: Middlewares }>) => void,
   before: [RequestHandler],
-  after: [RequestHandler],
 }
 
 /**
