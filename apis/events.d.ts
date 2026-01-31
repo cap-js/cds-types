@@ -20,7 +20,7 @@ export class EventContext {
 
   id: string
 
-  locale: `${string}_${string}`
+  locale?: string
 
   timestamp: Date
 
