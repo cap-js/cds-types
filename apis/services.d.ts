@@ -439,6 +439,9 @@ declare namespace CRUDEventHandler {
   type After<P, R = P | void | Error> = (data: undefined | P, req: Request<P>) => Promise<R> | R
 }
 
+// Subtype of Request as used in ActionEventHandlers
+type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
+
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove
 // { data: any } (inherited EventMessage} with a more restricted
