@@ -448,7 +448,7 @@ type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
 // type, based on the parameters of the action.
 interface ActionEventHandler<S, P, R> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  (req: Omit<Request, 'data'> & { data: P, subject: S }, next: Function): Promise<R> | R
+  (req: ActionRequest<P, S>, next: Function): Promise<R> | R
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.
