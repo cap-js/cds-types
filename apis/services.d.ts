@@ -439,13 +439,16 @@ declare namespace CRUDEventHandler {
   type After<P, R = P | void | Error> = (data: undefined | P, req: Request<P>) => Promise<R> | R
 }
 
+// Subtype of Request as used in ActionEventHandlers
+type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
+
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
 interface ActionEventHandler<S, P, R> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  (req: Omit<Request, 'data'> & { data: P, subject: S }, next: Function): Promise<R> | R
+  (req: ActionRequest<P, S>, next: Function): Promise<R> | R
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.

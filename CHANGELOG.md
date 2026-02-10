@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.16.0] - 2026-02-09
+
+### Added
 - Added `Request.messages`, `Request.errors` and `Request.results`
 - Types for `SELECT.stream()`
 - `service.actions`
@@ -18,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Fixed
 - Types for `req.error()` et al.
 - Types for `cds.error()`
+- Type for `cds.middlewares.before`
 ### Security
 
 ## [0.15.0] - 2025-09-26
