@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 ### Changed
+- `ResultHandler` now returns `unknown` instead of `void`, to accommodate asynchronous functions when having `@typescript-eslint/strict-void-return` activated
 ### Deprecated
 ### Removed
 ### Fixed
