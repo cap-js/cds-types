@@ -458,9 +458,11 @@ interface ActionEventHandler<S, P, R> {
 // (in a way that would benefit the user).
 // The user will therefore receive "any" as their result/ each. If we could some day differentiate,
 // we may want to add a generic to ResultsHandler which is passed from the EventHandlers down below.
+// The result of a ResultHandler is always ignored, so "void" would be a more fitting return type here.
+// unknown was chosen to accommodate the strict-void-return ESLint rule, which would stumble over async functions.
 interface ResultsHandler {
-  (results: any[], req: Request): void
-  (each: any, req: Request): void
+  (results: any[], req: Request): unknown
+  (each: any, req: Request): unknown
 }
 
 interface SpawnEvents {
