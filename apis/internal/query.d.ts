@@ -18,6 +18,36 @@ type PK = number | string | object
 // Defining overloads with it will override preceding signatures and the other way around.
 type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unknown[]) => T
 
+
+// Helper type to express nested predicates, like .where({title: 'foo', or { price: { '>': 42 } }})
+// wrapped helper to avoid having to apply UnwrappedInstanceType to every occurrence of T.
+// We can only offer this type for manual typing. Adding it as overload to .where() does not work,
+// as we also have catch-all signatures that would overlap with it and allow any properties of all types,
+// defeating the purpose of this type.
+/** @internal */
+type _PredicateMap<T> = {
+  [k in keyof Partial<T>]: (T[k] | Partial<{ [op in Op]: T[k] }>)
+}
+& { or?: PredicateMap<T>, and?: PredicateMap<T> }
+// disallow non-existing properties
+& { [key: string]: never }
+
+/**
+ * @example
+ * ```js
+ * const predicate: PredicateMap<Books> = {
+ *   title: 'foo',
+ *   or: {
+ *     price: { '>': 42 }
+ *   }
+ * }
+ * const result = await SELECT.from(Books).where(predicate)
+ * ```
+ * Note that you _have to_ explicitly type the predicate variable with `PredicateMap<T>`,
+ * as we can not offer this type as overload to `.where()` or `.having()`.
+ */
+type PredicateMap<T> = _PredicateMap<UnwrappedInstanceType<T>>
+
 type QueryArtefact = {
 
   /**
@@ -72,7 +102,7 @@ type KeyOfTarget<T, F = string | column_expr> = T extends ConstructedQuery<infer
     : keyof Unwrap<T>
 
 // as static SELECT borrows the type of Columns directly,
-// we need this second type argument to explicitly specific that "this" 
+// we need this second type argument to explicitly specific that "this"
 // refers to a STATIC<T>, not to a Columns. Or else we could not chain
 // other QL functions to .columns
 export interface Columns<T, This = undefined> {
@@ -89,15 +119,15 @@ type WS = '' | ' '
 type Expression<E extends string | number | bigint | boolean> = `${E}${WS}${Op}${WS}`
 type ColumnValue = Primitive | Readonly<Primitive[]> | SELECT<any>  // not entirely sure why Readonly is required here
 // TODO: it would be nicer to check for E[x] for the value instead of Primitive, where x is the key
-type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, ColumnValue> extends true 
-  ? L 
+type Expressions<L,E> = KVPairs<L, Expression<Exclude<keyof E, symbol>>, ColumnValue> extends true
+  ? L
   // fallback: allow for any string. Important for when user renamed properties
   : KVPairs<L, Expression<string>, ColumnValue> extends true
     ? L
     : never
 
 /**
- * @beta helper 
+ * @beta helper
  */
 type DeepPartial<T> = T extends object
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
@@ -108,7 +138,7 @@ type DeepPartial<T> = T extends object
       : { [K in keyof T]?: DeepPartial<T[K]> }
   : T
 
-type HavingWhere<This, E> = 
+type HavingWhere<This, E> =
   /**
    * @param predicate - An object with keys that are valid fields of the target entity and values that are compared to the respective fields.
    * @example
@@ -118,6 +148,7 @@ type HavingWhere<This, E> =
    * ```
    */
   ((predicate: Partial<{[column in KeyOfTarget<This extends ConstructedQuery<infer E> ? E : never, never>]: any}>) => This)
+
   /**
    * @param expr - An array of expressions, where every odd element is a valid field of the target entity and every even element is a value that is compared to the respective field.
    * @example
