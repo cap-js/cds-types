@@ -50,7 +50,7 @@
     }
   },
   "devDependencies": {
-    "@cap-js/cds-test": "^0",
+    "@cap-js/cds-test": "^0 || ^1",
     "@cap-js/db-service": "^2.3.0",
     "@microsoft/api-extractor": "^7.52.8",
     "@sap/cds-dk": "^9",
