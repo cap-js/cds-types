@@ -63,6 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Types for compile events: `compile.for.runtime`, `compile.to.dbx`, `compile.to.edmx`
 ### Changed
+- Types for `@sap/cds-dk` are now also available from the default export, if the package is intalled.
 ### Deprecated
 ### Removed
 ### Fixed
