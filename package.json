@@ -57,8 +57,8 @@
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
     "axios": "^1.6.2",
-    "eslint": "^9.2.0",
-    "typescript": "^5.4.5",
+    "eslint": "^10.2.1",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.0.0-alpha.51"
   }
 }
