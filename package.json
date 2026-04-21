@@ -58,7 +58,8 @@
     "@stylistic/eslint-plugin-ts": "^4.0.1",
     "@types/chai": "^5.2.3",
     "axios": "^1.6.2",
-    "eslint": "^9.2.0",
+    "eslint": "^10",
+    "globals": "^17.5.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^8.0.0-alpha.51"
   }
