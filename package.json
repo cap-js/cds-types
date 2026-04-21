@@ -56,6 +56,7 @@
     "@sap/cds-dk": "^9",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
+    "@types/chai": "^5.2.3",
     "axios": "^1.6.2",
     "eslint": "^9.2.0",
     "typescript": "^5.4.5",
