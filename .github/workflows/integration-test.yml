@@ -40,7 +40,6 @@ jobs:
     # running test:setup inside run-as-non-admin causes problems with creating OS links
     # -> run it outside of run-as-non-admin
     - run: |
-        npm i -g npm
         npm ci
         npm run test:setup
         npm run rollup:off
