@@ -86,8 +86,10 @@ declare class Test extends Axios {
 
   /**
    * The `expect` assertion from the `chai` assertion library.
-
    *
+   * For Jest, this returns a built-in implementation that covers the most common matchers with the standard `chai` API.
+   * If your tests need more matchers, move to a different test runner such as Vitest, which supports ESM-only modules like `chai`.
+   */
    * For Jest, this returns a built-in implementation that covers the most common matchers with the standard `chai` API.
    * If your tests need more matchers, move to a different test runner such as Vitest, which supports ESM-only modules like `chai`.
    */
