@@ -60,7 +60,7 @@
     "axios": "^1.6.2",
     "eslint": "^10",
     "globals": "^17.5.0",
-    "typescript": "^5.4.5",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.0.0-alpha.51"
   }
 }
