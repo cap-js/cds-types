@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosResponse } from 'axios'
-import type chai from 'chai'
+import * as chai from 'chai'
 import * as http from 'http'
 import { Service } from './services'
 import type * as cds from './cds'
@@ -10,7 +10,16 @@ type TaggedTemplateRequest = (strings: TemplateStringsArray, ...params: unknown[
 
 declare class Axios {
 
+  /**
+   * Provides access to an `axios` instance used as HTTP client.
+   * It comes preconfigured with the base URL of the running server, that is, `http://localhost:<port>`
+   *
+   * From `@cap-js/cds-test` >=1 onwards, it no longer points to the real `axios` library, but to an emulated lookalike, mostly for backward compatibility.
+   * Install `axios` explicitly as a project dependency if you need the full feature set of it. In that case, the HTTP shortcuts will automatically
+   * use the installed `axios` instead of the emulated version.
+   */
   get axios (): AxiosInstance
+
   get: AxiosInstance['get'] & TaggedTemplateRequest
 
   put: AxiosInstance['put'] & TaggedTemplateRequest
@@ -65,11 +74,23 @@ declare class Test extends Axios {
    */
   verbose (v: boolean): this
 
+  /**
+   * @deprecated Either use the {@link expect} property here or import `chai` in your test file.
+   */
   get chai (): typeof chai
 
-  get expect (): typeof chai.expect
-
+  /**
+   * @deprecated Either use the {@link expect} property here or import `chai.assert` in your test file.
+   */
   get assert (): typeof chai.assert
+
+  /**
+   * The `expect` assertion from the `chai` assertion library.
+   *
+   * For Jest, this returns a built-in implementation that covers the most common matchers with the standard `chai` API.
+   * If your tests need more matchers, move to a different test runner such as Vitest, which supports ESM-only modules like `chai`.
+   */
+  get expect (): typeof chai.expect
 
   get data (): DataUtil
 

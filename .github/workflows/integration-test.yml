@@ -26,21 +26,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [22, 20, 18]
+        version: [24, 22, 20]
         os: [windows-latest, ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.version }}
 
     # running test:setup inside run-as-non-admin causes problems with creating OS links
     # -> run it outside of run-as-non-admin
     - run: |
-        npm i -g npm
         npm ci
         npm run test:setup
         npm run rollup:off
