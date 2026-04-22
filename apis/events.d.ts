@@ -21,7 +21,7 @@ export class EventContext {
   id: string
 
   /**
-   * ISO 639-1 language code, optionally followed by a underscore and ISO 3166-1 alpha-2 country code, e.g. "en" or "en_US".
+   * ISO 639-1 language code, optionally followed by an underscore and ISO 3166-1 alpha-2 country code, e.g. "en" or "en_US".
    * May be `undefined` if the `AcceptLanguage` header is not set in the incoming request.
    */
   locale?: string
