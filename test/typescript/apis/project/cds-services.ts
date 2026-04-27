@@ -513,3 +513,8 @@ asrv.on('', (req) => {
 })
 asrv.dispatch('foo')
 asrv.dispatch(['foo', 'bar'])
+
+testType<Promise<number>>(cds.tx((tx) => 42))
+testType<Promise<number>>(cds.tx({}, (tx) => 42))
+testType<Promise<number>>(asrv.tx((tx) => 42))
+testType<Promise<number>>(asrv.tx({}, (tx) => 42))
