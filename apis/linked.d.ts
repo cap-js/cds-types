@@ -2,7 +2,12 @@ import * as csn from './csn'
 import { IterableMap } from './internal/util'
 import { Definitions, any_, entity, service_ } from './linked/classes'
 
-export type ModelPart<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
+export type ModelPart<T extends any_> = IterableMap<T> & {
+  /** @deprecated undocumented variant that will be removed in cds^10 */
+  (namespace: string): IterableMap<T>,
+}
+export type ModelPartFn<T extends any_> = IterableMap<T> & ((namespace: string) => IterableMap<T>)
+
 type Visitor = (def: any_, name: string, parent: any_, defs: Definitions) => void
 type Filter = string | (<T extends any_ = any_>(def: T) => boolean)
 
@@ -83,7 +88,7 @@ export interface LinkedCSN extends Omit<csn.CSN, 'definitions'> {
 	 */
   exports: IterableMap<any_>
   definitions: IterableMap<any_>
-  entities: ModelPart<entity>
+  entities: ModelPartFn<entity>
   services: ModelPart<service_>
 
 }

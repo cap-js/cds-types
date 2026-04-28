@@ -14,8 +14,6 @@ type Key = number | string | any
 
 export class QueryAPI {
 
-  entities: linked.LinkedCSN['entities']
-
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
@@ -171,10 +169,17 @@ export class Service extends QueryAPI {
   types: linked.ModelPart<linked.classes.type>
 
   /**
+   * @deprecated use {@link actions} instead
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
   operations: linked.ModelPart<linked.classes.action>
+
+  /**
+   * Provides access to the actions and functions, exposed by a service
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
+   */
+  actions: linked.ModelPart<linked.classes.action>
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -434,13 +439,16 @@ declare namespace CRUDEventHandler {
   type After<P, R = P | void | Error> = (data: undefined | P, req: Request<P>) => Promise<R> | R
 }
 
+// Subtype of Request as used in ActionEventHandlers
+type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
+
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
 interface ActionEventHandler<S, P, R> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  (req: Omit<Request, 'data'> & { data: P, subject: S }, next: Function): Promise<R> | R
+  (req: ActionRequest<P, S>, next: Function): Promise<R> | R
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.
@@ -450,9 +458,11 @@ interface ActionEventHandler<S, P, R> {
 // (in a way that would benefit the user).
 // The user will therefore receive "any" as their result/ each. If we could some day differentiate,
 // we may want to add a generic to ResultsHandler which is passed from the EventHandlers down below.
+// The result of a ResultHandler is always ignored, so "void" would be a more fitting return type here.
+// unknown was chosen to accommodate the strict-void-return ESLint rule, which would stumble over async functions.
 interface ResultsHandler {
-  (results: any[], req: Request): void
-  (each: any, req: Request): void
+  (results: any[], req: Request): unknown
+  (each: any, req: Request): unknown
 }
 
 interface SpawnEvents {
@@ -513,7 +523,6 @@ export const tx: {
   (context?: object): Transaction,
   (context: object, fn: (tx: Transaction) => object): Promise<any>,
 }
-export const entities: Service['entities']
 export const run: Service['run']
 export const foreach: Service['foreach']
 export const stream: Service['stream']
@@ -528,6 +537,8 @@ export const update: Service['update']
 export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
+
+export const entities: linked.LinkedCSN['entities']
 
 export const queued: (service: Service) => Service
 export const unqueued: (service: Service) => Service

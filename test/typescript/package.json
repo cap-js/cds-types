@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "express": "^4"
+    "express": "^4 || ^5"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",

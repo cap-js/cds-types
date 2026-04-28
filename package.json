@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -50,14 +50,16 @@
     }
   },
   "devDependencies": {
-    "@cap-js/cds-test": "^0",
+    "@cap-js/cds-test": "^0 || ^1",
     "@cap-js/db-service": "^2.3.0",
     "@microsoft/api-extractor": "^7.52.8",
     "@sap/cds-dk": "^9",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
+    "@types/chai": "^5.2.3",
     "axios": "^1.6.2",
-    "eslint": "^9.2.0",
+    "eslint": "^10",
+    "globals": "^17.5.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^8.0.0-alpha.51"
   }

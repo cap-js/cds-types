@@ -9,9 +9,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - Types for nested `.where` and `.having` predicates
 ### Changed
+- `ResultHandler` now returns `unknown` instead of `void`, to accommodate asynchronous functions when having `@typescript-eslint/strict-void-return` activated
+- Documentation for `cds.test.axios` mentioning that `@cap-js/cds-test@1` now returns an `axios` facade in absence of `axios`.
+- made `cds.context.locale` optional
+
 ### Deprecated
+- `cds.test.chai`, `cds.test.assert` pointing to either `cds.test.expect` or a custom import of `chai`.
 ### Removed
 ### Fixed
+### Security
+
+## [0.16.0] - 2026-02-09
+
+### Added
+- Added `Request.messages`, `Request.errors` and `Request.results`
+- Types for `SELECT.stream()`
+- `service.actions`
+### Changed
+### Deprecated
+- `service.operations`
+- Undocumented `service.entities()`, `service.events()`, `service.types()`, and `service.operations()`
+### Removed
+### Fixed
+- Types for `req.error()` et al.
+- Types for `cds.error()`
+- Type for `cds.middlewares.before`
 ### Security
 
 ## [0.15.0] - 2025-09-26
