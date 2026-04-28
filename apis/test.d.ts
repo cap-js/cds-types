@@ -24,7 +24,7 @@ declare class Axios {
    * - `baseURL` as defined in Axios
    * - `auth` as defined in Axios
    * - `headers` as defined in Fetch API and Axios
-   * - `validateStatus` as defined in Axios (default: status < 200 && status >= 300)
+   * - `validateStatus` as defined in Axios (default: status >= 200 && status < 300)
    *
    * In addition, you can use all of the config options understood by the underlying HTTP client, that is, for Fetch API,
    * its RequestInit options, and for Axios, its request config options.
