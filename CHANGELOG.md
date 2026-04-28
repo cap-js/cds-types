@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Types for nested `.where` and `.having` predicates
+
+
 ### Changed
 - `ResultHandler` now returns `unknown` instead of `void`, to accommodate asynchronous functions when having `@typescript-eslint/strict-void-return` activated
 - Documentation for `cds.test.axios` mentioning that `@cap-js/cds-test@1` now returns an `axios` facade in absence of `axios`.
