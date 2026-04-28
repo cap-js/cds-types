@@ -2,6 +2,7 @@ import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
+import { levels } from './log'
 
 
 /**
@@ -19,7 +20,11 @@ export class EventContext {
 
   id: string
 
-  locale: `${string}_${string}`
+  /**
+   * ISO 639-1 language code, optionally followed by an underscore and ISO 3166-1 alpha-2 country code, e.g. "en" or "en_US".
+   * May be `undefined` if the `AcceptLanguage` header is not set in the incoming request.
+   */
+  locale?: string
 
   timestamp: Date
 
@@ -49,9 +54,24 @@ export class Event<T = unknown> extends EventContext {
 /**
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/events)
  */
-export class Request<T = any> extends Event<T> {
+export class Request<
+  D = any,
+  P extends Record<string, any>[] = Record<string, any>[]
+> extends Event<D> {
 
-  params: Record<string, any>[]
+  messages: {message: string, numericSeverity: levels}[]
+
+  errors: {
+    code?: number,
+    message: string,
+    stack: string,
+    target?: string,
+    args?: unknown[],
+  }[]
+
+  results: D[]
+
+  params: P
 
   method: string
 
@@ -73,48 +93,49 @@ export class Request<T = any> extends Event<T> {
   /** @beta */
   reply (results: any, options: { mimetype?: string, filename?: string, [key: string]: any }): void
 
-  notify (code: number, message: string, target?: string, args?: any[]): Error
-
-  info (code: number, message: string, target?: string, args?: any[]): Error
-
-  warn (code: number, message: string, target?: string, args?: any[]): Error
-
-  error (code: number, message: string, target?: string, args?: any[]): Error
-
-  reject (code: number, message: string, target?: string, args?: any[]): never
-
-  notify (code: number, message: string, args?: any[]): Error
-
-  info (code: number, message: string, args?: any[]): Error
-
-  warn (code: number, message: string, args?: any[]): Error
-
-  error (code: number, message: string, args?: any[]): Error
-
-  reject (code: number, message: string, args?: any[]): never
-
+  // positional args
   notify (message: string, target?: string, args?: any[]): Error
+  notify (status: number, message?: string, target?: string, args?: any[]): Error
 
   info (message: string, target?: string, args?: any[]): Error
+  info (status: number, message?: string, target?: string, args?: any[]): Error
 
   warn (message: string, target?: string, args?: any[]): Error
+  warn (status: number, message?: string, target?: string, args?: any[]): Error
 
   error (message: string, target?: string, args?: any[]): Error
+  error (status: number, message?: string, target?: string, args?: any[]): Error
+  error (status: number, target?: string, args?: any[]): Error
 
   reject (message: string, target?: string, args?: any[]): never
+  reject (status: number, message?: string, target?: string, args?: any[]): never
 
-  notify (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+  // single object arg
+  notify (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  notify (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  info (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+  info (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  info (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  warn (message: { code?: number | string, message: string, target?: string, args?: any[] }): Error
+  warn (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  warn (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  error (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): Error
+  error (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
+  error (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
 
-  reject (message: { code?: number | string, message: string, target?: string, args?: any[], status?: number }): never
+  reject (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): never
+  reject (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): never
 
 }
 
+export type GetRequest<
+  P extends Record<string, any>[]
+> = Request<Record<never, never>, P>;
+
+export type PostRequest<
+  D = any,
+  P extends Record<string, any>[] = Record<string, any>[]
+> = Request<D, P>;
 
 /**
  * Represents the user in a given context.

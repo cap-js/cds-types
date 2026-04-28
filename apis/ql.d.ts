@@ -118,23 +118,24 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
   }
 
   /**
-   * If a parameter is given, the raw data stream is piped into it.
-   *
-   * If no parameter is given, the raw data stream is returned.
+   * Pipes the raw data stream into the given writable stream.
    * @param stream the writable stream to pipe the raw data into
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#pipeline)
    * @since 9.3.0
    */
   pipeline(stream: Writable): Promise<void>
   /**
-   * If a parameter is given, the raw data stream is piped into it.
-   *
-   * If no parameter is given, the raw data stream is returned.
-   * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#pipeline)
-   * @since 9.3.0
-   * @returns Readable
+   * @deprecated use `.stream()` instead
    */
   pipeline(): Promise<Readable>
+
+  /**
+   * Returns the raw data stream.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#stream)
+   * @since 9.4.0
+   * @returns Readable
+   */
+  stream(): Promise<Readable>
 
   /**
    * Calls the given callback function for each row in the result set.

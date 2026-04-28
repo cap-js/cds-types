@@ -7,11 +7,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+- `ResultHandler` now returns `unknown` instead of `void`, to accommodate asynchronous functions when having `@typescript-eslint/strict-void-return` activated
+- Documentation for `cds.test.axios` mentioning that `@cap-js/cds-test@1` now returns an `axios` facade in absence of `axios`.
+- made `cds.context.locale` optional
+
+### Deprecated
+- `cds.test.chai`, `cds.test.assert` pointing to either `cds.test.expect` or a custom import of `chai`.
+### Removed
+### Fixed
+### Security
+
+## [0.16.0] - 2026-02-09
+
+### Added
+- Added `Request.messages`, `Request.errors` and `Request.results`
+- Types for `SELECT.stream()`
+- `service.actions`
+### Changed
+### Deprecated
+- `service.operations`
+- Undocumented `service.entities()`, `service.events()`, `service.types()`, and `service.operations()`
+### Removed
+### Fixed
+- Types for `req.error()` et al.
+- Types for `cds.error()`
+- Type for `cds.middlewares.before`
+### Security
+
+## [0.15.0] - 2025-09-26
+
+### Added
+- Allow array-like params in CQN.expr via `{ list: [...] }` syntax
+- Types for `cds.error()`
+- `GetRequest` and `PostRequest` types
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.14.0] - 2025-08-28
+
+### Added
 - Types for alpha task scheduling API
 - Types for `SELECT.pipeline()` and `SELECT.foreach()`
 - Support deep partial `INSERT` / `UPDATE`
 ### Changed
 - `req.subject` now points to the bound entity type when implementing handlers for bound actions.
+- `service.dispatch` now also supports passing request objects, or arrays thereof.
 ### Deprecated
 ### Removed
 ### Fixed
