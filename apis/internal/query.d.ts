@@ -33,6 +33,7 @@ type _PredicateMap<T> = {
 & { [key: string]: never }
 
 /**
+ * @beta helper
  * @example
  * ```js
  * const predicate: PredicateMap<Books> = {
@@ -46,7 +47,7 @@ type _PredicateMap<T> = {
  * Note that you _have to_ explicitly type the predicate variable with `PredicateMap<T>`,
  * as we can not offer this type as overload to `.where()` or `.having()`.
  */
-type PredicateMap<T> = _PredicateMap<UnwrappedInstanceType<T>>
+export type PredicateMap<T> = _PredicateMap<UnwrappedInstanceType<T>>
 
 type QueryArtefact = {
 

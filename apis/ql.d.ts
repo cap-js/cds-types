@@ -35,7 +35,7 @@ import { Service } from './services'
 
 export type Query = CQN.Query
 
-export { QLExtensions } from './internal/query'
+export { QLExtensions, PredicateMap } from './internal/query'
 
 // this just serves as a reminder that we can not get rid of some of the anys at this point
 // as the would refer to the generic type of the surrounding class
