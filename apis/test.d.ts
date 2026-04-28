@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosResponse } from 'axios'
+import { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios'
 import * as chai from 'chai'
 import * as http from 'http'
 import { Service } from './services'
@@ -11,14 +11,25 @@ type TaggedTemplateRequest = (strings: TemplateStringsArray, ...params: unknown[
 declare class Axios {
 
   /**
-   * Provides access to an `axios` instance used as HTTP client.
-   * It comes preconfigured with the base URL of the running server, that is, `http://localhost:<port>`
-   *
-   * From `@cap-js/cds-test` >=1 onwards, it no longer points to the real `axios` library, but to an emulated lookalike, mostly for backward compatibility.
+   * @deprecated Used to provide access to an `axios` instance used as HTTP client. From `@cap-js/cds-test` >=1 onwards, it no longer points to
+   * the real `axios` library, but to an emulated lookalike, mostly for backward compatibility.
    * Install `axios` explicitly as a project dependency if you need the full feature set of it. In that case, the HTTP shortcuts will automatically
    * use the installed `axios` instead of the emulated version.
    */
   get axios (): AxiosInstance
+
+  /**
+   * Provides default values for HTTP requests. To stay portable across different HTTP clients, it's recommended to only use these options,
+   * which cds.test supports across all clients:
+   * - `baseURL` as defined in Axios
+   * - `auth` as defined in Axios
+   * - `headers` as defined in Fetch API and Axios
+   * - `validateStatus` as defined in Axios (default: status >= 200 && status < 300)
+   *
+   * In addition, you can use all of the config options understood by the underlying HTTP client, that is, for Fetch API,
+   * its RequestInit options, and for Axios, its request config options.
+   */
+  get defaults (): AxiosRequestConfig & RequestInit
 
   get: AxiosInstance['get'] & TaggedTemplateRequest
 

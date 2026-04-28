@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Deprecated
 - `cds.test.chai`, `cds.test.assert` pointing to either `cds.test.expect` or a custom import of `chai`.
+- `cds.test.axios` in favor of `cds.test.defaults`
 ### Removed
 ### Fixed
 ### Security
