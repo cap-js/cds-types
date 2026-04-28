@@ -92,9 +92,9 @@ export class QueryAPI {
   transaction: QueryAPI['tx']
 
   tx: {
-    (fn: (tx: Transaction) => object): Promise<unknown>,
+    <T>(fn: (tx: Transaction) => T): Promise<Awaited<T>>,
     (context?: object): Transaction,
-    (context: object, fn: (tx: Transaction) => object): Promise<unknown>,
+    <T>(context: object, fn: (tx: Transaction) => T): Promise<Awaited<T>>,
   }
 
 }
@@ -519,9 +519,9 @@ export function spawn (options: SpawnOptions, fn: (tx: Transaction) => object): 
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
 */
 export const tx: {
-  (fn: (tx: Transaction) => object): Promise<any>,
+  <T>(fn: (tx: Transaction) => T): Promise<T>,
   (context?: object): Transaction,
-  (context: object, fn: (tx: Transaction) => object): Promise<any>,
+  <T>(context: object, fn: (tx: Transaction) => T): Promise<T>,
 }
 export const run: Service['run']
 export const foreach: Service['foreach']
