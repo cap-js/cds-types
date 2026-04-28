@@ -28,7 +28,7 @@ type TaggedTemplateQueryPart<T> = (strings: TemplateStringsArray, ...params: unk
 type _PredicateMap<T> = {
   [k in keyof Partial<T>]: (T[k] | Partial<{ [op in Op]: T[k] }>)
 }
-& { or?: PredicateMap<T>, and?: PredicateMap<T> }
+& { or?: _PredicateMap<T>, and?: _PredicateMap<T> }
 // disallow non-existing properties
 & { [key: string]: never }
 
