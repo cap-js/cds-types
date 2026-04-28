@@ -6,9 +6,7 @@ import { Foo, Foos, attach, testType } from './dummy'
 import { connect } from '../../../../apis/server';
 import { expr, ref, val } from '../../../../apis/cqn';
 import * as assert from 'node:assert/strict';
-import { Readable } from 'node:stream';
 import { PredicateMap } from '../../../../apis/internal/query';
-import { UnwrappedInstanceType } from '../../../../apis/internal/inference';
 
 
 // @ts-expect-error - only supposed to be used statically, constructors private
