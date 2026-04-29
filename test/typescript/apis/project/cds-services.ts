@@ -1,5 +1,5 @@
 import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
-import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType } from './dummy'
+import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType, MyEvent } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
 import express from 'express'
@@ -519,3 +519,9 @@ testType<Promise<number>>(cds.tx({}, (tx) => 42))
 testType<Promise<number>>(asrv.tx((tx) => 42))
 testType<Promise<number>>(asrv.tx({}, (tx) => 42))
 testType<number>(await srv.tx(async (tx) => 42))
+
+asrv.on(MyEvent, (req) => {
+  testType<number>(req.data.foo)
+  // @ts-expect-error - must be number, and nothing else
+  testType<string>(req.data.foo)
+})
