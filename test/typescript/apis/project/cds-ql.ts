@@ -299,6 +299,7 @@ DELETE.from `${x}` .where `ID=${x}`
 
 SELECT.from(Foos).forUpdate()
 SELECT.from(Foos).forUpdate({wait: 5})
+SELECT.from(Foos).forUpdate({ignoreLocked: true})
 SELECT.from(Foos).forShareLock()
 
 INSERT.into('Foos').values(1,2,3)
