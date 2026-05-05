@@ -80,11 +80,14 @@ export const serve: (service: string, options?: {
 // FIXME: this is actually supposed to be part of models.d.ts
 // but had to be moved here so export * would not clash their definitions
 export function on (event: 'loaded', listener: (model: CSN) => void): _cds
+export function once (event: 'loaded', listener: (model: CSN) => void): _cds
+
 
 /**
 	 * Emitted whenever a specific service is connected for the first time.
 	 */
 export function on (event: 'connect', listener: (srv: Service) => void): _cds
+export function once (event: 'connect', listener: (srv: Service) => void): _cds
 
 
 /**
@@ -120,7 +123,7 @@ export function once (event: 'compile.to.edmx', listener: (model: CSN) => void):
 	 * Emitted for each service served by cds.serve().
 	 */
 export function on (event: 'serving', listener: (srv: Service) => void): _cds
-
+export function once (event: 'serving', listener: (srv: Service) => void): _cds
 /**
 	 * Emitted by the default, built-in `server.js` when all services are
 	 * constructed and mounted by cds.serve().
