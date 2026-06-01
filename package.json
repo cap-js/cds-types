@@ -41,7 +41,7 @@
   },
   "peerDependencies": {
     "@sap/cds": ">=9.0.0",
-    "@sap/cds-dk": "^9",
+    "@sap/cds-dk": ">=9",
     "@types/express": ">=4"
   },
   "peerDependenciesMeta": {
@@ -51,9 +51,9 @@
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0 || ^1",
-    "@cap-js/db-service": "^2.3.0",
+    "@cap-js/db-service": "^2.3.0 || ^3",
     "@microsoft/api-extractor": "^7.52.8",
-    "@sap/cds-dk": "^9",
+    "@sap/cds-dk": "^9 || ^10",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
     "@types/chai": "^5.2.3",
