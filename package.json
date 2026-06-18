@@ -35,7 +35,7 @@
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "setup": "npm i && npm i file:. --no-save --force",
-    "prerelease:ci-fix": "node .github/prerelease-fix.js",
+    "prerelease:ci-fix": "node .github/prerelease-fix.js"
   },
   "peerDependencies": {
     "@sap/cds": ">=9.0.0",
