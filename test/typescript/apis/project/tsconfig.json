@@ -1,16 +1,19 @@
 {
   "include": ["*.ts"],
   "compilerOptions": {
-    "module": "ES2022",
+    "module": "nodenext",
     "target": "ES2022",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "noEmit": true,
     "noImplicitAny": true
   },
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "paths": {
+    "@sap/cds": ["./node_modules/@cap-js/cds-types"]
+  }
 }
