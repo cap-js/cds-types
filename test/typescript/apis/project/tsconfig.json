@@ -1,7 +1,7 @@
 {
   "include": ["*.ts"],
   "compilerOptions": {
-    "module": "nodenext",
+    "module": "esnext",
     "target": "ES2022",
     "strict": true,
     "esModuleInterop": true,
