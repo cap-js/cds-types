@@ -20,7 +20,7 @@
   "scripts": {
     "test:integration": "echo 0",
     "test:runtime": "npm run test:runtime:post-mortem; rm -rf test/typescript/_out",
-    "test:runtime:tsc": "npx tsc test/typescript/runtime.test.ts --outDir test/typescript/_out --target ES2020 --module commonjs --esModuleInterop",
+    "test:runtime:tsc": "npx tsc --project test/typescript/tsconfig.runtime.json",
     "test:runtime:post-mortem": "npm run test:runtime:tsc && node --test './test/typescript/_out/runtime.test.js'",
     "test:api-calls": "node --test './test/typescript/apis/cds-api-calls.test.js'",
     "test:typings": "node --test './test/typescript/cds-typings.test.js'",
