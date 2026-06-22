@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "ES2022",
     "target": "ES2022",
-    "strict": false,
+    // "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
