@@ -45,9 +45,9 @@ export class Event<T = unknown> extends EventContext {
 
   headers: any
 
-  before(phase: 'commit', handler: () => void)
+  before(phase: 'commit', handler: () => void): void
 
-  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void)
+  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void): void
 
 }
 

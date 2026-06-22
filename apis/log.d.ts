@@ -69,7 +69,7 @@ declare type LogFactory = {
 
   // FIXME
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  winstonLogger (LoggerOptions?: { level?: string, levels?: any, format?: any, transports?: any, exitOnError?: boolean | Function, silent?: boolean }),
+  winstonLogger (LoggerOptions?: { level?: string, levels?: any, format?: any, transports?: any, exitOnError?: boolean | Function, silent?: boolean }): Logger,
 }
 
 declare class Logger {
@@ -138,7 +138,7 @@ declare class Logger {
      *
      * The formatter shall return an array of arguments, which are passed to the logger (for example, `console.log()`)
      */
-  setFormat (formatter: Formatter)
+  setFormat (formatter: Formatter): void
 
 }
 

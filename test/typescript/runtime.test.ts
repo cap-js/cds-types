@@ -51,7 +51,7 @@ describe('CDS Runtime Tests', () => {
 
   test('should test miscellaneous functionality', () => {
 
-    if (global.false as boolean) {
+    if ((global as unknown as {false:boolean}).false) {
       let q1 : Query
       let x1 = q1!.INSERT!.entries[1].foo
 
@@ -238,7 +238,7 @@ describe('CDS Runtime Tests', () => {
     // let q = SELECT.from(Books).where({ID:1})
     // assert.strictEqual(q.SELECT.from.ref[0], 'Books')
 
-    if (global.false as boolean) {
+    if ((global as unknown as {false:boolean}).false) {
       let srv = new cds.Service
       let { Books } = srv.entities
       Books.name
@@ -254,7 +254,7 @@ describe('CDS Runtime Tests', () => {
       srv.after('READ', [ Books, Books.drafts! ], console.log)
       srv.on('READ', [ Books, Books.drafts! ], console.log)
     }
-    if (global.false as boolean) {
+    if ((global as unknown as {false:boolean}).false) {
       let csn = cds.compile(`entity Foo { key ID: Integer; name: String; }`).to.csn()
       let { Foo } = csn.definitions!
       // Foo.name //> error: .name is not defined on unlinked CSN definitions
