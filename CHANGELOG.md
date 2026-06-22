@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 ### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.18.0] - 2026-06-22
+
+### Added
+### Changed
 - Installing `@cap-js/cds-types` no longer executes a postinstall script that creates a symlink in `node_modules/@types`. Instead, use a `paths` entry in your tsconfig.json. This entry can be created by running `cds add typescript` in your project.
 ### Deprecated
 ### Removed
