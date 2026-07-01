@@ -105,7 +105,7 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
 
   forShareLock (): this
 
-  forUpdate ({ wait }?: { wait?: number }): this
+  forUpdate({ wait, ignoreLocked }?: { wait?: number, ignoreLocked?: boolean }): this
 
   alias (as: string): this
   elements: EntityElements
