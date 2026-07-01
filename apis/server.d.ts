@@ -80,11 +80,14 @@ export const serve: (service: string, options?: {
 // FIXME: this is actually supposed to be part of models.d.ts
 // but had to be moved here so export * would not clash their definitions
 export function on (event: 'loaded', listener: (model: CSN) => void): _cds
+export function once (event: 'loaded', listener: (model: CSN) => void): _cds
+
 
 /**
 	 * Emitted whenever a specific service is connected for the first time.
 	 */
 export function on (event: 'connect', listener: (srv: Service) => void): _cds
+export function once (event: 'connect', listener: (srv: Service) => void): _cds
 
 
 /**
@@ -96,10 +99,31 @@ export function on (event: 'bootstrap', listener: (app: Application) => void): _
 export function once (event: 'bootstrap', listener: (app: Application) => void): _cds
 
 /**
+ 	 * Emitted  the model is compiled for usage in Node.js or Java runtime.
+      	 * @beta
+ 	 */
+export function on (event: 'compile.for.runtime', listener: (model: CSN) => void): _cds
+export function once (event: 'compile.for.runtime', listener: (model: CSN) => void): _cds
+
+/**
+ 	 * Emitted before database-specific artifacts, i.e. SQL DDL scripts, are generated from the model.
+   	 * @beta
+ 	 */
+export function on (event: 'compile.to.dbx', listener: (model: CSN) => void): _cds
+export function once (event: 'compile.to.dbx', listener: (model: CSN) => void): _cds
+
+/**
+ 	 * Emitted immediately before the model is compiled to edmx.
+      	 * @beta
+ 	 */
+export function on (event: 'compile.to.edmx', listener: (model: CSN) => void): _cds
+export function once (event: 'compile.to.edmx', listener: (model: CSN) => void): _cds
+
+/**
 	 * Emitted for each service served by cds.serve().
 	 */
 export function on (event: 'serving', listener: (srv: Service) => void): _cds
-
+export function once (event: 'serving', listener: (srv: Service) => void): _cds
 /**
 	 * Emitted by the default, built-in `server.js` when all services are
 	 * constructed and mounted by cds.serve().
@@ -138,6 +162,14 @@ export const service: service
    */
 export function exit (): void
 
+/**
+ * @see [capire](https://cap.cloud.sap/docs/node.js/cds-facade#cds-error)
+ */
+export function error (status: number, message: string, details?: {stack?: unknown}, caller?: (...args: any[]) => unknown): Error
+export function error (message: string, details?: {status: number, stack?: unknown}, caller?: (...args: any[]) => unknown): Error
+export function error (details: {status: number, message: string}, caller?: (...args: any[]) => unknown): Error
+export function error (string: TemplateStringsArray, ...args: any[]): Error
+
 
 export type service = {
 
@@ -175,6 +207,7 @@ type Middlewares = 'context' | 'trace' | 'auth' | 'ctx_model' | string
 
 export const middlewares: {
   add: (middleware: RequestHandler, pos?: XOR<XOR<{ at: number }, { after: Middlewares }>, { before: Middlewares }>) => void,
+  before: RequestHandler[],
 }
 
 /**

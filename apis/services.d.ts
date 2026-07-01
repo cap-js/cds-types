@@ -14,8 +14,6 @@ type Key = number | string | any
 
 export class QueryAPI {
 
-  entities: linked.LinkedCSN['entities']
-
   /**
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
@@ -94,9 +92,9 @@ export class QueryAPI {
   transaction: QueryAPI['tx']
 
   tx: {
-    (fn: (tx: Transaction) => object): Promise<unknown>,
+    <T>(fn: (tx: Transaction) => T): Promise<Awaited<T>>,
     (context?: object): Transaction,
-    (context: object, fn: (tx: Transaction) => object): Promise<unknown>,
+    <T>(context: object, fn: (tx: Transaction) => T): Promise<Awaited<T>>,
   }
 
 }
@@ -104,6 +102,22 @@ export class QueryAPI {
 type PropertiesOf<T> = {
   [K in keyof T]?: T[K];
 };
+
+// pulled out from service.send to be reused as part of service.schedule, with extra capabilities
+type Send<AddOn = {}> = {
+  <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T> & AddOn,
+  <T = any>(event: types.event, data?: object, headers?: object): Promise<T> & AddOn,
+  <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T> & AddOn,
+  <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T> & AddOn,
+}
+
+// after() and every() can be called at most once per fluent string!
+type FluentScheduling<O extends keyof FluentScheduling = never> = {
+  after: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'after'>, O | 'after'>,
+  every: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'every'>, O | 'every'>,
+}
 
 /**
  * Class cds.Service
@@ -155,10 +169,17 @@ export class Service extends QueryAPI {
   types: linked.ModelPart<linked.classes.type>
 
   /**
+   * @deprecated use {@link actions} instead
    * Provides access to the operations, i.e. actions and functions, exposed by a service
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
    */
   operations: linked.ModelPart<linked.classes.action>
+
+  /**
+   * Provides access to the actions and functions, exposed by a service
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services)
+   */
+  actions: linked.ModelPart<linked.classes.action>
 
   /**
    * Acts like a parameter-less constructor. Ensure to call `await super.init()` to have the base class’s handlers added.
@@ -181,21 +202,27 @@ export class Service extends QueryAPI {
     <P extends ArrayConstructable, R>(event: P, data: PropertiesOf<SingularInstanceType<P>>, headers?: object): Promise<R>,
     <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
     <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
   }
 
   /**
    * Constructs and sends a synchronous request.
    * @see [capire docs](https://cap.cloud.sap/docs/node.js/core-services#srv-send-request)
    */
-  send: {
-    <T = any>(event: types.event, path: string, data?: object, headers?: object): Promise<T>,
-    <T = any>(event: types.event, data?: object, headers?: object): Promise<T>,
-    <T = any>(details: { event: types.event, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { query: ConstructedQuery<T>, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { method: types.eventName, path: string, data?: object, headers?: object }): Promise<T>,
-    <T = any>(details: { event: types.eventName, entity: linked.Definition | string, data?: object, params?: object, headers?: object }): Promise<T>,
-  }
+  send: Send
+
+  /**
+   * @alpha
+   * Constructs and schedules a request for asynchronous processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-scheduling)
+   */
+  schedule: Send<FluentScheduling>
+
+  /**
+   * @alpha
+   * Triggers task processing.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/queue#task-processing)
+   */
+  flush(): Promise<void>
 
   /**
    * Constructs and sends a GET request.
@@ -231,7 +258,7 @@ export class Service extends QueryAPI {
   }
 
   // The central method to dispatch events
-  dispatch (msg: types.event): Promise<any>
+  dispatch (msg: types.event | Request | types.event[] | Request[]): Promise<any>
 
   // FIXME: not yet documented, will come in future version
   // disconnect (tenant?: string): Promise<void>
@@ -241,8 +268,10 @@ export class Service extends QueryAPI {
 
   on<T extends ArrayConstructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.On<Unwrap<T>>): this
   on<T extends Constructable>(eve: types.event, entity: T | T[], handler: CRUDEventHandler.On<InstanceType<T>>): this
-  on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
-  on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__parameters'], void | Error | F['__returns']>): this
+  on<F extends CdsFunction>(boundAction: F, service: string, handler: ActionEventHandler<F['__self'], F['__parameters'], void | Error | F['__returns']>): this
+  on<F extends CdsFunction>(unboundAction: F, handler: ActionEventHandler<F['__self'], F['__parameters'], void | Error | F['__returns']>): this
+  // event classes, generated by cds-typer
+  on<E extends {new (...args: any): any, kind: 'event'}>(eve: E, handler: EventHandler<InstanceType<E>>): this
   on (eve: types.event, entity: types.target, handler: OnEventHandler): this
   on (eve: types.event, handler: OnEventHandler): this
   on (eve: 'error', handler: OnErrorHandler): this
@@ -337,9 +366,9 @@ interface ServiceImpl {
   (this: Service, srv: Service): any
 }
 
-interface EventHandler {
+interface EventHandler<E = any> {
   // (msg : types.EventMessage) : Promise<any> | any | void
-  (req: Request): Promise<any> | any | void
+  (req: Request<E>): Promise<any> | any | void
 }
 
 interface OnEventHandler {
@@ -374,6 +403,7 @@ type CdsFunction = {
   (...args: any[]): any,
   __parameters: object,
   __returns: any,
+  __self?: any,  // the entity the function is bound to, in case of bound functions
 }
 
 // extracts all CdsFunction properties from T
@@ -387,11 +417,11 @@ type CdsFunctions<T> = Pick<T, { [K in keyof T]: T[K] extends CdsFunction ? K : 
  * @example
  * ```ts
  * import { myAction } from '#cds-models/myService'
- * 
+ *
  * function onMyFunction (req: HandlerFunction<typeof myAction>['parameters']['req']): HandlerFunction<typeof myAction>['returns'] {
  *   ...
  * }
- * 
+ *
  * srv.on(myAction, onMyFunction)
  * ```
  */
@@ -411,13 +441,16 @@ declare namespace CRUDEventHandler {
   type After<P, R = P | void | Error> = (data: undefined | P, req: Request<P>) => Promise<R> | R
 }
 
+// Subtype of Request as used in ActionEventHandlers
+type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
+
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove
 // { data: any } (inherited EventMessage} with a more restricted
 // type, based on the parameters of the action.
-interface ActionEventHandler<P, R> {
+interface ActionEventHandler<S, P, R> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  (req: Omit<Request, 'data'> & { data: P }, next: Function): Promise<R> | R
+  (req: ActionRequest<P, S>, next: Function): Promise<R> | R
 }
 
 // Note: the behaviour of ResultsHandler changes based on the name of the parameter.
@@ -427,9 +460,11 @@ interface ActionEventHandler<P, R> {
 // (in a way that would benefit the user).
 // The user will therefore receive "any" as their result/ each. If we could some day differentiate,
 // we may want to add a generic to ResultsHandler which is passed from the EventHandlers down below.
+// The result of a ResultHandler is always ignored, so "void" would be a more fitting return type here.
+// unknown was chosen to accommodate the strict-void-return ESLint rule, which would stumble over async functions.
 interface ResultsHandler {
-  (results: any[], req: Request): void
-  (each: any, req: Request): void
+  (results: any[], req: Request): unknown
+  (each: any, req: Request): unknown
 }
 
 interface SpawnEvents {
@@ -486,11 +521,10 @@ export function spawn (options: SpawnOptions, fn: (tx: Transaction) => object): 
 * @see [docs](https://cap.cloud.sap/docs/node.js/cds-tx)
 */
 export const tx: {
-  (fn: (tx: Transaction) => object): Promise<any>,
+  <T>(fn: (tx: Transaction) => T): Promise<T>,
   (context?: object): Transaction,
-  (context: object, fn: (tx: Transaction) => object): Promise<any>,
+  <T>(context: object, fn: (tx: Transaction) => T): Promise<T>,
 }
-export const entities: Service['entities']
 export const run: Service['run']
 export const foreach: Service['foreach']
 export const stream: Service['stream']
@@ -506,5 +540,16 @@ export const transaction: Service['transaction']
 export const db: DatabaseService
 // export const upsert: Service['upsert']
 
+export const entities: linked.LinkedCSN['entities']
+
+export const queued: (service: Service) => Service
+export const unqueued: (service: Service) => Service
+
+/*
+ * @deprecated use {@link queued} instead
+ */
 export const outboxed: (service: Service) => Service
+/*
+ * @deprecated use {@link unqueued} instead
+ */
 export const unboxed: (service: Service) => Service

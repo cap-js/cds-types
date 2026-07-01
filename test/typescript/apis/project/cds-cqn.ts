@@ -62,3 +62,15 @@ const drqn: cds.DROP = undefined as unknown as cds.DROP
 res = drqn.DROP.entity.toLowerCase()  // lazy "type check" for string
 res = drqn.DROP.table.ref
 res = drqn.DROP.view.ref
+
+sqn.SELECT.where = [
+    { ref: ["a"] },
+    "=",
+    { val: 'a' }
+]
+
+sqn.SELECT.where = [
+    { ref: ["a"] },
+    "in",
+    { list: [ "a", "b", "c" ] }
+]

@@ -1,5 +1,5 @@
 import { Definition, entity } from './csn' // cyclic dependency
-import { UnionToIntersection, UnionsToIntersections } from './internal/inference'
+import { UnionToIntersection } from './internal/inference'
 
 // FIXME: a union type would be more appropriate here
 export type Query = { 
@@ -76,12 +76,12 @@ type name = string
 /** @private */
 type source = UnionToIntersection<ref | SELECT> & { as?: name, join?: name, on?: xpr }
 export type column_expr = UnionToIntersection<expr> & { as?: name, cast?: any, expand?: column_expr[], inline?: column_expr[] }
-export type predicate = UnionsToIntersections<_xpr>
+export type predicate = _xpr  // not an intersection on purpose!
 
 /** @private */
 type ordering_term = UnionToIntersection<expr> & { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }
 
-export type expr = ref | val | xpr | function_call | SELECT
+export type expr = ref | val | list | xpr | function_call | SELECT
 
 /** @private */
 type ref = { ref: _segment[] }
@@ -102,6 +102,9 @@ type _named = { [key: name]: expr }
 
 /** @private */
 type val = { val: any }
+
+/** @private */
+type list = { list: any[] }
 
 /** @private */
 type xpr = { xpr: _xpr }

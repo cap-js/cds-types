@@ -6,6 +6,7 @@ import {
   Service,
   EventContext,
   Request,
+  PostRequest,
   Event,
   // User, >> already imported above
 
@@ -50,17 +51,17 @@ describe('CDS Runtime Tests', () => {
 
   test('should test miscellaneous functionality', () => {
 
-    if (global.false) {
+    if ((global as unknown as {false:boolean}).false) {
       let q1 : Query
-      let x1 = q1.INSERT.entries[1].foo
+      let x1 = q1!.INSERT!.entries[1].foo
 
       let csn = cds.parse(`entity Foo {}`)
-      let Foo = csn.definitions.Foo
+      let Foo = csn.definitions!.Foo
       Foo.query
 
       let e = new cds.entity
 
-      let x = csn.definitions.Foo
+      let x = csn.definitions!.Foo
       x instanceof cds.entity
       if (x.kind === 'entity') {
         x.query
@@ -210,13 +211,20 @@ describe('CDS Runtime Tests', () => {
     assert(u2.is('any'))
     assert(u2.is('authenticated-user'))
 
-    let r = new Request ({event:'foo',data:{foo:'bar'},headers:{x:11}})
+    let r: PostRequest<{foo:string}, [{baz:string}, ...any[]]> = new Request ({event:'foo',data:{foo:'bar'},headers:{x:11}})
+    r.params = [{baz:'quux'}];
     assert.strictEqual(r.event, 'foo')
     assert.strictEqual(r.data.foo, 'bar')
     assert.strictEqual(r.headers.x, 11)
+    assert.strictEqual(r.params[0].baz, 'quux')
 
     assert(cds.Association)
     assert(cds.Composition)
+
+    // @ts-expect-error - first parameter must have a property 'baz'
+    r.params = [{corge:42}]
+    // @ts-expect-error - params must have at least one element
+    r.params = []
 
     // .drafts is not available in lean draft mode in cds 8
     let Books = new cds.entity({name:'Books', elements: { HasDraftEntity:true }})
@@ -230,7 +238,7 @@ describe('CDS Runtime Tests', () => {
     // let q = SELECT.from(Books).where({ID:1})
     // assert.strictEqual(q.SELECT.from.ref[0], 'Books')
 
-    if (global.false) {
+    if ((global as unknown as {false:boolean}).false) {
       let srv = new cds.Service
       let { Books } = srv.entities
       Books.name
@@ -239,16 +247,16 @@ describe('CDS Runtime Tests', () => {
       srv.before('READ', Books, console.log)
       srv.after('READ', Books, console.log)
       srv.on('READ', Books, console.log)
-      srv.before('READ', Books.drafts, console.log)
-      srv.after('READ', Books.drafts, console.log)
-      srv.on('READ', Books.drafts, console.log)
-      srv.before('READ', [ Books, Books.drafts ], console.log)
-      srv.after('READ', [ Books, Books.drafts ], console.log)
-      srv.on('READ', [ Books, Books.drafts ], console.log)
+      srv.before('READ', Books.drafts!, console.log)
+      srv.after('READ', Books.drafts!, console.log)
+      srv.on('READ', Books.drafts!, console.log)
+      srv.before('READ', [ Books, Books.drafts! ], console.log)
+      srv.after('READ', [ Books, Books.drafts! ], console.log)
+      srv.on('READ', [ Books, Books.drafts! ], console.log)
     }
-    if (global.false) {
+    if ((global as unknown as {false:boolean}).false) {
       let csn = cds.compile(`entity Foo { key ID: Integer; name: String; }`).to.csn()
-      let { Foo } = csn.definitions
+      let { Foo } = csn.definitions!
       // Foo.name //> error: .name is not defined on unlinked CSN definitions
       let m = cds.linked(csn)
       let { Bar } = m.entities

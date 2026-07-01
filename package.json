@@ -1,6 +1,6 @@
 {
   "name": "@cap-js/cds-types",
-  "version": "0.11.0",
+  "version": "0.18.0",
   "description": "Type definitions for main packages of CAP, like `@sap/cds`",
   "repository": "github:cap-js/cds-types",
   "homepage": "https://cap.cloud.sap/",
@@ -18,9 +18,9 @@
     "README.md"
   ],
   "scripts": {
-    "test:integration": "node --test ./test/postinstall.integrationtest.js",
+    "test:integration": "echo 0",
     "test:runtime": "npm run test:runtime:post-mortem; rm -rf test/typescript/_out",
-    "test:runtime:tsc": "npx tsc test/typescript/runtime.test.ts --outDir test/typescript/_out --target ES2020 --module commonjs --esModuleInterop",
+    "test:runtime:tsc": "npx tsc --project test/typescript/tsconfig.runtime.json",
     "test:runtime:post-mortem": "npm run test:runtime:tsc && node --test './test/typescript/_out/runtime.test.js'",
     "test:api-calls": "node --test './test/typescript/apis/cds-api-calls.test.js'",
     "test:typings": "node --test './test/typescript/cds-typings.test.js'",
@@ -35,23 +35,30 @@
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "setup": "npm i && npm i file:. --no-save --force",
-    "prerelease:ci-fix": "node .github/prerelease-fix.js",
-    "postinstall": "node ./scripts/postinstall.js",
-    "dependencies": "node ./scripts/postinstall.js"
+    "prerelease:ci-fix": "node .github/prerelease-fix.js"
   },
   "peerDependencies": {
     "@sap/cds": ">=9.0.0",
-    "@sap/cds-dk": "^9",
+    "@sap/cds-dk": ">=9",
     "@types/express": ">=4"
   },
+  "peerDependenciesMeta": {
+    "@sap/cds-dk": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "@cap-js/cds-test": "^0",
+    "@cap-js/cds-test": "^0 || ^1",
+    "@cap-js/db-service": "^2.3.0 || ^3",
     "@microsoft/api-extractor": "^7.52.8",
+    "@sap/cds-dk": "^9 || ^10",
     "@stylistic/eslint-plugin-js": "^4.0.1",
     "@stylistic/eslint-plugin-ts": "^4.0.1",
+    "@types/chai": "^5.2.3",
     "axios": "^1.6.2",
-    "eslint": "^9.2.0",
-    "typescript": "^5.4.5",
+    "eslint": "^10",
+    "globals": "^17.5.0",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.0.0-alpha.51"
   }
 }

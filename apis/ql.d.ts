@@ -1,11 +1,13 @@
+import { Readable, Writable } from 'node:stream'
 import { EntityElements } from './csn'
 //export type { Query } from './cqn'
 import * as CQN from './cqn'
-import { 
+import {
   Constructable,
   ArrayConstructable,
   SingularInstanceType,
-  PluralInstanceType
+  PluralInstanceType,
+  Unwrap
 } from './internal/inference'
 import { Definition } from './linked'
 import { ref } from './cqn'
@@ -26,13 +28,14 @@ import {
   Where,
   ByKey,
   InUpsert,
+  DeepPartial,
 } from './internal/query'
 import { _TODO } from './internal/util'
 import { Service } from './services'
 
 export type Query = CQN.Query
 
-export { QLExtensions } from './internal/query'
+export { QLExtensions, PredicateMap } from './internal/query'
 
 // this just serves as a reminder that we can not get rid of some of the anys at this point
 // as the would refer to the generic type of the surrounding class
@@ -86,11 +89,12 @@ export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>
 // as SELECT.one will pass on SELECT_one as Q
 export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
   private constructor();
+  [Symbol.asyncIterator](): AsyncIterableIterator<Unwrap<T>>
 
   static one: SELECT_one & { from: SELECT_one } & { localized: SELECT_one }
-  
+
   static distinct: typeof SELECT<StaticAny>
-  
+
   static from: SELECT_from & { localized: SELECT_from }
 
   static localized: SELECT_from & { from: SELECT_from }
@@ -113,8 +117,34 @@ export class SELECT<T, Q = SELECT_from> extends ConstructedQuery<T> {
     count?: boolean,
   }
 
-}
+  /**
+   * Pipes the raw data stream into the given writable stream.
+   * @param stream the writable stream to pipe the raw data into
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#pipeline)
+   * @since 9.3.0
+   */
+  pipeline(stream: Writable): Promise<void>
+  /**
+   * @deprecated use `.stream()` instead
+   */
+  pipeline(): Promise<Readable>
 
+  /**
+   * Returns the raw data stream.
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#stream)
+   * @since 9.4.0
+   * @returns Readable
+   */
+  stream(): Promise<Readable>
+
+  /**
+   * Calls the given callback function for each row in the result set.
+   * @param cb the callback function to call for each row
+   * @see [capire docs](https://cap.cloud.sap/docs/node.js/cds-ql#foreach)
+   * @since 9.3.0
+   */
+  foreach: (cb: (element: Unwrap<T>) => void) => Promise<void>
+}
 
 type SELECT_one =
   TaggedTemplateQueryPart<Awaitable<SELECT<_TODO, SELECT_one>, InstanceType<_TODO>>>
@@ -179,31 +209,31 @@ export interface INSERT<T> extends Columns<T>, InUpsert<T> {}
 export class INSERT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static into: (<T extends ArrayConstructable> (entity: T, ...entries: SingularInstanceType<T>[]) => INSERT<SingularInstanceType<T>>)
-    & (<T extends ArrayConstructable> (entity: T, entries?: SingularInstanceType<T>[]) => INSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, ...entries: DeepPartial<SingularInstanceType<T>>[]) => INSERT<SingularInstanceType<T>>)
+    & (<T extends ArrayConstructable> (entity: T, entries?: DeepPartial<SingularInstanceType<T>>[]) => INSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<INSERT<unknown>>)
     & ((entity: EntityDescription, ...entries: Entries[]) => INSERT<StaticAny>)
     & ((entity: EntityDescription, entries?: Entries) => INSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, ...entries: T[]) => INSERT<T>)
-    & (<T> (entity: Constructable<T>, entries?: T[]) => INSERT<T>)
+    & (<T> (entity: Constructable<T>, ...entries: DeepPartial<T>[]) => INSERT<T>)
+    & (<T> (entity: Constructable<T>, entries?: DeepPartial<T>[]) => INSERT<T>)
 
   from (select: SELECT<T>): this
   INSERT: CQN.INSERT['INSERT']
 
 }
-type Entries<T = any> = {[key:string]: T} | {[key:string]: T} 
+type Entries<T = any> = {[key:string]: T} | {[key:string]: T}
 
 export interface UPSERT<T> extends Columns<T>, InUpsert<T> {}
 export class UPSERT<T> extends ConstructedQuery<T> {
   private constructor();
 
-  static into: (<T extends ArrayConstructable> (entity: T, ...entries: SingularInstanceType<T>[]) => UPSERT<SingularInstanceType<T>>)
-    & (<T extends ArrayConstructable> (entity: T, entries?: SingularInstanceType<T>[]) => UPSERT<SingularInstanceType<T>>)
+  static into: (<T extends ArrayConstructable> (entity: T, ...entries: DeepPartial<SingularInstanceType<T>>[]) => UPSERT<SingularInstanceType<T>>)
+    & (<T extends ArrayConstructable> (entity: T, entries?: DeepPartial<SingularInstanceType<T>>[]) => UPSERT<SingularInstanceType<T>>)
     & (TaggedTemplateQueryPart<UPSERT<StaticAny>>)
     & ((entity: EntityDescription, ...entries: Entries[]) => UPSERT<StaticAny>)
     & ((entity: EntityDescription, entries?: Entries) => UPSERT<StaticAny>)
-    & (<T> (entity: Constructable<T>, ...entries: T[]) => UPSERT<T>)
-    & (<T> (entity: Constructable<T>, entries?: T[]) => UPSERT<T>)
+    & (<T> (entity: Constructable<T>, ...entries: DeepPartial<T>[]) => UPSERT<T>)
+    & (<T> (entity: Constructable<T>, entries?: DeepPartial<T>[]) => UPSERT<T>)
 
   UPSERT: CQN.UPSERT['UPSERT']
 
@@ -224,7 +254,11 @@ export class DELETE<T> extends ConstructedQuery<T> {
 // operator for qbe expression
 type QbeOp = '=' | '-=' | '+=' | '*=' | '/=' | '%='
 
-export interface UPDATE<T> extends Where<T>, And, ByKey {}
+export interface UPDATE<T> extends Where<T>, And, ByKey {
+  set: UpdateSet<this, T>
+  with: UpdateSet<this, T>
+}
+
 export class UPDATE<T> extends ConstructedQuery<T> {
   private constructor();
 
@@ -235,11 +269,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     & ((entity: EntityDescription | ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
-  set: UpdateSet<this, T>
-  with: UpdateSet<this, T>
-  
   UPDATE: CQN.UPDATE['UPDATE']
-
 }
 
 /**
@@ -248,9 +278,9 @@ export class UPDATE<T> extends ConstructedQuery<T> {
  */
 type UpdateSet<This, T> = TaggedTemplateQueryPart<This>
   // simple value   > title: 'Some Title'
-  // qbe expression > stock: { '-=': quantity }  
+  // qbe expression > stock: { '-=': quantity }
   // cqn expression > descr: {xpr: [{ref:[descr]}, '||', 'Some addition to descr.']}
-  & ((data: {[P in keyof T]?: T[P] | {[op in QbeOp]?: T[P]} | CQN.xpr}) => This)
+  & ((data: {[P in keyof T]?: T[P] | DeepPartial<T[P]> | {[op in QbeOp]?: DeepPartial<T[P]>} | CQN.xpr}) => This)
 
 export class CREATE<T> extends ConstructedQuery<T> {
   private constructor();
@@ -263,7 +293,7 @@ export class CREATE<T> extends ConstructedQuery<T> {
 
 export class DROP<T> extends ConstructedQuery<T> {
   private constructor();
-  
+
   static entity (entity: EntityDescription): DROP<EntityDescription>
 
   DROP: CQN.DROP['DROP']
