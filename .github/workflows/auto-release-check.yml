@@ -1,0 +1,118 @@
+# This workflow periodically checks if there are unreleased changes and automatically triggers a release
+
+name: Auto Release Check
+
+on:
+  workflow_call:
+    inputs:
+      cron-schedule:
+        description: Cron schedule for periodic checks (default is daily at 2 AM UTC)
+        required: false
+        type: string
+        default: '0 2 * * *'
+      dry-run:
+        description: Dry run mode for testing
+        required: false
+        type: boolean
+        default: false
+      tag:
+        description: The tag to use during publish, values are latest, next
+        required: false
+        type: string
+        default: latest
+  schedule:
+    # Default: Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Dry run mode for testing
+        required: false
+        type: boolean
+        default: false
+      tag:
+        description: The tag to use during publish, values are latest, next
+        required: false
+        type: string
+        default: latest
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  check-unreleased-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      has-unreleased-changes: ${{ steps.check-changes.outputs.has-unreleased-changes }}
+      latest-tag: ${{ steps.check-changes.outputs.latest-tag }}
+      commits-count: ${{ steps.check-changes.outputs.commits-count }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags and commits
+
+      - name: Check for unreleased changes
+        id: check-changes
+        run: |
+          # Get the latest release tag (assuming format vX.Y.Z)
+          latest_tag=$(git tag -l 'v*' --sort=-version:refname | head -n 1)
+
+          if [ -z "$latest_tag" ]; then
+            echo "No release tags found, assuming first release needed"
+            echo "has-unreleased-changes=true" >> $GITHUB_OUTPUT
+            echo "latest-tag=none" >> $GITHUB_OUTPUT
+            echo "commits-count=all" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Latest release tag: $latest_tag"
+          echo "latest-tag=$latest_tag" >> $GITHUB_OUTPUT
+
+          # Count commits since the latest tag
+          commits_count=$(git rev-list ${latest_tag}..HEAD --count)
+          echo "commits-count=$commits_count" >> $GITHUB_OUTPUT
+
+          echo "Commits since $latest_tag: $commits_count"
+
+          if [ "$commits_count" -gt 0 ]; then
+            echo "Found $commits_count unreleased commit(s)"
+            echo "has-unreleased-changes=true" >> $GITHUB_OUTPUT
+
+            # Show the commits for logging
+            echo "Unreleased commits:"
+            git log ${latest_tag}..HEAD --oneline
+          else
+            echo "No unreleased changes found"
+            echo "has-unreleased-changes=false" >> $GITHUB_OUTPUT
+          fi
+
+  trigger-release:
+    needs: check-unreleased-changes
+    if: ${{ needs.check-unreleased-changes.outputs.has-unreleased-changes == 'true' }}
+    uses: ./.github/workflows/release.yml
+    with:
+      dry-run: ${{ inputs.dry-run || false }}
+      tag: ${{ inputs.tag || 'latest' }}
+    secrets: inherit
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: [check-unreleased-changes, trigger-release]
+    if: always()
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# Auto Release Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Latest Tag:** ${{ needs.check-unreleased-changes.outputs.latest-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Unreleased Commits:** ${{ needs.check-unreleased-changes.outputs.commits-count }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Has Unreleased Changes:** ${{ needs.check-unreleased-changes.outputs.has-unreleased-changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.check-unreleased-changes.outputs.has-unreleased-changes }}" == "true" ]; then
+            echo "✅ **Action:** Release workflow triggered" >> $GITHUB_STEP_SUMMARY
+            echo "**Release Status:** ${{ needs.trigger-release.result }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **Action:** No release needed" >> $GITHUB_STEP_SUMMARY
+          fi
