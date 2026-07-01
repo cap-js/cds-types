@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Added types for `req.req` and `req.res` in `cds.Request`
 ### Changed
 ### Deprecated
 ### Removed

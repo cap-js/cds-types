@@ -59,6 +59,10 @@ export class Request<
   P extends Record<string, any>[] = Record<string, any>[]
 > extends Event<D> {
 
+  req: express.Request
+
+  res: express.Response
+
   messages: {message: string, numericSeverity: levels}[]
 
   errors: {
