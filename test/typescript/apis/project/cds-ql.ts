@@ -127,7 +127,7 @@ DELETE(Foo)
 DELETE(Foo, Foos)
 DELETE([Foo, Foos])
 
-let selectOne: Foo | null
+let selectOne: Foo | null | undefined
 let selectMany: Foos
 
 // SINGULAR TESTS
