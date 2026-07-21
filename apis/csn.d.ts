@@ -66,6 +66,7 @@ export interface any_ {
    * @see [capire docs](https://cap.cloud.sap/docs/cds/cdl#comments)
    */
   doc?: string
+  [annotation: `@${string}`]: unknown
 }
 export interface context extends any_ { }
 export interface service extends any_ { }

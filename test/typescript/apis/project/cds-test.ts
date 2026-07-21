@@ -10,6 +10,11 @@ const {GET, DELETE, POST, PUT} = test
 const {get, delete:del, post, put} = test
 test.axios
 
+test.defaults.baseURL = '/foo'
+test.defaults.auth = { username: 'alice', password: '' }
+test.defaults.headers = { 'x-header': 'value' }
+test.defaults.validateStatus = (status) => status >= 200
+
 test.chai
 test.expect
 

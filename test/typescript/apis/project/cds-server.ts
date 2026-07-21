@@ -12,6 +12,8 @@ cds.middlewares.add(h, {before: 'foo', after: 'foo'})
 // @ts-expect-error
 cds.middlewares.add(h, {after: 'foo', at: 2})
 
+cds.middlewares.before
+
 cds.error(404, 'Not Found')
 cds.error('Not Found', {status: 404, stack: 'foo'})
 cds.error `Message with formatted: ${{foo: 'bar'}}`

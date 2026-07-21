@@ -1,15 +1,15 @@
 {
+  "files": ["runtime.test.ts"],
   "compilerOptions": {
-    "module": "ES2022",
-    "target": "ES2022",
-    // "strict": true,
+    "module": "commonjs",
+    "target": "ES2020",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "noEmit": true,
+    "outDir": "_out",
     "baseUrl": "../..",
     "paths": {
-      "@sap/cds": ["apis/cds.d.ts"]
+      "@sap/cds": ["apis/cds.d.ts", "dist/cds-types.d.ts"]
     }
   }
 }

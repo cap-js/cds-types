@@ -6,7 +6,7 @@ import { Foo, Foos, attach, testType } from './dummy'
 import { connect } from '../../../../apis/server';
 import { expr, ref, val } from '../../../../apis/cqn';
 import * as assert from 'node:assert/strict';
-import { Readable } from 'node:stream';
+import { PredicateMap } from '../../../../apis/ql';
 
 
 // @ts-expect-error - only supposed to be used statically, constructors private
@@ -437,3 +437,18 @@ const boundDelete: DELETE<any> = DELETE.from("Foos").bind(dummyServer)
 // infix filters for both 1:1 and 1:n associations
 SELECT.from(Foo, f => f`[foo='Bar']`(b => b.x))
 SELECT.from(Foo, f => f.refs`[foo='Bar']`(b => b.x))
+
+const predicate: PredicateMap<Foos> = {
+    x: 42,
+    // @ts-expect-error -- wrong type
+    y: 42,
+    or: {
+        x: { '>=': 42 },
+        and: {
+            // @ts-expect-error -- wrong type
+            x: 'foo'
+        }
+    },
+    // @ts-expect-error -- non-existing property
+    not_there: 42
+}

@@ -2,6 +2,7 @@ import { Definition, LinkedCSN } from './linked'
 import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
+import { levels } from './log'
 
 
 /**
@@ -19,7 +20,11 @@ export class EventContext {
 
   id: string
 
-  locale: `${string}_${string}`
+  /**
+   * ISO 639-1 language code, optionally followed by an underscore and ISO 3166-1 alpha-2 country code, e.g. "en" or "en_US".
+   * May be `undefined` if the `AcceptLanguage` header is not set in the incoming request.
+   */
+  locale?: string
 
   timestamp: Date
 
@@ -40,9 +45,9 @@ export class Event<T = unknown> extends EventContext {
 
   headers: any
 
-  before(phase: 'commit', handler: () => void)
+  before(phase: 'commit', handler: () => void): void
 
-  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void)
+  on(phase: 'succeeded' | 'failed' | 'done', handler: () => void): void
 
 }
 
@@ -53,6 +58,22 @@ export class Request<
   D = any,
   P extends Record<string, any>[] = Record<string, any>[]
 > extends Event<D> {
+
+  req: express.Request
+
+  res: express.Response
+
+  messages: {message: string, numericSeverity: levels}[]
+
+  errors: {
+    code?: number,
+    message: string,
+    stack: string,
+    target?: string,
+    args?: unknown[],
+  }[]
+
+  results: D[]
 
   params: P
 

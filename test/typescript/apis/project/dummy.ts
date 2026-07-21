@@ -36,6 +36,10 @@ export type BoundAction = {
   __returns: number,
   __self: Foo
 }
+export class MyEvent {
+  declare static readonly kind: 'event'
+  declare foo: number
+}
 
 // little 'trust me, type system!' helper to make T|undefined into T.
 // useful for tricking the type system into accepting uninitialised properties
