@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Deprecated
 ### Removed
 ### Fixed
+- Types for `SELECT.one` includes `undefined`
 ### Security
 
 ## [0.18.0] - 2026-06-22
