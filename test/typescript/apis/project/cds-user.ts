@@ -45,3 +45,12 @@ new (class extends User {
     return true
   }
 })()
+
+// authInfo is typed and optional (only present when an xssec strategy is active)
+const token = user.authInfo?.token
+const payload = token?.getPayload()
+const azp = token?.azp
+const jwt = token?.jwt
+
+// can be passed when constructing a user with an authInfo (e.g. in tests or custom middleware)
+new User({ id: 'svc', roles: {}, attr: {}, authInfo: user.authInfo })

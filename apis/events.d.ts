@@ -3,6 +3,7 @@ import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
 import { levels } from './log'
+import type xssec from '@sap/xssec'
 
 
 /**
@@ -143,11 +144,13 @@ export type PostRequest<
 
 /**
  * Represents the user in a given context.
- * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
  */
+type UserAuthToken = InstanceType<typeof xssec.Token>
+type UserAuthInfo = xssec.SecurityContext<InstanceType<typeof xssec.Service>, UserAuthToken>
+
 export class User {
 
-  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Array<string> | Record<string, string> } | User)
+  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Array<string> | Record<string, string>, authInfo?: UserAuthInfo } | User)
   id: string
 
   /**
@@ -163,6 +166,8 @@ export class User {
   attr: Record<string, string>
 
   roles: Array<string> | Record<string, string>
+
+  authInfo?: UserAuthInfo
 
   static Anonymous: typeof Anonymous
 

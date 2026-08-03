@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Added types for `req.req` and `req.res` in `cds.Request`
+- `cds.User` now has an `authInfo` property typed against `@sap/xssec`'s `SecurityContext`. `@sap/xssec` is an optional peer dependency.
 ### Changed
 ### Deprecated
 ### Removed

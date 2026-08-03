@@ -40,10 +40,14 @@
   "peerDependencies": {
     "@sap/cds": ">=9.0.0",
     "@sap/cds-dk": ">=9",
+    "@sap/xssec": ">=3",
     "@types/express": ">=4"
   },
   "peerDependenciesMeta": {
     "@sap/cds-dk": {
+      "optional": true
+    },
+    "@sap/xssec": {
       "optional": true
     }
   },
