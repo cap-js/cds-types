@@ -1,7 +1,7 @@
 name: 🐞 Bug
 description: File a bug/issue
 title: "[BUG] <title>"
-labels: ["bug"]
+labels: ["bug", "new"]
 body:
 - type: checkboxes
   attributes:
@@ -34,7 +34,7 @@ body:
   attributes:
     label: Versions
     description: |
-      Run `cds v -i` in your project and copy the output here. 
+      Run `cds v -i` in your project and copy the output here.
       Also include a link to the branch in your GitHub repo.
   validations:
     required: true
