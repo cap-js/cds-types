@@ -148,7 +148,7 @@ type UserAuthInfo = xssec.SecurityContext<InstanceType<typeof xssec.Service>, Us
 
 /**
  * Represents the user in a given context.
- * * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
+ * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
  */
 export class User {
 
