@@ -142,12 +142,14 @@ export type PostRequest<
   P extends Record<string, any>[] = Record<string, any>[]
 > = Request<D, P>;
 
-/**
- * Represents the user in a given context.
- */
+
 type UserAuthToken = InstanceType<typeof xssec.Token>
 type UserAuthInfo = xssec.SecurityContext<InstanceType<typeof xssec.Service>, UserAuthToken>
 
+/**
+ * Represents the user in a given context.
+ * * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
+ */
 export class User {
 
   constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Array<string> | Record<string, string>, authInfo?: UserAuthInfo } | User)
