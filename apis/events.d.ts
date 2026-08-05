@@ -3,7 +3,7 @@ import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
 import { levels } from './log'
-import xssec, { Token as UserAuthToken } from '@sap/xssec'
+import * as xssec from '@sap/xssec'
 
 
 /**
@@ -143,7 +143,7 @@ export type PostRequest<
 > = Request<D, P>;
 
 
-type UserAuthInfo = xssec.SecurityContext<xssec.Service, UserAuthToken>
+type UserAuthInfo = xssec.SecurityContext<xssec.Service, xssec.Token>
 
 /**
  * Represents the user in a given context.
