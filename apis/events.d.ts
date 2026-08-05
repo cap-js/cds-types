@@ -142,16 +142,19 @@ export type PostRequest<
   P extends Record<string, any>[] = Record<string, any>[]
 > = Request<D, P>;
 
-
-type UserAuthInfo = xssec.SecurityContext<xssec.Service, xssec.Token>
-
 /**
  * Represents the user in a given context.
  * @see [capire docs](https://cap.cloud.sap/docs/node.js/authentication#cds-user)
  */
 export class User {
 
-  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Array<string> | Record<string, string>, authInfo?: UserAuthInfo } | User)
+  constructor (obj?: string | {
+    id: string,
+    attr: Record<string, string>,
+    roles: Array<string> | Record<string, string>,
+    // xssec namespace must be used inline, or post-rollup script will not be able to properly replace with inline import
+    authInfo?: xssec.SecurityContext<xssec.Service, xssec.Token>,
+  } | User)
   id: string
 
   /**
@@ -168,7 +171,7 @@ export class User {
 
   roles: Array<string> | Record<string, string>
 
-  authInfo?: UserAuthInfo
+  authInfo?: xssec.SecurityContext<xssec.Service, xssec.Token>
 
   static Anonymous: typeof Anonymous
 
