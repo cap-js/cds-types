@@ -3,6 +3,7 @@ import { Query } from './cqn'
 import { ref } from './cqn'
 import * as express from 'express'
 import { levels } from './log'
+import * as xssec from '@sap/xssec'
 
 
 /**
@@ -147,7 +148,13 @@ export type PostRequest<
  */
 export class User {
 
-  constructor (obj?: string | { id: string, attr: Record<string, string>, roles: Array<string> | Record<string, string> } | User)
+  constructor (obj?: string | {
+    id: string,
+    attr: Record<string, string>,
+    roles: Array<string> | Record<string, string>,
+    // xssec namespace must be used inline, or post-rollup script will not be able to properly replace with inline import
+    authInfo?: xssec.SecurityContext<xssec.Service, xssec.Token>,
+  } | User)
   id: string
 
   /**
@@ -163,6 +170,8 @@ export class User {
   attr: Record<string, string>
 
   roles: Array<string> | Record<string, string>
+
+  authInfo?: xssec.SecurityContext<xssec.Service, xssec.Token>
 
   static Anonymous: typeof Anonymous
 
