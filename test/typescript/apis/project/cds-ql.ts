@@ -7,6 +7,7 @@ import { connect } from '../../../../apis/server';
 import { expr, ref, val } from '../../../../apis/cqn';
 import * as assert from 'node:assert/strict';
 import { PredicateMap } from '../../../../apis/ql';
+import { ref as qlRef, val as qlVal, expr as qlExpr, columns as qlColumns, expand as qlExpand, where as qlWhere, orderBy as qlOrderBy, ql } from '../../../../apis/ql';
 
 
 // @ts-expect-error - only supposed to be used statically, constructors private
@@ -452,3 +453,48 @@ const predicate: PredicateMap<Foos> = {
     // @ts-expect-error -- non-existing property
     not_there: 42
 }
+
+// cds.ql enhancements (December 2024)
+// https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements
+
+// cds.ql as universal converter: tagged template
+const q1: SELECT<unknown> = ql `SELECT from Books where ID=${201}`
+// cds.ql as universal converter: function with CQN object
+const q2: SELECT<unknown> = ql({ SELECT: { from: { ref: ['Books'] } } } as any)
+// cds.ql as universal converter: function with string
+const q3: SELECT<unknown> = ql('SELECT from Books')
+
+// CXL helper: ref
+const r1 = qlRef `Authors`
+const r2 = qlRef('Authors')
+
+// CXL helper: val
+const v1 = qlVal(42)
+testType<{ val: number }>(v1)
+
+// CXL helper: expr (tagged template)
+const e1 = qlExpr `ID > 5`
+
+// CXL helper: columns (tagged template)
+const cols1 = qlColumns `ID, title`
+
+// CXL helper: where (tagged template)
+const w1 = qlWhere `stock > 7`
+
+// CXL helper: orderBy (tagged template)
+const ob1 = qlOrderBy `title`
+
+// CXL helpers destructurable from cds.ql (columns is a standalone export, not on cds.ql due to conflict with SELECT.columns)
+const { ref: dRef, val: dVal, expr: dExpr, expand: dExpand, where: dWhere, orderBy: dOrderBy } = cds.ql
+
+// cds.parse.cql with tagged template literal
+const parsed1 = cds.parse.cql `SELECT ID,title from Books`
+const parsed2 = cds.parse.cql('SELECT ID,title from Books')
+
+// cds.run with tagged template literal
+const runResult = cds.run `SELECT ID,title from Books`
+const runResult2 = cds.run('SELECT ID,title from Books')
+
+// cds.read with tagged template literal
+const readResult = cds.read `Books where ID=201`
+const readResult2 = cds.read `Books`

@@ -46,6 +46,8 @@ export const parse: {
   (cdl: CDL): csn.CSN,
   cdl (cdl: CDL): csn.CSN,
   cql (src: string): CQN,
+  /** @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements) */
+  cql (strings: TemplateStringsArray, ...params: unknown[]): CQN,
   expr (src: string): expr,
   xpr (src: string): _xpr,
   ref (src: string): string[],

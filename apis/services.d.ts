@@ -21,6 +21,8 @@ export class QueryAPI {
     <T extends ArrayConstructable>(entity: T, key?: Key): Awaitable<SELECT<T>, InstanceType<T>>,
     <T>(entity: linked.Definition | string, key?: Key): SELECT<T>,
     (entity: ref, key?: Key): SELECT<unknown>,
+    /** @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements) */
+    (strings: TemplateStringsArray, ...params: unknown[]): SELECT<unknown>,
   }
 
   /**
@@ -62,6 +64,8 @@ export class QueryAPI {
     (query: ConstructedQuery<_TODO> | ConstructedQuery<_TODO>[]): Promise<ResultSet | any>,
     (query: Query): Promise<ResultSet | any>,
     (query: string, args?: any[] | object): Promise<ResultSet | any>,
+    /** @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements) */
+    (strings: TemplateStringsArray, ...params: unknown[]): Promise<ResultSet | any>,
   }
 
   /**

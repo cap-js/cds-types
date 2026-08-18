@@ -10,7 +10,7 @@ import {
   Unwrap
 } from './internal/inference'
 import { Definition } from './linked'
-import { ref } from './cqn'
+import { ref as cqn_ref, column_expr, predicate } from './cqn'
 import {
   And,
   Awaitable,
@@ -77,7 +77,88 @@ export declare class QL<T> {
 
   DROP: typeof DROP<T>
 
+  /**
+   * CXL helper: creates a `{ ref: [...] }` CQN object from a tagged template or string.
+   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+   */
+  ref: CXLRef
+
+  /**
+   * CXL helper: creates a `{ val: ... }` CQN object.
+   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+   */
+  val: CXLVal
+
+  /**
+   * CXL helper: creates a `{ xpr: [...] }` expression from a tagged template.
+   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+   */
+  expr: CXLExpr
+
+  /**
+   * CXL helper: builds an `expand` column expression from a ref, with optional clauses.
+   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+   */
+  expand: CXLExpand
+
+  /**
+   * CXL helper: builds a `where` predicate from a tagged template.
+   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+   */
+  where: CXLWhere
+
+  /**
+   * CXL helper: builds an `orderBy` clause from a tagged template.
+   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+   */
+  orderBy: CXLOrderBy
+
 }
+
+// CXL helper function types for programmatic CQN construction
+
+/** CXL helper that creates a `{ ref: string[] }` object from a tagged template string */
+export type CXLRef = TaggedTemplateQueryPart<CQN.ref> & ((path: string) => CQN.ref)
+/** CXL helper that wraps a value into a `{ val: any }` object */
+export type CXLVal = (<V>(value: V) => { val: V })
+/** CXL helper that creates a `{ xpr: [...] }` CQN expression from a tagged template */
+export type CXLExpr = TaggedTemplateQueryPart<CQN.xpr>
+/** CXL helper that produces an array of column expressions from a tagged template */
+export type CXLColumns = TaggedTemplateQueryPart<column_expr[]> & ((...cols: column_expr[]) => column_expr[])
+/** CXL helper that produces an expanded column expression (subselect on association/composition) */
+export type CXLExpand = (ref: CQN.ref, ...clauses: (predicate | { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }[] | column_expr[])[]) => column_expr & { expand: column_expr[] }
+/** CXL helper that creates a predicate from a tagged template */
+export type CXLWhere = TaggedTemplateQueryPart<predicate>
+/** CXL helper that creates an orderBy clause from a tagged template */
+export type CXLOrderBy = TaggedTemplateQueryPart<{ sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }[]>
+
+/**
+ * Named CXL helper functions destructurable from `cds.ql`.
+ * @example
+ * const { ref, val, columns, expand, where, orderBy } = cds.ql
+ * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+ */
+export declare const ref: CXLRef
+export declare const val: CXLVal
+export declare const expr: CXLExpr
+export declare const columns: CXLColumns
+export declare const expand: CXLExpand
+export declare const where: CXLWhere
+export declare const orderBy: CXLOrderBy
+
+/**
+ * `cds.ql` acts as a universal converter for CDS queries — callable as a tagged template,
+ * a function accepting a CQN object, or a plain string. Also carries all query builder
+ * classes and CXL helper functions as properties.
+ *
+ * @example
+ * let q = cds.ql `SELECT from Books where ID=${201}`
+ * let q = cds.ql ({ SELECT: { from: { ref: ['Books'] }, ... } })
+ * const { ref, val, where, orderBy } = cds.ql
+ * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
+ */
+export declare function ql (query: CQN.Query | string): SELECT<unknown>
+export declare function ql (strings: TemplateStringsArray, ...params: unknown[]): SELECT<unknown>
 
 export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>, Limit, Hints {
   // overload specific to SELECT
@@ -163,7 +244,7 @@ type SELECT_one =
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
-  & ((subject: ref) => SELECT<_TODO>)
+  & ((subject: cqn_ref) => SELECT<_TODO>)
 
 type SELECT_from =
 // tagged template
@@ -182,7 +263,7 @@ type SELECT_from =
 // calling with concrete list
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
-  & ((subject: ref) => SELECT<_TODO>)
+  & ((subject: cqn_ref) => SELECT<_TODO>)
   // put these overloads at the very end, as they would also match the above
   // We expect these to be the overloads for scalars since we covered arrays above -> wrap them back in Array
   & (<T extends Constructable>(
@@ -246,7 +327,7 @@ export class DELETE<T> extends ConstructedQuery<T> {
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<StaticAny>>>
     & (<T>(entity: EntityDescription | ArrayConstructable, primaryKey?: PK) => DELETE<T>)
-    & ((subject: ref) => DELETE<_TODO>)
+    & ((subject: cqn_ref) => DELETE<_TODO>)
 
   DELETE: CQN.DELETE['DELETE']
 
@@ -266,7 +347,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     // UPDATE<SingularInstanceType<T>> is used here so type inference in set/with has the property keys of the singular type
     & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
     & (<T extends Constructable> (entity: T, primaryKey?: PK) => UPDATE<InstanceType<T>>)
-    & ((entity: EntityDescription | ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
+    & ((entity: EntityDescription | cqn_ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
   UPDATE: CQN.UPDATE['UPDATE']
