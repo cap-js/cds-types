@@ -10,7 +10,7 @@ import {
   Unwrap
 } from './internal/inference'
 import { Definition } from './linked'
-import { ref as cqn_ref, column_expr, predicate, ordering_term } from './cqn'
+import { ref as cqn_ref, column_expr, predicate } from './cqn'
 import {
   And,
   Awaitable,
@@ -96,12 +96,6 @@ export declare class QL<T> {
   expr: CXLExpr
 
   /**
-   * CXL helper: builds a `columns` clause from a tagged template or column expressions.
-   * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
-   */
-  columns: CXLColumns
-
-  /**
    * CXL helper: builds an `expand` column expression from a ref, with optional clauses.
    * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
    */
@@ -127,16 +121,16 @@ export declare class QL<T> {
 export type CXLRef = TaggedTemplateQueryPart<CQN.ref> & ((path: string) => CQN.ref)
 /** CXL helper that wraps a value into a `{ val: any }` object */
 export type CXLVal = (<V>(value: V) => { val: V })
-/** CXL helper that creates a CQN expression from a tagged template */
-export type CXLExpr = TaggedTemplateQueryPart<CQN.expr>
+/** CXL helper that creates a `{ xpr: [...] }` CQN expression from a tagged template */
+export type CXLExpr = TaggedTemplateQueryPart<CQN.xpr>
 /** CXL helper that produces an array of column expressions from a tagged template */
 export type CXLColumns = TaggedTemplateQueryPart<column_expr[]> & ((...cols: column_expr[]) => column_expr[])
 /** CXL helper that produces an expanded column expression (subselect on association/composition) */
-export type CXLExpand = (ref: CQN.ref, ...clauses: (predicate | ordering_term[] | column_expr[])[]) => column_expr & { expand: column_expr[] }
+export type CXLExpand = (ref: CQN.ref, ...clauses: (predicate | { sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }[] | column_expr[])[]) => column_expr & { expand: column_expr[] }
 /** CXL helper that creates a predicate from a tagged template */
 export type CXLWhere = TaggedTemplateQueryPart<predicate>
 /** CXL helper that creates an orderBy clause from a tagged template */
-export type CXLOrderBy = TaggedTemplateQueryPart<ordering_term[]>
+export type CXLOrderBy = TaggedTemplateQueryPart<{ sort?: 'asc' | 'desc', nulls?: 'first' | 'last' }[]>
 
 /**
  * Named CXL helper functions destructurable from `cds.ql`.

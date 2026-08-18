@@ -484,8 +484,8 @@ const w1 = qlWhere `stock > 7`
 // CXL helper: orderBy (tagged template)
 const ob1 = qlOrderBy `title`
 
-// CXL helpers destructurable from cds.ql
-const { ref: dRef, val: dVal, expr: dExpr, columns: dColumns, where: dWhere, orderBy: dOrderBy } = cds.ql
+// CXL helpers destructurable from cds.ql (columns is a standalone export, not on cds.ql due to conflict with SELECT.columns)
+const { ref: dRef, val: dVal, expr: dExpr, expand: dExpand, where: dWhere, orderBy: dOrderBy } = cds.ql
 
 // cds.parse.cql with tagged template literal
 const parsed1 = cds.parse.cql `SELECT ID,title from Books`
