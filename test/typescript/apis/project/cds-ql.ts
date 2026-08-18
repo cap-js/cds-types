@@ -433,7 +433,7 @@ const dummyServer = await connect.to('service')
 
 // srv.run proxies type of contained query (#530)
 const runFoos: Foos = await dummyServer.run(SELECT.from(Foos))
-const runFoo: Foo = await dummyServer.run(SELECT.one.from(Foos))
+const runFoo: Foo | null | undefined = await dummyServer.run(SELECT.one.from(Foos))
 
 const boundSelect: SELECT<any> = SELECT.from(Foo).bind(dummyServer)
 const boundUpdate: UPDATE<any> = UPDATE.entity("Foos").bind(dummyServer)
