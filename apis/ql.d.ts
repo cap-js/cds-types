@@ -147,8 +147,8 @@ export declare const where: CXLWhere
 export declare const orderBy: CXLOrderBy
 
 /**
- * Universal converter for CDS queries. Acts as a tagged template, a function accepting CQN objects,
- * or a plain string — all producing equivalent `SELECT` instances. Also carries all query builder
+ * `cds.ql` acts as a universal converter for CDS queries — callable as a tagged template,
+ * a function accepting a CQN object, or a plain string. Also carries all query builder
  * classes and CXL helper functions as properties.
  *
  * @example
@@ -157,9 +157,8 @@ export declare const orderBy: CXLOrderBy
  * const { ref, val, where, orderBy } = cds.ql
  * @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements)
  */
-export declare const ql: QL<any>
-  & TaggedTemplateQueryPart<SELECT<unknown>>
-  & ((query: CQN.Query | string) => SELECT<unknown>)
+export declare function ql (query: CQN.Query | string): SELECT<unknown>
+export declare function ql (strings: TemplateStringsArray, ...params: unknown[]): SELECT<unknown>
 
 export interface SELECT<T> extends Where<T>, And, Having<T>, GroupBy, OrderBy<T>, Limit, Hints {
   // overload specific to SELECT

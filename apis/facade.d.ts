@@ -12,8 +12,8 @@ export { log, debug } from './log'
 export { test } from './test'
 
 // API extractor cannot handle export * as ql from './ql', so split it into an import and an export statement
-// The named `ql` const is a callable universal converter that also carries all QL class properties
-import { ql } from './ql'
+// Export ql as a namespace (for rollup/global.d.ts compatibility) merged with the callable ql const
+import * as ql from './ql'
 export { ql }
 export { QLExtensions, ConstructedQuery, Query } from './ql'
 export type { CXLRef, CXLVal, CXLExpr, CXLColumns, CXLExpand, CXLWhere, CXLOrderBy } from './ql'
