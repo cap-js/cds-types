@@ -62,13 +62,13 @@ export class QueryAPI {
   run: {
     <T>(query: ConstructedQuery<T>): Promise<
       T extends ArrayConstructable ? InstanceType<T> :
-      T extends any[] ? T :
+        T extends any[] ? T :
       T | null | undefined
     >,
     <T>(query: ConstructedQuery<T>[]): Promise<Array<
       T extends ArrayConstructable ? InstanceType<T> :
-      T extends any[] ? T :
-      T
+        T extends any[] ? T :
+          T
     >>,
     (query: Query): Promise<ResultSet | any>,
     (query: string, args?: any[] | object): Promise<ResultSet | any>,
