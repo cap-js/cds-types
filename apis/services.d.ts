@@ -7,7 +7,6 @@ import * as csn from './csn'
 import { EventContext } from './events'
 import { Request } from './events'
 import { ReadableStream } from 'node:stream/web'
-import { _TODO } from './internal/util'
 import { ref } from './cqn'
 
 type Key = number | string | any
@@ -61,7 +60,16 @@ export class QueryAPI {
    * @see [docs](https://cap.cloud.sap/docs/node.js/core-services#crud-style-api)
    */
   run: {
-    (query: ConstructedQuery<_TODO> | ConstructedQuery<_TODO>[]): Promise<ResultSet | any>,
+    <T>(query: ConstructedQuery<T>): Promise<
+      T extends ArrayConstructable ? InstanceType<T> :
+        T extends any[] ? T :
+      T | null | undefined
+    >,
+    <T>(query: ConstructedQuery<T>[]): Promise<Array<
+      T extends ArrayConstructable ? InstanceType<T> :
+        T extends any[] ? T :
+          T
+    >>,
     (query: Query): Promise<ResultSet | any>,
     (query: string, args?: any[] | object): Promise<ResultSet | any>,
     /** @see [capire](https://cap.cloud.sap/docs/releases/2024/dec24#cdsql-enhancements) */

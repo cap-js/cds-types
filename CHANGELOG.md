@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - `cds.ql` is now typed as a callable universal converter: tagged template, function accepting a CQN object, or plain string — all returning `SELECT<unknown>`
 - CXL helper functions (`ref`, `val`, `expr`, `columns`, `expand`, `where`, `orderBy`) are now exported from `cds.ql` and can be destructured from it
 - `cds.parse.cql`, `cds.run`, and `cds.read` now accept tagged template literals
+- `Service.run(query)` now proxies the entity type of the contained query through to the return type
 ### Changed
 ### Deprecated
 ### Removed
