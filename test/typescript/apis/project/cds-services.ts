@@ -1,4 +1,4 @@
-import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
+import cds, { Service, Request, HandlerFunction, ApplicationService, TypedRef } from '@sap/cds'
 import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType, MyEvent } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -278,9 +278,14 @@ function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) {
 srv.on(unboundAction, req => req.data.foo.x)
 srv.on(unboundAction, 'FooService', req => req.data.foo.x)
 
-srv.on(boundAction, req => {
-  testType<Foo>(req.subject)
-  req.subject.x
+srv.on(boundAction, async req => {
+  testType<TypedRef<Foo>>(req.subject)
+  const one = await SELECT.one.from(req.subject)
+  testType<Foo | null | undefined>(one)
+  const many = await SELECT.from(req.subject)
+  testType<Foo[]>(many)
+  await DELETE.from(req.subject)
+  await UPDATE(req.subject)
 })
 
 srv.on('CREATE', Foo, (req, next) => { isOne(req); return next() })

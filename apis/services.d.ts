@@ -1,4 +1,4 @@
-import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT } from './ql'
+import { SELECT, INSERT, UPDATE, DELETE, Query, ConstructedQuery, UPSERT, TypedRef } from './ql'
 import { Awaitable } from './internal/query'
 import { ArrayConstructable, Constructable, SingularInstanceType, Unwrap } from './internal/inference'
 //import { ModelPart, CSN, LinkedDefinition, LinkedEntity } from './linked'
@@ -446,7 +446,7 @@ declare namespace CRUDEventHandler {
 }
 
 // Subtype of Request as used in ActionEventHandlers
-type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
+type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: TypedRef<S> }
 
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove

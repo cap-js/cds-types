@@ -16,7 +16,7 @@ export { test } from './test'
 import * as ql from './ql'
 export { ql }
 export { QLExtensions, ConstructedQuery, Query } from './ql'
-export type { CXLRef, CXLVal, CXLExpr, CXLColumns, CXLExpand, CXLWhere, CXLOrderBy } from './ql'
+export type { CXLRef, CXLVal, CXLExpr, CXLColumns, CXLExpand, CXLWhere, CXLOrderBy, TypedRef } from './ql'
 
 import * as csn from './csn'
 // clashes with linked and not really needed for consumers,

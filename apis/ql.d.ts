@@ -11,6 +11,9 @@ import {
 } from './internal/inference'
 import { Definition } from './linked'
 import { ref as cqn_ref, column_expr, predicate } from './cqn'
+
+/** A CQN ref that carries entity type information, used for typed `req.subject` in bound action handlers. */
+export type TypedRef<T> = cqn_ref & { __entity?: T }
 import {
   And,
   Awaitable,
@@ -244,6 +247,7 @@ type SELECT_one =
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
+  & (<T> (subject: TypedRef<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & ((subject: cqn_ref) => SELECT<_TODO>)
 
 type SELECT_from =
@@ -263,6 +267,7 @@ type SELECT_from =
 // calling with concrete list
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
+  & (<T> (subject: TypedRef<T>) => Awaitable<SELECT<T>, T[]>)
   & ((subject: cqn_ref) => SELECT<_TODO>)
   // put these overloads at the very end, as they would also match the above
   // We expect these to be the overloads for scalars since we covered arrays above -> wrap them back in Array
@@ -327,6 +332,7 @@ export class DELETE<T> extends ConstructedQuery<T> {
   static from:
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<StaticAny>>>
     & (<T>(entity: EntityDescription | ArrayConstructable, primaryKey?: PK) => DELETE<T>)
+    & (<T>(subject: TypedRef<T>) => DELETE<T>)
     & ((subject: cqn_ref) => DELETE<_TODO>)
 
   DELETE: CQN.DELETE['DELETE']
@@ -347,6 +353,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     // UPDATE<SingularInstanceType<T>> is used here so type inference in set/with has the property keys of the singular type
     & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
     & (<T extends Constructable> (entity: T, primaryKey?: PK) => UPDATE<InstanceType<T>>)
+    & (<T> (subject: TypedRef<T>) => UPDATE<T>)
     & ((entity: EntityDescription | cqn_ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
