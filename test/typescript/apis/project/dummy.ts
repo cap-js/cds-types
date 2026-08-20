@@ -36,7 +36,6 @@ export type BoundAction = {
   __parameters: {foo: Foo},
   __returns: number,
   __self: Foo,
-  __Self: typeof Foo
 }
 export class MyEvent {
   declare static readonly kind: 'event'
