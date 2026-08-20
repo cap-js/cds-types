@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - CXL helper functions (`ref`, `val`, `expr`, `columns`, `expand`, `where`, `orderBy`) are now exported from `cds.ql` and can be destructured from it
 - `cds.parse.cql`, `cds.run`, and `cds.read` now accept tagged template literals
 ### Changed
+- Bound action handlers now keep `req.subject` typed as the bound action's instance type (`__self`) instead of a class/ref hybrid.
+- Subject-based query overloads (`SELECT.from`, `SELECT.one.from`, `UPDATE`, `DELETE`) now derive the entity class from the passed subject instance to preserve typed query results.
 ### Deprecated
 ### Removed
 ### Fixed
