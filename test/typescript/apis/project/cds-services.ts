@@ -279,7 +279,8 @@ srv.on(unboundAction, req => req.data.foo.x)
 srv.on(unboundAction, 'FooService', req => req.data.foo.x)
 
 srv.on(boundAction, async req => {
-  testType<TypedRef<Foo>>(req.subject)
+  testType<typeof Foo>(req.subject)
+  req.subject.kind
   const one = await SELECT.one.from(req.subject)
   testType<Foo | null | undefined>(one)
   const many = await SELECT.from(req.subject)
