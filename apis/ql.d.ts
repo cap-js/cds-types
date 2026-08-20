@@ -13,7 +13,8 @@ import { Definition } from './linked'
 import { ref as cqn_ref, column_expr, predicate } from './cqn'
 
 /** Forcefully derives an entity class type from an instance to retain constructor-level metadata in subject overloads. */
-type EntityClassFromInstance<T extends { constructor: any }> =
+type ClassInstance = { constructor: any }
+type EntityClassFromInstance<T extends ClassInstance> =
   T extends { constructor: infer C }
     ? C & Constructable<T> & { kind: 'entity' }
     : Constructable<T> & { kind: 'entity' }
@@ -252,7 +253,7 @@ type SELECT_one =
   & (<T> (entity: { new(): T }, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & (<T> (entity: { new(): T }, primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T, SELECT_one>, T | null | undefined>)
   & ((subject: cqn_ref) => SELECT<_TODO>)
-  & (<T extends { constructor: any }> (subject: T) => Awaitable<SELECT<InstanceType<EntityClassFromInstance<T>>, SELECT_one>, InstanceType<EntityClassFromInstance<T>> | null | undefined>)
+  & (<T extends ClassInstance> (subject: T) => Awaitable<SELECT<InstanceType<EntityClassFromInstance<T>>, SELECT_one>, InstanceType<EntityClassFromInstance<T>> | null | undefined>)
 
 type SELECT_from =
 // tagged template
@@ -272,7 +273,7 @@ type SELECT_from =
   & (<T> (entity: T[], projection?: Projection<T>) => SELECT<T> & Promise<T[]>)
   & (<T> (entity: T[], primaryKey: PK, projection?: Projection<T>) => Awaitable<SELECT<T>, T>)
   & ((subject: cqn_ref) => SELECT<_TODO>)
-  & (<T extends { constructor: any }> (subject: T) => Awaitable<SELECT<InstanceType<EntityClassFromInstance<T>>>, InstanceType<EntityClassFromInstance<T>>[]>)
+  & (<T extends ClassInstance> (subject: T) => Awaitable<SELECT<InstanceType<EntityClassFromInstance<T>>>, InstanceType<EntityClassFromInstance<T>>[]>)
   // put these overloads at the very end, as they would also match the above
   // We expect these to be the overloads for scalars since we covered arrays above -> wrap them back in Array
   & (<T extends Constructable>(
@@ -337,7 +338,7 @@ export class DELETE<T> extends ConstructedQuery<T> {
     TaggedTemplateQueryPart<Awaitable<SELECT<unknown>, InstanceType<StaticAny>>>
     & (<T>(entity: EntityDescription | ArrayConstructable, primaryKey?: PK) => DELETE<T>)
     & ((subject: cqn_ref) => DELETE<_TODO>)
-    & (<T extends { constructor: any }>(subject: T) => DELETE<InstanceType<EntityClassFromInstance<T>>>)
+    & (<T extends ClassInstance>(subject: T) => DELETE<InstanceType<EntityClassFromInstance<T>>>)
 
   DELETE: CQN.DELETE['DELETE']
 
@@ -358,7 +359,7 @@ export class UPDATE<T> extends ConstructedQuery<T> {
     & (<T extends ArrayConstructable> (entity: T, primaryKey?: PK) => UPDATE<SingularInstanceType<T>>)
     & (<T extends Constructable> (entity: T, primaryKey?: PK) => UPDATE<InstanceType<T>>)
     & ((entity: EntityDescription | cqn_ref | Definition, primaryKey?: PK) => UPDATE<StaticAny>)
-    & (<T extends { constructor: any }> (subject: T) => UPDATE<InstanceType<EntityClassFromInstance<T>>>)
+    & (<T extends ClassInstance> (subject: T) => UPDATE<InstanceType<EntityClassFromInstance<T>>>)
     & (<T> (entity: T, primaryKey?: PK) => UPDATE<T>)
 
   UPDATE: CQN.UPDATE['UPDATE']
