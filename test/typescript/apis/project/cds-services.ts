@@ -280,6 +280,7 @@ srv.on(unboundAction, 'FooService', req => req.data.foo.x)
 
 srv.on(boundAction, async req => {
   testType<Foo>(req.subject)
+  req.subject.x
   const one = await SELECT.one.from(req.subject)
   testType<Foo | null | undefined>(one)
   const many = await SELECT.from(req.subject)
