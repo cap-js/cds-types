@@ -15,8 +15,6 @@ import { ref as cqn_ref, column_expr, predicate } from './cqn'
 /** Marker type for cds-typer generated entity classes, used to enable typed `req.subject` in bound action handlers. */
 type EntityLike = { new(...args: any[]): any, kind: 'entity' }
 
-/** A CQN ref bound to a specific entity type, used for typed `req.subject` in bound action handlers. */
-export type TypedRef<T extends EntityLike> = T & cqn_ref
 import {
   And,
   Awaitable,
