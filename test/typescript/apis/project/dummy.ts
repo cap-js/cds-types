@@ -5,6 +5,7 @@
 // dummies to test singular and plural types in queries with
 export class Foo {
     static readonly drafts: typeof Foo
+    declare static readonly kind: 'entity'
     x: number = 42
     y: string | null = null
     ref_x: number | null = null
@@ -34,7 +35,7 @@ export type BoundAction = {
   (foo: Foo): number,
   __parameters: {foo: Foo},
   __returns: number,
-  __self: Foo
+  __self: Foo,
 }
 export class MyEvent {
   declare static readonly kind: 'event'

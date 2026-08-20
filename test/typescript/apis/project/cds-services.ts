@@ -278,9 +278,15 @@ function isManyOfMany(p: Request<Foos | Bars> | Foos | Bars | undefined) {
 srv.on(unboundAction, req => req.data.foo.x)
 srv.on(unboundAction, 'FooService', req => req.data.foo.x)
 
-srv.on(boundAction, req => {
+srv.on(boundAction, async req => {
   testType<Foo>(req.subject)
   req.subject.x
+  const one = await SELECT.one.from(req.subject)
+  testType<Foo | null | undefined>(one)
+  const many = await SELECT.from(req.subject)
+  testType<Foo[]>(many)
+  await DELETE.from(req.subject)
+  await UPDATE(req.subject)
 })
 
 srv.on('CREATE', Foo, (req, next) => { isOne(req); return next() })

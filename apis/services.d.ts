@@ -454,7 +454,10 @@ declare namespace CRUDEventHandler {
 }
 
 // Subtype of Request as used in ActionEventHandlers
-type ActionRequest<P, S> = Omit<Request, 'data'> & { data: P, subject: S }
+type ActionRequest<P, S> = Omit<Request, 'data' | 'subject'> & {
+  data: P,
+  subject: S,
+}
 
 // Handlers for actions try to infer the passed .data property
 // as strictly as possible and therefore have to remove
