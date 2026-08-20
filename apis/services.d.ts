@@ -408,7 +408,6 @@ type CdsFunction = {
   __parameters: object,
   __returns: any,
   __self?: any,  // the entity the function is bound to, in case of bound functions
-  __Self?: Constructable,  // the class of __self
 }
 
 // extracts all CdsFunction properties from T
