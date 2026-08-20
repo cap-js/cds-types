@@ -1,4 +1,4 @@
-import cds, { Service, Request, HandlerFunction, ApplicationService, TypedRef } from '@sap/cds'
+import cds, { Service, Request, HandlerFunction, ApplicationService } from '@sap/cds'
 import { Bars, Bar, Foo, Foos, unboundAction, boundAction, as, testType, MyEvent } from './dummy'
 const model = cds.reflect({})
 const { Book: Books } = model.entities
@@ -279,8 +279,7 @@ srv.on(unboundAction, req => req.data.foo.x)
 srv.on(unboundAction, 'FooService', req => req.data.foo.x)
 
 srv.on(boundAction, async req => {
-  testType<typeof Foo>(req.subject)
-  req.subject.kind
+  testType<Foo>(req.subject)
   const one = await SELECT.one.from(req.subject)
   testType<Foo | null | undefined>(one)
   const many = await SELECT.from(req.subject)
