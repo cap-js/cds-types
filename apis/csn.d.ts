@@ -43,7 +43,7 @@ export type FQN = string
 /**
  * Definitions are the central elements of a CDS model.
  */
-export type Definition = context & service & type & struct & entity & Association
+export type Definition = context | service | type | struct | entity | Association
 // NOTE: If we use & instead of | CSN.definitions values would be reduced to <never>
 
 /**
