@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.19.0] - 2026-08-24
+
+### Added
 - Added types for `req.req` and `req.res` in `cds.Request`
 - `cds.User` now has an `authInfo` property typed against `@sap/xssec`'s `SecurityContext`. `@sap/xssec` is an peer dependency.
 - `cds.ql` is now typed as a callable universal converter: tagged template, function accepting a CQN object, or plain string — all returning `SELECT<unknown>`
