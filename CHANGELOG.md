@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
-- Added `service.schedule.as(<name>)`
+- Added `service.schedule(...).as(<name>)`
 ### Changed
 ### Deprecated
 ### Removed
