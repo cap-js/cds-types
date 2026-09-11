@@ -129,6 +129,7 @@ type Send<AddOn = {}> = {
 type FluentScheduling<O extends keyof FluentScheduling = never> = {
   after: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'after'>, O | 'after'>,
   every: <T = any>(t: number | string, u?: string) => Promise<T> & Omit<FluentScheduling<O | 'every'>, O | 'every'>,
+  as: <T = any>(name: string) => Promise<T> & Omit<FluentScheduling<O | 'as'>, O | 'as'>,
 }
 
 /**

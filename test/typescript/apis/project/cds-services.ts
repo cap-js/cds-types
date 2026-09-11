@@ -131,6 +131,9 @@ await srv.schedule({ query, headers: {} }).every(2, 's')
 await srv.schedule({ event: 'READ' }).after('1h')
 await srv.schedule('CREATE', 'Books', {}, {}).every('3d')
 await srv.schedule('CREATE', 'Books', {}, {}).every('3d').after('1h')
+await srv.schedule('CREATE', 'Books', {}, {}).as('my task').after('1h')
+// @ts-expect-error - can not use .as multiple times
+await srv.schedule('CREATE', 'Books', {}, {}).as('my task').after('1h').as('my task again')
 await srv.flush()
 const badSchedule = srv.schedule({ method: 'READ', path: 'Authors' })
 // @ts-expect-error - after() and every() should be called at most once
