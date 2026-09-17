@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Added `service.schedule(...).as(<name>)`
+- Added `cds.utils.ms4(...)`
 ### Changed
 ### Deprecated
 ### Removed
