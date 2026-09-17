@@ -2,10 +2,26 @@ import type * as fs from 'node:fs'
 import type * as nodePath from 'node:path'
 import type * as nodeUtil from 'node:util'
 
+type TimeUnit = 'ms'
+  | 's' | 'sec' | 'second' | 'seconds'
+  | 'm' | 'min' | 'minute' | 'minutes'
+  | 'h' | 'hrs' | 'hour' | 'hours'
+  | 'd' | 'day' | 'days'
+  | 'w' | 'week' | 'weeks'
+
 /**
  * Provides a set of utility functions
  */
 declare const utils: {
+  /**
+   * Converts a time span with a unit into milliseconds.
+   * @example
+   * ```js
+   * ms4(5,'s') //> 5000
+   * ms4('5s') //> 5000
+   * ```
+   */
+  ms4 (ts: number | string, unit: TimeUnit): number,
 
   /**
 	 * Generates a new v4 UUID
@@ -104,7 +120,7 @@ declare const utils: {
    * Shortcut for require("util").inspect
    */
   inspect: typeof nodeUtil.inspect,
-                                                
+
   /**
    * @since 8.3.0
    * @see https://cap.cloud.sap/docs/node.js/cds-utils#colors
