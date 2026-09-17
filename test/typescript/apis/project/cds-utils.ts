@@ -44,6 +44,12 @@ const { path: nodePath } = cds.utils
 nodePath.resolve('dist', 'db')
 nodePath.join(__dirname, 'dist', 'db')
 
+const { ms4 } = cds.utils
+ms4(5, 's')
+ms4('5s')
+// @ts-expect-error - invalid unit
+ms4(5, 'sekunden')
+
 const { inspect } = cds.utils
 inspect({}, true, 10, true)
 const { colors } = cds.utils

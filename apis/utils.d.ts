@@ -21,7 +21,7 @@ declare const utils: {
    * ms4('5s') //> 5000
    * ```
    */
-  ms4 (ts: number | string, unit: TimeUnit): number,
+  ms4 (ts: number | string, unit?: TimeUnit): number,
 
   /**
 	 * Generates a new v4 UUID
