@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.20.0] - 2026-09-23
+
+### Added
 - Added `service.schedule(...).as(<name>)`
 - Added `cds.utils.ms4(...)`
 ### Changed
