@@ -27,6 +27,7 @@ res = sqn.SELECT.limit
 res = sqn.SELECT.mixin
 res = sqn.SELECT.forShareLock?.wait
 res = sqn.SELECT.forUpdate?.wait
+res = sqn.SELECT.forUpdate?.ignoreLocked
 res = sqn.SELECT.search?.at(0)
 testType<boolean | undefined>(sqn.SELECT.count)
 
