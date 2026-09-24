@@ -98,38 +98,41 @@ export class Request<
   /** @beta */
   reply (results: any, options: { mimetype?: string, filename?: string, [key: string]: any }): void
 
+  // `args` may be typed as object or array. accept both variants
+  // see https://cap.cloud.sap/docs/node.js/cds-i18n#localized-messages
+
   // positional args
-  notify (message: string, target?: string, args?: any[]): Error
-  notify (status: number, message?: string, target?: string, args?: any[]): Error
+  notify (message: string, target?: string, args?: any[] | object): Error
+  notify (status: number, message?: string, target?: string, args?: any[] | object): Error
 
-  info (message: string, target?: string, args?: any[]): Error
-  info (status: number, message?: string, target?: string, args?: any[]): Error
+  info (message: string, target?: string, args?: any[] | object): Error
+  info (status: number, message?: string, target?: string, args?: any[] | object): Error
 
-  warn (message: string, target?: string, args?: any[]): Error
-  warn (status: number, message?: string, target?: string, args?: any[]): Error
+  warn (message: string, target?: string, args?: any[] | object): Error
+  warn (status: number, message?: string, target?: string, args?: any[] | object): Error
 
-  error (message: string, target?: string, args?: any[]): Error
-  error (status: number, message?: string, target?: string, args?: any[]): Error
-  error (status: number, target?: string, args?: any[]): Error
+  error (message: string, target?: string, args?: any[] | object): Error
+  error (status: number, message?: string, target?: string, args?: any[] | object): Error
+  error (status: number, target?: string, args?: any[] | object): Error
 
-  reject (message: string, target?: string, args?: any[]): never
-  reject (status: number, message?: string, target?: string, args?: any[]): never
+  reject (message: string, target?: string, args?: any[] | object): never
+  reject (status: number, message?: string, target?: string, args?: any[] | object): never
 
   // single object arg
-  notify (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
-  notify (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
+  notify (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] | object }): Error
+  notify (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] | object }): Error
 
-  info (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
-  info (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
+  info (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] | object }): Error
+  info (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] | object }): Error
 
-  warn (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
-  warn (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
+  warn (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] | object }): Error
+  warn (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] | object }): Error
 
-  error (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): Error
-  error (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): Error
+  error (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] | object }): Error
+  error (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] | object }): Error
 
-  reject (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] }): never
-  reject (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] }): never
+  reject (message: { status?: number, code?: number | string, message: string, target?: string, args?: any[] | object }): never
+  reject (message: { status?: number, code: number | string, message?: string, target?: string, args?: any[] | object }): never
 
 }
 
